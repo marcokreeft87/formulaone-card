@@ -4,7 +4,7 @@ Present the data of [hass-formulaoneapi](https://github.com/delzear/hass-formula
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| sesnor            | string        | **Required**                        | Entity ID of the sensor (must be one of the sensors of [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi)               |
+| sensor            | string        | **Required**                        | Entity ID of the sensor (must be one of the sensors of [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi)               |
 | card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
