@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/marcokreeft87/formulaone-card#readme",
   "devDependencies": {
+    "@types/jest": "^29.1.1",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
     "eslint": "^8.24.0",
@@ -33,10 +34,18 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.19.1",
+    "@babel/preset-env": "^7.19.3",
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
+    "babel-jest": "^29.1.2",
     "compression-webpack-plugin": "^10.0.0",
     "custom-card-helpers": "^1.9.0",
+    "jest-environment-jsdom": "^29.1.2",
+    "jest-ts-auto-mock": "^2.1.0",
+    "ts-auto-mock": "^3.6.2",
+    "ts-jest": "^29.0.3",
     "ts-loader": "^9.4.1",
+    "ttypescript": "^1.5.13",
     "yarn": "^1.22.19"
   }
 }

@@ -10,10 +10,10 @@
       "moduleResolution": "Node",
       "target": "es6",
       "plugins": [
-        // { "transform": "ts-auto-mock/transformer", "cacheBetweenTests": false }
+         { "transform": "ts-auto-mock/transformer", "cacheBetweenTests": false }
       ],
       "paths": {
-        // "jest-ts-auto-mock": ["../../index"]
+         "jest-ts-auto-mock": ["../../index"]
       }
     },
     "include": ["src/**/*"],

@@ -113,10 +113,10 @@ export interface Result {
     FastestLap: FastestLap;
 }
 
-// export interface RaceTable {
-//     season: string;
-//     Races: Race[];
-// }
+export interface RaceTable {
+    season: string;
+    Races: Race[];
+}
 
 export interface Constructor {
     constructorId: string;
@@ -144,12 +144,12 @@ export interface ConstructorStanding {
     Constructor: Constructor;
 }
 
-// export interface StandingsList {
-//     season: string;
-//     round: string;
-//     ConstructorStandings: ConstructorStanding[];
-//     DriverStandings: DriverStanding[];
-// }
+export interface StandingsList {
+    season: string;
+    round: string;
+    ConstructorStandings: ConstructorStanding[];
+    DriverStandings: DriverStanding[];
+}
 
 export interface DriverStanding {
     position: string;
@@ -160,7 +160,7 @@ export interface DriverStanding {
     Constructors: Constructor[];
 }
 
-// export interface StandingsTable {
-//     season: string;
-//     StandingsLists: StandingsList[];
-// }
+export interface StandingsTable {
+    season: string;
+    StandingsLists: StandingsList[];
+}
