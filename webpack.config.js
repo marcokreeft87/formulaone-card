@@ -9,6 +9,9 @@ module.exports = {
         filename: 'formulaone-card.js',
         path: path.resolve(__dirname),
     },
+    optimization: {
+        minimize: false,
+    },
     module: {
         rules: [
             {

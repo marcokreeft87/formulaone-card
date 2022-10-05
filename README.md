@@ -1,2 +1,2 @@
 # FormulaOne Card
-Frontend card for [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi)
+Present the data of [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi) in a pretty way 
