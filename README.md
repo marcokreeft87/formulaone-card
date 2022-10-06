@@ -7,6 +7,30 @@
 
 Present the data of [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi) in a pretty way 
 
+## Installation
+
+Manually add [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js)
+to your `<config>/www/` folder and add the following to the `configuration.yaml` file:
+```yaml
+lovelace:
+  resources:
+    - url: /local/formulaone-card.js
+      type: module
+```
+
+_OR_ install using [HACS](https://hacs.xyz/) and add this (if in YAML mode):
+```yaml
+lovelace:
+  resources:
+    - url: /hacsfiles/formulaone-card/room-card.js
+      type: module
+```
+
+The above configuration can be managed directly in the Configuration -> Lovelace Dashboards -> Resources panel when not using YAML mode,
+or added by clicking the "Add to lovelace" button on the HACS dashboard after installing the plugin.
+
+## Configuration
+
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
