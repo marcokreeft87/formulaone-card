@@ -22,7 +22,7 @@ _OR_ install using [HACS](https://hacs.xyz/) and add this (if in YAML mode):
 ```yaml
 lovelace:
   resources:
-    - url: /hacsfiles/formulaone-card/room-card.js
+    - url: /hacsfiles/formulaone-card/formulaone-card.js
       type: module
 ```
 
