@@ -1,14 +1,17 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
-import { Race, Result } from "../types/formulaone-card-types";
+import { FormulaOneCardConfig, Race, Result } from "../types/formulaone-card-types";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
 
     date_locale?: string;
+    image_clickable?: boolean;
 
-    constructor(sensor: string, hass: HomeAssistant) {
+    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass);
+
+        this.image_clickable = config.image_clickable;
     } 
 
     renderResultRow(result: Result): HTMLTemplateResult {
@@ -23,6 +26,16 @@ export default class LastResult extends BaseCard {
             </tr>`;
     }
 
+    renderHeader(): HTMLTemplateResult {
+        
+        const data = this.sensor.data as Race;
+        const countryDashed = data.Circuit.Location.country.replace(" ","-");
+        const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">`;
+        const imageWithLinkHtml = this.image_clickable ? html`<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
+
+        return html`<h2><img height="25" src="https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
+    }
+
     render() : HTMLTemplateResult {
 
         const data = this.sensor.data as Race;
@@ -30,18 +43,11 @@ export default class LastResult extends BaseCard {
             throw new Error('Please pass the correct sensor (last_result)')
         }
 
-        const countryDashed = data.Circuit.Location.country.replace(" ","-");
-
         return html`       
 
             <table>
                 <tr>
-                    <td>
-                        <h2><img height="25" src="https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png">&nbsp;  ${data.round} :  ${data.raceName}</h2>
-                        <a target="_new" href="${data.Circuit.url}">
-                            <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">
-                        </a> <br> 
-                    </td>
+                    <td>${this.renderHeader()}</td>
                 </tr>
             </table>
             <table>

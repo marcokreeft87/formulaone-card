@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Frontend card for hass-formulaoneapi",
   "main": "index.js",
   "scripts": {

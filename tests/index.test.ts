@@ -123,7 +123,7 @@ describe('Testing index file function setConfig', () => {
         const result = card.render();
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read properties of undefined (reading \'Location\')</hui-warning>');
+        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read properties of undefined (reading \'date\')</hui-warning>');
     }),    
     test('Calling render with hass and config Schedule should return expected html', () => {   
 
