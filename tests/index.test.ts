@@ -39,7 +39,7 @@ describe('Testing index file function setConfig', () => {
         const result = card.render();
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read property \'attributes\' of undefined</hui-warning>');
+        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read properties of undefined (reading \'attributes\')</hui-warning>');
     }),    
     test('Calling render with hass and config ConstructorStandings should return expected html', () => {   
 
@@ -102,7 +102,7 @@ describe('Testing index file function setConfig', () => {
         const result = card.render();
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read property \'Location\' of undefined</hui-warning>');
+        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read properties of undefined (reading \'Location\')</hui-warning>');
     }),    
     test('Calling render with hass and config NextRace should return expected html', () => {   
 
@@ -123,7 +123,7 @@ describe('Testing index file function setConfig', () => {
         const result = card.render();
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read property \'date\' of undefined</hui-warning>');
+        expect(htmlResult).toMatch('<hui-warning>TypeError: Cannot read properties of undefined (reading \'date\')</hui-warning>');
     }),    
     test('Calling render with hass and config Schedule should return expected html', () => {   
 
