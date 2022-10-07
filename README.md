@@ -38,6 +38,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
+| image_clickable   | boolean       |                                     | Click on image leads to wikipedia, or not   |
 
 ```
 type: custom:formulaone-card
@@ -45,6 +46,7 @@ card_type: next_race
 sensor: sensor.formula_one_sensor_races
 title: Next Race
 date_locale: nl
+image_clickable: false
 ```
 
 ![image](https://user-images.githubusercontent.com/10223677/194120592-3df715bc-888d-460b-8743-ec1ab6017b96.png)

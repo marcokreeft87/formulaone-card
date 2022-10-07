@@ -8,6 +8,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     card_type?: FormulaOneCardType;
     sensor?: string;
     date_locale?: string;
+    image_clickable?: boolean;
 }
 
 export interface FormulaOneSensor {
