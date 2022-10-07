@@ -21,7 +21,7 @@ describe('Testing formate_date file', () => {
     test('Passing date, locale and en locale', () => {           
         const date = new Date('2022-01-01')
 
-        expect(formatDateNumeric(date, locale, 'en')).toBe('01/01/2022');
+        expect(formatDateNumeric(date, locale, 'en')).toBe('01/01/22');
     }),
     test('Passing date and locale', () => {           
         const date = new Date('2022-01-01')

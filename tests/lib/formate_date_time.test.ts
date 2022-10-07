@@ -34,7 +34,7 @@ describe('Testing formate_date_time file', () => {
         const date = new Date('2022-01-01 10:00:00')
         locale.time_format = TimeFormat.system;
 
-        expect(formatDateTime(date, locale)).toBe('1 januari 2022 om 10:00');
+        expect(formatDateTime(date, locale)).toBe('1 januari 2022 om 10:00 am');
     }),
     test('Passing date and locale timeformat system formatDateTimeRaceInfo', () => {           
         const date = new Date('2022-01-01 10:00:00')
