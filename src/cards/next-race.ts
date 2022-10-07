@@ -9,6 +9,7 @@ export default class NextRace extends BaseCard {
 
     next_race: Race;
     date_locale?: string;
+    image_clickable?: boolean;
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass);
@@ -17,7 +18,17 @@ export default class NextRace extends BaseCard {
 
         this.next_race = sensorEntity.attributes['next_race'] as Race;
         this.date_locale = config.date_locale;
+        this.image_clickable = config.image_clickable;
     } 
+
+    renderHeader(): HTMLTemplateResult {
+        
+        const countryDashed = this.next_race.Circuit.Location.country.replace(" ","-");
+        const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">`;
+        const imageWithLinkHtml = this.image_clickable ? html`<a target="_new" href="${this.next_race.Circuit.url}">${imageHtml}</a>` : imageHtml;
+
+        return html`<h2><img height="25" src="https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png">&nbsp;  ${this.next_race.round} :  ${this.next_race.raceName}</h2>${imageWithLinkHtml}<br> `
+    }
 
     render() : HTMLTemplateResult {
 
@@ -26,7 +37,6 @@ export default class NextRace extends BaseCard {
         }
 
         const raceDate = new Date(this.next_race.date + 'T' + this.next_race.time);
-        const countryDashed = this.next_race.Circuit.Location.country.replace(" ","-");
         const freePractice1 = formatDateTimeRaceInfo(new Date(this.next_race.FirstPractice.date + 'T' + this.next_race.FirstPractice.time), this.hass.locale);
         const freePractice2 = formatDateTimeRaceInfo(new Date(this.next_race.SecondPractice.date + 'T' + this.next_race.SecondPractice.time), this.hass.locale);
         const freePractice3 = formatDateTimeRaceInfo(new Date(this.next_race.ThirdPractice.date + 'T' + this.next_race.ThirdPractice.time), this.hass.locale);
@@ -39,12 +49,7 @@ export default class NextRace extends BaseCard {
             <table>
                 <tbody>
                     <tr>
-                        <td colspan="5">
-                            <h2><img height="25" src="https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png">&nbsp;  ${this.next_race.round} :  ${this.next_race.raceName}</h2>
-                            <a target="_new" href="${this.next_race.Circuit.url}">
-                                <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">
-                            </a> <br> 
-                        </td>
+                        <td colspan="5">${this.renderHeader()}</td>
                     </tr>
                     <tr><td>Date</td><td>${formatDateNumeric(raceDate, this.hass.locale, this.date_locale)}</td><td>&nbsp;</td><td>Practice 1</td><td align="right">${freePractice1}</td></tr>
                     <tr><td>Race</td><td>${this.next_race.round}</td><td>&nbsp;</td><td>Practice 2</td><td align="right">${freePractice2}</td></tr>

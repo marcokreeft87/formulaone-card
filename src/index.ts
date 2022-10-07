@@ -64,7 +64,7 @@ export default class FormulaOneCard extends LitElement {
             case FormulaOneCardType.NextRace:                
                 return new NextRace(this.config.sensor, this._hass, this.config).render();     
             case FormulaOneCardType.LastResult:                
-                return new LastResult(this.config.sensor, this._hass).render();
+                return new LastResult(this.config.sensor, this._hass, this.config).render();
         }
     }
 
