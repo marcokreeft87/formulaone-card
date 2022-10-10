@@ -1,6 +1,7 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { FormulaOneCardConfig, Race, Result } from "../types/formulaone-card-types";
+import { getCountryFlagUrl } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -33,7 +34,7 @@ export default class LastResult extends BaseCard {
         const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">`;
         const imageWithLinkHtml = this.image_clickable ? html`<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
 
-        return html`<h2><img height="25" src="https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
+        return html`<h2><img height="25" src="${getCountryFlagUrl(countryDashed)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
     }
 
     render() : HTMLTemplateResult {

@@ -23,3 +23,15 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
         throw new Error('Please define FormulaOne sensor.');
     }
 };
+
+export const getCountryFlagUrl = (countryDashed: string) => {
+    const exceptions = [{ countryDashed: 'USA', name: 'United-States-of-America'}];
+
+    const exception = exceptions.filter(exception => exception.countryDashed == countryDashed);
+    if(exception.length > 0)
+    {
+        countryDashed = exception[0].name; 
+    }
+
+    return `https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png`;
+}
