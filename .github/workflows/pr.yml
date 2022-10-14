@@ -38,9 +38,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           test-command: "npm run workflow"
-
-      - name: HACS validation
-        uses: hacs/action@main
-        with:
-          category: "plugin"
-          ignore: brands
