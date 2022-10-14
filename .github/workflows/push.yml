@@ -1,0 +1,53 @@
+name: Tests
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  hacs:
+    runs-on: "ubuntu-latest"
+    name: Test and validate
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Set Timezone
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Europe/Amsterdam"
+          timezoneMacos: "Europe/Amsterdam"
+          timezoneWindows: "Central European Time"
+
+      - run: npm install
+      
+      - name: Run Tests
+        run: npm run workflow
+        
+      - name: Run Jest
+        uses: willcaul/jest-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          test-command: "npm run workflow"
+
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: "plugin"
+          ignore: brands
+
+      - name: Automatic GitHub Release
+        uses: justincy/github-action-npm-release@2.0.2        
+        
+      - name: Print release output
+        if: ${{ steps.release.outputs.released == 'true' }}
+        run: echo Release ID ${{ steps.release.outputs.release_id }}
