@@ -1,12 +1,13 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
-import { DriverStanding } from "../types/formulaone-card-types";
+import { DriverStanding, FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class DriverStandings extends BaseCard {
 
-    constructor(sensor: string, hass: HomeAssistant) {
-        super(sensor, hass);
+    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
+        super(sensor, hass, config);
     }    
 
     renderStandingRow(standing: DriverStanding): HTMLTemplateResult {
@@ -14,7 +15,7 @@ export default class DriverStandings extends BaseCard {
             <tr>
                 <td class="width-50 text-center">${standing.position}</td>
                 <td>${standing.Driver.code}</td>
-                <td>${standing.Driver.givenName} ${standing.Driver.familyName}</td>
+                <td>${getDriverName(standing.Driver, this.config)}</td>
                 <td class="width-60 text-center">${standing.points}</td>
                 <td class="text-center">${standing.wins}</td>
             </tr>`;

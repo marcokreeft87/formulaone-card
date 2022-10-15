@@ -9,6 +9,15 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     sensor?: string;
     date_locale?: string;
     image_clickable?: boolean;
+    show_carnumber?: boolean;
+    location_clickable?: boolean;
+    previous_race?: PreviousRaceDisplay;
+}
+
+export enum PreviousRaceDisplay {
+    Strikethrough = 'strikethrough',
+    Italic = 'italic',
+    Hide = 'hide'
 }
 
 export interface FormulaOneSensor {

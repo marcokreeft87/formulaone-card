@@ -9,24 +9,20 @@ import { BaseCard } from "./base-card";
 export default class NextRace extends BaseCard {
 
     next_race: Race;
-    date_locale?: string;
-    image_clickable?: boolean;
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(sensor, hass);
+        super(sensor, hass, config);
 
         const sensorEntity = this.hass.states[this.sensor_entity_id];
 
         this.next_race = sensorEntity.attributes['next_race'] as Race;
-        this.date_locale = config.date_locale;
-        this.image_clickable = config.image_clickable;
     } 
 
     renderHeader(): HTMLTemplateResult {
         
         const countryDashed = this.next_race.Circuit.Location.country.replace(" ","-");
         const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">`;
-        const imageWithLinkHtml = this.image_clickable ? html`<a target="_new" href="${this.next_race.Circuit.url}">${imageHtml}</a>` : imageHtml;
+        const imageWithLinkHtml = this.config.image_clickable ? html`<a target="_new" href="${this.next_race.Circuit.url}">${imageHtml}</a>` : imageHtml;
 
         return html`<h2><img height="25" src="${getCountryFlagUrl(countryDashed)}">&nbsp;  ${this.next_race.round} :  ${this.next_race.raceName}</h2>${imageWithLinkHtml}<br> `
     }
@@ -52,7 +48,7 @@ export default class NextRace extends BaseCard {
                     <tr>
                         <td colspan="5">${this.renderHeader()}</td>
                     </tr>
-                    <tr><td>Date</td><td>${formatDateNumeric(raceDate, this.hass.locale, this.date_locale)}</td><td>&nbsp;</td><td>Practice 1</td><td align="right">${freePractice1}</td></tr>
+                    <tr><td>Date</td><td>${formatDateNumeric(raceDate, this.hass.locale, this.config.date_locale)}</td><td>&nbsp;</td><td>Practice 1</td><td align="right">${freePractice1}</td></tr>
                     <tr><td>Race</td><td>${this.next_race.round}</td><td>&nbsp;</td><td>Practice 2</td><td align="right">${freePractice2}</td></tr>
                     <tr><td>Race name</td><td>${this.next_race.raceName}</td><td>&nbsp;</td><td>Practice 3</td><td align="right">${freePractice3}</td></tr>
                     <tr><td>Circuit name</td><td>${this.next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>Qualifying</td><td align="right">${qualifyingDate}</td></tr>

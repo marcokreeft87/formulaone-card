@@ -32,4 +32,17 @@ export const style = css`
     .width-60 {
         width: 60px;
     }
+    .hide { 
+        display: none;
+    }
+    .strikethrough {
+        text-decoration: line-through;
+    }
+    .italic {
+        font-style: italic;
+    }
+    a {
+        text-decoration: none;
+        color: var(--secondary-text-color);  
+    }
 `;

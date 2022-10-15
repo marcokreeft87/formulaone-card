@@ -38,7 +38,9 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
-| image_clickable   | boolean       |                                     | Click on image leads to wikipedia, or not   |
+| image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
+| show_carnumber    | boolean       | `false`                             | Show the number of the car   |
+| location_clickable    | boolean       | `false`                             | Click on the location leads to wikipedia   |
 
 ```
 type: custom:formulaone-card
