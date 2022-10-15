@@ -1,28 +1,30 @@
 import {  formatTime, HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { formatDate } from "../lib/format_date";
-import { FormulaOneCardConfig, Race } from "../types/formulaone-card-types";
+import { Circuit, FormulaOneCardConfig, Race } from "../types/formulaone-card-types";
 import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
-
-    date_locale?: string;
     
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(sensor, hass);
-
-        this.date_locale = config.date_locale;
+        super(sensor, hass, config);
     } 
+
+    renderLocation(circuit: Circuit) {
+        const locationConcatted = `${circuit.Location.locality}, ${circuit.Location.country}`;
+        return this.config.location_clickable ? html`<a href="${circuit.url}" target="_blank">${locationConcatted}</a>` : locationConcatted;
+    }
 
     renderScheduleRow(race: Race): HTMLTemplateResult {
         const raceDate = new Date(race.date + 'T' + race.time);
+        const renderClass = this.config.previous_race && raceDate < new Date() ? this.config.previous_race : '';
 
         return html`
-            <tr>
+            <tr class="${renderClass}"> 
                 <td class="width-50 text-center">${race.round}</td>
                 <td>${race.Circuit.circuitName}</td>
-                <td>${race.Circuit.Location.locality}, ${race.Circuit.Location.country}</td>
-                <td class="width-60 text-center">${formatDate(raceDate, this.hass.locale, this.date_locale)}</td>
+                <td>${this.renderLocation(race.Circuit)}</td>
+                <td class="width-60 text-center">${formatDate(raceDate, this.hass.locale, this.config.date_locale)}</td>
                 <td class="text-center">${formatTime(raceDate, this.hass.locale)}</td>
             </tr>`;
     }

@@ -5,19 +5,20 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { getRenderString } from '../utils';
 import { MRData } from '../testdata/constructorStandings.json'
 import { HassEntity } from 'home-assistant-js-websocket';
-import { ConstructorStanding } from '../../src/types/formulaone-card-types';
+import { ConstructorStanding, FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 
 describe('Testing constructor-standings file', () => {
     const hass = createMock<HomeAssistant>();
     const data = MRData['StandingsTable']['StandingsLists'][0]['ConstructorStandings'];
     const hassEntity = createMock<HassEntity>();
+    const config = createMock<FormulaOneCardConfig>();
 
     test('Calling render with hass and wrong sensor', () => { 
         hass.states = {
             'sensor.test_sensor_wrong_sensor': hassEntity
         };  
 
-        const card = new ConstructorStandings('sensor.test_sensor_wrong_sensor', hass);
+        const card = new ConstructorStandings('sensor.test_sensor_wrong_sensor', hass, config);
         expect(() => card.render()).toThrowError('Please pass the correct sensor (constructors)');
     }),
     test('Calling render with hass and sensor but no data', () => {   
@@ -26,7 +27,7 @@ describe('Testing constructor-standings file', () => {
             'sensor.test_sensor_constructors': hassEntity
         };
 
-        const card = new ConstructorStandings('sensor.test_sensor_constructors', hass);
+        const card = new ConstructorStandings('sensor.test_sensor_constructors', hass, config);
         expect(() => card.render()).toThrowError('Please pass the correct sensor (constructors)');
     }),
     test('Calling render with hass and sensor', () => {   
@@ -35,7 +36,7 @@ describe('Testing constructor-standings file', () => {
             'sensor.test_sensor_constructors': hassEntity
         };
 
-        const card = new ConstructorStandings('sensor.test_sensor_constructors', hass);
+        const card = new ConstructorStandings('sensor.test_sensor_constructors', hass, config);
         const result = card.render();
         const htmlResult = getRenderString(result);
 

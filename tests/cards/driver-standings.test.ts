@@ -5,19 +5,20 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { getRenderString } from '../utils';
 import { MRData } from '../testdata/driverStandings.json'
 import { HassEntity } from 'home-assistant-js-websocket';
-import { DriverStanding } from '../../src/types/formulaone-card-types';
+import { DriverStanding, FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 
 describe('Testing driver-standings file', () => {
     const hass = createMock<HomeAssistant>();
     const data = MRData['StandingsTable']['StandingsLists'][0]['DriverStandings'];
     const hassEntity = createMock<HassEntity>();
+    const config = createMock<FormulaOneCardConfig>();
 
     test('Calling render with hass and wrong sensor', () => { 
         hass.states = {
             'sensor.test_sensor_wrong_sensor': hassEntity
         };  
 
-        const card = new DriverStandings('sensor.test_sensor_wrong_sensor', hass);
+        const card = new DriverStandings('sensor.test_sensor_wrong_sensor', hass, config);
         expect(() => card.render()).toThrowError('Please pass the correct sensor (drivers)');
     }),
     test('Calling render with hass and sensor but no data', () => {   
@@ -26,7 +27,7 @@ describe('Testing driver-standings file', () => {
             'sensor.test_sensor_drivers': hassEntity
         };
 
-        const card = new DriverStandings('sensor.test_sensor_drivers', hass);
+        const card = new DriverStandings('sensor.test_sensor_drivers', hass, config);
         expect(() => card.render()).toThrowError('Please pass the correct sensor (drivers)');
     }),
     test('Calling render with hass and sensor', () => {   
@@ -35,7 +36,7 @@ describe('Testing driver-standings file', () => {
             'sensor.test_sensor_drivers': hassEntity
         };
 
-        const card = new DriverStandings('sensor.test_sensor_drivers', hass);
+        const card = new DriverStandings('sensor.test_sensor_drivers', hass, config);
         const result = card.render();
         const htmlResult = getRenderString(result);
 
