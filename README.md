@@ -41,6 +41,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
 | location_clickable    | boolean       | `false`                             | Click on the location leads to wikipedia   |
+| previous_race    | enum       |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 
 ```
 type: custom:formulaone-card
