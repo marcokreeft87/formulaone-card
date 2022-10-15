@@ -1,6 +1,6 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { PropertyValues } from "lit";
-import { FormulaOneCardConfig } from "./types/formulaone-card-types";
+import { Driver, FormulaOneCardConfig } from "./types/formulaone-card-types";
 
 export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -34,4 +34,9 @@ export const getCountryFlagUrl = (countryDashed: string) => {
     }
 
     return `https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png`;
+}
+
+export const getDriverName = (driver: Driver, config: FormulaOneCardConfig) => {
+    const permanentNumber = driver.code == 'VER' ? 1 : driver.permanentNumber;
+    return `${driver.givenName} ${driver.familyName}${(config.show_carnumber ? ` #${permanentNumber}` : '')}`;
 }

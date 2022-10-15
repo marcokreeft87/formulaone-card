@@ -1,12 +1,12 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
-import { ConstructorStanding } from "../types/formulaone-card-types";
+import { ConstructorStanding, FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { BaseCard } from "./base-card";
 
 export default class ConstructorStandings extends BaseCard {
 
-    constructor(sensor: string, hass: HomeAssistant) {
-        super(sensor, hass);
+    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
+        super(sensor, hass, config);
     }    
 
     renderStandingRow(standing: ConstructorStanding): HTMLTemplateResult {

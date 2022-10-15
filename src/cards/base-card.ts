@@ -9,9 +9,10 @@ export abstract class BaseCard {
     hass: HomeAssistant;
     config: FormulaOneCardConfig;
 
-    constructor(sensor: string, hass: HomeAssistant) {
+    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         this.sensor_entity_id = sensor;
         this.hass = hass;
+        this.config = config;
 
         this.sensor = this.getSensor();
     }    
