@@ -18,7 +18,7 @@ export default class LastResult extends BaseCard {
                 <td>${getDriverName(result.Driver, this.config)}</td>
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
-                <td class="text-center">${result.status}</td>
+                <td class="width-50 text-center">${result.status}</td>
             </tr>`;
     }
 

@@ -25,7 +25,7 @@ export default class Schedule extends BaseCard {
                 <td>${race.Circuit.circuitName}</td>
                 <td>${this.renderLocation(race.Circuit)}</td>
                 <td class="width-60 text-center">${formatDate(raceDate, this.hass.locale, this.config.date_locale)}</td>
-                <td class="text-center">${formatTime(raceDate, this.hass.locale)}</td>
+                <td class="width-50 text-center">${formatTime(raceDate, this.hass.locale)}</td>
             </tr>`;
     }
 
