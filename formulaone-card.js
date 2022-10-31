@@ -46,7 +46,7 @@
                 <td>${(0,n.getDriverName)(t.Driver,this.config)}</td>
                 <td>${t.grid}</td>
                 <td class="width-60 text-center">${t.points}</td>
-                <td class="text-center">${t.status}</td>
+                <td class="width-50 text-center">${t.status}</td>
             </tr>`}renderHeader(){const t=this.sensor.data,e=t.Circuit.Location.country.replace(" ","-"),r=i.html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${e}_Circuit.png.transform/7col/image.png">`,a=this.config.image_clickable?i.html`<a target="_new" href="${t.Circuit.url}">${r}</a>`:r;return i.html`<h2><img height="25" src="${(0,n.getCountryFlagUrl)(e)}">&nbsp;  ${t.round} :  ${t.raceName}</h2>${a}<br> `}render(){const t=this.sensor.data;if(!this.sensor_entity_id.endsWith("_last_result")||void 0===t)throw new Error("Please pass the correct sensor (last_result)");return i.html`       
 
             <table>
@@ -89,7 +89,7 @@
                 <td>${t.Circuit.circuitName}</td>
                 <td>${this.renderLocation(t.Circuit)}</td>
                 <td class="width-60 text-center">${(0,a.formatDate)(e,this.hass.locale,this.config.date_locale)}</td>
-                <td class="text-center">${(0,i.formatTime)(e,this.hass.locale)}</td>
+                <td class="width-50 text-center">${(0,i.formatTime)(e,this.hass.locale)}</td>
             </tr>`}render(){const t=this.sensor.data;if(!this.sensor_entity_id.endsWith("_races")||void 0===t)throw new Error("Please pass the correct sensor (races)");return n.html`
         <table>
             <thead>
