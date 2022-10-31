@@ -82,7 +82,7 @@ export interface Race {
     time: string;
     FirstPractice: FirstPractice;
     SecondPractice: SecondPractice;
-    ThirdPractice: ThirdPractice;
+    ThirdPractice?: ThirdPractice;
     Qualifying?: Qualifying;
     Sprint?: Sprint;
     Results?: Result[]
