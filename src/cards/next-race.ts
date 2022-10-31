@@ -36,7 +36,7 @@ export default class NextRace extends BaseCard {
         const raceDate = new Date(this.next_race.date + 'T' + this.next_race.time);
         const freePractice1 = formatDateTimeRaceInfo(new Date(this.next_race.FirstPractice.date + 'T' + this.next_race.FirstPractice.time), this.hass.locale);
         const freePractice2 = formatDateTimeRaceInfo(new Date(this.next_race.SecondPractice.date + 'T' + this.next_race.SecondPractice.time), this.hass.locale);
-        const freePractice3 = formatDateTimeRaceInfo(new Date(this.next_race.ThirdPractice.date + 'T' + this.next_race.ThirdPractice.time), this.hass.locale);
+        const freePractice3 = this.next_race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(this.next_race.ThirdPractice.date + 'T' + this.next_race.ThirdPractice.time), this.hass.locale) : '-';
         const raceDateFormatted = formatDateTimeRaceInfo(raceDate, this.hass.locale);
         const qualifyingDate = this.next_race.Qualifying !== undefined ? formatDateTimeRaceInfo(new Date(this.next_race.Qualifying.date + 'T' + this.next_race.Qualifying.time), this.hass.locale) : '-';
         const sprintDate = this.next_race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(this.next_race.Sprint.date + 'T' + this.next_race.Sprint.time), this.hass.locale) : '-';
