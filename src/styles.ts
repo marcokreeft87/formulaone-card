@@ -24,7 +24,7 @@ export const style = css`
         text-align: center;
     }
     .width-40 {
-        width: 50px;
+        width: 40px;
     }
     .width-50 {
         width: 50px;
