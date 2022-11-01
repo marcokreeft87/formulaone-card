@@ -12,6 +12,12 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     show_carnumber?: boolean;
     location_clickable?: boolean;
     previous_race?: PreviousRaceDisplay;
+    standings?: StandingDisplayOptions;
+}
+
+export interface StandingDisplayOptions {
+    show_team?: boolean;
+    show_flag?: boolean;
 }
 
 export enum PreviousRaceDisplay {
