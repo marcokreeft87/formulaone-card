@@ -40,8 +40,9 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
-| location_clickable    | boolean       | `false`                             | Click on the location leads to wikipedia   |
-| previous_race    | enum       |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
+| location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
+| previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
+| standings         | object        |                                     | Configuration for the driver standings card     |
 
 ```
 type: custom:formulaone-card
@@ -71,6 +72,19 @@ title: Driver Standings
 
 ```
 ![image](https://user-images.githubusercontent.com/10223677/194120796-28532a9d-a62d-44bb-8cb8-403bfa434a8b.png)
+
+This card can also show the flags and team names of the driver:
+
+```
+type: custom:formulaone-card
+card_type: driver_standings
+sensor: sensor.formula_one_sensor_drivers
+title: Driver Standings
+standings:
+  show_flag: true
+  show_team: true
+  
+```
 
 ```
 type: custom:formulaone-card
