@@ -25,7 +25,7 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
 };
 
 export const getCountryFlagUrl = (countryDashed: string) => {
-    const exceptions = [{ countryDashed: 'USA', name: 'United-States-of-America'}];
+    const exceptions = [{ countryDashed: 'USA', name: 'United-States-of-America'}, { countryDashed: 'UAE', name: 'United-Arab-Emirates'}];
 
     const exception = exceptions.filter(exception => exception.countryDashed == countryDashed);
     if(exception.length > 0)
@@ -34,6 +34,18 @@ export const getCountryFlagUrl = (countryDashed: string) => {
     }
 
     return `https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png`;
+}
+
+export const getCircuitName = (circuitName: string) => {
+    const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}];
+
+    const exception = exceptions.filter(exception => exception.countryDashed == circuitName);
+    if(exception.length > 0)
+    {
+        circuitName = exception[0].name; 
+    }
+
+    return circuitName;
 }
 
 export const getDriverName = (driver: Driver, config: FormulaOneCardConfig) => {

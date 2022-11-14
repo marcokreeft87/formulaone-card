@@ -3,7 +3,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { formatDateNumeric } from "../lib/format_date";
 import { formatDateTimeRaceInfo } from "../lib/format_date_time";
 import { FormulaOneCardConfig, Race } from "../types/formulaone-card-types";
-import { getCountryFlagUrl } from "../utils";
+import { getCircuitName, getCountryFlagUrl } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class NextRace extends BaseCard {
@@ -20,8 +20,10 @@ export default class NextRace extends BaseCard {
 
     renderHeader(): HTMLTemplateResult {
         
-        const countryDashed = this.next_race.Circuit.Location.country.replace(" ","-");
-        const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryDashed}_Circuit.png.transform/7col/image.png">`;
+        const countryDashed = this.next_race.Circuit.Location.country.replace(" ","-")
+        const circuitName = getCircuitName(countryDashed);
+
+        const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
         const imageWithLinkHtml = this.config.image_clickable ? html`<a target="_new" href="${this.next_race.Circuit.url}">${imageHtml}</a>` : imageHtml;
 
         return html`<h2><img height="25" src="${getCountryFlagUrl(countryDashed)}">&nbsp;  ${this.next_race.round} :  ${this.next_race.raceName}</h2>${imageWithLinkHtml}<br> `
