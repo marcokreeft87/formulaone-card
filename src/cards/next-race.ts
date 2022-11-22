@@ -29,10 +29,18 @@ export default class NextRace extends BaseCard {
         return html`<h2><img height="25" src="${getCountryFlagUrl(countryDashed)}">&nbsp;  ${this.next_race.round} :  ${this.next_race.raceName}</h2>${imageWithLinkHtml}<br> `
     }
 
+    renderSeasonEnded(): HTMLTemplateResult {
+        return html`<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>`;
+    }
+
     render() : HTMLTemplateResult {
 
         if(!this.sensor_entity_id.endsWith('_races') || this.next_race === undefined) {
             throw new Error('Please pass the correct sensor (races)')
+        }
+
+        if(!this.next_race) {
+            return this.renderSeasonEnded();
         }
 
         const raceDate = new Date(this.next_race.date + 'T' + this.next_race.time);
