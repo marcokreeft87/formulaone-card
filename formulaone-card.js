@@ -19,7 +19,7 @@
                 ${t.map((t=>this.renderStandingRow(t)))}
             </tbody>
         </table>
-      `}}e.default=a},412:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(692),r=i(593),a=i(243),o=i(634);class s extends a.BaseCard{constructor(t,e,i){super(t,e,i),this.getCountryFlag=t=>{console.log(t,o.filter((e=>e.Nationality===t)).length);const e=o.filter((e=>e.Nationality===t))[0].Country.replace(" ","-");return(0,r.getCountryFlagUrl)(e)}}renderStandingRow(t){var e,i;return n.html`
+      `}}e.default=a},412:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(692),r=i(593),a=i(243),o=i(634);class s extends a.BaseCard{constructor(t,e,i){super(t,e,i),this.getCountryFlag=t=>{const e=o.filter((e=>e.Nationality===t))[0].Country.replace(" ","-");return(0,r.getCountryFlagUrl)(e)}}renderStandingRow(t){var e,i;return n.html`
             <tr>
                 <td class="width-40 text-center">${t.position}</td>
                 <td>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_flag)?n.html`<img height="10" src="${this.getCountryFlag(t.Driver.nationality)}">&nbsp;`:""}${t.Driver.code}</td>
