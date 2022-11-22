@@ -12,7 +12,6 @@ export default class DriverStandings extends BaseCard {
     }    
 
     getCountryFlag = (nationality: string) => {
-        console.log(nationality, countries.filter(x => x.Nationality === nationality).length);
         const country = countries.filter(x => x.Nationality === nationality)[0].Country;
         const countryDashed = country.replace(" ","-");
 

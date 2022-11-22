@@ -6,9 +6,19 @@ import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
     
+    next_race: Race;
+
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
+
+        const sensorEntity = this.hass.states[this.sensor_entity_id];
+
+        this.next_race = sensorEntity.attributes['next_race'] as Race;
     } 
+
+    renderSeasonEnded(): HTMLTemplateResult {
+        return html`<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>`;
+    }
 
     renderLocation(circuit: Circuit) {
         const locationConcatted = `${circuit.Location.locality}, ${circuit.Location.country}`;
@@ -34,6 +44,10 @@ export default class Schedule extends BaseCard {
         const data = this.sensor.data as Race[];
         if(!this.sensor_entity_id.endsWith('_races') || data === undefined) {
             throw new Error('Please pass the correct sensor (races)')
+        }
+        
+        if(!this.next_race) {
+            return this.renderSeasonEnded();
         }
 
         return html`
