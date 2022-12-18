@@ -9,7 +9,10 @@ Present the data of [hass-formulaoneapi](https://github.com/delzear/hass-formula
 
 ## Installation
 
-Manually add [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js)
+Use this button:
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcokreeft87&repository=formulaone-card&category=plugin)
+
+_OR_ Manually add [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js)
 to your `<config>/www/` folder and add the following to the `configuration.yaml` file:
 ```yaml
 lovelace:
