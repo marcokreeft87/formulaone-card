@@ -16,7 +16,11 @@ export default class NextRace extends BaseCard {
         const sensorEntity = this.hass.states[this.sensor_entity_id];
 
         this.next_race = sensorEntity.attributes['next_race'] as Race;
-    } 
+    }   
+    
+    cardSize(): number {
+        throw new Error("Method not implemented.");
+    }
 
     renderHeader(): HTMLTemplateResult {
         

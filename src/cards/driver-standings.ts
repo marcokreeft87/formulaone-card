@@ -10,6 +10,10 @@ export default class DriverStandings extends BaseCard {
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
     }    
+    
+    cardSize(): number {
+        throw new Error("Method not implemented.");
+    }  
 
     getCountryFlag = (nationality: string) => {
         const country = countries.filter(x => x.Nationality === nationality)[0].Country;

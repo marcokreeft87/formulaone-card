@@ -8,7 +8,11 @@ export default class LastResult extends BaseCard {
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
-    } 
+    }   
+    
+    cardSize(): number {
+        throw new Error("Method not implemented.");
+    }
 
     renderResultRow(result: Result): HTMLTemplateResult {
 

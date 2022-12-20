@@ -14,7 +14,11 @@ export default class Schedule extends BaseCard {
         const sensorEntity = this.hass.states[this.sensor_entity_id];
 
         this.next_race = sensorEntity.attributes['next_race'] as Race;
-    } 
+    }   
+    
+    cardSize(): number {
+        throw new Error("Method not implemented.");
+    }
 
     renderSeasonEnded(): HTMLTemplateResult {
         return html`<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>`;
