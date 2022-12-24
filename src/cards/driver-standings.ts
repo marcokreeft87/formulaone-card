@@ -12,7 +12,12 @@ export default class DriverStandings extends BaseCard {
     }    
     
     cardSize(): number {
-        throw new Error("Method not implemented.");
+        const data = this.sensor.data as DriverStanding[];
+        if(!data) {
+            return 2;
+        }
+
+        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
     }  
 
     getCountryFlag = (nationality: string) => {

@@ -19,7 +19,12 @@ export default class NextRace extends BaseCard {
     }   
     
     cardSize(): number {
-        throw new Error("Method not implemented.");
+        const data = this.next_race;
+        if(!data) {
+            return 2;
+        }
+
+        return 8;
     }
 
     renderHeader(): HTMLTemplateResult {

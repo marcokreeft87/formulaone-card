@@ -11,7 +11,12 @@ export default class LastResult extends BaseCard {
     }   
     
     cardSize(): number {
-        throw new Error("Method not implemented.");
+        const data = this.sensor.data as Race;
+        if(!data || !data.Results) {
+            return 2;
+        }
+
+        return (data.Results.length == 0 ? 1 : data.Results.length / 2 ) + 1;
     }
 
     renderResultRow(result: Result): HTMLTemplateResult {

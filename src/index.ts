@@ -56,26 +56,25 @@ export default class FormulaOneCard extends LitElement {
     }
 
     renderCardType(): HTMLTemplateResult {
-        let card: BaseCard;
         switch(this.config.card_type) {
             case FormulaOneCardType.ConstructorStandings:
-                card =  new ConstructorStandings(this.config.sensor, this._hass, this.config);
+                this.card =  new ConstructorStandings(this.config.sensor, this._hass, this.config);
                 break;
             case FormulaOneCardType.DriverStandings:                
-                card =  new DriverStandings(this.config.sensor, this._hass, this.config);
+                this.card =  new DriverStandings(this.config.sensor, this._hass, this.config);
                 break;
             case FormulaOneCardType.Schedule:                
-                card =  new Schedule(this.config.sensor, this._hass, this.config);
+                this.card =  new Schedule(this.config.sensor, this._hass, this.config);
                 break;
             case FormulaOneCardType.NextRace:                
-                card =  new NextRace(this.config.sensor, this._hass, this.config); 
+                this.card =  new NextRace(this.config.sensor, this._hass, this.config); 
                 break;    
             case FormulaOneCardType.LastResult:                
-                card = new LastResult(this.config.sensor, this._hass, this.config);
+                this.card = new LastResult(this.config.sensor, this._hass, this.config);
                 break;
         }
 
-        return card.render();
+        return this.card.render();
     }
 
     render() : HTMLTemplateResult {

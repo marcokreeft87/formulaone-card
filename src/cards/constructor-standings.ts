@@ -9,8 +9,13 @@ export default class ConstructorStandings extends BaseCard {
         super(sensor, hass, config);
     }    
     
-    cardSize(): number {
-        throw new Error("Method not implemented.");
+    cardSize(): number {        
+        const data = this.sensor.data as ConstructorStanding[];        
+        if(!data) {
+            return 2;
+        }
+
+        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
     }
 
     renderStandingRow(standing: ConstructorStanding): HTMLTemplateResult {
