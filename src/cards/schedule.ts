@@ -14,7 +14,16 @@ export default class Schedule extends BaseCard {
         const sensorEntity = this.hass.states[this.sensor_entity_id];
 
         this.next_race = sensorEntity.attributes['next_race'] as Race;
-    } 
+    }   
+    
+    cardSize(): number {
+        const data = this.sensor.data as Race[];        
+        if(!data) {
+            return 2;
+        }
+
+        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+    }
 
     renderSeasonEnded(): HTMLTemplateResult {
         return html`<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>`;

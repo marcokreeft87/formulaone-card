@@ -10,6 +10,15 @@ export default class DriverStandings extends BaseCard {
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
     }    
+    
+    cardSize(): number {
+        const data = this.sensor.data as DriverStanding[];
+        if(!data) {
+            return 2;
+        }
+
+        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+    }  
 
     getCountryFlag = (nationality: string) => {
         const country = countries.filter(x => x.Nationality === nationality)[0].Country;
