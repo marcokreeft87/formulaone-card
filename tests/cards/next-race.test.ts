@@ -117,5 +117,26 @@ describe('Testing next-race file', () => {
         const htmlResult = getRenderString(result);
 
         expect(htmlResult).toMatch('<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>');
+    }),
+    test('Calling cardSize with hass and sensor', () => { 
+        
+        const raceData = data as Race;
+        hassEntity.attributes['next_race'] = raceData;
+        hass.states = {
+            'sensor.test_sensor_races': hassEntity
+        };
+
+        const card = new NextRace('sensor.test_sensor_races', hass, config);
+        expect(card.cardSize()).toBe(8);
+    }),
+    test('Calling cardSize with hass and sensor without data', () => { 
+        
+        hassEntity.attributes['next_race'] = undefined;
+        hass.states = {
+            'sensor.test_sensor_races': hassEntity
+        };
+
+        const card = new NextRace('sensor.test_sensor_races', hass, config);
+        expect(card.cardSize()).toBe(2);
     })
 });

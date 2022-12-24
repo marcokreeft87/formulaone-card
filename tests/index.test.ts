@@ -179,6 +179,27 @@ describe('Testing index file function setConfig', () => {
         const result = card['shouldUpdate'](props);
 
         expect(result).toBeTruthy();
+    }),
+    test.each`
+    type | expected
+    ${FormulaOneCardType.ConstructorStandings}, ${2}
+    ${FormulaOneCardType.DriverStandings}, ${2}
+    ${FormulaOneCardType.LastResult}, ${2}
+    ${FormulaOneCardType.NextRace}, ${8}
+    ${FormulaOneCardType.Schedule}, ${2}
+    `('Calling getCardSize with type should return card size', ({ type, expected }) => {  
+        
+        const config: FormulaOneCardConfig = {
+            type: '',
+            title: 'Test',
+            card_type: type.toString(),
+            sensor: 'sensor.test_sensor_races'
+        }
+
+        card.setConfig(config);
+        card.hass = hass;
+        card.render();
+        expect(card.getCardSize()).toBe(expected);
     })
 })
 
