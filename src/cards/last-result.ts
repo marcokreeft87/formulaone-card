@@ -8,7 +8,16 @@ export default class LastResult extends BaseCard {
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
-    } 
+    }   
+    
+    cardSize(): number {
+        const data = this.sensor.data as Race;
+        if(!data || !data.Results) {
+            return 2;
+        }
+
+        return (data.Results.length == 0 ? 1 : data.Results.length / 2 ) + 1;
+    }
 
     renderResultRow(result: Result): HTMLTemplateResult {
 

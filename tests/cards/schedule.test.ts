@@ -99,5 +99,35 @@ describe('Testing schedule file', () => {
         const htmlResult = getRenderString(result);
 
         expect(htmlResult).toMatch('<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>');
+    }),
+    test('Calling cardSize with hass and sensor', () => { 
+        
+        hassEntity.attributes['data'] = data as Race[];
+        hass.states = {
+            'sensor.test_sensor_races': hassEntity
+        };
+
+        const card = new Schedule('sensor.test_sensor_races', hass, config);
+        expect(card.cardSize()).toBe(12);
+    }),
+    test('Calling cardSize with hass and sensor without data', () => { 
+        
+        hassEntity.attributes['data'] = [];
+        hass.states = {
+            'sensor.test_sensor_races': hassEntity
+        };
+
+        const card = new Schedule('sensor.test_sensor_races', hass, config);
+        expect(card.cardSize()).toBe(2);
+    })
+    test('Calling cardSize with hass and sensor without data', () => { 
+        
+        hassEntity.attributes['data'] = undefined;
+        hass.states = {
+            'sensor.test_sensor_races': hassEntity
+        };
+
+        const card = new Schedule('sensor.test_sensor_races', hass, config);
+        expect(card.cardSize()).toBe(2);
     })
 });

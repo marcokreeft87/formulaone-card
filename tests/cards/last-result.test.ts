@@ -67,5 +67,36 @@ describe('Testing last-result file', () => {
         const htmlResult = getRenderString(result);
 
         expect(htmlResult).toMatch('<h2><img height="25" src="https://www.countries-ofthe-world.com/flags-normal/flag-of-Singapore.png">&nbsp; 17 : Singapore Grand Prix</h2><a target="_new" href="http://en.wikipedia.org/wiki/Marina_Bay_Street_Circuit"><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png"></a><br>');
+    }),
+    test('Calling cardSize with hass and sensor', () => { 
+        
+        hassEntity.attributes['data'] = data as Race;
+        hass.states = {
+            'sensor.test_sensor_last_result': hassEntity
+        };
+
+        const card = new LastResult('sensor.test_sensor_last_result', hass, config);
+        expect(card.cardSize()).toBe(11);
+    }),
+    test('Calling cardSize with hass and sensor without data', () => { 
+        
+        hassEntity.attributes['data'] = undefined;
+        hass.states = {
+            'sensor.test_sensor_last_result': hassEntity
+        };
+
+        const card = new LastResult('sensor.test_sensor_last_result', hass, config);
+        expect(card.cardSize()).toBe(2);
+    }),
+    test('Calling cardSize with hass and sensor', () => { 
+        const raceData = data as Race;
+        raceData.Results = [];
+        hassEntity.attributes['data'] = raceData;
+        hass.states = {
+            'sensor.test_sensor_last_result': hassEntity
+        };
+
+        const card = new LastResult('sensor.test_sensor_last_result', hass, config);
+        expect(card.cardSize()).toBe(2);
     })
 });

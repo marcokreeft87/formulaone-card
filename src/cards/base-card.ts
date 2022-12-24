@@ -23,4 +23,6 @@ export abstract class BaseCard {
     }
 
     abstract render() : HTMLTemplateResult;
+
+    abstract cardSize() : number;
 }

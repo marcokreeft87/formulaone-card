@@ -10,6 +10,7 @@ import DriverStandings from './cards/driver-standings';
 import Schedule from './cards/schedule';
 import NextRace from './cards/next-race';
 import LastResult from './cards/last-result';
+import { BaseCard } from './cards/base-card';
 
 console.info(
     `%c FORMULAONE-CARD %c ${packageJson.version}`,
@@ -31,6 +32,7 @@ console.info(
 export default class FormulaOneCard extends LitElement {
     @property() _hass?: HomeAssistant;
     @property() config?: FormulaOneCardConfig;
+    @property() card: BaseCard;
 
     setConfig(config: FormulaOneCardConfig) {      
         
@@ -56,16 +58,23 @@ export default class FormulaOneCard extends LitElement {
     renderCardType(): HTMLTemplateResult {
         switch(this.config.card_type) {
             case FormulaOneCardType.ConstructorStandings:
-                return new ConstructorStandings(this.config.sensor, this._hass, this.config).render();
+                this.card =  new ConstructorStandings(this.config.sensor, this._hass, this.config);
+                break;
             case FormulaOneCardType.DriverStandings:                
-                return new DriverStandings(this.config.sensor, this._hass, this.config).render();
+                this.card =  new DriverStandings(this.config.sensor, this._hass, this.config);
+                break;
             case FormulaOneCardType.Schedule:                
-                return new Schedule(this.config.sensor, this._hass, this.config).render();
+                this.card =  new Schedule(this.config.sensor, this._hass, this.config);
+                break;
             case FormulaOneCardType.NextRace:                
-                return new NextRace(this.config.sensor, this._hass, this.config).render();     
+                this.card =  new NextRace(this.config.sensor, this._hass, this.config); 
+                break;    
             case FormulaOneCardType.LastResult:                
-                return new LastResult(this.config.sensor, this._hass, this.config).render();
+                this.card = new LastResult(this.config.sensor, this._hass, this.config);
+                break;
         }
+
+        return this.card.render();
     }
 
     render() : HTMLTemplateResult {
@@ -81,5 +90,9 @@ export default class FormulaOneCard extends LitElement {
         } catch (error) {
             return html`<hui-warning>${error.toString()}</hui-warning>`;
         }
+    }
+
+    getCardSize() {
+        return this.card.cardSize();
     }
 }

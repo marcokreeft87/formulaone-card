@@ -8,6 +8,15 @@ export default class ConstructorStandings extends BaseCard {
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
     }    
+    
+    cardSize(): number {        
+        const data = this.sensor.data as ConstructorStanding[];        
+        if(!data) {
+            return 2;
+        }
+
+        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+    }
 
     renderStandingRow(standing: ConstructorStanding): HTMLTemplateResult {
         return html`
