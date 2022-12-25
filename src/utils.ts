@@ -24,16 +24,16 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
     }
 };
 
-export const getCountryFlagUrl = (countryDashed: string) => {
-    const exceptions = [{ countryDashed: 'USA', name: 'United-States-of-America'}, { countryDashed: 'UAE', name: 'United-Arab-Emirates'}];
+export const getCountryFlagUrl = (countryCode: string) => {
+    const exceptions = [{ countryCode: 'USA', corrected: 'US'}, { countryCode: 'UAE', corrected: 'AE'}];
 
-    const exception = exceptions.filter(exception => exception.countryDashed == countryDashed);
+    const exception = exceptions.filter(exception => exception.countryCode == countryCode);
     if(exception.length > 0)
     {
-        countryDashed = exception[0].name; 
+        countryCode = exception[0].corrected; 
     }
 
-    return `https://www.countries-ofthe-world.com/flags-normal/flag-of-${countryDashed}.png`;
+    return `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
 }
 
 export const getCircuitName = (circuitName: string) => {
