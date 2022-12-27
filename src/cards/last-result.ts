@@ -5,6 +5,13 @@ import { getCircuitName, getCountryFlagUrl, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
+    
+    defaultTranslations = {
+        'driver' : 'Driver',   
+        'grid' : 'Grid',
+        'points' : 'Points',
+        'status' : 'Status'
+    };
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
@@ -60,10 +67,10 @@ export default class LastResult extends BaseCard {
                 <thead>                    
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Driver</th>
-                        <th class="text-center">Grid</th>
-                        <th class="text-ccenter">Points</th>
-                        <th>Status</th>
+                        <th>${this.translation('driver')}</th>
+                        <th class="text-center">${this.translation('grid')}</th>
+                        <th class="text-ccenter">${this.translation('points')}</th>
+                        <th>${this.translation('status')}</th>
                     </tr>
                 </thead>
                 <tbody>
