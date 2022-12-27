@@ -117,6 +117,7 @@ title: Last Result
 The following texts can be translated or altered.
 
 | Card type(s) | Key | Default value |
+| ----------------------------------- | ------------- | ----------------------------------- |
 | next_race, schedule | date' | 'Date' |
 | next_race | practice1' | 'Practice 1' |
 | next_race | practice2' | 'Practice 2' |
