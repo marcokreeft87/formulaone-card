@@ -4,6 +4,11 @@ import { ConstructorStanding, FormulaOneCardConfig } from "../types/formulaone-c
 import { BaseCard } from "./base-card";
 
 export default class ConstructorStandings extends BaseCard {
+    defaultTranslations = {
+        'constructor' : 'Constructor',   
+        'points' : 'Pts',
+        'wins' : 'Wins'
+    };
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
@@ -40,9 +45,9 @@ export default class ConstructorStandings extends BaseCard {
             <thead>
             <tr>
                 <th class="width-50">&nbsp;</th>
-                <th>Constructor</th>
-                <th class="width-60 text-center">Pts</th>
-                <th class="text-center">Wins</th>
+                <th>${this.translation('constructor')}</th>
+                <th class="width-60 text-center">${this.translation('points')}</th>
+                <th class="text-center">${this.translation('wins')}</th>
             </tr>
             </thead>
             <tbody>

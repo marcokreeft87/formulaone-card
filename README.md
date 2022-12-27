@@ -47,6 +47,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 | standings         | object        |                                     | Configuration for the driver standings card     |
+| translations      | dictionary    |  _[translations](#Translations)_          | Dictionary to override the default translation  |
 
 ```
 type: custom:formulaone-card
@@ -110,3 +111,54 @@ title: Last Result
 ```
 ![image](https://user-images.githubusercontent.com/10223677/194120925-5fc6c1a7-8b2a-4c58-b89c-d0316d70efe9.png)
 
+
+## Translations
+
+The following texts can be translated or altered.
+
+| Card type(s) | Key | Default value |
+| next_race, schedule | date' | 'Date' |
+| next_race | practice1' | 'Practice 1' |
+| next_race | practice2' | 'Practice 2' |
+| next_race | practice3' | 'Practice 3' |
+| next_race, schedule | race' | 'Race' |
+| next_race | racename' | 'Race name' |
+| next_race | circuitname' | 'Circuit name' |
+| next_race, schedule | location' | 'Location' |
+| next_race | racetime' | 'Race' |
+| next_race | sprint' | 'Sprint' |
+| next_race | qualifying' | 'Qualifying' |
+| next_race, schedule | endofseason' | 'Season is over. See you next year!' |
+| constructor_standings | 'constructor' | 'Constructor' |
+| constructor_standings, driver_standings, last_result | 'points' | 'Pts' |
+| constructor_standings, driver_standings | 'wins' | 'Wins' |
+| driver_standings | 'team' | 'Team' |
+| driver_standings, last_result | 'driver' | 'Driver' |
+| last_result | 'grid' | 'Grid' |
+| last_result | 'status' | 'Status' |
+| schedule | 'time' | 'Time' |
+
+Example:
+
+```
+type: custom:formulaone-card
+card_type: next_race
+sensor: sensor.formula_one_sensor_races
+title: Next Race
+date_locale: nl
+image_clickable: true
+translations: 
+  'date' : 'Date'  
+  'practice1' : 'Practice 1'
+  'practice2' : 'Practice 2'
+  'practice3' : 'Practice 3'
+  'race' : 'Race'
+  'racename' : 'Race name'
+  'circuitname' : 'Circuit name'
+  'location' : 'Location'
+  'racetime' : 'Race'
+  'sprint' : 'Sprint'
+  'qualifying' : 'Qualifying'
+  'endofseason' : 'Season is over. See you next year!!'
+
+```

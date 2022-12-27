@@ -6,6 +6,14 @@ import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
     
+    defaultTranslations = {
+        'date' : 'Date',   
+        'race' : 'Race',
+        'time' : 'Time',
+        'location' : 'Location',
+        'endofseason' : 'Season is over. See you next year!'
+    };
+    
     next_race: Race;
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
@@ -26,7 +34,7 @@ export default class Schedule extends BaseCard {
     }
 
     renderSeasonEnded(): HTMLTemplateResult {
-        return html`<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>`;
+        return html`<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
     }
 
     renderLocation(circuit: Circuit) {
@@ -64,10 +72,10 @@ export default class Schedule extends BaseCard {
             <thead>
                 <tr>
                     <th>&nbsp;</th>
-                    <th>Race</th>
-                    <th>Location</th>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Time</th>
+                    <th>${this.translation('race')}</th>
+                    <th>${this.translation('location')}</th>
+                    <th class="text-center">${this.translation('date')}</th>
+                    <th class="text-center">${this.translation('time')}</th>
                 </tr>
             </thead>
             <tbody>

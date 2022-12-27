@@ -7,6 +7,21 @@ import { getCircuitName, getCountryFlagUrl } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class NextRace extends BaseCard {
+    
+    defaultTranslations = {
+        'date' : 'Date',   
+        'practice1' : 'Practice 1',
+        'practice2' : 'Practice 2',
+        'practice3' : 'Practice 3',
+        'race' : 'Race',
+        'racename' : 'Race name',
+        'circuitname' : 'Circuit name',
+        'location' : 'Location',
+        'racetime' : 'Race',
+        'sprint' : 'Sprint',
+        'qualifying' : 'Qualifying',
+        'endofseason' : 'Season is over. See you next year!'
+    };
 
     next_race: Race;
 
@@ -39,7 +54,7 @@ export default class NextRace extends BaseCard {
     }
 
     renderSeasonEnded(): HTMLTemplateResult {
-        return html`<table><tr><td class="text-center"><strong>Season is over. See you next year!</strong></td></tr></table>`;
+        return html`<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
     }
 
     render() : HTMLTemplateResult {
@@ -67,12 +82,12 @@ export default class NextRace extends BaseCard {
                     <tr>
                         <td colspan="5">${this.renderHeader()}</td>
                     </tr>
-                    <tr><td>Date</td><td>${formatDateNumeric(raceDate, this.hass.locale, this.config.date_locale)}</td><td>&nbsp;</td><td>Practice 1</td><td align="right">${freePractice1}</td></tr>
-                    <tr><td>Race</td><td>${this.next_race.round}</td><td>&nbsp;</td><td>Practice 2</td><td align="right">${freePractice2}</td></tr>
-                    <tr><td>Race name</td><td>${this.next_race.raceName}</td><td>&nbsp;</td><td>Practice 3</td><td align="right">${freePractice3}</td></tr>
-                    <tr><td>Circuit name</td><td>${this.next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>Qualifying</td><td align="right">${qualifyingDate}</td></tr>
-                    <tr><td>Location</td><td>${this.next_race.Circuit.Location.country}</td><td>&nbsp;</td><td>Sprint</td><td align="right">${sprintDate}</td></tr>        
-                    <tr><td>City</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>Race</td><td align="right">${raceDateFormatted}</td></tr>        
+                    <tr><td>${this.translation('date')}</td><td>${formatDateNumeric(raceDate, this.hass.locale, this.config.date_locale)}</td><td>&nbsp;</td><td>${this.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
+                    <tr><td>${this.translation('race')}</td><td>${this.next_race.round}</td><td>&nbsp;</td><td>${this.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
+                    <tr><td>${this.translation('racename')}</td><td>${this.next_race.raceName}</td><td>&nbsp;</td><td>${this.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
+                    <tr><td>${this.translation('circuitname')}</td><td>${this.next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>${this.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
+                    <tr><td>${this.translation('location')}</td><td>${this.next_race.Circuit.Location.country}</td><td>&nbsp;</td><td>${this.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
+                    <tr><td>City</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
                 </tbody>
             </table>
       `;
