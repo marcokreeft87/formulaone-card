@@ -6,6 +6,12 @@ import { BaseCard } from "./base-card";
 import * as countries from '../data/countries.json';
 
 export default class DriverStandings extends BaseCard {
+    defaultTranslations = {
+        'driver' : 'Driver',   
+        'team' : 'Team',
+        'points' : 'Pts',
+        'wins' : 'Wins'
+    };
 
     constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(sensor, hass, config);
@@ -50,10 +56,10 @@ export default class DriverStandings extends BaseCard {
             <thead>
             <tr>
                 <th class="width-50" colspan="2">&nbsp;</th>
-                <th>Driver</th>                
-                ${(this.config.standings?.show_team ? html`<th>Team</th>` : '')}
-                <th class="width-60 text-center">Pts</th>
-                <th class="text-center">Wins</th>
+                <th>${this.translation('driver')}</th>                
+                ${(this.config.standings?.show_team ? html`<th>${this.translation('team')}</th>` : '')}
+                <th class="width-60 text-center">${this.translation('points')}</th>
+                <th class="text-center">${this.translation('wins')}</th>
             </tr>
             </thead>
             <tbody>
