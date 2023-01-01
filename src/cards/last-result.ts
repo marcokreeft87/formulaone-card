@@ -1,7 +1,7 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { FormulaOneCardConfig, Race, Result } from "../types/formulaone-card-types";
-import { getCircuitName, getCountryFlagUrl, getDriverName } from "../utils";
+import { getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -46,7 +46,7 @@ export default class LastResult extends BaseCard {
         const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
         const imageWithLinkHtml = this.config.image_clickable ? html`<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
 
-        return html`<h2><img height="25" src="${getCountryFlagUrl(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
+        return html`<h2><img height="25" src="${getCountryFlagByName(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
     }
 
     render() : HTMLTemplateResult {
