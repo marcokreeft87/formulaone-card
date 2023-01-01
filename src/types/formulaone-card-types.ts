@@ -41,8 +41,7 @@ export enum FormulaOneCardType {
     ConstructorStandings = 'constructor_standings',
     NextRace = 'next_race',
     Schedule = 'schedule',
-    LastResult = 'last_result',
-    Results = 'results'
+    LastResult = 'last_result'
 }
 
 export interface Location {
