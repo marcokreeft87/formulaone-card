@@ -31,9 +31,6 @@ export const getCountryFlagByName = (countryName: string) => {
     }
 
     const country = countries.filter(x => x.Country === countryName)[0];
-    if(country == undefined) {
-        throw new Error(`${countryName} not found`);
-    }
 
     return getCountryFlagUrl(country.Code);
 }
