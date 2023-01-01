@@ -1,6 +1,7 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { PropertyValues } from "lit";
 import { Driver, FormulaOneCardConfig } from "./types/formulaone-card-types";
+import * as countries from './data/countries.json';
 
 export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -13,6 +14,18 @@ export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedPr
     }
     return false;
 };
+
+export const getCountryFlagByNationality = (nationality: string) => {
+    const country = countries.filter(x => x.Nationality === nationality)[0];
+
+    return getCountryFlagUrl(country.Code);
+}
+
+export const getCountryFlagByName = (countryName: string) => {
+    const country = countries.filter(x => x.Country === countryName)[0];
+
+    return getCountryFlagUrl(country.Code);
+}
 
 export const checkConfig = (config: FormulaOneCardConfig) => {
     if (config.card_type === undefined) {
