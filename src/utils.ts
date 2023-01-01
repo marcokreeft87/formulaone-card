@@ -22,7 +22,18 @@ export const getCountryFlagByNationality = (nationality: string) => {
 }
 
 export const getCountryFlagByName = (countryName: string) => {
+    const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'}];
+
+    const exception = exceptions.filter(exception => exception.countryCode == countryName);
+    if(exception.length > 0)
+    {
+        countryName = exception[0].corrected;
+    }
+
     const country = countries.filter(x => x.Country === countryName)[0];
+    if(country == undefined) {
+        throw new Error(`${countryName} not found`);
+    }
 
     return getCountryFlagUrl(country.Code);
 }
