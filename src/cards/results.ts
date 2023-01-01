@@ -13,17 +13,21 @@ export default class Results extends BaseCard {
         'driver' : 'Driver',   
         'grid' : 'Grid',
         'points' : 'Points',
-        'status' : 'Status'
+        'status' : 'Status',
+        'raceheader' : 'Race',
+        'seasonheader' : 'Season',
     };
-    results: Result[];
-    seasons: Season[];
-    races: Race[];
+    results: Result[] = [];
+    seasons: Season[] = [];
+    races: Race[] = [];
     selectedRace: Race;
+    selectedSeason: Season;
 
     constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
         super(null, hass, config);
 
         this.client = new ErgastClient();
+        this.getSeasons().then(response => this.seasons = response)
     }   
 
     async getSeasons() : Promise<Season[]> {
@@ -62,6 +66,10 @@ export default class Results extends BaseCard {
 
     renderHeader(): HTMLTemplateResult {
         
+        if(!this.selectedRace) {
+            return null;
+        }
+
         const data = this.selectedRace;
         const countryDashed = data.Circuit.Location.country.replace(" ","-");
         const circuitName = getCircuitName(countryDashed);
@@ -69,6 +77,36 @@ export default class Results extends BaseCard {
         const imageWithLinkHtml = this.config.image_clickable ? html`<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
 
         return html`<h2><img height="25" src="${getCountryFlagUrl(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
+    }
+
+    async selectedSeasonChanged(ev: any): Promise<any> {
+        const option = ev.detail.item.innerText;
+        console.log('Season', option);
+
+        this.getSeasonRaces(option).then(response => this.races = response);
+        // const selected = this.stateObj.state;
+        // if (ev.detail && ev.detail.item) {
+        //   this.setScrollTop(ev.detail.item.offsetTop);
+        // }
+        // if (option === selected) {
+        //   return;
+        // }
+        // await SelectListCard.setInputSelectOption(this.hass, this.config.entity, option);
+    }
+    
+    async selectedRaceChanged(ev: any): Promise<any> {
+        const option = ev.detail.item.innerText;
+        console.log('Race', option);
+
+        //this.getSeasonRaces(option).then(response => this.races = response);
+        // const selected = this.stateObj.state;
+        // if (ev.detail && ev.detail.item) {
+        //   this.setScrollTop(ev.detail.item.offsetTop);
+        // }
+        // if (option === selected) {
+        //   return;
+        // }
+        // await SelectListCard.setInputSelectOption(this.hass, this.config.entity, option);
     }
 
     render() : HTMLTemplateResult {
@@ -79,20 +117,39 @@ export default class Results extends BaseCard {
         // if(!this.sensor_entity_id.endsWith('_last_result') || data === undefined) {
         //     throw new Error('Please pass the correct sensor (last_result)')
         // }
+        /* 
+         <select name="selectedSeason">
+                            ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
+                        </select> 
+                        
+                        style="${style}"
+                        */
 
         
         return html`   
             <table>
                 <tr>
                     <td>
-                        <select name="selectedSeason">
-                            ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
-                        </select>
+                        <paper-listbox
+                            id="seasons"
+                            label="${this.translation('seasonheader')}"
+                            @iron-select=${this.selectedSeasonChanged}
+                            .selected=${this.seasons.indexOf(this.selectedSeason)}>
+                            ${this.seasons.map(season => {
+                                return html`<paper-item>${season.season}</paper-item>`;
+                            })}
+                        </paper-listbox>                       
                     </td>
                     <td>
-                        <select name="selectedRace">
-                            ${this.races.map(race => `<option value="${race.round}">${race.round} ${race.raceName}</option>`)}
-                        </select>
+                        <paper-listbox
+                            id="races"
+                            label="${this.translation('raceheader')}"
+                            @iron-select=${this.selectedRaceChanged}
+                            .selected=${this.races.indexOf(this.selectedRace)}>
+                            ${this.races.map(race => {
+                                return html`<paper-item>${race.round} ${race.raceName}</paper-item>`;
+                            })}
+                        </paper-listbox>     
                     </td>
                 </tr>
                 <tr>

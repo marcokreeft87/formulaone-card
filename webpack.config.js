@@ -9,6 +9,9 @@ module.exports = {
         filename: 'formulaone-card.js',
         path: path.resolve(__dirname),
     },
+    optimization: {
+        minimize: true
+    },
     module: {
         rules: [
             {
@@ -34,5 +37,18 @@ module.exports = {
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        fallback: {
+            fs: false,
+            tls: false,
+            "http": require.resolve("stream-http"),
+            "https": require.resolve("https-browserify"),
+            "url": require.resolve("url/"),
+            "zlib": require.resolve("browserify-zlib"),
+            "path": require.resolve("path-browserify"),
+            "assert": require.resolve("assert"),
+            "util": require.resolve("util"),
+            "stream": require.resolve("stream-browserify"),
+            "buffer": require.resolve("buffer")
+        }
     }
 };
