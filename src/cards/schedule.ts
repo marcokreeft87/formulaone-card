@@ -5,7 +5,6 @@ import { Circuit, FormulaOneCardConfig, Race } from "../types/formulaone-card-ty
 import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
-    
     defaultTranslations = {
         'date' : 'Date',   
         'race' : 'Race',

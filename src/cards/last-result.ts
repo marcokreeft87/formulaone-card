@@ -5,7 +5,6 @@ import { getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
-    
     defaultTranslations = {
         'driver' : 'Driver',   
         'grid' : 'Grid',

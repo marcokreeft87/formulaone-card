@@ -7,7 +7,6 @@ import { getCircuitName, getCountryFlagByName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class NextRace extends BaseCard {
-    
     defaultTranslations = {
         'date' : 'Date',   
         'practice1' : 'Practice 1',

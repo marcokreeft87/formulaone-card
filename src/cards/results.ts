@@ -6,8 +6,7 @@ import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getCircuitName, getCountryFlagUrl, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
-export default class Results extends BaseCard {
-    
+export default class Results extends BaseCard {    
     client: ErgastClient;
     defaultTranslations = {
         'driver' : 'Driver',   
@@ -27,7 +26,9 @@ export default class Results extends BaseCard {
         super(null, hass, config);
 
         this.client = new ErgastClient();
-        this.getSeasons().then(response => this.seasons = response)
+        this.getSeasons().then(response => { 
+            this.seasons = response; 
+        });
     }   
 
     async getSeasons() : Promise<Season[]> {
@@ -130,6 +131,9 @@ export default class Results extends BaseCard {
             <table>
                 <tr>
                     <td>
+                        <select name="selectedSeason">
+                            ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
+                        </select> 
                         <paper-listbox
                             id="seasons"
                             label="${this.translation('seasonheader')}"

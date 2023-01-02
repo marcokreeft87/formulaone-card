@@ -11,6 +11,7 @@ import Schedule from './cards/schedule';
 import NextRace from './cards/next-race';
 import LastResult from './cards/last-result';
 import { BaseCard } from './cards/base-card';
+import Results from './cards/results';
 
 console.info(
     `%c FORMULAONE-CARD %c ${packageJson.version}`,
@@ -71,6 +72,9 @@ export default class FormulaOneCard extends LitElement {
                 break;    
             case FormulaOneCardType.LastResult:                
                 this.card = new LastResult(this.config.sensor, this._hass, this.config);
+                break;
+            case FormulaOneCardType.Results:                
+                this.card = new Results(this._hass, this.config);
                 break;
         }
 

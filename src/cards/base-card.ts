@@ -18,6 +18,10 @@ export abstract class BaseCard {
     }    
 
     getSensor() : FormulaOneSensor {
+        if(!this.sensor_entity_id) {
+            return null;
+        }
+
         const sensorEntity = this.hass.states[this.sensor_entity_id];
         return { last_update: new Date(sensorEntity.attributes['last_update']), data: sensorEntity.attributes['data']  }
     }
