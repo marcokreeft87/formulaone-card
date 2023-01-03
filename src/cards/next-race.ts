@@ -17,6 +17,7 @@ export default class NextRace extends BaseCard {
         'racename' : 'Race name',
         'circuitname' : 'Circuit name',
         'location' : 'Location',
+        'city': 'City',
         'racetime' : 'Race',
         'sprint' : 'Sprint',
         'qualifying' : 'Qualifying',
@@ -87,7 +88,7 @@ export default class NextRace extends BaseCard {
                     <tr><td>${this.translation('racename')}</td><td>${this.next_race.raceName}</td><td>&nbsp;</td><td>${this.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
                     <tr><td>${this.translation('circuitname')}</td><td>${this.next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>${this.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
                     <tr><td>${this.translation('location')}</td><td>${this.next_race.Circuit.Location.country}</td><td>&nbsp;</td><td>${this.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
-                    <tr><td>City</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
+                    <tr><td>${this.translation('city')}</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
                 </tbody>
             </table>
       `;
