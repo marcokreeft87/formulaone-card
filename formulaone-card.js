@@ -188,7 +188,7 @@ class ErgastClient {
     }
     GetSeasons() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data, status } = yield axios_1.default.get('seasons.json', {
+            const { data, status } = yield axios_1.default.get('seasons.json?limit=200', {
                 headers: {
                     Accept: 'application/json',
                 },
@@ -468,6 +468,7 @@ class NextRace extends base_card_1.BaseCard {
             'racename': 'Race name',
             'circuitname': 'Circuit name',
             'location': 'Location',
+            'city': 'City',
             'racetime': 'Race',
             'sprint': 'Sprint',
             'qualifying': 'Qualifying',
@@ -519,7 +520,7 @@ class NextRace extends base_card_1.BaseCard {
                     <tr><td>${this.translation('racename')}</td><td>${this.next_race.raceName}</td><td>&nbsp;</td><td>${this.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
                     <tr><td>${this.translation('circuitname')}</td><td>${this.next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>${this.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
                     <tr><td>${this.translation('location')}</td><td>${this.next_race.Circuit.Location.country}</td><td>&nbsp;</td><td>${this.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
-                    <tr><td>City</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
+                    <tr><td>${this.translation('city')}</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
                 </tbody>
             </table>
       `;
@@ -545,6 +546,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
+const until_js_1 = __webpack_require__(885);
 const ergast_client_1 = __webpack_require__(171);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
@@ -560,18 +562,8 @@ class Results extends base_card_1.BaseCard {
             'seasonheader': 'Season',
         };
         this.results = [];
-        this.seasons = [];
         this.races = [];
         this.client = new ergast_client_1.default();
-        this.getSeasons().then(response => {
-            this.seasons = response;
-            this.config.test = 't';
-        });
-    }
-    getSeasons() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.client.GetSeasons();
-        });
     }
     getSeasonRaces(season) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -624,19 +616,14 @@ class Results extends base_card_1.BaseCard {
         return (0, lit_html_1.html) `   
             <table>
                 <tr>
-                    <td>
-                        <select name="selectedSeason">
-                            ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
-                        </select> 
-                        <paper-listbox
-                            id="seasons"
-                            label="${this.translation('seasonheader')}"
-                            @iron-select=${this.selectedSeasonChanged}
-                            .selected=${this.seasons.indexOf(this.selectedSeason)}>
-                            ${this.seasons.map(season => {
-            return (0, lit_html_1.html) `<paper-item>${season.season}</paper-item>`;
-        })}
-                        </paper-listbox>                       
+                    <td>                        
+                        ${(0, until_js_1.until)(this.client.GetSeasons().then(response => response
+            ? (0, lit_html_1.html) `<select name="selectedSeason">
+                                    ${response.map(season => {
+                return (0, lit_html_1.html) `<option value="${season.season}">${season.season}</option>`;
+            })}
+                                </select>`
+            : (0, lit_html_1.html) `Error getting seasons`), (0, lit_html_1.html) `Loading...`)}                 
                     </td>
                     <td>
                         <paper-listbox
@@ -4280,6 +4267,68 @@ module.exports = axios;
 
 /***/ }),
 
+/***/ 885:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "UntilDirective": () => (/* binding */ until_h),
+  "until": () => (/* binding */ until_c)
+});
+
+// EXTERNAL MODULE: ./node_modules/lit-html/lit-html.js
+var lit_html = __webpack_require__(692);
+;// CONCATENATED MODULE: ./node_modules/lit-html/directive-helpers.js
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const{H:l}=lit_html._$LH,directive_helpers_t=o=>null===o||"object"!=typeof o&&"function"!=typeof o,i={HTML:1,SVG:2},n=(o,l)=>void 0===l?void 0!==(null==o?void 0:o._$litType$):(null==o?void 0:o._$litType$)===l,d=o=>void 0!==(null==o?void 0:o._$litDirective$),v=o=>null==o?void 0:o._$litDirective$,e=o=>void 0===o.strings,c=()=>document.createComment(""),r=(o,t,i)=>{var n;const d=o._$AA.parentNode,v=void 0===t?o._$AB:t._$AA;if(void 0===i){const t=d.insertBefore(c(),v),n=d.insertBefore(c(),v);i=new l(t,n,o,o.options)}else{const l=i._$AB.nextSibling,t=i._$AM,e=t!==o;if(e){let l;null===(n=i._$AQ)||void 0===n||n.call(i,o),i._$AM=o,void 0!==i._$AP&&(l=o._$AU)!==t._$AU&&i._$AP(l)}if(l!==v||e){let o=i._$AA;for(;o!==l;){const l=o.nextSibling;d.insertBefore(o,v),o=l}}}return i},u=(o,l,t=o)=>(o._$AI(l,t),o),f={},s=(o,l=f)=>o._$AH=l,m=o=>o._$AH,p=o=>{var l;null===(l=o._$AP)||void 0===l||l.call(o,!1,!0);let t=o._$AA;const i=o._$AB.nextSibling;for(;t!==i;){const o=t.nextSibling;t.remove(),t=o}},a=o=>{o._$AR()};
+//# sourceMappingURL=directive-helpers.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/directive.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const directive_t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},directive_e=t=>(...e)=>({_$litDirective$:t,values:e});class directive_i{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}
+//# sourceMappingURL=directive.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/async-directive.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const async_directive_s=(i,t)=>{var e,o;const r=i._$AN;if(void 0===r)return!1;for(const i of r)null===(o=(e=i)._$AO)||void 0===o||o.call(e,t,!1),async_directive_s(i,t);return!0},o=i=>{let t,e;do{if(void 0===(t=i._$AM))break;e=t._$AN,e.delete(i),i=t}while(0===(null==e?void 0:e.size))},async_directive_r=i=>{for(let t;t=i._$AM;i=t){let e=t._$AN;if(void 0===e)t._$AN=e=new Set;else if(e.has(i))break;e.add(i),async_directive_l(t)}};function async_directive_n(i){void 0!==this._$AN?(o(this),this._$AM=i,async_directive_r(this)):this._$AM=i}function h(i,t=!1,e=0){const r=this._$AH,n=this._$AN;if(void 0!==n&&0!==n.size)if(t)if(Array.isArray(r))for(let i=e;i<r.length;i++)async_directive_s(r[i],!1),o(r[i]);else null!=r&&(async_directive_s(r,!1),o(r));else async_directive_s(this,i)}const async_directive_l=i=>{var t,s,o,r;i.type==directive_t.CHILD&&(null!==(t=(o=i)._$AP)&&void 0!==t||(o._$AP=h),null!==(s=(r=i)._$AQ)&&void 0!==s||(r._$AQ=async_directive_n))};class async_directive_c extends directive_i{constructor(){super(...arguments),this._$AN=void 0}_$AT(i,t,e){super._$AT(i,t,e),async_directive_r(this),this.isConnected=i._$AU}_$AO(i,t=!0){var e,r;i!==this.isConnected&&(this.isConnected=i,i?null===(e=this.reconnected)||void 0===e||e.call(this):null===(r=this.disconnected)||void 0===r||r.call(this)),t&&(async_directive_s(this,i),o(this))}setValue(t){if(e(this._$Ct))this._$Ct._$AI(t,this);else{const i=[...this._$Ct._$AH];i[this._$Ci]=t,this._$Ct._$AI(i,this,0)}}disconnected(){}reconnected(){}}
+//# sourceMappingURL=async-directive.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/directives/private-async-helpers.js
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t=async(t,s)=>{for await(const i of t)if(!1===await s(i))return};class private_async_helpers_s{constructor(t){this.Y=t}disconnect(){this.Y=void 0}reconnect(t){this.Y=t}deref(){return this.Y}}class private_async_helpers_i{constructor(){this.Z=void 0,this.q=void 0}get(){return this.Z}pause(){var t;null!==(t=this.Z)&&void 0!==t||(this.Z=new Promise((t=>this.q=t)))}resume(){var t;null===(t=this.q)||void 0===t||t.call(this),this.Z=this.q=void 0}}
+//# sourceMappingURL=private-async-helpers.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/directives/until.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const until_n=t=>!directive_helpers_t(t)&&"function"==typeof t.then;class until_h extends async_directive_c{constructor(){super(...arguments),this._$Cwt=1073741823,this._$Cyt=[],this._$CK=new private_async_helpers_s(this),this._$CX=new private_async_helpers_i}render(...s){var i;return null!==(i=s.find((t=>!until_n(t))))&&void 0!==i?i:lit_html.noChange}update(s,i){const r=this._$Cyt;let e=r.length;this._$Cyt=i;const o=this._$CK,h=this._$CX;this.isConnected||this.disconnected();for(let t=0;t<i.length&&!(t>this._$Cwt);t++){const s=i[t];if(!until_n(s))return this._$Cwt=t,s;t<e&&s===r[t]||(this._$Cwt=1073741823,e=0,Promise.resolve(s).then((async t=>{for(;h.get();)await h.get();const i=o.deref();if(void 0!==i){const r=i._$Cyt.indexOf(s);r>-1&&r<i._$Cwt&&(i._$Cwt=r,i.setValue(t))}})))}return lit_html.noChange}disconnected(){this._$CK.disconnect(),this._$CX.pause()}reconnected(){this._$CK.reconnect(this),this._$CX.resume()}}const until_c=directive_e(until_h);
+//# sourceMappingURL=until.js.map
+
+
+/***/ }),
+
 /***/ 692:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
@@ -4487,7 +4536,7 @@ var lit_html = __webpack_require__(692);
 /***/ 147:
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"name":"formulaone-card","version":"0.2.3","description":"Frontend card for hass-formulaoneapi","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.1.1","@typescript-eslint/eslint-plugin":"^5.39.0","@typescript-eslint/parser":"^5.39.0","eslint":"^8.24.0","home-assistant-js-websocket":"^8.0.0","lit":"^2.3.1","path-browserify":"^1.0.1","typescript":"^4.8.4","webpack":"^5.74.0","webpack-cli":"^4.10.0"},"dependencies":{"@babel/plugin-transform-runtime":"^7.19.1","@babel/preset-env":"^7.19.3","@lit-labs/scoped-registry-mixin":"^1.0.1","axios":"^1.2.2","babel-jest":"^29.1.2","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","jest-environment-jsdom":"^29.1.2","jest-ts-auto-mock":"^2.1.0","net":"^1.0.2","process":"^0.11.10","ts-auto-mock":"^3.6.2","ts-jest":"^29.0.3","ts-loader":"^9.4.1","ttypescript":"^1.5.13","url-loader":"^4.1.1","yarn":"^1.22.19"}}');
+module.exports = JSON.parse('{"name":"formulaone-card","version":"0.2.4","description":"Frontend card for hass-formulaoneapi","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.1.1","@typescript-eslint/eslint-plugin":"^5.39.0","@typescript-eslint/parser":"^5.39.0","eslint":"^8.24.0","home-assistant-js-websocket":"^8.0.0","lit":"^2.3.1","path-browserify":"^1.0.1","typescript":"^4.8.4","webpack":"^5.74.0","webpack-cli":"^4.10.0"},"dependencies":{"@babel/plugin-transform-runtime":"^7.19.1","@babel/preset-env":"^7.19.3","@lit-labs/scoped-registry-mixin":"^1.0.1","axios":"^1.2.2","babel-jest":"^29.1.2","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","jest-environment-jsdom":"^29.1.2","jest-ts-auto-mock":"^2.1.0","net":"^1.0.2","process":"^0.11.10","ts-auto-mock":"^3.6.2","ts-jest":"^29.0.3","ts-loader":"^9.4.1","ttypescript":"^1.5.13","url-loader":"^4.1.1","yarn":"^1.22.19"}}');
 
 /***/ }),
 

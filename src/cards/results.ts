@@ -1,5 +1,6 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
+import { until } from 'lit-html/directives/until.js';
 import ErgastClient from "../api/ergast-client";
 import { Race, Result, Season } from "../api/models";
 import { FormulaOneCardConfig } from "../types/formulaone-card-types";
@@ -17,7 +18,6 @@ export default class Results extends BaseCard {
         'seasonheader' : 'Season',
     };
     results: Result[] = [];
-    seasons: Season[] = [];
     races: Race[] = [];
     selectedRace: Race;
     selectedSeason: Season;
@@ -26,14 +26,7 @@ export default class Results extends BaseCard {
         super(null, hass, config);
 
         this.client = new ErgastClient();
-        this.getSeasons().then(response => { 
-            this.seasons = response; 
-        });
-    }   
-
-    async getSeasons() : Promise<Season[]> {
-        return this.client.GetSeasons();
-    } 
+    }
 
     async getSeasonRaces(season: number) : Promise<Race[]> {
         return this.client.GetSeasonRaces(season);
@@ -124,25 +117,42 @@ export default class Results extends BaseCard {
                         </select> 
                         
                         style="${style}"
+                         ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
+
+
+                        ${until(
+                            this.client.GetSeasons().then(response => response
+                              ? html`<paper-select
+                                    id="seasons"
+                                    label="${this.translation('seasonheader')}"
+                                    @iron-select=${this.selectedSeasonChanged}
+                                    .selected=${response.indexOf(this.selectedSeason)}>
+                                    ${response.map(season => {
+                                        return html`<paper-item>${season.season}</paper-item>`;
+                                    })}
+                                </paper-select>`
+                              : html`Error getting seasons`),
+                            html`Loading...`,
+                          )} 
+
+
                         */
 
         
         return html`   
             <table>
                 <tr>
-                    <td>
-                        <select name="selectedSeason">
-                            ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
-                        </select> 
-                        <paper-listbox
-                            id="seasons"
-                            label="${this.translation('seasonheader')}"
-                            @iron-select=${this.selectedSeasonChanged}
-                            .selected=${this.seasons.indexOf(this.selectedSeason)}>
-                            ${this.seasons.map(season => {
-                                return html`<paper-item>${season.season}</paper-item>`;
-                            })}
-                        </paper-listbox>                       
+                    <td>                        
+                        ${until(
+                            this.client.GetSeasons().then(response => response
+                              ? html`<select name="selectedSeason">
+                                    ${response.map(season => {
+                                        return html`<option value="${season.season}">${season.season}</option>`;
+                                    })}
+                                </select>`
+                              : html`Error getting seasons`),
+                            html`Loading...`,
+                          )}                 
                     </td>
                     <td>
                         <paper-listbox

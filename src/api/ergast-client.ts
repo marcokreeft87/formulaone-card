@@ -32,7 +32,7 @@ export default class ErgastClient  {
         
         //return result.result.MRData.SeasonTable.Seasons;
         const { data, status } = await axios.get<Root>(
-            'seasons.json',
+            'seasons.json?limit=200',
             {
               headers: {
                 Accept: 'application/json',
