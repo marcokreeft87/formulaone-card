@@ -23,9 +23,7 @@ export default class Results extends BaseCard {
     selectedSeason: Season;
 
     constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(null, hass, config);
-
-        this.client = new ErgastClient();
+        super(hass, config);
     }
 
     async getSeasonRaces(season: number) : Promise<Race[]> {

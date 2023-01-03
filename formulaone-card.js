@@ -174,36 +174,60 @@ const axios_1 = __webpack_require__(218);
 class ErgastClient {
     constructor() {
         this.baseUrl = 'https://ergast.com/api/f1';
-        axios_1.default.defaults.baseURL = this.baseUrl;
+        this.instance = axios_1.default.create({
+            baseURL: this.baseUrl,
+        });
+    }
+    GetSchedule() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData('current.json');
+            return data.MRData.RaceTable.Races;
+        });
+    }
+    GetLastResult() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData('current/last/results.json');
+            return data.MRData.RaceTable.Races[0];
+        });
+    }
+    GetDriverStandings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData('current/driverStandings.json');
+            return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+        });
+    }
+    GetConstructorStandings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData('current/constructorStandings.json');
+            return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+        });
     }
     GetResults(season, round) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data, status } = yield axios_1.default.get(`${season}/${round}/results.json`, {
-                headers: {
-                    Accept: 'application/json',
-                },
-            });
+            const data = yield this.GetData(`${season}/${round}/results.json`);
             return data.MRData.RaceTable;
         });
     }
     GetSeasons() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data, status } = yield axios_1.default.get('seasons.json?limit=200', {
-                headers: {
-                    Accept: 'application/json',
-                },
-            });
+            const data = yield this.GetData('seasons.json?limit=200');
             return data.MRData.SeasonTable.Seasons;
         });
     }
     GetSeasonRaces(season) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data, status } = yield axios_1.default.get(`${season}.json`, {
+            const data = yield this.GetData(`${season}.json`);
+            return data.MRData.RaceTable.Races;
+        });
+    }
+    GetData(endpoint) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { data } = yield this.instance.get(endpoint, {
                 headers: {
                     Accept: 'application/json',
                 },
             });
-            return data.MRData.RaceTable.Races;
+            return data;
         });
     }
 }
@@ -213,24 +237,17 @@ exports["default"] = ErgastClient;
 /***/ }),
 
 /***/ 243:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BaseCard = void 0;
+const ergast_client_1 = __webpack_require__(171);
 class BaseCard {
-    constructor(sensor, hass, config) {
-        this.sensor_entity_id = sensor;
+    constructor(hass, config) {
         this.hass = hass;
         this.config = config;
-        this.sensor = this.getSensor();
-    }
-    getSensor() {
-        if (!this.sensor_entity_id) {
-            return null;
-        }
-        const sensorEntity = this.hass.states[this.sensor_entity_id];
-        return { last_update: new Date(sensorEntity.attributes['last_update']), data: sensorEntity.attributes['data'] };
+        this.client = new ergast_client_1.default();
     }
     translation(key) {
         if (!this.config.translations || Object.keys(this.config.translations).indexOf(key) < 0) {
@@ -250,10 +267,11 @@ exports.BaseCard = BaseCard;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
+const until_js_1 = __webpack_require__(885);
 const base_card_1 = __webpack_require__(243);
 class ConstructorStandings extends base_card_1.BaseCard {
-    constructor(sensor, hass, config) {
-        super(sensor, hass, config);
+    constructor(hass, config) {
+        super(hass, config);
         this.defaultTranslations = {
             'constructor': 'Constructor',
             'points': 'Pts',
@@ -261,11 +279,7 @@ class ConstructorStandings extends base_card_1.BaseCard {
         };
     }
     cardSize() {
-        const data = this.sensor.data;
-        if (!data) {
-            return 2;
-        }
-        return (data.length == 0 ? 1 : data.length / 2) + 1;
+        return 2;
     }
     renderStandingRow(standing) {
         return (0, lit_html_1.html) `
@@ -277,25 +291,23 @@ class ConstructorStandings extends base_card_1.BaseCard {
             </tr>`;
     }
     render() {
-        const data = this.sensor.data;
-        if (!this.sensor_entity_id.endsWith('_constructors') || data === undefined) {
-            throw new Error('Please pass the correct sensor (constructors)');
-        }
-        return (0, lit_html_1.html) `
-        <table>
-            <thead>
-            <tr>
-                <th class="width-50">&nbsp;</th>
-                <th>${this.translation('constructor')}</th>
-                <th class="width-60 text-center">${this.translation('points')}</th>
-                <th class="text-center">${this.translation('wins')}</th>
-            </tr>
-            </thead>
-            <tbody>
-                ${data.map(standing => this.renderStandingRow(standing))}
-            </tbody>
-        </table>
-      `;
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetConstructorStandings().then(response => response
+            ? (0, lit_html_1.html) `
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="width-50">&nbsp;</th>
+                            <th>${this.translation('constructor')}</th>
+                            <th class="width-60 text-center">${this.translation('points')}</th>
+                            <th class="text-center">${this.translation('wins')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${response.map(standing => this.renderStandingRow(standing))}
+                        </tbody>
+                    </table>
+                    `
+            : (0, lit_html_1.html) `Error getting standings`), (0, lit_html_1.html) `Loading...`)}`;
     }
 }
 exports["default"] = ConstructorStandings;
@@ -309,11 +321,12 @@ exports["default"] = ConstructorStandings;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
+const until_js_1 = __webpack_require__(885);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class DriverStandings extends base_card_1.BaseCard {
-    constructor(sensor, hass, config) {
-        super(sensor, hass, config);
+    constructor(hass, config) {
+        super(hass, config);
         this.defaultTranslations = {
             'driver': 'Driver',
             'team': 'Team',
@@ -322,11 +335,7 @@ class DriverStandings extends base_card_1.BaseCard {
         };
     }
     cardSize() {
-        const data = this.sensor.data;
-        if (!data) {
-            return 2;
-        }
-        return (data.length == 0 ? 1 : data.length / 2) + 1;
+        return 2;
     }
     renderStandingRow(standing) {
         var _a, _b;
@@ -341,27 +350,27 @@ class DriverStandings extends base_card_1.BaseCard {
             </tr>`;
     }
     render() {
-        var _a;
-        const data = this.sensor.data;
-        if (!this.sensor_entity_id.endsWith('_drivers') || data === undefined) {
-            throw new Error('Please pass the correct sensor (drivers)');
-        }
-        return (0, lit_html_1.html) `
-        <table>
-            <thead>
-            <tr>
-                <th class="width-50" colspan="2">&nbsp;</th>
-                <th>${this.translation('driver')}</th>                
-                ${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_team) ? (0, lit_html_1.html) `<th>${this.translation('team')}</th>` : '')}
-                <th class="width-60 text-center">${this.translation('points')}</th>
-                <th class="text-center">${this.translation('wins')}</th>
-            </tr>
-            </thead>
-            <tbody>
-                ${data.map(standing => this.renderStandingRow(standing))}
-            </tbody>
-        </table>
-      `;
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetDriverStandings().then(response => {
+            var _a;
+            return response
+                ? (0, lit_html_1.html) `
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="width-50" colspan="2">&nbsp;</th>
+                            <th>${this.translation('driver')}</th>                
+                            ${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_team) ? (0, lit_html_1.html) `<th>${this.translation('team')}</th>` : '')}
+                            <th class="width-60 text-center">${this.translation('points')}</th>
+                            <th class="text-center">${this.translation('wins')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${response.map(standing => this.renderStandingRow(standing))}
+                        </tbody>
+                    </table>
+                    `
+                : (0, lit_html_1.html) `Error getting standings`;
+        }), (0, lit_html_1.html) `Loading...`)}`;
     }
 }
 exports["default"] = DriverStandings;
@@ -375,11 +384,12 @@ exports["default"] = DriverStandings;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
+const until_js_1 = __webpack_require__(885);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class LastResult extends base_card_1.BaseCard {
-    constructor(sensor, hass, config) {
-        super(sensor, hass, config);
+    constructor(hass, config) {
+        super(hass, config);
         this.defaultTranslations = {
             'driver': 'Driver',
             'grid': 'Grid',
@@ -388,11 +398,7 @@ class LastResult extends base_card_1.BaseCard {
         };
     }
     cardSize() {
-        const data = this.sensor.data;
-        if (!data || !data.Results) {
-            return 2;
-        }
-        return (data.Results.length == 0 ? 1 : data.Results.length / 2) + 1;
+        return 2;
     }
     renderResultRow(result) {
         return (0, lit_html_1.html) `
@@ -404,8 +410,7 @@ class LastResult extends base_card_1.BaseCard {
                 <td class="width-50 text-center">${result.status}</td>
             </tr>`;
     }
-    renderHeader() {
-        const data = this.sensor.data;
+    renderHeader(data) {
         const countryDashed = data.Circuit.Location.country.replace(" ", "-");
         const circuitName = (0, utils_1.getCircuitName)(countryDashed);
         const imageHtml = (0, lit_html_1.html) `<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
@@ -413,32 +418,28 @@ class LastResult extends base_card_1.BaseCard {
         return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagByName)(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `;
     }
     render() {
-        const data = this.sensor.data;
-        if (!this.sensor_entity_id.endsWith('_last_result') || data === undefined) {
-            throw new Error('Please pass the correct sensor (last_result)');
-        }
-        return (0, lit_html_1.html) `       
-
-            <table>
-                <tr>
-                    <td>${this.renderHeader()}</td>
-                </tr>
-            </table>
-            <table>
-                <thead>                    
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetLastResult().then(response => response
+            ? (0, lit_html_1.html) ` 
+                <table>
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>${this.translation('driver')}</th>
-                        <th class="text-center">${this.translation('grid')}</th>
-                        <th class="text-ccenter">${this.translation('points')}</th>
-                        <th>${this.translation('status')}</th>
+                        <td>${this.renderHeader(response)}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    ${data.Results.map(result => this.renderResultRow(result))}
-                </tbody>
-            </table>
-      `;
+                </table>
+                <table>
+                    <thead>                    
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>${this.translation('driver')}</th>
+                            <th class="text-center">${this.translation('grid')}</th>
+                            <th class="text-ccenter">${this.translation('points')}</th>
+                            <th>${this.translation('status')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${response.Results.map(result => this.renderResultRow(result))}
+                    </tbody>
+                </table>`
+            : (0, lit_html_1.html) `Error getting standings`), (0, lit_html_1.html) `Loading...`)}`;
     }
 }
 exports["default"] = LastResult;
@@ -452,13 +453,14 @@ exports["default"] = LastResult;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
+const until_js_1 = __webpack_require__(885);
 const format_date_1 = __webpack_require__(247);
 const format_date_time_1 = __webpack_require__(347);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class NextRace extends base_card_1.BaseCard {
-    constructor(sensor, hass, config) {
-        super(sensor, hass, config);
+    constructor(hass, config) {
+        super(hass, config);
         this.defaultTranslations = {
             'date': 'Date',
             'practice1': 'Practice 1',
@@ -474,56 +476,52 @@ class NextRace extends base_card_1.BaseCard {
             'qualifying': 'Qualifying',
             'endofseason': 'Season is over. See you next year!'
         };
-        const sensorEntity = this.hass.states[this.sensor_entity_id];
-        this.next_race = sensorEntity.attributes['next_race'];
     }
     cardSize() {
-        const data = this.next_race;
-        if (!data) {
-            return 2;
-        }
         return 8;
     }
-    renderHeader() {
-        const countryDashed = this.next_race.Circuit.Location.country.replace(" ", "-");
+    renderHeader(race) {
+        const countryDashed = race.Circuit.Location.country.replace(" ", "-");
         const circuitName = (0, utils_1.getCircuitName)(countryDashed);
         const imageHtml = (0, lit_html_1.html) `<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
-        const imageWithLinkHtml = this.config.image_clickable ? (0, lit_html_1.html) `<a target="_new" href="${this.next_race.Circuit.url}">${imageHtml}</a>` : imageHtml;
-        return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagByName)(this.next_race.Circuit.Location.country)}">&nbsp;  ${this.next_race.round} :  ${this.next_race.raceName}</h2>${imageWithLinkHtml}<br> `;
+        const imageWithLinkHtml = this.config.image_clickable ? (0, lit_html_1.html) `<a target="_new" href="${race.Circuit.url}">${imageHtml}</a>` : imageHtml;
+        return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagByName)(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>${imageWithLinkHtml}<br> `;
     }
     renderSeasonEnded() {
         return (0, lit_html_1.html) `<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
     }
     render() {
-        if (!this.sensor_entity_id.endsWith('_races') || this.next_race === undefined) {
-            throw new Error('Please pass the correct sensor (races)');
-        }
-        if (!this.next_race) {
-            return this.renderSeasonEnded();
-        }
-        const raceDate = new Date(this.next_race.date + 'T' + this.next_race.time);
-        const freePractice1 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(this.next_race.FirstPractice.date + 'T' + this.next_race.FirstPractice.time), this.hass.locale);
-        const freePractice2 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(this.next_race.SecondPractice.date + 'T' + this.next_race.SecondPractice.time), this.hass.locale);
-        const freePractice3 = this.next_race.ThirdPractice !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(this.next_race.ThirdPractice.date + 'T' + this.next_race.ThirdPractice.time), this.hass.locale) : '-';
-        const raceDateFormatted = (0, format_date_time_1.formatDateTimeRaceInfo)(raceDate, this.hass.locale);
-        const qualifyingDate = this.next_race.Qualifying !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(this.next_race.Qualifying.date + 'T' + this.next_race.Qualifying.time), this.hass.locale) : '-';
-        const sprintDate = this.next_race.Sprint !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(this.next_race.Sprint.date + 'T' + this.next_race.Sprint.time), this.hass.locale) : '-';
-        return (0, lit_html_1.html) `       
-
-            <table>
-                <tbody>
-                    <tr>
-                        <td colspan="5">${this.renderHeader()}</td>
-                    </tr>
-                    <tr><td>${this.translation('date')}</td><td>${(0, format_date_1.formatDateNumeric)(raceDate, this.hass.locale, this.config.date_locale)}</td><td>&nbsp;</td><td>${this.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
-                    <tr><td>${this.translation('race')}</td><td>${this.next_race.round}</td><td>&nbsp;</td><td>${this.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
-                    <tr><td>${this.translation('racename')}</td><td>${this.next_race.raceName}</td><td>&nbsp;</td><td>${this.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
-                    <tr><td>${this.translation('circuitname')}</td><td>${this.next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>${this.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
-                    <tr><td>${this.translation('location')}</td><td>${this.next_race.Circuit.Location.country}</td><td>&nbsp;</td><td>${this.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
-                    <tr><td>${this.translation('city')}</td><td>${this.next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
-                </tbody>
-            </table>
-      `;
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetSchedule().then(response => {
+            if (!response) {
+                return (0, lit_html_1.html) `Error getting next race`;
+            }
+            const next_race = response === null || response === void 0 ? void 0 : response.filter(race => {
+                return new Date(race.date + 'T' + race.time) >= new Date();
+            })[0];
+            if (!next_race) {
+                return this.renderSeasonEnded();
+            }
+            const raceDate = new Date(next_race.date + 'T' + next_race.time);
+            const freePractice1 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(next_race.FirstPractice.date + 'T' + next_race.FirstPractice.time), this.hass.locale);
+            const freePractice2 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(next_race.SecondPractice.date + 'T' + next_race.SecondPractice.time), this.hass.locale);
+            const freePractice3 = next_race.ThirdPractice !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(next_race.ThirdPractice.date + 'T' + next_race.ThirdPractice.time), this.hass.locale) : '-';
+            const raceDateFormatted = (0, format_date_time_1.formatDateTimeRaceInfo)(raceDate, this.hass.locale);
+            const qualifyingDate = next_race.Qualifying !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(next_race.Qualifying.date + 'T' + next_race.Qualifying.time), this.hass.locale) : '-';
+            const sprintDate = next_race.Sprint !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(next_race.Sprint.date + 'T' + next_race.Sprint.time), this.hass.locale) : '-';
+            (0, lit_html_1.html) `<table>
+                        <tbody>
+                            <tr>
+                                <td colspan="5">${this.renderHeader(next_race)}</td>
+                            </tr>
+                            <tr><td>${this.translation('date')}</td><td>${(0, format_date_1.formatDateNumeric)(raceDate, this.hass.locale, this.config.date_locale)}</td><td>&nbsp;</td><td>${this.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
+                            <tr><td>${this.translation('race')}</td><td>${next_race.round}</td><td>&nbsp;</td><td>${this.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
+                            <tr><td>${this.translation('racename')}</td><td>${next_race.raceName}</td><td>&nbsp;</td><td>${this.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
+                            <tr><td>${this.translation('circuitname')}</td><td>${next_race.Circuit.circuitName}</td><td>&nbsp;</td><td>${this.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
+                            <tr><td>${this.translation('location')}</td><td>${next_race.Circuit.Location.country}</td><td>&nbsp;</td><td>${this.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
+                            <tr><td>${this.translation('city')}</td><td>${next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
+                        </tbody>
+                    </table>`;
+        }), (0, lit_html_1.html) `Loading...`)}`;
     }
 }
 exports["default"] = NextRace;
@@ -547,12 +545,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
 const until_js_1 = __webpack_require__(885);
-const ergast_client_1 = __webpack_require__(171);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class Results extends base_card_1.BaseCard {
     constructor(hass, config) {
-        super(null, hass, config);
+        super(hass, config);
         this.defaultTranslations = {
             'driver': 'Driver',
             'grid': 'Grid',
@@ -563,7 +560,6 @@ class Results extends base_card_1.BaseCard {
         };
         this.results = [];
         this.races = [];
-        this.client = new ergast_client_1.default();
     }
     getSeasonRaces(season) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -670,11 +666,12 @@ exports["default"] = Results;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const custom_card_helpers_1 = __webpack_require__(197);
 const lit_html_1 = __webpack_require__(692);
+const until_js_1 = __webpack_require__(885);
 const format_date_1 = __webpack_require__(247);
 const base_card_1 = __webpack_require__(243);
 class Schedule extends base_card_1.BaseCard {
-    constructor(sensor, hass, config) {
-        super(sensor, hass, config);
+    constructor(hass, config) {
+        super(hass, config);
         this.defaultTranslations = {
             'date': 'Date',
             'race': 'Race',
@@ -682,15 +679,9 @@ class Schedule extends base_card_1.BaseCard {
             'location': 'Location',
             'endofseason': 'Season is over. See you next year!'
         };
-        const sensorEntity = this.hass.states[this.sensor_entity_id];
-        this.next_race = sensorEntity.attributes['next_race'];
     }
     cardSize() {
-        const data = this.sensor.data;
-        if (!data) {
-            return 2;
-        }
-        return (data.length == 0 ? 1 : data.length / 2) + 1;
+        return 2;
     }
     renderSeasonEnded() {
         return (0, lit_html_1.html) `<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
@@ -712,29 +703,31 @@ class Schedule extends base_card_1.BaseCard {
             </tr>`;
     }
     render() {
-        const data = this.sensor.data;
-        if (!this.sensor_entity_id.endsWith('_races') || data === undefined) {
-            throw new Error('Please pass the correct sensor (races)');
-        }
-        if (!this.next_race) {
-            return this.renderSeasonEnded();
-        }
-        return (0, lit_html_1.html) `
-        <table>
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>${this.translation('race')}</th>
-                    <th>${this.translation('location')}</th>
-                    <th class="text-center">${this.translation('date')}</th>
-                    <th class="text-center">${this.translation('time')}</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${data.map(race => this.renderScheduleRow(race))}
-            </tbody>
-        </table>
-      `;
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetSchedule().then(response => {
+            const next_race = response === null || response === void 0 ? void 0 : response.filter(race => {
+                return new Date(race.date + 'T' + race.time) >= new Date();
+            })[0];
+            if (!next_race) {
+                return this.renderSeasonEnded();
+            }
+            response ?
+                (0, lit_html_1.html) `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>${this.translation('race')}</th>
+                                    <th>${this.translation('location')}</th>
+                                    <th class="text-center">${this.translation('date')}</th>
+                                    <th class="text-center">${this.translation('time')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${response.map(race => this.renderScheduleRow(race))}
+                            </tbody>
+                        </table>`
+                : (0, lit_html_1.html) `Error getting schedule`;
+        }), (0, lit_html_1.html) `Loading...`)}`;
     }
 }
 exports["default"] = Schedule;
@@ -791,19 +784,19 @@ let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
     renderCardType() {
         switch (this.config.card_type) {
             case formulaone_card_types_1.FormulaOneCardType.ConstructorStandings:
-                this.card = new constructor_standings_1.default(this.config.sensor, this._hass, this.config);
+                this.card = new constructor_standings_1.default(this._hass, this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.DriverStandings:
-                this.card = new driver_standings_1.default(this.config.sensor, this._hass, this.config);
+                this.card = new driver_standings_1.default(this._hass, this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.Schedule:
-                this.card = new schedule_1.default(this.config.sensor, this._hass, this.config);
+                this.card = new schedule_1.default(this._hass, this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.NextRace:
-                this.card = new next_race_1.default(this.config.sensor, this._hass, this.config);
+                this.card = new next_race_1.default(this._hass, this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.LastResult:
-                this.card = new last_result_1.default(this.config.sensor, this._hass, this.config);
+                this.card = new last_result_1.default(this._hass, this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.Results:
                 this.card = new results_1.default(this._hass, this.config);
@@ -4536,7 +4529,7 @@ var lit_html = __webpack_require__(692);
 /***/ 147:
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"name":"formulaone-card","version":"0.2.4","description":"Frontend card for hass-formulaoneapi","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.1.1","@typescript-eslint/eslint-plugin":"^5.39.0","@typescript-eslint/parser":"^5.39.0","eslint":"^8.24.0","home-assistant-js-websocket":"^8.0.0","lit":"^2.3.1","path-browserify":"^1.0.1","typescript":"^4.8.4","webpack":"^5.74.0","webpack-cli":"^4.10.0"},"dependencies":{"@babel/plugin-transform-runtime":"^7.19.1","@babel/preset-env":"^7.19.3","@lit-labs/scoped-registry-mixin":"^1.0.1","axios":"^1.2.2","babel-jest":"^29.1.2","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","jest-environment-jsdom":"^29.1.2","jest-ts-auto-mock":"^2.1.0","net":"^1.0.2","process":"^0.11.10","ts-auto-mock":"^3.6.2","ts-jest":"^29.0.3","ts-loader":"^9.4.1","ttypescript":"^1.5.13","url-loader":"^4.1.1","yarn":"^1.22.19"}}');
+module.exports = JSON.parse('{"name":"formulaone-card","version":"0.2.4","description":"Frontend card for hass-formulaoneapi","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.1.1","@typescript-eslint/eslint-plugin":"^5.39.0","@typescript-eslint/parser":"^5.39.0","eslint":"^8.24.0","home-assistant-js-websocket":"^8.0.0","lit":"^2.3.1","path-browserify":"^1.0.1","typescript":"^4.8.4","webpack":"^5.74.0","webpack-cli":"^4.10.0"},"dependencies":{"@babel/plugin-transform-runtime":"^7.19.1","@babel/preset-env":"^7.19.3","@lit-labs/scoped-registry-mixin":"^1.0.1","axios":"^1.2.2","axios-extensions":"^3.1.6","babel-jest":"^29.1.2","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","jest-environment-jsdom":"^29.1.2","jest-ts-auto-mock":"^2.1.0","net":"^1.0.2","process":"^0.11.10","ts-auto-mock":"^3.6.2","ts-jest":"^29.0.3","ts-loader":"^9.4.1","ttypescript":"^1.5.13","url-loader":"^4.1.1","yarn":"^1.22.19"}}');
 
 /***/ }),
 

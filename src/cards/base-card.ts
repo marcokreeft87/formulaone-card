@@ -1,30 +1,18 @@
 import { HomeAssistant } from "custom-card-helpers";
-import {  HTMLTemplateResult } from "lit-html";
-import { FormulaOneCardConfig, FormulaOneSensor, Translation } from "../types/formulaone-card-types";
+import { HTMLTemplateResult } from "lit-html";
+import ErgastClient from "../api/ergast-client";
+import { FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
 export abstract class BaseCard {
-
-    sensor: FormulaOneSensor;
-    sensor_entity_id: string;
     hass: HomeAssistant;
-    config: FormulaOneCardConfig;
+    config: FormulaOneCardConfig;  
+    client: ErgastClient;
 
-    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        this.sensor_entity_id = sensor;
+    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
         this.hass = hass;
         this.config = config;
-
-        this.sensor = this.getSensor();
+        this.client = new ErgastClient();
     }    
-
-    getSensor() : FormulaOneSensor {
-        if(!this.sensor_entity_id) {
-            return null;
-        }
-
-        const sensorEntity = this.hass.states[this.sensor_entity_id];
-        return { last_update: new Date(sensorEntity.attributes['last_update']), data: sensorEntity.attributes['data']  }
-    }
 
     translation(key: string) : string {
 

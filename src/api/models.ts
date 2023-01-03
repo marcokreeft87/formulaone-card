@@ -11,6 +11,36 @@ export interface Root {
     total: string
     RaceTable: RaceTable
     SeasonTable: SeasonTable;
+    StandingsTable: StandingsTable
+  }
+
+  export interface StandingsTable {
+    season: string
+    StandingsLists: StandingsList[]
+  }
+  
+  export interface StandingsList {
+    season: string
+    round: string
+    ConstructorStandings: ConstructorStanding[]
+    DriverStandings: DriverStanding[]
+  }
+  
+  export interface DriverStanding {
+    position: string
+    positionText: string
+    points: string
+    wins: string
+    Driver: Driver
+    Constructors: Constructor[]
+  }
+  
+  export interface ConstructorStanding {
+    position: string
+    positionText: string
+    points: string
+    wins: string
+    Constructor: Constructor
   }
   
   export interface RaceTable {
@@ -28,6 +58,11 @@ export interface Root {
     date: string
     time: string
     Results: Result[]
+    FirstPractice: FirstPractice
+    SecondPractice: SecondPractice
+    ThirdPractice?: ThirdPractice
+    Qualifying: Qualifying
+    Sprint?: Sprint
   }
   
   export interface Circuit {

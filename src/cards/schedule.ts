@@ -1,7 +1,9 @@
 import {  formatTime, HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
+import { until } from 'lit-html/directives/until.js';
+import { Circuit, Race } from "../api/models";
 import { formatDate } from "../lib/format_date";
-import { Circuit, FormulaOneCardConfig, Race } from "../types/formulaone-card-types";
+import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
@@ -13,23 +15,18 @@ export default class Schedule extends BaseCard {
         'endofseason' : 'Season is over. See you next year!'
     };
     
-    next_race: Race;
-
-    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(sensor, hass, config);
-
-        const sensorEntity = this.hass.states[this.sensor_entity_id];
-
-        this.next_race = sensorEntity.attributes['next_race'] as Race;
+    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
+        super(hass, config);
     }   
     
     cardSize(): number {
-        const data = this.sensor.data as Race[];        
-        if(!data) {
-            return 2;
-        }
+        return 2;
+        // const data = this.sensor.data as Race[];        
+        // if(!data) {
+        //     return 2;
+        // }
 
-        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+        // return (data.length == 0 ? 1 : data.length / 2 ) + 1;
     }
 
     renderSeasonEnded(): HTMLTemplateResult {
@@ -57,30 +54,35 @@ export default class Schedule extends BaseCard {
 
     render() : HTMLTemplateResult {
 
-        const data = this.sensor.data as Race[];
-        if(!this.sensor_entity_id.endsWith('_races') || data === undefined) {
-            throw new Error('Please pass the correct sensor (races)')
-        }
-        
-        if(!this.next_race) {
-            return this.renderSeasonEnded();
-        }
+        return html`${until(
+            this.client.GetSchedule().then(response => {
+                const next_race = response?.filter(race =>  {
+                    return new Date(race.date + 'T' + race.time) >= new Date();
+                })[0];
 
-        return html`
-        <table>
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>${this.translation('race')}</th>
-                    <th>${this.translation('location')}</th>
-                    <th class="text-center">${this.translation('date')}</th>
-                    <th class="text-center">${this.translation('time')}</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${data.map(race => this.renderScheduleRow(race))}
-            </tbody>
-        </table>
-      `;
+                if(!next_race) {
+                    return this.renderSeasonEnded();
+                }
+
+                response ? 
+                    html`
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>${this.translation('race')}</th>
+                                    <th>${this.translation('location')}</th>
+                                    <th class="text-center">${this.translation('date')}</th>
+                                    <th class="text-center">${this.translation('time')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${response.map(race => this.renderScheduleRow(race))}
+                            </tbody>
+                        </table>`
+                : html`Error getting schedule`
+            }),
+            html`Loading...`
+        )}`;
     }
 }

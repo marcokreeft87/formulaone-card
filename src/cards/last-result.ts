@@ -1,6 +1,8 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
-import { FormulaOneCardConfig, Race, Result } from "../types/formulaone-card-types";
+import { until } from 'lit-html/directives/until.js';
+import { Race, Result } from "../api/models";
+import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -12,17 +14,18 @@ export default class LastResult extends BaseCard {
         'status' : 'Status'
     };
 
-    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(sensor, hass, config);
+    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
+        super(hass, config);
     }   
     
     cardSize(): number {
-        const data = this.sensor.data as Race;
-        if(!data || !data.Results) {
-            return 2;
-        }
+        return 2;
+        // const data = this.sensor.data as Race;
+        // if(!data || !data.Results) {
+        //     return 2;
+        // }
 
-        return (data.Results.length == 0 ? 1 : data.Results.length / 2 ) + 1;
+        // return (data.Results.length == 0 ? 1 : data.Results.length / 2 ) + 1;
     }
 
     renderResultRow(result: Result): HTMLTemplateResult {
@@ -37,9 +40,7 @@ export default class LastResult extends BaseCard {
             </tr>`;
     }
 
-    renderHeader(): HTMLTemplateResult {
-        
-        const data = this.sensor.data as Race;
+    renderHeader(data: Race): HTMLTemplateResult {        
         const countryDashed = data.Circuit.Location.country.replace(" ","-");
         const circuitName = getCircuitName(countryDashed);
         const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
@@ -50,32 +51,30 @@ export default class LastResult extends BaseCard {
 
     render() : HTMLTemplateResult {
 
-        const data = this.sensor.data as Race;
-        if(!this.sensor_entity_id.endsWith('_last_result') || data === undefined) {
-            throw new Error('Please pass the correct sensor (last_result)')
-        }
-
-        return html`       
-
-            <table>
-                <tr>
-                    <td>${this.renderHeader()}</td>
-                </tr>
-            </table>
-            <table>
-                <thead>                    
+        return html`${until(
+            this.client.GetLastResult().then(response => response
+                ?  html` 
+                <table>
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>${this.translation('driver')}</th>
-                        <th class="text-center">${this.translation('grid')}</th>
-                        <th class="text-ccenter">${this.translation('points')}</th>
-                        <th>${this.translation('status')}</th>
+                        <td>${this.renderHeader(response)}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    ${data.Results.map(result => this.renderResultRow(result))}
-                </tbody>
-            </table>
-      `;
+                </table>
+                <table>
+                    <thead>                    
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>${this.translation('driver')}</th>
+                            <th class="text-center">${this.translation('grid')}</th>
+                            <th class="text-ccenter">${this.translation('points')}</th>
+                            <th>${this.translation('status')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${response.Results.map(result => this.renderResultRow(result))}
+                    </tbody>
+                </table>`
+              : html`Error getting standings`),
+            html`Loading...`
+          )}`;
     }
 }
