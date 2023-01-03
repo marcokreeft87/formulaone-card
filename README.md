@@ -118,26 +118,27 @@ The following texts can be translated or altered.
 
 | Card type(s) | Key | Default value |
 | ----------------------------------- | ------------- | ----------------------------------- |
-| next_race, schedule | date' | 'Date' |
-| next_race | practice1' | 'Practice 1' |
-| next_race | practice2' | 'Practice 2' |
-| next_race | practice3' | 'Practice 3' |
+| next_race, schedule | date | 'Date' |
+| next_race | practice1 | 'Practice 1' |
+| next_race | practice2 | 'Practice 2' |
+| next_race | practice3 | 'Practice 3' |
 | next_race, schedule | race' | 'Race' |
-| next_race | racename' | 'Race name' |
-| next_race | circuitname' | 'Circuit name' |
+| next_race | racename | 'Race name' |
+| next_race | circuitname | 'Circuit name' |
 | next_race, schedule | location' | 'Location' |
-| next_race | racetime' | 'Race' |
-| next_race | sprint' | 'Sprint' |
-| next_race | qualifying' | 'Qualifying' |
-| next_race, schedule | endofseason' | 'Season is over. See you next year!' |
-| constructor_standings | 'constructor' | 'Constructor' |
-| constructor_standings, driver_standings, last_result | 'points' | 'Pts' |
-| constructor_standings, driver_standings | 'wins' | 'Wins' |
-| driver_standings | 'team' | 'Team' |
-| driver_standings, last_result | 'driver' | 'Driver' |
-| last_result | 'grid' | 'Grid' |
-| last_result | 'status' | 'Status' |
-| schedule | 'time' | 'Time' |
+| next_race | city | 'City' |
+| next_race | racetime | 'Race' |
+| next_race | sprint | 'Sprint' |
+| next_race | qualifying | 'Qualifying' |
+| next_race, schedule | endofseason | 'Season is over. See you next year!' |
+| constructor_standings | constructor | 'Constructor' |
+| constructor_standings, driver_standings, last_result | points | 'Pts' |
+| constructor_standings, driver_standings | wins | 'Wins' |
+| driver_standings | team | 'Team' |
+| driver_standings, last_result | driver | 'Driver' |
+| last_result | grid | 'Grid' |
+| last_result | status | 'Status' |
+| schedule | time | 'Time' |
 
 Example:
 
