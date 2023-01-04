@@ -49,7 +49,7 @@ export default class Schedule extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetSchedule().then(response => {
+            this.client.GetSchedule(new Date().getFullYear()).then(response => {
                 const next_race = response?.filter(race =>  {
                     return new Date(race.date + 'T' + race.time) >= new Date();
                 })[0];
@@ -58,9 +58,8 @@ export default class Schedule extends BaseCard {
                     return getEndOfSeasonMessage(this.translation('endofseason'));
                 }
 
-                response ? 
-                    html`
-                        <table>
+                return response ?
+                    html`<table>
                             <thead>
                                 <tr>
                                     <th>&nbsp;</th>

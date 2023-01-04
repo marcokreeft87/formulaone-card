@@ -14,8 +14,8 @@ export default class ErgastClient  {
       });
     }
 
-    async GetSchedule() : Promise<Race[]> {      
-      const data = await this.GetData<Root>('current.json', true, 24);
+    async GetSchedule(season: number) : Promise<Race[]> {      
+      const data = await this.GetData<Root>(`${season}.json`, true, 24);
 
       return data.MRData.RaceTable.Races;
     }

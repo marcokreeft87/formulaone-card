@@ -55,7 +55,7 @@ export default class NextRace extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetSchedule().then(response => {
+            this.client.GetSchedule(new Date().getFullYear()).then(response => {
                 if(!response) {
                     return html`${getApiErrorMessage('next race')}`
                 }
@@ -76,7 +76,7 @@ export default class NextRace extends BaseCard {
                 const qualifyingDate = next_race.Qualifying !== undefined ? formatDateTimeRaceInfo(new Date(next_race.Qualifying.date + 'T' + next_race.Qualifying.time), this.hass.locale) : '-';
                 const sprintDate = next_race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(next_race.Sprint.date + 'T' + next_race.Sprint.time), this.hass.locale) : '-';
         
-                    html`<table>
+                return html`<table>
                         <tbody>
                             <tr>
                                 <td colspan="5">${this.renderHeader(next_race)}</td>
