@@ -1,7 +1,8 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
-import { DriverStanding, FormulaOneCardConfig } from "../types/formulaone-card-types";
-import { getCountryFlagByNationality, getDriverName } from "../utils";
+import { until } from 'lit-html/directives/until.js';
+import { DriverStanding } from "../api/models";
+import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class DriverStandings extends BaseCard {
@@ -12,17 +13,18 @@ export default class DriverStandings extends BaseCard {
         'wins' : 'Wins'
     };
 
-    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(sensor, hass, config);
+    constructor(config: FormulaOneCardConfig) {
+        super(config);
     }    
     
     cardSize(): number {
-        const data = this.sensor.data as DriverStanding[];
-        if(!data) {
-            return 2;
-        }
+        return 2;
+        // const data = this.sensor.data as DriverStanding[];
+        // if(!data) {
+        //     return 2;
+        // }
 
-        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+        //return (data.length == 0 ? 1 : data.length / 2 ) + 1;
     }  
     
     renderStandingRow(standing: DriverStanding): HTMLTemplateResult {
@@ -39,26 +41,26 @@ export default class DriverStandings extends BaseCard {
 
     render() : HTMLTemplateResult {
 
-        const data = this.sensor.data as DriverStanding[];
-        if(!this.sensor_entity_id.endsWith('_drivers') || data === undefined) {
-            throw new Error('Please pass the correct sensor (drivers)')
-        }
-
-        return html`
-        <table>
-            <thead>
-            <tr>
-                <th class="width-50" colspan="2">&nbsp;</th>
-                <th>${this.translation('driver')}</th>                
-                ${(this.config.standings?.show_team ? html`<th>${this.translation('team')}</th>` : '')}
-                <th class="width-60 text-center">${this.translation('points')}</th>
-                <th class="text-center">${this.translation('wins')}</th>
-            </tr>
-            </thead>
-            <tbody>
-                ${data.map(standing => this.renderStandingRow(standing))}
-            </tbody>
-        </table>
-      `;
+        return html`${until(
+            this.client.GetDriverStandings().then(response => response
+              ? html`
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="width-50" colspan="2">&nbsp;</th>
+                            <th>${this.translation('driver')}</th>                
+                            ${(this.config.standings?.show_team ? html`<th>${this.translation('team')}</th>` : '')}
+                            <th class="width-60 text-center">${this.translation('points')}</th>
+                            <th class="text-center">${this.translation('wins')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${response.map(standing => this.renderStandingRow(standing))}
+                        </tbody>
+                    </table>
+                    `
+              : html`${getApiErrorMessage('standings')}`),
+            html`${getApiLoadingMessage()}`,
+          )}`;
     }
 }

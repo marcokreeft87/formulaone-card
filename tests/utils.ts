@@ -9,6 +9,11 @@ export const getRenderString = (data: HTMLTemplateResult) : string => {
 
     const {strings, values} = data;
 
+    
+    // console.log(data);
+    // console.log('strings', strings);
+    // console.log('values', values);
+
     if(strings === undefined) {
         return returnHtml;
     }
@@ -23,8 +28,10 @@ export const getRenderString = (data: HTMLTemplateResult) : string => {
         if(typeof values[i] === 'function') {
             // eslint-disable-next-line @typescript-eslint/ban-types
             returnHtml += (values[i] as Function).name;
-        }
+        }        
         else if(typeof values[i] === 'object') {
+
+            ((values[i] as HTMLTemplateResult).values[0] as Promise<HTMLTemplateResult>).then(reponse => console.log(2, reponse));
             const templates = values[i] as HTMLTemplateResult[];
             if(templates !== undefined && templates !== null) {
                 for(let i = 0; i < templates.length; i++) {
@@ -33,9 +40,15 @@ export const getRenderString = (data: HTMLTemplateResult) : string => {
             }
 
             const template = values[i] as HTMLTemplateResult;
-            if(template !== undefined && templates !== null) {
+            if(template !== undefined && template !== null) {
                 returnHtml += getRenderString(template);
             }
+
+            // const promise = values[i] as Promise<HTMLTemplateResult>;
+            // if(promise !== undefined && promise !== null) {
+            //     console.log(typeof promise);
+            //     promise.then(reponse => console.log(2, reponse));
+            // }
         } 
     }
 

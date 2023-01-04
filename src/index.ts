@@ -11,6 +11,7 @@ import Schedule from './cards/schedule';
 import NextRace from './cards/next-race';
 import LastResult from './cards/last-result';
 import { BaseCard } from './cards/base-card';
+//import Results from './cards/results';
 
 console.info(
     `%c FORMULAONE-CARD %c ${packageJson.version}`,
@@ -58,20 +59,23 @@ export default class FormulaOneCard extends LitElement {
     renderCardType(): HTMLTemplateResult {
         switch(this.config.card_type) {
             case FormulaOneCardType.ConstructorStandings:
-                this.card =  new ConstructorStandings(this.config.sensor, this._hass, this.config);
+                this.card =  new ConstructorStandings(this.config);
                 break;
             case FormulaOneCardType.DriverStandings:                
-                this.card =  new DriverStandings(this.config.sensor, this._hass, this.config);
+                this.card =  new DriverStandings(this.config);
                 break;
             case FormulaOneCardType.Schedule:                
-                this.card =  new Schedule(this.config.sensor, this._hass, this.config);
+                this.card =  new Schedule(this._hass, this.config);
                 break;
             case FormulaOneCardType.NextRace:                
-                this.card =  new NextRace(this.config.sensor, this._hass, this.config); 
+                this.card =  new NextRace(this._hass, this.config); 
                 break;    
             case FormulaOneCardType.LastResult:                
-                this.card = new LastResult(this.config.sensor, this._hass, this.config);
+                this.card = new LastResult(this.config);
                 break;
+            // case FormulaOneCardType.Results:                
+            //     this.card = new Results(this.config);
+            //     break;
         }
 
         return this.card.render();

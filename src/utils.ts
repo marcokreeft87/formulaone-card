@@ -1,7 +1,8 @@
 import { HomeAssistant } from "custom-card-helpers";
-import { PropertyValues } from "lit";
-import { Driver, FormulaOneCardConfig } from "./types/formulaone-card-types";
+import { html, PropertyValues } from "lit";
+import { FormulaOneCardConfig } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
+import { Driver } from "./api/models";
 
 export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -72,4 +73,16 @@ export const getCircuitName = (circuitName: string) => {
 export const getDriverName = (driver: Driver, config: FormulaOneCardConfig) => {
     const permanentNumber = driver.code == 'VER' ? 1 : driver.permanentNumber;
     return `${driver.givenName} ${driver.familyName}${(config.show_carnumber ? ` #${permanentNumber}` : '')}`;
+}
+
+export const getApiErrorMessage = (dataType: string) => {
+    return html`<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon> Error getting ${dataType} <ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>`
+}
+
+export const getApiLoadingMessage = () => {
+    return html`<table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table>`
+}
+
+export const getEndOfSeasonMessage = (message: string) => {
+    return html`<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${message}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`;
 }

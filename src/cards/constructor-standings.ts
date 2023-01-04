@@ -1,6 +1,8 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
-import { ConstructorStanding, FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { until } from 'lit-html/directives/until.js';
+import { ConstructorStanding } from "../api/models";
+import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { getApiErrorMessage, getApiLoadingMessage } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class ConstructorStandings extends BaseCard {
@@ -10,17 +12,18 @@ export default class ConstructorStandings extends BaseCard {
         'wins' : 'Wins'
     };
 
-    constructor(sensor: string, hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(sensor, hass, config);
+    constructor(config: FormulaOneCardConfig) {
+        super(config);
     }    
     
     cardSize(): number {        
-        const data = this.sensor.data as ConstructorStanding[];        
-        if(!data) {
-            return 2;
-        }
+        return 2;
+        // const data = this.sensor.data as ConstructorStanding[];        
+        // if(!data) {
+        //     return 2;
+        // }
 
-        return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+        // return (data.length == 0 ? 1 : data.length / 2 ) + 1;
     }
 
     renderStandingRow(standing: ConstructorStanding): HTMLTemplateResult {
@@ -35,25 +38,25 @@ export default class ConstructorStandings extends BaseCard {
 
     render() : HTMLTemplateResult {
 
-        const data = this.sensor.data as ConstructorStanding[];
-        if(!this.sensor_entity_id.endsWith('_constructors') || data === undefined) {
-            throw new Error('Please pass the correct sensor (constructors)')
-        }
-
-        return html`
-        <table>
-            <thead>
-            <tr>
-                <th class="width-50">&nbsp;</th>
-                <th>${this.translation('constructor')}</th>
-                <th class="width-60 text-center">${this.translation('points')}</th>
-                <th class="text-center">${this.translation('wins')}</th>
-            </tr>
-            </thead>
-            <tbody>
-                ${data.map(standing => this.renderStandingRow(standing))}
-            </tbody>
-        </table>
-      `;
+        return html`${until(
+            this.client.GetConstructorStandings().then(response => response
+              ? html`
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="width-50">&nbsp;</th>
+                            <th>${this.translation('constructor')}</th>
+                            <th class="width-60 text-center">${this.translation('points')}</th>
+                            <th class="text-center">${this.translation('wins')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${response.map(standing => this.renderStandingRow(standing))}
+                        </tbody>
+                    </table>
+                    `
+              : html`${getApiErrorMessage('standings')}`),
+            html`${getApiLoadingMessage()}`,
+          )}`;
     }
 }
