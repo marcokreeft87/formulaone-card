@@ -175,58 +175,74 @@ class ErgastClient {
     constructor() {
         this.baseUrl = 'https://ergast.com/api/f1';
         this.instance = axios_1.default.create({
-            baseURL: this.baseUrl,
+            baseURL: this.baseUrl
         });
     }
     GetSchedule() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current.json');
+            const data = yield this.GetData('current.json', true);
             return data.MRData.RaceTable.Races;
         });
     }
     GetLastResult() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current/last/results.json');
+            const data = yield this.GetData('current/last/results.json', true);
             return data.MRData.RaceTable.Races[0];
         });
     }
     GetDriverStandings() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current/driverStandings.json');
+            const data = yield this.GetData('current/driverStandings.json', true);
             return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
         });
     }
     GetConstructorStandings() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current/constructorStandings.json');
+            const data = yield this.GetData('current/constructorStandings.json', true);
             return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
         });
     }
     GetResults(season, round) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData(`${season}/${round}/results.json`);
+            const data = yield this.GetData(`${season}/${round}/results.json`, false);
             return data.MRData.RaceTable;
         });
     }
     GetSeasons() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('seasons.json?limit=200');
+            const data = yield this.GetData('seasons.json?limit=200', true);
             return data.MRData.SeasonTable.Seasons;
         });
     }
     GetSeasonRaces(season) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData(`${season}.json`);
+            const data = yield this.GetData(`${season}.json`, true);
             return data.MRData.RaceTable.Races;
         });
     }
-    GetData(endpoint) {
+    GetData(endpoint, cacheResult) {
         return __awaiter(this, void 0, void 0, function* () {
+            const localStorageData = localStorage.getItem(endpoint);
+            if (localStorageData && cacheResult) {
+                const item = JSON.parse(localStorageData);
+                const checkDate = new Date();
+                checkDate.setHours(checkDate.getHours() - 1);
+                if (new Date(item.created) > checkDate) {
+                    return JSON.parse(item.data);
+                }
+            }
             const { data } = yield this.instance.get(endpoint, {
                 headers: {
                     Accept: 'application/json',
                 },
             });
+            const item = {
+                data: JSON.stringify(data),
+                created: new Date()
+            };
+            if (cacheResult) {
+                localStorage.setItem(endpoint, JSON.stringify(item));
+            }
             return data;
         });
     }
@@ -244,8 +260,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BaseCard = void 0;
 const ergast_client_1 = __webpack_require__(171);
 class BaseCard {
-    constructor(hass, config) {
-        this.hass = hass;
+    constructor(config) {
         this.config = config;
         this.client = new ergast_client_1.default();
     }
@@ -268,10 +283,11 @@ exports.BaseCard = BaseCard;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const lit_html_1 = __webpack_require__(692);
 const until_js_1 = __webpack_require__(885);
+const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class ConstructorStandings extends base_card_1.BaseCard {
-    constructor(hass, config) {
-        super(hass, config);
+    constructor(config) {
+        super(config);
         this.defaultTranslations = {
             'constructor': 'Constructor',
             'points': 'Pts',
@@ -307,7 +323,7 @@ class ConstructorStandings extends base_card_1.BaseCard {
                         </tbody>
                     </table>
                     `
-            : (0, lit_html_1.html) `Error getting standings`), (0, lit_html_1.html) `Loading...`)}`;
+            : (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('standings')}`), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
     }
 }
 exports["default"] = ConstructorStandings;
@@ -325,8 +341,8 @@ const until_js_1 = __webpack_require__(885);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class DriverStandings extends base_card_1.BaseCard {
-    constructor(hass, config) {
-        super(hass, config);
+    constructor(config) {
+        super(config);
         this.defaultTranslations = {
             'driver': 'Driver',
             'team': 'Team',
@@ -369,8 +385,8 @@ class DriverStandings extends base_card_1.BaseCard {
                         </tbody>
                     </table>
                     `
-                : (0, lit_html_1.html) `Error getting standings`;
-        }), (0, lit_html_1.html) `Loading...`)}`;
+                : (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('standings')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
     }
 }
 exports["default"] = DriverStandings;
@@ -388,8 +404,8 @@ const until_js_1 = __webpack_require__(885);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class LastResult extends base_card_1.BaseCard {
-    constructor(hass, config) {
-        super(hass, config);
+    constructor(config) {
+        super(config);
         this.defaultTranslations = {
             'driver': 'Driver',
             'grid': 'Grid',
@@ -398,7 +414,7 @@ class LastResult extends base_card_1.BaseCard {
         };
     }
     cardSize() {
-        return 2;
+        return 11;
     }
     renderResultRow(result) {
         return (0, lit_html_1.html) `
@@ -418,28 +434,31 @@ class LastResult extends base_card_1.BaseCard {
         return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagByName)(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `;
     }
     render() {
-        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetLastResult().then(response => response
-            ? (0, lit_html_1.html) ` 
-                <table>
-                    <tr>
-                        <td>${this.renderHeader(response)}</td>
-                    </tr>
-                </table>
-                <table>
-                    <thead>                    
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetLastResult().then(response => {
+            this.lastResult = response;
+            response
+                ? (0, lit_html_1.html) ` 
+                    <table>
                         <tr>
-                            <th>&nbsp;</th>
-                            <th>${this.translation('driver')}</th>
-                            <th class="text-center">${this.translation('grid')}</th>
-                            <th class="text-ccenter">${this.translation('points')}</th>
-                            <th>${this.translation('status')}</th>
+                            <td>${this.renderHeader(response)}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        ${response.Results.map(result => this.renderResultRow(result))}
-                    </tbody>
-                </table>`
-            : (0, lit_html_1.html) `Error getting standings`), (0, lit_html_1.html) `Loading...`)}`;
+                    </table>
+                    <table>
+                        <thead>                    
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>${this.translation('driver')}</th>
+                                <th class="text-center">${this.translation('grid')}</th>
+                                <th class="text-ccenter">${this.translation('points')}</th>
+                                <th>${this.translation('status')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${response.Results.map(result => this.renderResultRow(result))}
+                        </tbody>
+                    </table>`
+                : (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('standings')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
     }
 }
 exports["default"] = LastResult;
@@ -460,7 +479,7 @@ const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class NextRace extends base_card_1.BaseCard {
     constructor(hass, config) {
-        super(hass, config);
+        super(config);
         this.defaultTranslations = {
             'date': 'Date',
             'practice1': 'Practice 1',
@@ -476,6 +495,7 @@ class NextRace extends base_card_1.BaseCard {
             'qualifying': 'Qualifying',
             'endofseason': 'Season is over. See you next year!'
         };
+        this.hass = hass;
     }
     cardSize() {
         return 8;
@@ -487,19 +507,16 @@ class NextRace extends base_card_1.BaseCard {
         const imageWithLinkHtml = this.config.image_clickable ? (0, lit_html_1.html) `<a target="_new" href="${race.Circuit.url}">${imageHtml}</a>` : imageHtml;
         return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagByName)(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>${imageWithLinkHtml}<br> `;
     }
-    renderSeasonEnded() {
-        return (0, lit_html_1.html) `<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
-    }
     render() {
         return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetSchedule().then(response => {
             if (!response) {
-                return (0, lit_html_1.html) `Error getting next race`;
+                return (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('next race')}`;
             }
             const next_race = response === null || response === void 0 ? void 0 : response.filter(race => {
                 return new Date(race.date + 'T' + race.time) >= new Date();
             })[0];
             if (!next_race) {
-                return this.renderSeasonEnded();
+                return (0, utils_1.getEndOfSeasonMessage)(this.translation('endofseason'));
             }
             const raceDate = new Date(next_race.date + 'T' + next_race.time);
             const freePractice1 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(next_race.FirstPractice.date + 'T' + next_race.FirstPractice.time), this.hass.locale);
@@ -521,140 +538,10 @@ class NextRace extends base_card_1.BaseCard {
                             <tr><td>${this.translation('city')}</td><td>${next_race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${this.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>        
                         </tbody>
                     </table>`;
-        }), (0, lit_html_1.html) `Loading...`)}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
     }
 }
 exports["default"] = NextRace;
-
-
-/***/ }),
-
-/***/ 903:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const lit_html_1 = __webpack_require__(692);
-const until_js_1 = __webpack_require__(885);
-const utils_1 = __webpack_require__(593);
-const base_card_1 = __webpack_require__(243);
-class Results extends base_card_1.BaseCard {
-    constructor(hass, config) {
-        super(hass, config);
-        this.defaultTranslations = {
-            'driver': 'Driver',
-            'grid': 'Grid',
-            'points': 'Points',
-            'status': 'Status',
-            'raceheader': 'Race',
-            'seasonheader': 'Season',
-        };
-        this.results = [];
-        this.races = [];
-    }
-    getSeasonRaces(season) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.client.GetSeasonRaces(season);
-        });
-    }
-    getData() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.client.GetResults(2022, 22).then(value => value.Races[0].Results);
-        });
-    }
-    cardSize() {
-        return 2;
-    }
-    renderResultRow(result) {
-        return (0, lit_html_1.html) `
-            <tr>
-                <td class="width-50 text-center">${result}</td>
-                <td>${(0, utils_1.getDriverName)(result.Driver, this.config)}</td>
-                <td>${result.grid}</td>
-                <td class="width-60 text-center">${result.points}</td>
-                <td class="width-50 text-center">${result.status}</td>
-            </tr>`;
-    }
-    renderHeader() {
-        if (!this.selectedRace) {
-            return null;
-        }
-        const data = this.selectedRace;
-        const countryDashed = data.Circuit.Location.country.replace(" ", "-");
-        const circuitName = (0, utils_1.getCircuitName)(countryDashed);
-        const imageHtml = (0, lit_html_1.html) `<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
-        const imageWithLinkHtml = this.config.image_clickable ? (0, lit_html_1.html) `<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
-        return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagUrl)(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `;
-    }
-    selectedSeasonChanged(ev) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const option = ev.detail.item.innerText;
-            console.log('Season', option);
-            this.getSeasonRaces(option).then(response => this.races = response);
-        });
-    }
-    selectedRaceChanged(ev) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const option = ev.detail.item.innerText;
-            console.log('Race', option);
-        });
-    }
-    render() {
-        return (0, lit_html_1.html) `   
-            <table>
-                <tr>
-                    <td>                        
-                        ${(0, until_js_1.until)(this.client.GetSeasons().then(response => response
-            ? (0, lit_html_1.html) `<select name="selectedSeason">
-                                    ${response.map(season => {
-                return (0, lit_html_1.html) `<option value="${season.season}">${season.season}</option>`;
-            })}
-                                </select>`
-            : (0, lit_html_1.html) `Error getting seasons`), (0, lit_html_1.html) `Loading...`)}                 
-                    </td>
-                    <td>
-                        <paper-listbox
-                            id="races"
-                            label="${this.translation('raceheader')}"
-                            @iron-select=${this.selectedRaceChanged}
-                            .selected=${this.races.indexOf(this.selectedRace)}>
-                            ${this.races.map(race => {
-            return (0, lit_html_1.html) `<paper-item>${race.round} ${race.raceName}</paper-item>`;
-        })}
-                        </paper-listbox>     
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">${this.renderHeader()}</td>
-                </tr>
-            </table>
-            <table>
-                <thead>                    
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>${this.translation('driver')}</th>
-                        <th class="text-center">${this.translation('grid')}</th>
-                        <th class="text-ccenter">${this.translation('points')}</th>
-                        <th>${this.translation('status')}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${this.results.map(result => this.renderResultRow(result))}
-                </tbody>
-            </table>
-        `;
-    }
-}
-exports["default"] = Results;
 
 
 /***/ }),
@@ -668,10 +555,11 @@ const custom_card_helpers_1 = __webpack_require__(197);
 const lit_html_1 = __webpack_require__(692);
 const until_js_1 = __webpack_require__(885);
 const format_date_1 = __webpack_require__(247);
+const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class Schedule extends base_card_1.BaseCard {
     constructor(hass, config) {
-        super(hass, config);
+        super(config);
         this.defaultTranslations = {
             'date': 'Date',
             'race': 'Race',
@@ -679,12 +567,10 @@ class Schedule extends base_card_1.BaseCard {
             'location': 'Location',
             'endofseason': 'Season is over. See you next year!'
         };
+        this.hass = hass;
     }
     cardSize() {
-        return 2;
-    }
-    renderSeasonEnded() {
-        return (0, lit_html_1.html) `<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
+        return 12;
     }
     renderLocation(circuit) {
         const locationConcatted = `${circuit.Location.locality}, ${circuit.Location.country}`;
@@ -708,7 +594,7 @@ class Schedule extends base_card_1.BaseCard {
                 return new Date(race.date + 'T' + race.time) >= new Date();
             })[0];
             if (!next_race) {
-                return this.renderSeasonEnded();
+                return (0, utils_1.getEndOfSeasonMessage)(this.translation('endofseason'));
             }
             response ?
                 (0, lit_html_1.html) `
@@ -726,8 +612,8 @@ class Schedule extends base_card_1.BaseCard {
                                 ${response.map(race => this.renderScheduleRow(race))}
                             </tbody>
                         </table>`
-                : (0, lit_html_1.html) `Error getting schedule`;
-        }), (0, lit_html_1.html) `Loading...`)}`;
+                : (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('schedule')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
     }
 }
 exports["default"] = Schedule;
@@ -757,7 +643,6 @@ const driver_standings_1 = __webpack_require__(412);
 const schedule_1 = __webpack_require__(269);
 const next_race_1 = __webpack_require__(249);
 const last_result_1 = __webpack_require__(958);
-const results_1 = __webpack_require__(903);
 console.info(`%c FORMULAONE-CARD %c ${packageJson.version}`, 'color: cyan; background: black; font-weight: bold;', 'color: darkblue; background: white; font-weight: bold;');
 window.customCards = window.customCards || [];
 window.customCards.push({
@@ -784,10 +669,10 @@ let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
     renderCardType() {
         switch (this.config.card_type) {
             case formulaone_card_types_1.FormulaOneCardType.ConstructorStandings:
-                this.card = new constructor_standings_1.default(this._hass, this.config);
+                this.card = new constructor_standings_1.default(this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.DriverStandings:
-                this.card = new driver_standings_1.default(this._hass, this.config);
+                this.card = new driver_standings_1.default(this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.Schedule:
                 this.card = new schedule_1.default(this._hass, this.config);
@@ -796,10 +681,7 @@ let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
                 this.card = new next_race_1.default(this._hass, this.config);
                 break;
             case formulaone_card_types_1.FormulaOneCardType.LastResult:
-                this.card = new last_result_1.default(this._hass, this.config);
-                break;
-            case formulaone_card_types_1.FormulaOneCardType.Results:
-                this.card = new results_1.default(this._hass, this.config);
+                this.card = new last_result_1.default(this.config);
                 break;
         }
         return this.card.render();
@@ -1034,7 +916,8 @@ var FormulaOneCardType;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDriverName = exports.getCircuitName = exports.getCountryFlagUrl = exports.checkConfig = exports.getCountryFlagByName = exports.getCountryFlagByNationality = exports.hasConfigOrEntitiesChanged = void 0;
+exports.getEndOfSeasonMessage = exports.getApiLoadingMessage = exports.getApiErrorMessage = exports.getDriverName = exports.getCircuitName = exports.getCountryFlagUrl = exports.checkConfig = exports.getCountryFlagByName = exports.getCountryFlagByNationality = exports.hasConfigOrEntitiesChanged = void 0;
+const lit_1 = __webpack_require__(392);
 const countries = __webpack_require__(634);
 const hasConfigOrEntitiesChanged = (node, changedProps) => {
     if (changedProps.has('config')) {
@@ -1094,6 +977,18 @@ const getDriverName = (driver, config) => {
     return `${driver.givenName} ${driver.familyName}${(config.show_carnumber ? ` #${permanentNumber}` : '')}`;
 };
 exports.getDriverName = getDriverName;
+const getApiErrorMessage = (dataType) => {
+    return (0, lit_1.html) `<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon> Error getting ${dataType} <ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>`;
+};
+exports.getApiErrorMessage = getApiErrorMessage;
+const getApiLoadingMessage = () => {
+    return (0, lit_1.html) `<table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table>`;
+};
+exports.getApiLoadingMessage = getApiLoadingMessage;
+const getEndOfSeasonMessage = (message) => {
+    return (0, lit_1.html) `<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${message}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`;
+};
+exports.getEndOfSeasonMessage = getEndOfSeasonMessage;
 
 
 /***/ }),
@@ -4529,7 +4424,7 @@ var lit_html = __webpack_require__(692);
 /***/ 147:
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"name":"formulaone-card","version":"0.2.4","description":"Frontend card for hass-formulaoneapi","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.1.1","@typescript-eslint/eslint-plugin":"^5.39.0","@typescript-eslint/parser":"^5.39.0","eslint":"^8.24.0","home-assistant-js-websocket":"^8.0.0","lit":"^2.3.1","path-browserify":"^1.0.1","typescript":"^4.8.4","webpack":"^5.74.0","webpack-cli":"^4.10.0"},"dependencies":{"@babel/plugin-transform-runtime":"^7.19.1","@babel/preset-env":"^7.19.3","@lit-labs/scoped-registry-mixin":"^1.0.1","axios":"^1.2.2","axios-extensions":"^3.1.6","babel-jest":"^29.1.2","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","jest-environment-jsdom":"^29.1.2","jest-ts-auto-mock":"^2.1.0","net":"^1.0.2","process":"^0.11.10","ts-auto-mock":"^3.6.2","ts-jest":"^29.0.3","ts-loader":"^9.4.1","ttypescript":"^1.5.13","url-loader":"^4.1.1","yarn":"^1.22.19"}}');
+module.exports = JSON.parse('{"name":"formulaone-card","version":"0.3.0","description":"Frontend card for hass-formulaoneapi","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.1.1","@typescript-eslint/eslint-plugin":"^5.39.0","@typescript-eslint/parser":"^5.39.0","eslint":"^8.24.0","home-assistant-js-websocket":"^8.0.0","lit":"^2.3.1","path-browserify":"^1.0.1","typescript":"^4.8.4","webpack":"^5.74.0","webpack-cli":"^4.10.0"},"dependencies":{"@babel/plugin-transform-runtime":"^7.19.1","@babel/preset-env":"^7.19.3","@lit-labs/scoped-registry-mixin":"^1.0.1","axios":"^1.2.2","babel-jest":"^29.1.2","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","jest-environment-jsdom":"^29.1.2","jest-ts-auto-mock":"^2.1.0","net":"^1.0.2","process":"^0.11.10","ts-auto-mock":"^3.6.2","ts-jest":"^29.0.3","ts-loader":"^9.4.1","ttypescript":"^1.5.13","url-loader":"^4.1.1","yarn":"^1.22.19"}}');
 
 /***/ }),
 

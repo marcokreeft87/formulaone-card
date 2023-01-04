@@ -1,9 +1,8 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import { Race, Result } from "../api/models";
 import { FormulaOneCardConfig } from "../types/formulaone-card-types";
-import { getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -14,18 +13,14 @@ export default class LastResult extends BaseCard {
         'status' : 'Status'
     };
 
-    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(hass, config);
+    constructor(config: FormulaOneCardConfig) {
+        super(config);
     }   
+
+    lastResult: Race;
     
     cardSize(): number {
-        return 2;
-        // const data = this.sensor.data as Race;
-        // if(!data || !data.Results) {
-        //     return 2;
-        // }
-
-        // return (data.Results.length == 0 ? 1 : data.Results.length / 2 ) + 1;
+        return 11;
     }
 
     renderResultRow(result: Result): HTMLTemplateResult {
@@ -52,29 +47,33 @@ export default class LastResult extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetLastResult().then(response => response
+            this.client.GetLastResult().then(response => { 
+                this.lastResult = response;
+                
+                response
                 ?  html` 
-                <table>
-                    <tr>
-                        <td>${this.renderHeader(response)}</td>
-                    </tr>
-                </table>
-                <table>
-                    <thead>                    
+                    <table>
                         <tr>
-                            <th>&nbsp;</th>
-                            <th>${this.translation('driver')}</th>
-                            <th class="text-center">${this.translation('grid')}</th>
-                            <th class="text-ccenter">${this.translation('points')}</th>
-                            <th>${this.translation('status')}</th>
+                            <td>${this.renderHeader(response)}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        ${response.Results.map(result => this.renderResultRow(result))}
-                    </tbody>
-                </table>`
-              : html`Error getting standings`),
-            html`Loading...`
+                    </table>
+                    <table>
+                        <thead>                    
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>${this.translation('driver')}</th>
+                                <th class="text-center">${this.translation('grid')}</th>
+                                <th class="text-ccenter">${this.translation('points')}</th>
+                                <th>${this.translation('status')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${response.Results.map(result => this.renderResultRow(result))}
+                        </tbody>
+                    </table>`
+                : html`${getApiErrorMessage('standings')}`;
+                }),
+            html`${getApiLoadingMessage()}`
           )}`;
     }
 }

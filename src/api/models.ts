@@ -9,9 +9,9 @@ export interface Root {
     limit: string
     offset: string
     total: string
-    RaceTable: RaceTable
-    SeasonTable: SeasonTable;
-    StandingsTable: StandingsTable
+    RaceTable?: RaceTable
+    SeasonTable?: SeasonTable;
+    StandingsTable?: StandingsTable
   }
 
   export interface StandingsTable {
@@ -61,7 +61,7 @@ export interface Root {
     FirstPractice: FirstPractice
     SecondPractice: SecondPractice
     ThirdPractice?: ThirdPractice
-    Qualifying: Qualifying
+    Qualifying?: Qualifying
     Sprint?: Sprint
   }
   

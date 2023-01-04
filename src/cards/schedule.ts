@@ -1,12 +1,14 @@
-import {  formatTime, HomeAssistant } from "custom-card-helpers";
+import { formatTime, HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import { Circuit, Race } from "../api/models";
 import { formatDate } from "../lib/format_date";
 import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
+    hass: HomeAssistant;
     defaultTranslations = {
         'date' : 'Date',   
         'race' : 'Race',
@@ -16,21 +18,13 @@ export default class Schedule extends BaseCard {
     };
     
     constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(hass, config);
+        super(config);
+
+        this.hass = hass;
     }   
     
     cardSize(): number {
-        return 2;
-        // const data = this.sensor.data as Race[];        
-        // if(!data) {
-        //     return 2;
-        // }
-
-        // return (data.length == 0 ? 1 : data.length / 2 ) + 1;
-    }
-
-    renderSeasonEnded(): HTMLTemplateResult {
-        return html`<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
+        return 12;
     }
 
     renderLocation(circuit: Circuit) {
@@ -61,7 +55,7 @@ export default class Schedule extends BaseCard {
                 })[0];
 
                 if(!next_race) {
-                    return this.renderSeasonEnded();
+                    return getEndOfSeasonMessage(this.translation('endofseason'));
                 }
 
                 response ? 
@@ -80,9 +74,9 @@ export default class Schedule extends BaseCard {
                                 ${response.map(race => this.renderScheduleRow(race))}
                             </tbody>
                         </table>`
-                : html`Error getting schedule`
+                : html`${getApiErrorMessage('schedule')}`
             }),
-            html`Loading...`
+            html`${getApiLoadingMessage()}`
         )}`;
     }
 }

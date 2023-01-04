@@ -1,7 +1,8 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import { ConstructorStanding, FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { ConstructorStanding } from "../api/models";
+import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { getApiErrorMessage, getApiLoadingMessage } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class ConstructorStandings extends BaseCard {
@@ -11,8 +12,8 @@ export default class ConstructorStandings extends BaseCard {
         'wins' : 'Wins'
     };
 
-    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(hass, config);
+    constructor(config: FormulaOneCardConfig) {
+        super(config);
     }    
     
     cardSize(): number {        
@@ -54,8 +55,8 @@ export default class ConstructorStandings extends BaseCard {
                         </tbody>
                     </table>
                     `
-              : html`Error getting standings`),
-            html`Loading...`,
+              : html`${getApiErrorMessage('standings')}`),
+            html`${getApiLoadingMessage()}`,
           )}`;
     }
 }

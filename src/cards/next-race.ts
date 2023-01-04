@@ -5,10 +5,11 @@ import { Race } from "../api/models";
 import { formatDateNumeric } from "../lib/format_date";
 import { formatDateTimeRaceInfo } from "../lib/format_date_time";
 import { FormulaOneCardConfig } from "../types/formulaone-card-types";
-import { getCircuitName, getCountryFlagByName } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCircuitName, getCountryFlagByName, getEndOfSeasonMessage } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class NextRace extends BaseCard {
+    hass: HomeAssistant;
     defaultTranslations = {
         'date' : 'Date',   
         'practice1' : 'Practice 1',
@@ -26,7 +27,9 @@ export default class NextRace extends BaseCard {
     };
 
     constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(hass, config);
+        super(config);
+
+        this.hass = hass;
     }   
     
     cardSize(): number {
@@ -48,17 +51,13 @@ export default class NextRace extends BaseCard {
 
         return html`<h2><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>${imageWithLinkHtml}<br> `
     }
-
-    renderSeasonEnded(): HTMLTemplateResult {
-        return html`<table><tr><td class="text-center"><strong>${this.translation('endofseason')}</strong></td></tr></table>`;
-    }
-
+    
     render() : HTMLTemplateResult {
 
         return html`${until(
             this.client.GetSchedule().then(response => {
                 if(!response) {
-                    return html`Error getting next race`
+                    return html`${getApiErrorMessage('next race')}`
                 }
 
                 const next_race = response?.filter(race =>  {
@@ -66,7 +65,7 @@ export default class NextRace extends BaseCard {
                 })[0];
 
                 if(!next_race) {
-                    return this.renderSeasonEnded();
+                    return getEndOfSeasonMessage(this.translation('endofseason'));
                 }
 
                 const raceDate = new Date(next_race.date + 'T' + next_race.time);
@@ -91,7 +90,7 @@ export default class NextRace extends BaseCard {
                         </tbody>
                     </table>`
                 }),
-            html`Loading...`
+            html`${getApiLoadingMessage()}`
         )}`;
     }
 }

@@ -1,16 +1,13 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { HTMLTemplateResult } from "lit-html";
 import ErgastClient from "../api/ergast-client";
 import { FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
 export abstract class BaseCard {
-    hass: HomeAssistant;
     config: FormulaOneCardConfig;  
     client: ErgastClient;
 
-    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        this.hass = hass;
-        this.config = config;
+    constructor(config: FormulaOneCardConfig) {     
+        this.config = config;   
         this.client = new ErgastClient();
     }    
 

@@ -1,5 +1,5 @@
-//https://ergast.com/mrd/
 import axios, { AxiosInstance } from 'axios';
+import { LocalStorageItem } from '../types/formulaone-card-types';
 import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './models';
 
 export default class ErgastClient  {
@@ -8,57 +8,67 @@ export default class ErgastClient  {
     instance: AxiosInstance;
 
     constructor() {
-        //axios.defaults.baseURL = this.baseUrl;
 
-        this.instance = axios.create({
-          baseURL: this.baseUrl,
-          //headers: { 'Cache-Control': 'max-age=3600' }
-        });
+      this.instance = axios.create({
+        baseURL: this.baseUrl
+      });
     }
 
     async GetSchedule() : Promise<Race[]> {      
-      const data = await this.GetData('current.json');
+      const data = await this.GetData<Root>('current.json', true);
 
       return data.MRData.RaceTable.Races;
     }
 
     async GetLastResult() : Promise<Race> {      
-      const data = await this.GetData('current/last/results.json');
+      const data = await this.GetData<Root>('current/last/results.json', true);
 
       return data.MRData.RaceTable.Races[0];
     }
 
     async GetDriverStandings() : Promise<DriverStanding[]> {      
-      const data = await this.GetData('current/driverStandings.json');
+      const data = await this.GetData<Root>('current/driverStandings.json', true);
 
       return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
-      const data = await this.GetData('current/constructorStandings.json');
+      const data = await this.GetData<Root>('current/constructorStandings.json', true);
 
       return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
     
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
-      const data = await this.GetData(`${season}/${round}/results.json`);
+      const data = await this.GetData<Root>(`${season}/${round}/results.json`, false);
 
       return data.MRData.RaceTable;
     }
 
     async GetSeasons() : Promise<Season[]> {
-      const data = await this.GetData('seasons.json?limit=200');
+      const data = await this.GetData<Root>('seasons.json?limit=200', true);
 
       return data.MRData.SeasonTable.Seasons;
     }
 
     async GetSeasonRaces(season: number) : Promise<Race[]> {
-        const data = await this.GetData( `${season}.json`);
+        const data = await this.GetData<Root>(`${season}.json`, true);
         return data.MRData.RaceTable.Races;
     }
 
-    async GetData(endpoint: string) : Promise<Root> {
-       const { data } = await this.instance.get<Root>(
+    async GetData<T>(endpoint: string, cacheResult: boolean) : Promise<T> {
+      const localStorageData = localStorage.getItem(endpoint);
+      if(localStorageData && cacheResult) {
+        const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
+
+        const checkDate = new Date();
+        checkDate.setHours(checkDate.getHours() - 1);
+
+        if(new Date(item.created) > checkDate) {
+          return <T>JSON.parse(item.data);
+        }
+      }
+
+       const { data } = await this.instance.get<T>(
             endpoint,
             {
               headers: {
@@ -66,6 +76,15 @@ export default class ErgastClient  {
               },
             },
           );
+        
+        const item : LocalStorageItem = {
+          data: JSON.stringify(data),
+          created: new Date()
+        }
+
+        if(cacheResult) {          
+          localStorage.setItem(endpoint, JSON.stringify(item));
+        }
 
         return data;
     }
