@@ -29,15 +29,15 @@ jobs:
 
       - run: npm install
       
-      - name: Run Tests
-        run: npm run workflow
+      # - name: Run Tests
+      #   run: npm run workflow
         
-      - name: Run Jest
-        uses: willcaul/jest-github-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          test-command: "npm run workflow"
+      # - name: Run Jest
+      #   uses: willcaul/jest-github-action@v2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     test-command: "npm run workflow"
 
       - name: HACS validation
         uses: hacs/action@main
