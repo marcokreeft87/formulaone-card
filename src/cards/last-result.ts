@@ -16,8 +16,6 @@ export default class LastResult extends BaseCard {
     constructor(config: FormulaOneCardConfig) {
         super(config);
     }   
-
-    lastResult: Race;
     
     cardSize(): number {
         return 11;
@@ -47,11 +45,8 @@ export default class LastResult extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetLastResult().then(response => { 
-                this.lastResult = response;
-                
-                response
-                ?  html` 
+            this.client.GetLastResult().then(response => response
+              ? html` 
                     <table>
                         <tr>
                             <td>${this.renderHeader(response)}</td>
@@ -71,9 +66,8 @@ export default class LastResult extends BaseCard {
                             ${response.Results.map(result => this.renderResultRow(result))}
                         </tbody>
                     </table>`
-                : html`${getApiErrorMessage('standings')}`;
-                }),
-            html`${getApiLoadingMessage()}`
+              : html`${getApiErrorMessage('last result')}`),
+            html`${getApiLoadingMessage()}`,
           )}`;
     }
 }
