@@ -180,53 +180,53 @@ class ErgastClient {
     }
     GetSchedule() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current.json', true);
+            const data = yield this.GetData('current.json', true, 24);
             return data.MRData.RaceTable.Races;
         });
     }
     GetLastResult() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current/last/results.json', true);
+            const data = yield this.GetData('current/last/results.json', true, 1);
             return data.MRData.RaceTable.Races[0];
         });
     }
     GetDriverStandings() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current/driverStandings.json', true);
+            const data = yield this.GetData('current/driverStandings.json', true, 24);
             return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
         });
     }
     GetConstructorStandings() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('current/constructorStandings.json', true);
+            const data = yield this.GetData('current/constructorStandings.json', true, 24);
             return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
         });
     }
     GetResults(season, round) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData(`${season}/${round}/results.json`, false);
+            const data = yield this.GetData(`${season}/${round}/results.json`, false, 0);
             return data.MRData.RaceTable;
         });
     }
     GetSeasons() {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData('seasons.json?limit=200', true);
+            const data = yield this.GetData('seasons.json?limit=200', true, 24);
             return data.MRData.SeasonTable.Seasons;
         });
     }
     GetSeasonRaces(season) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.GetData(`${season}.json`, true);
+            const data = yield this.GetData(`${season}.json`, true, 24);
             return data.MRData.RaceTable.Races;
         });
     }
-    GetData(endpoint, cacheResult) {
+    GetData(endpoint, cacheResult, hoursBeforeInvalid) {
         return __awaiter(this, void 0, void 0, function* () {
             const localStorageData = localStorage.getItem(endpoint);
             if (localStorageData && cacheResult) {
                 const item = JSON.parse(localStorageData);
                 const checkDate = new Date();
-                checkDate.setHours(checkDate.getHours() - 1);
+                checkDate.setHours(checkDate.getHours() - hoursBeforeInvalid);
                 if (new Date(item.created) > checkDate) {
                     return JSON.parse(item.data);
                 }

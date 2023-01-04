@@ -15,53 +15,53 @@ export default class ErgastClient  {
     }
 
     async GetSchedule() : Promise<Race[]> {      
-      const data = await this.GetData<Root>('current.json', true);
+      const data = await this.GetData<Root>('current.json', true, 24);
 
       return data.MRData.RaceTable.Races;
     }
 
     async GetLastResult() : Promise<Race> {      
-      const data = await this.GetData<Root>('current/last/results.json', true);
+      const data = await this.GetData<Root>('current/last/results.json', true, 1);
 
       return data.MRData.RaceTable.Races[0];
     }
 
     async GetDriverStandings() : Promise<DriverStanding[]> {      
-      const data = await this.GetData<Root>('current/driverStandings.json', true);
+      const data = await this.GetData<Root>('current/driverStandings.json', true, 24);
 
       return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
-      const data = await this.GetData<Root>('current/constructorStandings.json', true);
+      const data = await this.GetData<Root>('current/constructorStandings.json', true, 24);
 
       return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
     
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
-      const data = await this.GetData<Root>(`${season}/${round}/results.json`, false);
+      const data = await this.GetData<Root>(`${season}/${round}/results.json`, false, 0);
 
       return data.MRData.RaceTable;
     }
 
     async GetSeasons() : Promise<Season[]> {
-      const data = await this.GetData<Root>('seasons.json?limit=200', true);
+      const data = await this.GetData<Root>('seasons.json?limit=200', true, 24);
 
       return data.MRData.SeasonTable.Seasons;
     }
 
     async GetSeasonRaces(season: number) : Promise<Race[]> {
-        const data = await this.GetData<Root>(`${season}.json`, true);
+        const data = await this.GetData<Root>(`${season}.json`, true, 24);
         return data.MRData.RaceTable.Races;
     }
 
-    async GetData<T>(endpoint: string, cacheResult: boolean) : Promise<T> {
+    async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
       const localStorageData = localStorage.getItem(endpoint);
       if(localStorageData && cacheResult) {
         const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
 
         const checkDate = new Date();
-        checkDate.setHours(checkDate.getHours() - 1);
+        checkDate.setHours(checkDate.getHours() - hoursBeforeInvalid);
 
         if(new Date(item.created) > checkDate) {
           return <T>JSON.parse(item.data);
