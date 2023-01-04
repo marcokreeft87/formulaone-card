@@ -40,10 +40,6 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
     if (config.card_type === undefined) {
         throw new Error('Please define FormulaOne card type (card_type).');
     }
-
-    if (config.sensor === undefined) {
-        throw new Error('Please define FormulaOne sensor.');
-    }
 };
 
 export const getCountryFlagUrl = (countryCode: string) => {
