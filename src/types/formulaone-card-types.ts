@@ -6,7 +6,6 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     name?: string;
     hass?: HomeAssistant;
     card_type?: FormulaOneCardType;
-    sensor?: string;
     date_locale?: string;
     image_clickable?: boolean;
     show_carnumber?: boolean;
