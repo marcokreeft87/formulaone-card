@@ -59,10 +59,10 @@ export default class FormulaOneCard extends LitElement {
     renderCardType(): HTMLTemplateResult {
         switch(this.config.card_type) {
             case FormulaOneCardType.ConstructorStandings:
-                this.card =  new ConstructorStandings(this.config);
+                this.card = new ConstructorStandings(this.config);
                 break;
             case FormulaOneCardType.DriverStandings:                
-                this.card =  new DriverStandings(this.config);
+                this.card = new DriverStandings(this.config);
                 break;
             case FormulaOneCardType.Schedule:                
                 this.card =  new Schedule(this._hass, this.config);
