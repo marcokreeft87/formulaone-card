@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { LocalStorageItem } from '../types/formulaone-card-types';
+import { getRefreshTime } from '../utils';
 import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './models';
 
 export default class ErgastClient  {
@@ -15,25 +16,29 @@ export default class ErgastClient  {
     }
 
     async GetSchedule(season: number) : Promise<Race[]> {      
-      const data = await this.GetData<Root>(`${season}.json`, true, 24);
+      const data = await this.GetData<Root>(`${season}.json`, true, 72);
 
       return data.MRData.RaceTable.Races;
     }
 
     async GetLastResult() : Promise<Race> {      
-      const data = await this.GetData<Root>('current/last/results.json', true, 1);
+
+      const refreshCacheHours = getRefreshTime('current/last/results.json');
+      const data = await this.GetData<Root>('current/last/results.json', true, refreshCacheHours);
 
       return data.MRData.RaceTable.Races[0];
     }
 
     async GetDriverStandings() : Promise<DriverStanding[]> {      
-      const data = await this.GetData<Root>('current/driverStandings.json', true, 24);
+      const refreshCacheHours = getRefreshTime('current/driverStandings.json');
+      const data = await this.GetData<Root>('current/driverStandings.json', true, refreshCacheHours);
 
       return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
-      const data = await this.GetData<Root>('current/constructorStandings.json', true, 24);
+      const refreshCacheHours = getRefreshTime('current/constructorStandings.json');
+      const data = await this.GetData<Root>('current/constructorStandings.json', true, refreshCacheHours);
 
       return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
@@ -45,13 +50,13 @@ export default class ErgastClient  {
     }
 
     async GetSeasons() : Promise<Season[]> {
-      const data = await this.GetData<Root>('seasons.json?limit=200', true, 24);
+      const data = await this.GetData<Root>('seasons.json?limit=200', true, 72);
 
       return data.MRData.SeasonTable.Seasons;
     }
 
     async GetSeasonRaces(season: number) : Promise<Race[]> {
-        const data = await this.GetData<Root>(`${season}.json`, true, 24);
+        const data = await this.GetData<Root>(`${season}.json`, true, 72);
         return data.MRData.RaceTable.Races;
     }
 
