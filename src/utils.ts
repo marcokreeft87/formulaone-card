@@ -1,8 +1,8 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, PropertyValues } from "lit";
-import { FormulaOneCardConfig } from "./types/formulaone-card-types";
+import { FormulaOneCardConfig, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
-import { Driver } from "./api/models";
+import { Driver, Root } from "./api/models";
 
 export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -81,4 +81,31 @@ export const getApiLoadingMessage = () => {
 
 export const getEndOfSeasonMessage = (message: string) => {
     return html`<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${message}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`;
+}
+
+export const getRefreshTime = (endpoint: string) => {
+    let refreshCacheHours = 24;
+    const scheduleLocalStorage = localStorage.getItem(`${new Date().getFullYear()}.json`);
+
+    if(scheduleLocalStorage) {
+        const item: LocalStorageItem = <LocalStorageItem>JSON.parse(scheduleLocalStorage);
+        const schedule = <Root>JSON.parse(item.data);
+        const now = new Date();
+        const filteredRaces = schedule.MRData.RaceTable.Races.filter(race => new Date(race.date).toLocaleDateString == now.toLocaleDateString);
+        
+        if(filteredRaces.length > 0) {
+            const todaysRace = filteredRaces[0];
+            const raceTime = new Date(todaysRace.date + 'T' + todaysRace.time);
+            
+            const lastResultLocalStorage = localStorage.getItem(endpoint);  
+            if(lastResultLocalStorage) {
+                const resultItem: LocalStorageItem = <LocalStorageItem>JSON.parse(lastResultLocalStorage);
+                if(resultItem.created < raceTime) {
+                    refreshCacheHours = 1;
+                }
+            }          
+        }
+    }
+
+    return refreshCacheHours;
 }
