@@ -1,5 +1,6 @@
 import { createMock } from 'ts-auto-mock';
-import { Driver, FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
+import { Driver } from '../../src/api/models';
+import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import { getDriverName } from '../../src/utils';
 
 describe('Testing util file function getDriverName', () => {

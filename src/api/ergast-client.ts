@@ -18,7 +18,7 @@ export default class ErgastClient  {
     async GetSchedule(season: number) : Promise<Race[]> {      
       const data = await this.GetData<Root>(`${season}.json`, true, 72);
 
-      return data.MRData.RaceTable.Races;
+      return data?.MRData.RaceTable.Races;
     }
 
     async GetLastResult() : Promise<Race> {      
@@ -32,14 +32,14 @@ export default class ErgastClient  {
       const refreshCacheHours = getRefreshTime('current/driverStandings.json');
       const data = await this.GetData<Root>('current/driverStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+      return data?.MRData.StandingsTable.StandingsLists[0].DriverStandings;
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
       const refreshCacheHours = getRefreshTime('current/constructorStandings.json');
       const data = await this.GetData<Root>('current/constructorStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+      return data?.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
     
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
@@ -60,17 +60,17 @@ export default class ErgastClient  {
     }
 
     async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
-      const localStorageData = localStorage.getItem(endpoint);
-      if(localStorageData && cacheResult) {
-        const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
+      // const localStorageData = localStorage.getItem(endpoint);
+      // if(localStorageData && cacheResult) {
+      //   const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
 
-        const checkDate = new Date();
-        checkDate.setHours(checkDate.getHours() - hoursBeforeInvalid);
+      //   const checkDate = new Date();
+      //   checkDate.setHours(checkDate.getHours() - hoursBeforeInvalid);
 
-        if(new Date(item.created) > checkDate) {
-          return <T>JSON.parse(item.data);
-        }
-      }
+      //   if(new Date(item.created) > checkDate) {
+      //     return <T>JSON.parse(item.data);
+      //   }
+      // }
 
        const { data } = await this.instance.get<T>(
             endpoint,
@@ -81,14 +81,14 @@ export default class ErgastClient  {
             },
           );
         
-        const item : LocalStorageItem = {
-          data: JSON.stringify(data),
-          created: new Date()
-        }
+        // const item : LocalStorageItem = {
+        //   data: JSON.stringify(data),
+        //   created: new Date()
+        // }
 
-        if(cacheResult) {          
-          localStorage.setItem(endpoint, JSON.stringify(item));
-        }
+        // if(cacheResult) {          
+        //   localStorage.setItem(endpoint, JSON.stringify(item));
+        // }
 
         return data;
     }

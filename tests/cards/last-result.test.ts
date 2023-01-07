@@ -5,9 +5,9 @@ import { MRData } from '../testdata/results.json'
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import { Mrdata, Race, Root } from '../../src/api/models';
 import ErgastClient from '../../src/api/ergast-client';
+import { getApiErrorMessage } from '../../src/utils';
 
 describe('Testing last-result file', () => {
-    const data = MRData['RaceTable'].Races[0];
     const config = createMock<FormulaOneCardConfig>();
     const lastRace = <Race>MRData.RaceTable.Races[0];
 
@@ -34,10 +34,9 @@ describe('Testing last-result file', () => {
         
         const result = card.render();
         const htmlResult = await getRenderStringAsync(result);
+        const expectedResult = getRenderString(getApiErrorMessage('last result'));
 
-        console.log(htmlResult);
-
-        expect(htmlResult).toMatch('<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon> Error getting last result <ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>');
+        expect(htmlResult).toMatch(expectedResult);
     }),
     test('Calling renderHeader with image not clickable', async () => { 
         config.image_clickable = undefined;
@@ -59,7 +58,7 @@ describe('Testing last-result file', () => {
 
         expect(htmlResult).toMatch('<h2><img height="25" src="https://flagcdn.com/w40/sg.png">&nbsp; 17 : Singapore Grand Prix</h2><a target="_new" href="http://en.wikipedia.org/wiki/Marina_Bay_Street_Circuit"><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png"></a><br>');
     }),
-    test('Calling cardSize with hass and sensor', () => { 
+    test('Calling cardSize', () => { 
         const card = new LastResult(config);
         expect(card.cardSize()).toBe(11);
     })
