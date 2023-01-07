@@ -33,11 +33,6 @@ export default class NextRace extends BaseCard {
     }   
     
     cardSize(): number {
-        // const data = this.next_race;
-        // if(!data) {
-        //     return 2;
-        // }
-
         return 8;
     }
 
@@ -60,7 +55,7 @@ export default class NextRace extends BaseCard {
                     return html`${getApiErrorMessage('next race')}`
                 }
 
-                const next_race = response?.filter(race =>  {
+                const next_race = response.filter(race =>  {
                     return new Date(race.date + 'T' + race.time) >= new Date();
                 })[0];
 
@@ -73,7 +68,7 @@ export default class NextRace extends BaseCard {
                 const freePractice2 = formatDateTimeRaceInfo(new Date(next_race.SecondPractice.date + 'T' + next_race.SecondPractice.time), this.hass.locale);
                 const freePractice3 = next_race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(next_race.ThirdPractice.date + 'T' + next_race.ThirdPractice.time), this.hass.locale) : '-';
                 const raceDateFormatted = formatDateTimeRaceInfo(raceDate, this.hass.locale);
-                const qualifyingDate = next_race.Qualifying !== undefined ? formatDateTimeRaceInfo(new Date(next_race.Qualifying.date + 'T' + next_race.Qualifying.time), this.hass.locale) : '-';
+                const qualifyingDate = formatDateTimeRaceInfo(new Date(next_race.Qualifying.date + 'T' + next_race.Qualifying.time), this.hass.locale);
                 const sprintDate = next_race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(next_race.Sprint.date + 'T' + next_race.Sprint.time), this.hass.locale) : '-';
         
                 return html`<table>

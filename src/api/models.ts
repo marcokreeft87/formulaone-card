@@ -45,7 +45,7 @@ export interface Root {
   
   export interface RaceTable {
     season: string
-    round: string
+    round?: string
     Races: Race[]
   }
   
@@ -57,7 +57,7 @@ export interface Root {
     Circuit: Circuit
     date: string
     time: string
-    Results: Result[]
+    Results?: Result[]
     FirstPractice: FirstPractice
     SecondPractice: SecondPractice
     ThirdPractice?: ThirdPractice
