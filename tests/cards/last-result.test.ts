@@ -5,6 +5,7 @@ import { MRData } from '../testdata/results.json'
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import { Mrdata, Race, Root } from '../../src/api/models';
 import ErgastClient from '../../src/api/ergast-client';
+import { getApiErrorMessage } from '../../src/utils';
 
 describe('Testing last-result file', () => {
     const data = MRData['RaceTable'].Races[0];
@@ -34,10 +35,9 @@ describe('Testing last-result file', () => {
         
         const result = card.render();
         const htmlResult = await getRenderStringAsync(result);
+        const expectedResult = getRenderString(getApiErrorMessage('last result'));
 
-        console.log(htmlResult);
-
-        expect(htmlResult).toMatch('<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon> Error getting last result <ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>');
+        expect(htmlResult).toMatch(expectedResult);
     }),
     test('Calling renderHeader with image not clickable', async () => { 
         config.image_clickable = undefined;

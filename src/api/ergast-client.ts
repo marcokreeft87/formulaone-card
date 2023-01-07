@@ -39,7 +39,7 @@ export default class ErgastClient  {
       const refreshCacheHours = getRefreshTime('current/constructorStandings.json');
       const data = await this.GetData<Root>('current/constructorStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+      return data?.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
     
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
