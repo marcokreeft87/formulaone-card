@@ -37,7 +37,7 @@ export default class Schedule extends BaseCard {
         const renderClass = this.config.previous_race && raceDate < new Date() ? this.config.previous_race : '';
 
         return html`
-            <tr class="${renderClass}"> 
+            <tr class="${renderClass}">
                 <td class="width-50 text-center">${race.round}</td>
                 <td>${race.Circuit.circuitName}</td>
                 <td>${this.renderLocation(race.Circuit)}</td>
@@ -50,16 +50,16 @@ export default class Schedule extends BaseCard {
 
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
-                const next_race = response?.filter(race =>  {
+                if(!response) {
+                    return html`${getApiErrorMessage('schedule')}`
+                }
+                const next_race = response.filter(race =>  {
                     return new Date(race.date + 'T' + race.time) >= new Date();
                 })[0];
-
                 if(!next_race) {
                     return getEndOfSeasonMessage(this.translation('endofseason'));
                 }
-
-                return response ?
-                    html`<table>
+                return html`<table>
                             <thead>
                                 <tr>
                                     <th>&nbsp;</th>
@@ -72,8 +72,7 @@ export default class Schedule extends BaseCard {
                             <tbody>
                                 ${response.map(race => this.renderScheduleRow(race))}
                             </tbody>
-                        </table>`
-                : html`${getApiErrorMessage('schedule')}`
+                        </table>`;
             }),
             html`${getApiLoadingMessage()}`
         )}`;
