@@ -45,7 +45,7 @@ export default class ErgastClient  {
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
       const data = await this.GetData<Root>(`${season}/${round}/results.json`, false, 0);
 
-      return data.MRData.RaceTable;
+      return data?.MRData.RaceTable;
     }
 
     async GetSeasons() : Promise<Season[]> {

@@ -1,5 +1,5 @@
 import { checkConfig } from '../../src/utils';
-import { FormulaOneCardConfig, FormulaOneCardType } from '../../src/types/formulaone-card-types';
+import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 
 describe('Testing util file function checkConfig', () => {
     test('Passing empty config should throw error', () => {   

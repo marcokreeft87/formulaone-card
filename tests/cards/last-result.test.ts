@@ -8,7 +8,6 @@ import ErgastClient from '../../src/api/ergast-client';
 import { getApiErrorMessage } from '../../src/utils';
 
 describe('Testing last-result file', () => {
-    const data = MRData['RaceTable'].Races[0];
     const config = createMock<FormulaOneCardConfig>();
     const lastRace = <Race>MRData.RaceTable.Races[0];
 
