@@ -1,10 +1,11 @@
 import { HomeAssistant } from 'custom-card-helpers';
 import { createMock } from 'ts-auto-mock';
 import FormulaOneCard from '../src/index';
-import { ConstructorStanding, DriverStanding, FormulaOneCardConfig, FormulaOneCardType, Race } from '../src/types/formulaone-card-types';
+import { FormulaOneCardConfig, FormulaOneCardType } from '../src/types/formulaone-card-types';
 import { getRenderString } from './utils';
 import { HassEntity } from 'home-assistant-js-websocket';
 import { PropertyValues } from 'lit';
+import { ConstructorStanding, DriverStanding, Race } from '../src/api/models';
 
 describe('Testing index file function setConfig', () => {
     const card = new FormulaOneCard();

@@ -22,11 +22,10 @@ export default class ErgastClient  {
     }
 
     async GetLastResult() : Promise<Race> {      
-
       const refreshCacheHours = getRefreshTime('current/last/results.json');
       const data = await this.GetData<Root>('current/last/results.json', true, refreshCacheHours);
-
-      return data.MRData.RaceTable.Races[0];
+      
+      return data?.MRData.RaceTable.Races[0];
     }
 
     async GetDriverStandings() : Promise<DriverStanding[]> {      

@@ -34,6 +34,7 @@ export default class LastResult extends BaseCard {
     }
 
     renderHeader(data: Race): HTMLTemplateResult {        
+        
         const countryDashed = data.Circuit.Location.country.replace(" ","-");
         const circuitName = getCircuitName(countryDashed);
         const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
@@ -58,7 +59,7 @@ export default class LastResult extends BaseCard {
                                 <th>&nbsp;</th>
                                 <th>${this.translation('driver')}</th>
                                 <th class="text-center">${this.translation('grid')}</th>
-                                <th class="text-ccenter">${this.translation('points')}</th>
+                                <th class="text-center">${this.translation('points')}</th>
                                 <th>${this.translation('status')}</th>
                             </tr>
                         </thead>
