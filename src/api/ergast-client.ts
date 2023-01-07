@@ -32,7 +32,7 @@ export default class ErgastClient  {
       const refreshCacheHours = getRefreshTime('current/driverStandings.json');
       const data = await this.GetData<Root>('current/driverStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+      return data?.MRData.StandingsTable.StandingsLists[0].DriverStandings;
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
