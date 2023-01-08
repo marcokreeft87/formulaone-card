@@ -91,7 +91,6 @@ export const getRefreshTime = (endpoint: string) => {
     if(scheduleLocalStorage) {
         const item: LocalStorageItem = <LocalStorageItem>JSON.parse(scheduleLocalStorage);
         const schedule = <Root>JSON.parse(item.data);
-
         const filteredRaces = schedule.MRData.RaceTable.Races.filter(race => new Date(race.date).toLocaleDateString == now.toLocaleDateString);
         
         if(filteredRaces.length > 0) {
