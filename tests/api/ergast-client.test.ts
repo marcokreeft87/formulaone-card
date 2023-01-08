@@ -5,9 +5,13 @@ import { MRData as resultData } from '../testdata/results.json'
 import { MRData as driverStandingsData } from '../testdata/driverStandings.json'
 import { MRData as constructorStandingsData } from '../testdata/constructorStandings.json'
 import { MRData as seasonData } from '../testdata/seasons.json'
+import LocalStorageMock from '../testdata/localStorageMock';
 
 describe('Testing ergast client file', () => {
-    const client = new ErgastClient();
+    const client = new ErgastClient();    
+    const localStorageMock = new LocalStorageMock();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
     test('Passing number to GetSchedule should return correct data', async () => {           
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,6 +53,14 @@ describe('Testing ergast client file', () => {
 
         await expect(client.GetResults(2022, 2)).resolves.toBe(resultData.RaceTable);
     }),
+    test('Calling GetResults api not returning data should return correct data', async () => {           
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
+            resolve(undefined as unknown as Root);
+        }));
+
+        await expect(client.GetResults(2022, 2)).resolves.toBe(undefined);
+    }),
     test('Calling GetSeasons should return correct data', async () => {           
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
@@ -64,6 +76,12 @@ describe('Testing ergast client file', () => {
         }));
 
         await expect(client.GetSeasonRaces(2022)).resolves.toBe(scheduleData.RaceTable.Races);
+    }),
+    test('Calling GetData with data in localstorage and cacheResult true should return correct data', async () => {           
+        localStorageMock.setItem('2022.json', JSON.stringify({ data: JSON.stringify({ MRData: scheduleData }), created: new Date() }));    
+        
+        const result = await client.GetData('2022.json', true, 24);
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
     })
 })
 
