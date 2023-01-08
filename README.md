@@ -4,6 +4,7 @@
 [![GH-last-commit](https://img.shields.io/github/last-commit/marcokreeft87/formulaone-card.svg?style=flat-square)](https://github.com/marcokreeft87/formulaone-card/commits/master)
 [![GH-code-size](https://img.shields.io/github/languages/code-size/marcokreeft87/formulaone-card.svg?color=red&style=flat-square)](https://github.com/marcokreeft87/formulaone-card)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=flat-square)](https://github.com/hacs/default)
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/marcokreeft87/formulaone-card/main.svg?style=flat-square)](https://codecov.io/gh/marcokreeft87/formulaone-card/)
 
 
 Present the data of [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi) in a pretty way 

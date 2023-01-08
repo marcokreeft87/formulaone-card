@@ -18,35 +18,34 @@ export default class ErgastClient  {
     async GetSchedule(season: number) : Promise<Race[]> {      
       const data = await this.GetData<Root>(`${season}.json`, true, 72);
 
-      return data.MRData.RaceTable.Races;
+      return data?.MRData.RaceTable.Races;
     }
 
     async GetLastResult() : Promise<Race> {      
-
       const refreshCacheHours = getRefreshTime('current/last/results.json');
       const data = await this.GetData<Root>('current/last/results.json', true, refreshCacheHours);
-
-      return data.MRData.RaceTable.Races[0];
+      
+      return data?.MRData.RaceTable.Races[0];
     }
 
     async GetDriverStandings() : Promise<DriverStanding[]> {      
       const refreshCacheHours = getRefreshTime('current/driverStandings.json');
       const data = await this.GetData<Root>('current/driverStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+      return data?.MRData.StandingsTable.StandingsLists[0].DriverStandings;
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
       const refreshCacheHours = getRefreshTime('current/constructorStandings.json');
       const data = await this.GetData<Root>('current/constructorStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+      return data?.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
     
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
       const data = await this.GetData<Root>(`${season}/${round}/results.json`, false, 0);
 
-      return data.MRData.RaceTable;
+      return data?.MRData.RaceTable;
     }
 
     async GetSeasons() : Promise<Season[]> {

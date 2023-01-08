@@ -18,13 +18,7 @@ export default class DriverStandings extends BaseCard {
     }    
     
     cardSize(): number {
-        return 2;
-        // const data = this.sensor.data as DriverStanding[];
-        // if(!data) {
-        //     return 2;
-        // }
-
-        //return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+        return 12;
     }  
     
     renderStandingRow(standing: DriverStanding): HTMLTemplateResult {

@@ -17,13 +17,7 @@ export default class ConstructorStandings extends BaseCard {
     }    
     
     cardSize(): number {        
-        return 2;
-        // const data = this.sensor.data as ConstructorStanding[];        
-        // if(!data) {
-        //     return 2;
-        // }
-
-        // return (data.length == 0 ? 1 : data.length / 2 ) + 1;
+        return 11;
     }
 
     renderStandingRow(standing: ConstructorStanding): HTMLTemplateResult {
