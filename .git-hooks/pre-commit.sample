@@ -1,7 +1,0 @@
-npm run test --bail --findRelatedTests $STAGED_FILES
-if [[ "$?" == 0 ]]; then
-    echo "\t\033[32mJest Tests Passed\033[0m"
-else
-    echo "\t\033[41mJest Tests Failed\033[0m"
-    PASS=false
-fi

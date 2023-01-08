@@ -4,7 +4,6 @@
   "description": "Frontend card for hass-formulaoneapi",
   "main": "index.js",
   "scripts": {
-    "postinstall": "git config core.hooksPath ./.git-hooks",
     "lint": "eslint src/**/*.ts",
     "dev": "webpack -c webpack.config.js",
     "build": "yarn lint && webpack -c webpack.config.js",
