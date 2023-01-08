@@ -85,12 +85,13 @@ export const getEndOfSeasonMessage = (message: string) => {
 
 export const getRefreshTime = (endpoint: string) => {
     let refreshCacheHours = 24;
-    const scheduleLocalStorage = localStorage.getItem(`${new Date().getFullYear()}.json`);
+    const now = new Date();
+    const scheduleLocalStorage = localStorage.getItem(`${now.getFullYear()}.json`);
 
     if(scheduleLocalStorage) {
         const item: LocalStorageItem = <LocalStorageItem>JSON.parse(scheduleLocalStorage);
         const schedule = <Root>JSON.parse(item.data);
-        const now = new Date();
+
         const filteredRaces = schedule.MRData.RaceTable.Races.filter(race => new Date(race.date).toLocaleDateString == now.toLocaleDateString);
         
         if(filteredRaces.length > 0) {
@@ -100,7 +101,8 @@ export const getRefreshTime = (endpoint: string) => {
             const lastResultLocalStorage = localStorage.getItem(endpoint);  
             if(lastResultLocalStorage) {
                 const resultItem: LocalStorageItem = <LocalStorageItem>JSON.parse(lastResultLocalStorage);
-                if(resultItem.created < raceTime) {
+                
+                if(new Date(resultItem.created) < raceTime) {
                     refreshCacheHours = 1;
                 }
             }          
