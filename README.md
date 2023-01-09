@@ -139,7 +139,6 @@ Example:
 ```
 type: custom:formulaone-card
 card_type: next_race
-sensor: sensor.formula_one_sensor_races
 title: Next Race
 date_locale: nl
 image_clickable: true
