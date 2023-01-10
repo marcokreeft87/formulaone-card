@@ -7,7 +7,7 @@
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/marcokreeft87/formulaone-card/main.svg?style=flat-square)](https://codecov.io/gh/marcokreeft87/formulaone-card/)
 
 
-Present the data of [hass-formulaoneapi](https://github.com/delzear/hass-formulaoneapi) in a pretty way 
+Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way 
 
 ## Installation
 
