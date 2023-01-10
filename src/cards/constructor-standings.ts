@@ -5,7 +5,7 @@ import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage } from "../utils";
 import { BaseCard } from "./base-card";
 
-export default class ConstructorStandings extends BaseCard {
+export default class ConstructorStandings extends BaseCard {    
     defaultTranslations = {
         'constructor' : 'Constructor',   
         'points' : 'Pts',

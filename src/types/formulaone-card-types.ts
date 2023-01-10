@@ -36,7 +36,8 @@ export enum FormulaOneCardType {
     NextRace = 'next_race',
     Schedule = 'schedule',
     LastResult = 'last_result',
-    Results = 'results'
+    Results = 'results',    
+    Countdown = 'countdown'
 }
 
 export interface LocalStorageItem {
