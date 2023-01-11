@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/marcokreeft87/formulaone-card#readme",
   "devDependencies": {
-    "@types/jest": "^29.1.1",
+    "@types/jest": "^29.2.5",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
     "codecov": "^3.8.3",
