@@ -48,7 +48,7 @@
     "ts-auto-mock": "^3.6.2",
     "ts-jest": "^29.0.3",
     "ts-loader": "^9.4.1",
-    "ttypescript": "^1.5.13",
+    "ttypescript": "^1.5.15",
     "yarn": "^1.22.19"
   }
 }
