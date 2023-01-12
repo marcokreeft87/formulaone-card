@@ -5,6 +5,7 @@
 [![GH-code-size](https://img.shields.io/github/languages/code-size/marcokreeft87/formulaone-card.svg?color=red&style=flat-square)](https://github.com/marcokreeft87/formulaone-card)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=flat-square)](https://github.com/hacs/default)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/marcokreeft87/formulaone-card/main.svg?style=flat-square)](https://codecov.io/gh/marcokreeft87/formulaone-card/)
+[![CodeFactor](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card/badge?style=flat-square)](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card)
 
 
 Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way 
