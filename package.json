@@ -45,7 +45,7 @@
     "custom-card-helpers": "^1.9.0",
     "jest-environment-jsdom": "^29.1.2",
     "jest-ts-auto-mock": "^2.1.0",
-    "ts-auto-mock": "^3.6.2",
+    "ts-auto-mock": "^3.6.4",
     "ts-jest": "^29.0.3",
     "ts-loader": "^9.4.1",
     "ttypescript": "^1.5.15",
