@@ -1,18 +1,19 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { html, PropertyValues } from "lit";
 import { FormulaOneCardConfig, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
 import { Driver, Root } from "./api/models";
+import FormulaOneCard from ".";
 
-export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedProps: PropertyValues) => {
+export const hasConfigOrEntitiesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
         return true;
     }
 
-    const oldHass = changedProps.get('_hass') as HomeAssistant;
-    if (oldHass) {
-        return oldHass.states[node.sensor] !== node.hass.states[node.sensor];
+    const oldCardValues = changedProps.get('cardValues') as Map<string, unknown>;
+    if (oldCardValues) {
+        return oldCardValues !== node.cardValues;
     }
+
     return false;
 };
 

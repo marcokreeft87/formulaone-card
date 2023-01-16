@@ -11,8 +11,8 @@ import Schedule from './cards/schedule';
 import NextRace from './cards/next-race';
 import LastResult from './cards/last-result';
 import { BaseCard } from './cards/base-card';
-import Countdown from './cards/countdown';
-//import Results from './cards/results';
+//import Countdown from './cards/countdown';
+import Results from './cards/results';
 
 console.info(
     `%c FORMULAONE-CARD %c ${packageJson.version}`,
@@ -35,6 +35,38 @@ export default class FormulaOneCard extends LitElement {
     @property() _hass?: HomeAssistant;
     @property() config?: FormulaOneCardConfig;
     @property() card: BaseCard;
+    @property() set cardValues(values: Map<string, unknown>) {
+        const oldValue = this._cardValues
+        console.log(`set cardValues, oldValue: ${this._cardValues}, newValue: ${values}`);
+        this._cardValues = values;
+        this.requestUpdate("cardValues", oldValue);
+    }
+    get cardValues() {
+        return this._cardValues;
+      }
+    
+    private _cardValues: Map<string, unknown>;
+
+
+    requestUpdate(name?: PropertyKey, oldValue?: unknown) {
+        //const newValue = this[name];
+        console.log(
+          `requestUpdate(). property: ${name as string}, oldValue: ${oldValue}, newValue: 1`
+        );
+        // schedule an update
+        return super.requestUpdate(name, oldValue);
+      }
+
+    update(changedProperties: Map<string, unknown>) {
+        console.log(`update(). changedProps: `, changedProperties);
+        if (changedProperties.has("cardValues")) {
+        //   const oldValue = changedProperties.get("userId") as number;
+            const newValue = this.cardValues;
+        //   this.loadAddress(newValue);        
+            this.card?.setValues(newValue);
+        }
+        super.update(changedProperties);
+      }
 
     setConfig(config: FormulaOneCardConfig) {      
         
@@ -44,7 +76,7 @@ export default class FormulaOneCard extends LitElement {
     }
 
     protected shouldUpdate(changedProps: PropertyValues): boolean {
-        return hasConfigOrEntitiesChanged(this.config, changedProps);
+        return hasConfigOrEntitiesChanged(this, changedProps);
     }
 
     set hass(hass: HomeAssistant) {
@@ -74,12 +106,12 @@ export default class FormulaOneCard extends LitElement {
             case FormulaOneCardType.LastResult:                
                 this.card = new LastResult(this.config);
                 break;
-            case FormulaOneCardType.Countdown:                
-                this.card = new Countdown(this._hass, this.config);
-                break;
-            // case FormulaOneCardType.Results:                
-            //     this.card = new Results(this.config);
+            // case FormulaOneCardType.Countdown:                
+            //     this.card = new Countdown(this._hass, this.config);
             //     break;
+            case FormulaOneCardType.Results:                
+                this.card = new Results(this.config, this);
+                break;
         }
 
         return this.card.render();
