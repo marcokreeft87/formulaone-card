@@ -40,7 +40,7 @@ jobs:
           test-command: "npm run workflow"
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3   
+        uses: codecov/codecov-action@v3 
 
       - name: HACS validation
         uses: hacs/action@main
@@ -49,8 +49,8 @@ jobs:
           ignore: brands
 
       - name: Automatic GitHub Release
-        uses: justincy/github-action-npm-release@2.0.2        
-        
+        uses: justincy/github-action-npm-release@2.0.2
+
       - name: Print release output
         if: ${{ steps.release.outputs.released == 'true' }}
         run: echo Release ID ${{ steps.release.outputs.release_id }}
