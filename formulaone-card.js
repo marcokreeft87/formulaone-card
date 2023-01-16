@@ -569,7 +569,7 @@ const until_js_1 = __webpack_require__(885);
 const utils_1 = __webpack_require__(593);
 const base_card_1 = __webpack_require__(243);
 class Results extends base_card_1.BaseCard {
-    constructor(config, card) {
+    constructor(config, parent) {
         super(config);
         this.defaultTranslations = {
             'driver': 'Driver',
@@ -580,8 +580,7 @@ class Results extends base_card_1.BaseCard {
             'seasonheader': 'Season',
         };
         this.results = [];
-        this.races = [];
-        this.card = card;
+        this.parent = parent;
     }
     getSeasonRaces(season) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -599,7 +598,10 @@ class Results extends base_card_1.BaseCard {
         });
     }
     extractValues(values) {
-        return new Promise((resolve, reject) => resolve(values.get('races')));
+        return new Promise((resolve) => {
+            const races = values.get('races');
+            resolve(races);
+        });
     }
     cardSize() {
         return 12;
@@ -625,23 +627,29 @@ class Results extends base_card_1.BaseCard {
         const imageWithLinkHtml = this.config.image_clickable ? (0, lit_html_1.html) `<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
         return (0, lit_html_1.html) `<h2><img height="25" src="${(0, utils_1.getCountryFlagUrl)(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `;
     }
-    selectedRaceChanged(ev) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const option = ev.detail.item.innerText;
-            console.log('Race', option);
-        });
-    }
     render() {
-        console.log('Races', this.races);
+        var _a;
+        console.log('child render Races', this.races);
         const selectedSeasonChanged = (ev) => {
             const selectedSeason = ev.target.value;
             console.log('Season', selectedSeason);
+            this.selectedSeason = selectedSeason;
             this.client.GetSeasonRaces(selectedSeason).then(response => {
-                console.log(response);
                 this.races = response;
                 const temp = new Map();
                 temp.set('races', response);
-                this.card.cardValues = temp;
+                this.parent.cardValues = temp;
+            });
+        };
+        const selectedRaceChanged = (ev) => {
+            const round = ev.target.value;
+            console.log('child selectedRaceChanged', round);
+            this.client.GetResults(this.selectedSeason, round).then(response => {
+                var _a;
+                this.results = response.Races[0].Results;
+                const temp = (_a = this.parent.cardValues) !== null && _a !== void 0 ? _a : new Map();
+                temp.set('results', this.results);
+                this.parent.cardValues = temp;
             });
         };
         return (0, lit_html_1.html) `   
@@ -662,8 +670,8 @@ class Results extends base_card_1.BaseCard {
                     </td>
                     <td>
                         ${this.translation('raceheader')}&nbsp;
-                        <select name="selectedRace" @change="${selectedSeasonChanged}">
-                            ${this.races.map(race => {
+                        <select name="selectedRace" @change="${selectedRaceChanged}">
+                            ${(_a = this.races) === null || _a === void 0 ? void 0 : _a.map(race => {
             return (0, lit_html_1.html) `<option value="${race.round}">${race.raceName}</option>`;
         })}
                         </select>
@@ -804,7 +812,6 @@ window.customCards.push({
 let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
     set cardValues(values) {
         const oldValue = this._cardValues;
-        console.log(`set cardValues, oldValue: ${this._cardValues}, newValue: ${values}`);
         this._cardValues = values;
         this.requestUpdate("cardValues", oldValue);
     }
@@ -812,13 +819,11 @@ let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
         return this._cardValues;
     }
     requestUpdate(name, oldValue) {
-        console.log(`requestUpdate(). property: ${name}, oldValue: ${oldValue}, newValue: 1`);
         return super.requestUpdate(name, oldValue);
     }
     update(changedProperties) {
         var _a;
-        console.log(`update(). changedProps: `, changedProperties);
-        if (changedProperties.has("cardValues")) {
+        if (changedProperties.has("races")) {
             const newValue = this.cardValues;
             (_a = this.card) === null || _a === void 0 ? void 0 : _a.setValues(newValue);
         }
@@ -834,11 +839,6 @@ let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
     set hass(hass) {
         this._hass = hass;
         this.config.hass = hass;
-    }
-    static get styles() {
-        return styles_1.style;
-    }
-    renderCardType() {
         switch (this.config.card_type) {
             case formulaone_card_types_1.FormulaOneCardType.ConstructorStandings:
                 this.card = new constructor_standings_1.default(this.config);
@@ -859,6 +859,11 @@ let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
                 this.card = new results_1.default(this.config, this);
                 break;
         }
+    }
+    static get styles() {
+        return styles_1.style;
+    }
+    renderCardType() {
         return this.card.render();
     }
     render() {
@@ -1102,9 +1107,13 @@ const hasConfigOrEntitiesChanged = (node, changedProps) => {
     if (changedProps.has('config')) {
         return true;
     }
-    const oldCardValues = changedProps.get('cardValues');
-    if (oldCardValues) {
-        return oldCardValues !== node.cardValues;
+    const card = changedProps.get('card');
+    if (card) {
+        return card.parent.cardValues !== node.cardValues;
+    }
+    const cardValues = changedProps.get('cardValues');
+    if (cardValues) {
+        return cardValues != node.cardValues;
     }
     return false;
 };

@@ -3,15 +3,21 @@ import { FormulaOneCardConfig, LocalStorageItem } from "./types/formulaone-card-
 import * as countries from './data/countries.json';
 import { Driver, Root } from "./api/models";
 import FormulaOneCard from ".";
+import { BaseCard } from "./cards/base-card";
 
 export const hasConfigOrEntitiesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
         return true;
     }
 
-    const oldCardValues = changedProps.get('cardValues') as Map<string, unknown>;
-    if (oldCardValues) {
-        return oldCardValues !== node.cardValues;
+    const card = changedProps.get('card') as BaseCard;
+    if (card) {
+        return card.parent.cardValues !== node.cardValues;
+    }
+
+    const cardValues = changedProps.get('cardValues') as Map<string, unknown>;
+    if(cardValues) {
+        return cardValues != node.cardValues;
     }
 
     return false;

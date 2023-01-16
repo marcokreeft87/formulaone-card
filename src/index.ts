@@ -37,32 +37,25 @@ export default class FormulaOneCard extends LitElement {
     @property() card: BaseCard;
     @property() set cardValues(values: Map<string, unknown>) {
         const oldValue = this._cardValues
-        console.log(`set cardValues, oldValue: ${this._cardValues}, newValue: ${values}`);
         this._cardValues = values;
+        //this.update(values);
         this.requestUpdate("cardValues", oldValue);
     }
     get cardValues() {
         return this._cardValues;
-      }
+    }
     
     private _cardValues: Map<string, unknown>;
 
-
     requestUpdate(name?: PropertyKey, oldValue?: unknown) {
-        //const newValue = this[name];
-        console.log(
-          `requestUpdate(). property: ${name as string}, oldValue: ${oldValue}, newValue: 1`
-        );
         // schedule an update
         return super.requestUpdate(name, oldValue);
       }
 
     update(changedProperties: Map<string, unknown>) {
-        console.log(`update(). changedProps: `, changedProperties);
-        if (changedProperties.has("cardValues")) {
+        if (changedProperties.has("races")) {
         //   const oldValue = changedProperties.get("userId") as number;
             const newValue = this.cardValues;
-        //   this.loadAddress(newValue);        
             this.card?.setValues(newValue);
         }
         super.update(changedProperties);
@@ -83,13 +76,7 @@ export default class FormulaOneCard extends LitElement {
         this._hass = hass;
 
         this.config.hass = hass;
-    }
 
-    static get styles(): CSSResult {
-        return style;
-    }
-
-    renderCardType(): HTMLTemplateResult {
         switch(this.config.card_type) {
             case FormulaOneCardType.ConstructorStandings:
                 this.card = new ConstructorStandings(this.config);
@@ -113,6 +100,14 @@ export default class FormulaOneCard extends LitElement {
                 this.card = new Results(this.config, this);
                 break;
         }
+    }
+
+    static get styles(): CSSResult {
+        return style;
+    }
+
+    renderCardType(): HTMLTemplateResult {
+        
 
         return this.card.render();
     }

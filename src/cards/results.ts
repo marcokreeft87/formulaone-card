@@ -16,15 +16,16 @@ export default class Results extends BaseCard {
         'seasonheader' : 'Season',
     };
     results: Result[] = [];
-    races: Race[] = [];
+    races: Race[];
     selectedRace: Race;
-    selectedSeason: Season;
-    card: FormulaOneCard;
+    selectedRound: number;
+    selectedSeason: number;
+    parent: FormulaOneCard;
 
-    constructor(config: FormulaOneCardConfig, card: FormulaOneCard) {
+    constructor(config: FormulaOneCardConfig, parent: FormulaOneCard) {
         super(config);
 
-        this.card = card;
+        this.parent = parent;
     }
 
     async getSeasonRaces(season: number) : Promise<Race[]> {
@@ -36,13 +37,14 @@ export default class Results extends BaseCard {
     }
 
     async setValues(values: Map<string, unknown>) {
-        //this.races = 
-        //this.races = values.get('races') as Race[];
-        this.races = await this.extractValues(values);
+        this.races = await this.extractValues(values);        
     }
 
     private extractValues(values: Map<string, unknown>) {
-        return new Promise<Race[]>((resolve, reject) => resolve(values.get('races') as Race[]));
+        return new Promise<Race[]>((resolve) => {
+            const races = values.get('races') as Race[];
+            resolve(races);
+        });
     }
     
     cardSize(): number {
@@ -82,61 +84,36 @@ export default class Results extends BaseCard {
         return html`<h2><img height="25" src="${getCountryFlagUrl(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
     }
 
-    async selectedRaceChanged(ev: any): Promise<any> {
-        const option = ev.detail.item.innerText;
-        console.log('Race', option);
-    }
-
     render() : HTMLTemplateResult {
 
-        console.log('Races', this.races);
-        //const data = this.client.GetResults(2022, 22);
-
-        // const data = this.sensor.data as Race;
-        // if(!this.sensor_entity_id.endsWith('_last_result') || data === undefined) {
-        //     throw new Error('Please pass the correct sensor (last_result)')
-        // }
-        /* 
-         <select name="selectedSeason">
-                            ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
-                        </select> 
-                        
-                        style="${style}"
-                         ${this.seasons.map(season => `<option value="${season.season}">${season.season}</option>`)}
-
-
-                        ${until(
-                            this.client.GetSeasons().then(response => response
-                              ? html`<paper-select
-                                    id="seasons"
-                                    label="${this.translation('seasonheader')}"
-                                    @iron-select=${this.selectedSeasonChanged}
-                                    .selected=${response.indexOf(this.selectedSeason)}>
-                                    ${response.map(season => {
-                                        return html`<paper-item>${season.season}</paper-item>`;
-                                    })}
-                                </paper-select>`
-                              : html`Error getting seasons`),
-                            html`Loading...`,
-                          )} 
-
-
-                        */
+        console.log('child render Races', this.races);
+        
         const selectedSeasonChanged = (ev: any): void => {
             const selectedSeason: number = ev.target.value;        
             console.log('Season', selectedSeason);
 
+            this.selectedSeason = selectedSeason;
             this.client.GetSeasonRaces(selectedSeason).then(response => { 
-                console.log(response); 
                 this.races = response;
 
-                const temp = new Map<string, unknown>();
+                const temp = new Map<string, unknown>();//this.parent.cardValues ?? new Map<string, unknown>();
                 temp.set('races', response);
 
-                this.card.cardValues = temp;
+                this.parent.cardValues = temp;
+            });
+        }
 
-                //this.card.cardValues.set('races', response);
-                //this.card.cardValues = { 'races': response }; //.requestUpdate('card');
+        const selectedRaceChanged = (ev: any): void => {
+            const round = ev.target.value;
+            console.log('child selectedRaceChanged', round);
+    
+            this.client.GetResults(this.selectedSeason, round).then(response => { 
+                this.results = response.Races[0].Results;
+
+                const temp = this.parent.cardValues ?? new Map<string, unknown>();
+                temp.set('results', this.results);
+
+                this.parent.cardValues = temp;
             });
         }
         
@@ -161,8 +138,8 @@ export default class Results extends BaseCard {
                     </td>
                     <td>
                         ${this.translation('raceheader')}&nbsp;
-                        <select name="selectedRace" @change="${selectedSeasonChanged}">
-                            ${this.races.map(race => {
+                        <select name="selectedRace" @change="${selectedRaceChanged}">
+                            ${this.races?.map(race => {
                                 return html`<option value="${race.round}">${race.raceName}</option>`;
                             })}
                         </select>
@@ -187,28 +164,5 @@ export default class Results extends BaseCard {
                 </tbody>
             </table>
         `;
-
-    //     return html`       
-
-    //         <table>
-    //             <tr>
-    //                 <td>${this.renderHeader()}</td>
-    //             </tr>
-    //         </table>
-    //         <table>
-    //             <thead>                    
-    //                 <tr>
-    //                     <th>&nbsp;</th>
-    //                     <th>${this.translation('driver')}</th>
-    //                     <th class="text-center">${this.translation('grid')}</th>
-    //                     <th class="text-ccenter">${this.translation('points')}</th>
-    //                     <th>${this.translation('status')}</th>
-    //                 </tr>
-    //             </thead>
-    //             <tbody>
-    //                 ${data.Results.map(result => this.renderResultRow(result))}
-    //             </tbody>
-    //         </table>
-    //   `;
     }
 }
