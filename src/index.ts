@@ -38,8 +38,8 @@ export default class FormulaOneCard extends LitElement {
     @property() set cardValues(values: Map<string, unknown>) {
         const oldValue = this._cardValues
         this._cardValues = values;
-        //this.update(values);
-        this.requestUpdate("cardValues", oldValue);
+        this.update(values);
+        //this.requestUpdate("cardValues", oldValue);
     }
     get cardValues() {
         return this._cardValues;
@@ -53,10 +53,12 @@ export default class FormulaOneCard extends LitElement {
       }
 
     update(changedProperties: Map<string, unknown>) {
-        if (changedProperties.has("races")) {
+        const values = changedProperties.get("cardValues") 
+        console.log(`has races changed? ${changedProperties.has("cardValues")}`, values);
+        if (changedProperties.has("cardValues")) {
         //   const oldValue = changedProperties.get("userId") as number;
             const newValue = this.cardValues;
-            this.card?.setValues(newValue);
+            this.card?.setValues(changedProperties);
         }
         super.update(changedProperties);
       }

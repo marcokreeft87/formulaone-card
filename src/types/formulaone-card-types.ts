@@ -44,3 +44,7 @@ export interface LocalStorageItem {
     data: string,
     created: Date
 }
+
+export interface CardProperties {
+    [key: string]: unknown;
+}

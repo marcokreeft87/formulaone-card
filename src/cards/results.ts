@@ -1,8 +1,8 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
-import { Race, Result, Season } from "../api/models";
-import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { Race, Result } from "../api/models";
+import { CardProperties, FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getCircuitName, getCountryFlagUrl, getDriverName } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -37,13 +37,17 @@ export default class Results extends BaseCard {
     }
 
     async setValues(values: Map<string, unknown>) {
-        this.races = await this.extractValues(values);        
+        const properties = await this.extractProperties(values);      
+        
+        this.races = properties.races as Race[];
     }
 
-    private extractValues(values: Map<string, unknown>) {
-        return new Promise<Race[]>((resolve) => {
-            const races = values.get('races') as Race[];
-            resolve(races);
+    private extractProperties(values: Map<string, unknown>) {
+        return new Promise<CardProperties>((resolve) => {
+            const cardProperties = values.get('cardValues') as CardProperties;
+            if(cardProperties) {
+                resolve(cardProperties);
+            }
         });
     }
     
@@ -96,10 +100,19 @@ export default class Results extends BaseCard {
             this.client.GetSeasonRaces(selectedSeason).then(response => { 
                 this.races = response;
 
-                const temp = new Map<string, unknown>();//this.parent.cardValues ?? new Map<string, unknown>();
-                temp.set('races', response);
+                const cardValues = this.parent.cardValues ?? new Map<string, unknown>();
+                //const properties = cardValues.get('cardValues') as CardProperties;
 
-                this.parent.cardValues = temp;
+                // get const from cardValues as CardProperties and create new instance of CardProperties if not exists
+                const properties = cardValues.get('cardValues') as CardProperties ?? {} as CardProperties;
+
+                properties.races = this.races;
+
+                cardValues.set('cardValues', properties);
+                // const temp = new Map<string, unknown>();//this.parent.cardValues ?? new Map<string, unknown>();
+                // temp.set('cardValues', { "races" : this.races });
+
+                this.parent.cardValues = cardValues;
             });
         }
 
@@ -110,10 +123,10 @@ export default class Results extends BaseCard {
             this.client.GetResults(this.selectedSeason, round).then(response => { 
                 this.results = response.Races[0].Results;
 
-                const temp = this.parent.cardValues ?? new Map<string, unknown>();
-                temp.set('results', this.results);
+                // const temp = this.parent.cardValues ?? new Map<string, unknown>();
+                // temp.set('cardValues', this.results);
 
-                this.parent.cardValues = temp;
+                // this.parent.cardValues = temp;
             });
         }
         
