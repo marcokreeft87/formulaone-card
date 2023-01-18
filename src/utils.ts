@@ -64,7 +64,7 @@ export const getCountryFlagUrl = (countryCode: string) => {
 
 export const getCircuitName = (circuitName: string) => {
     const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}, { countryDashed: 'UK', name: 'Great_Britain'}, 
-    { countryDashed: 'Monaco', name: 'Monoco'}, { countryDashed: 'Azerbaijan', name: 'Baku'}];
+    { countryDashed: 'Monaco', name: 'Monoco'}, { countryDashed: 'Azerbaijan', name: 'Baku'}, { countryDashed: 'Saudi-Arabia', name: 'Saudi_Arabia'}];
 
     const exception = exceptions.filter(exception => exception.countryDashed == circuitName);
     if(exception.length > 0)
