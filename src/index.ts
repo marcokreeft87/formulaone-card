@@ -3,7 +3,7 @@ import { property, customElement } from 'lit/decorators.js';
 import { HomeAssistant } from 'custom-card-helpers';
 import { FormulaOneCardConfig, FormulaOneCardType } from './types/formulaone-card-types';
 import { CSSResult, html, HTMLTemplateResult, LitElement, PropertyValues } from 'lit';
-import { checkConfig, hasConfigOrEntitiesChanged } from './utils';
+import { checkConfig, hasConfigOrCardValuesChanged } from './utils';
 import { style } from './styles';
 import ConstructorStandings from './cards/constructor-standings';
 import DriverStandings from './cards/driver-standings';
@@ -36,32 +36,14 @@ export default class FormulaOneCard extends LitElement {
     @property() config?: FormulaOneCardConfig;
     @property() card: BaseCard;
     @property() set cardValues(values: Map<string, unknown>) {
-        const oldValue = this._cardValues
         this._cardValues = values;
         this.update(values);
-        //this.requestUpdate("cardValues", oldValue);
     }
     get cardValues() {
         return this._cardValues;
     }
     
     private _cardValues: Map<string, unknown>;
-
-    requestUpdate(name?: PropertyKey, oldValue?: unknown) {
-        // schedule an update
-        return super.requestUpdate(name, oldValue);
-      }
-
-    update(changedProperties: Map<string, unknown>) {
-        const values = changedProperties.get("cardValues") 
-        console.log(`has races changed? ${changedProperties.has("cardValues")}`, values);
-        if (changedProperties.has("cardValues")) {
-        //   const oldValue = changedProperties.get("userId") as number;
-            const newValue = this.cardValues;
-            this.card?.setValues(changedProperties);
-        }
-        super.update(changedProperties);
-      }
 
     setConfig(config: FormulaOneCardConfig) {      
         
@@ -71,7 +53,7 @@ export default class FormulaOneCard extends LitElement {
     }
 
     protected shouldUpdate(changedProps: PropertyValues): boolean {
-        return hasConfigOrEntitiesChanged(this, changedProps);
+        return hasConfigOrCardValuesChanged(this, changedProps);
     }
 
     set hass(hass: HomeAssistant) {
@@ -108,12 +90,6 @@ export default class FormulaOneCard extends LitElement {
         return style;
     }
 
-    renderCardType(): HTMLTemplateResult {
-        
-
-        return this.card.render();
-    }
-
     render() : HTMLTemplateResult {
         if (!this._hass || !this.config) return html``;
 
@@ -121,7 +97,7 @@ export default class FormulaOneCard extends LitElement {
             return html`
                 <ha-card elevation="2">
                     ${this.config.title ? html`<h1 class="card-header">${this.config.title}</h1>` : ''}
-                    ${this.renderCardType()}
+                    ${this.card.render()}
                 </ha-card>
             `;
         } catch (error) {

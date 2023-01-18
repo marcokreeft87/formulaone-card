@@ -5,7 +5,7 @@ import { Driver, Root } from "./api/models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 
-export const hasConfigOrEntitiesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
+export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
         return true;
     }
@@ -30,7 +30,8 @@ export const getCountryFlagByNationality = (nationality: string) => {
 }
 
 export const getCountryFlagByName = (countryName: string) => {
-    const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'}];
+    const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'},
+    { countryCode: 'UK', corrected: 'United Kingdom'}];
 
     const exception = exceptions.filter(exception => exception.countryCode == countryName);
     if(exception.length > 0)
@@ -62,7 +63,8 @@ export const getCountryFlagUrl = (countryCode: string) => {
 }
 
 export const getCircuitName = (circuitName: string) => {
-    const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}];
+    const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}, { countryDashed: 'UK', name: 'Great_Britain'}, 
+    { countryDashed: 'Monaco', name: 'Monoco'}, { countryDashed: 'Azerbaijan', name: 'Baku'}];
 
     const exception = exceptions.filter(exception => exception.countryDashed == circuitName);
     if(exception.length > 0)

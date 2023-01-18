@@ -4,9 +4,6 @@ import ErgastClient from "../api/ergast-client";
 import { FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
 export abstract class BaseCard {
-    setValues(values: Map<string, unknown>) {
-        throw new Error('Method not implemented.');
-    }
     parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
     client: ErgastClient;

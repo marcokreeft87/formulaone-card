@@ -134,6 +134,11 @@ The following texts can be translated or altered.
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |
 | schedule | time | 'Time' |
+| results | raceheader | 'Race' | 
+| results | seasonheader | 'Season' | 
+| results | selectseason | 'Select season' | 
+| results | selectrace | 'Select race' | 
+| results | noresults | 'Please select a race thats already been run' | 
 
 Example:
 

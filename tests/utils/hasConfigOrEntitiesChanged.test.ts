@@ -2,77 +2,37 @@ import { HomeAssistant } from "custom-card-helpers";
 import { HassEntity } from "home-assistant-js-websocket";
 import { PropertyValues } from "lit";
 import { createMock } from "ts-auto-mock";
+import FormulaOneCard from "../../src";
+import { BaseCard } from "../../src/cards/base-card";
 import { FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
-import { hasConfigOrEntitiesChanged } from '../../src/utils';
+import { hasConfigOrCardValuesChanged } from '../../src/utils';
 
 describe('Testing util file function hasConfigOrEntitiesChanged', () => {
     const config : FormulaOneCardConfig = {
         type: ''
-    };
-    const hassEntity = createMock<HassEntity>();
-    const hass = createMock<HomeAssistant>();
+    };    
+    const card = createMock<FormulaOneCard>();
+    const baseCard = createMock<BaseCard>();
 
     test('Passing PropertyValues with config should return true', () => {
         const props : PropertyValues = new Map([['config', config]]);
 
-        expect(hasConfigOrEntitiesChanged(config, props)).toBe(true);
+        expect(hasConfigOrCardValuesChanged(card, props)).toBe(true);
     }),
-    test('Passing PropertyValues empty and no oldHass should return true', () => {
+    test('Passing PropertyValues empty should return false', () => {
         const props : PropertyValues = new Map();
 
-        expect(hasConfigOrEntitiesChanged(config, props)).toBe(false);
+        expect(hasConfigOrCardValuesChanged(card, props)).toBe(false);
     }),
-    test('Passing PropertyValues with _hass and no changes should return false', () => {
-        hassEntity.entity_id = 'sensor.test_entity';
-        hassEntity.state = 'hide';
-        hassEntity.attributes = {
-            'show_state': 'show'
-        }
+    test('Passing PropertyValues config and card should return true', () => {
+        card.cardValues = new Map([['test', 'test']]);
+        const props : PropertyValues = new Map([['card', baseCard]]);
 
-        hass.states = { 
-            'sensor.test_entity': hassEntity
-        };
-
-        config.hass = hass;
-        const props : PropertyValues = new Map([['_hass', hass]]);
-        
-        expect(hasConfigOrEntitiesChanged(config, props)).toBe(false);
+        expect(hasConfigOrCardValuesChanged(card, props)).toBe(true);
     }),
-    test('Passing PropertyValues with _hass and changes should return true', () => {
-        hassEntity.entity_id = 'sensor.test_entity';
-        hassEntity.state = 'hide';
+    test('Passing PropertyValues config and cardValues should return true', () => {
+        const props : PropertyValues = new Map([['cardValues', new Map([['cardValues', 'test']])]]);
 
-        const oldHass = hass;
-        oldHass.states = { 
-            'sensor.test_entity': hassEntity
-        };
-
-        const changedEntity = createMock<HassEntity>()
-        changedEntity.entity_id = 'sensor.test_entity';
-        changedEntity.state = 'show';
-        const newHass = createMock<HomeAssistant>();
-        newHass.states = { 
-            'sensor.test_entity': changedEntity
-        };
-
-        config.hass = newHass;
-        config.sensor = hassEntity.entity_id;
-        const props : PropertyValues = new Map([['_hass', oldHass]]);
-        
-        expect(hasConfigOrEntitiesChanged(config, props)).toBe(true);
-    }),
-    test('Passing PropertyValues with _hass and no changes should return false', () => {
-        hassEntity.entity_id = 'sensor.test_entity';
-        hassEntity.state = 'hide';
-
-        hass.states = { 
-            'sensor.test_entity': hassEntity
-        };
-
-        config.hass = hass;
-        config.sensor = hassEntity.entity_id;
-        const props : PropertyValues = new Map([['_hass', hass]]);
-        
-        expect(hasConfigOrEntitiesChanged(config, props)).toBe(false);
+        expect(hasConfigOrCardValuesChanged(card, props)).toBe(true);
     })
 })

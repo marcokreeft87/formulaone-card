@@ -6,6 +6,7 @@ import { MRData as driverStandingsData } from '../testdata/driverStandings.json'
 import { MRData as constructorStandingsData } from '../testdata/constructorStandings.json'
 import { MRData as seasonData } from '../testdata/seasons.json'
 import LocalStorageMock from '../testdata/localStorageMock';
+import { LocalStorageItem } from '../../src/types/formulaone-card-types';
 
 describe('Testing ergast client file', () => {
     const client = new ErgastClient();    
@@ -82,6 +83,20 @@ describe('Testing ergast client file', () => {
         
         const result = await client.GetData('2022.json', true, 24);
         expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
+    }),
+    test('Calling GetData without data in localstorage and cacheResult true should return correct data', async () => {   
+        localStorageMock.clear();        
+        
+        const endpoint = '2022.json';
+        window.fetch = jest.fn().mockImplementationOnce((_input, _init) => new Promise<Response>((resolve) => {            
+            resolve({ json: () => scheduleData } as unknown as Response);
+        }));        
+        
+        const result = await client.GetData(endpoint, true, 24);
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
+
+        const localStorageItem = <LocalStorageItem>JSON.parse(localStorageMock.getItem(endpoint));
+        expect(localStorageItem.data).toMatch(JSON.stringify(scheduleData));
     })
 })
 

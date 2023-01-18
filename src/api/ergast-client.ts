@@ -52,6 +52,7 @@ export default class ErgastClient  {
 
     async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
       const localStorageData = localStorage.getItem(endpoint);
+      console.log(localStorageData);
       if(localStorageData && cacheResult) {
         const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
 
