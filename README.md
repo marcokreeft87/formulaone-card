@@ -111,7 +111,7 @@ type: custom:formulaone-card
 card_type: results
 title: Results
 ```
-
+![image](https://user-images.githubusercontent.com/10223677/213260361-6af23d9e-e716-44d8-9cea-f7ce8cdb1142.png)
 
 ## Translations
 
