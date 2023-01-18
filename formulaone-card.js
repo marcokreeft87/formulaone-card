@@ -99,7 +99,7 @@
                     </td>
                     <td>
                         ${this.translation("raceheader")}<br />
-                        <select name="selectedRace" @change="${t=>{const e=t.target.value,{properties:i,cardValues:n}=this.getParentCardValues();console.log("cardValues",n),i.selectedRound=e,this.client.GetResults(i.selectedSeason,e).then((t=>{i.selectedRace=t.Races[0],n.set("cardValues",i),this.parent.properties=n}))}}">
+                        <select name="selectedRace" @change="${t=>{const e=t.target.value,{properties:i,cardValues:n}=this.getParentCardValues();i.selectedRound=e,this.client.GetResults(i.selectedSeason,e).then((t=>{i.selectedRace=t.Races[0],n.set("cardValues",i),this.parent.properties=n}))}}">
                             <option value="0">${this.translation("selectrace")}</option>
                             ${null==t?void 0:t.map((t=>n.html`<option value="${t.round}">${t.raceName}</option>`))}
                         </select>
@@ -126,7 +126,7 @@
                                 <td>${this.translation("noresults")}</td>
                             </tr>
                         </table>`}
-        `}getProperties(){var t;const e=null===(t=this.parent.properties)||void 0===t?void 0:t.get("cardValues");return{races:null==e?void 0:e.races,selectedRace:null==e?void 0:e.selectedRace,selectedSeason:null==e?void 0:e.selectedSeason}}getParentCardValues(){var t,e;console.log("this.parent.properties",this.parent.properties);const i=null!==(t=this.parent.properties)&&void 0!==t?t:new Map;return{properties:null!==(e=i.get("cardValues"))&&void 0!==e?e:{},cardValues:i}}}e.default=s},269:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(197),r=i(692),a=i(885),o=i(247),s=i(593),l=i(243);class c extends l.BaseCard{constructor(t,e){super(e),this.defaultTranslations={date:"Date",race:"Race",time:"Time",location:"Location",endofseason:"Season is over. See you next year!"},this.hass=t}cardSize(){return 12}renderLocation(t){const e=`${t.Location.locality}, ${t.Location.country}`;return this.config.location_clickable?r.html`<a href="${t.url}" target="_blank">${e}</a>`:e}renderScheduleRow(t){const e=new Date(t.date+"T"+t.time),i=this.config.previous_race&&e<new Date?this.config.previous_race:"";return r.html`
+        `}getProperties(){var t;const e=null===(t=this.parent.properties)||void 0===t?void 0:t.get("cardValues");return{races:null==e?void 0:e.races,selectedRace:null==e?void 0:e.selectedRace,selectedSeason:null==e?void 0:e.selectedSeason}}getParentCardValues(){var t,e;const i=null!==(t=this.parent.properties)&&void 0!==t?t:new Map;return{properties:null!==(e=i.get("cardValues"))&&void 0!==e?e:{},cardValues:i}}}e.default=s},269:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(197),r=i(692),a=i(885),o=i(247),s=i(593),l=i(243);class c extends l.BaseCard{constructor(t,e){super(e),this.defaultTranslations={date:"Date",race:"Race",time:"Time",location:"Location",endofseason:"Season is over. See you next year!"},this.hass=t}cardSize(){return 12}renderLocation(t){const e=`${t.Location.locality}, ${t.Location.country}`;return this.config.location_clickable?r.html`<a href="${t.url}" target="_blank">${e}</a>`:e}renderScheduleRow(t){const e=new Date(t.date+"T"+t.time),i=this.config.previous_race&&e<new Date?this.config.previous_race:"";return r.html`
             <tr class="${i}">
                 <td class="width-50 text-center">${t.round}</td>
                 <td>${t.Circuit.circuitName}</td>
