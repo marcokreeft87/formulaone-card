@@ -169,3 +169,6 @@ translations:
   'endofseason' : 'Season is over. See you next year!!'
 
 ```
+
+## TODO
+- [ ] Convert Ergast client to use fetch to reduce library size
