@@ -27,7 +27,7 @@ export default class Results extends BaseCard {
     }
     
     cardSize(): number {
-        return 12;
+        return 11;
     }
 
     renderResultRow(result: Result): HTMLTemplateResult {
@@ -59,9 +59,8 @@ export default class Results extends BaseCard {
 
     render() : HTMLTemplateResult {
         const { races, selectedRace, selectedSeason } = this.getProperties();
-        console.log('child render Results', selectedRace);
-        console.log('child render selectedSeason', selectedSeason);
         
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const selectedSeasonChanged = (ev: any): void => {
             const selectedSeason: number = ev.target.value;     
             const { properties, cardValues } = this.getParentCardValues();
@@ -71,19 +70,20 @@ export default class Results extends BaseCard {
                 properties.races = response;
                 properties.results = undefined;
                 cardValues.set('cardValues', properties);
-                this.parent.cardValues = cardValues;
+                this.parent.properties = cardValues;
             });
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const selectedRaceChanged = (ev: any): void => {
             const round = ev.target.value;
             const { properties, cardValues } = this.getParentCardValues();
     
             properties.selectedRound = round;
-            this.client.GetResults(properties?.selectedSeason as number, round).then(response => {
+            this.client.GetResults(properties.selectedSeason as number, round).then(response => {
                 properties.results = response.Races[0];
                 cardValues.set('cardValues', properties);
-                this.parent.cardValues = cardValues;
+                this.parent.properties = cardValues;
             });
         }
         
@@ -144,7 +144,7 @@ export default class Results extends BaseCard {
     }
 
     private getProperties() {
-        const cardProperties = this.parent.cardValues?.get('cardValues') as CardProperties;
+        const cardProperties = this.parent.properties?.get('cardValues') as CardProperties;
         const races = cardProperties?.races as Race[];
         const selectedRace = cardProperties?.results as Race;
         const selectedSeason = cardProperties?.selectedSeason as string;
@@ -152,7 +152,7 @@ export default class Results extends BaseCard {
     }
 
     private getParentCardValues() {
-        const cardValues = this.parent.cardValues ?? new Map<string, unknown>();
+        const cardValues = this.parent.properties ?? new Map<string, unknown>();
         const properties = cardValues.get('cardValues') as CardProperties ?? {} as CardProperties;
         return { properties, cardValues };
     }

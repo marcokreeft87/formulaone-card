@@ -35,11 +35,11 @@ export default class FormulaOneCard extends LitElement {
     @property() _hass?: HomeAssistant;
     @property() config?: FormulaOneCardConfig;
     @property() card: BaseCard;
-    @property() set cardValues(values: Map<string, unknown>) {
+    @property() set properties(values: Map<string, unknown>) {
         this._cardValues = values;
         this.update(values);
     }
-    get cardValues() {
+    get properties() {
         return this._cardValues;
     }
     

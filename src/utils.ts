@@ -12,12 +12,12 @@ export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps:
 
     const card = changedProps.get('card') as BaseCard;
     if (card) {
-        return card.parent.cardValues !== node.cardValues;
+        return card.parent.properties !== node.properties;
     }
 
     const cardValues = changedProps.get('cardValues') as Map<string, unknown>;
     if(cardValues) {
-        return cardValues != node.cardValues;
+        return cardValues != node.properties;
     }
 
     return false;

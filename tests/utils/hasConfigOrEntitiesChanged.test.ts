@@ -25,7 +25,7 @@ describe('Testing util file function hasConfigOrEntitiesChanged', () => {
         expect(hasConfigOrCardValuesChanged(card, props)).toBe(false);
     }),
     test('Passing PropertyValues config and card should return true', () => {
-        card.cardValues = new Map([['test', 'test']]);
+        card.properties = new Map([['test', 'test']]);
         const props : PropertyValues = new Map([['card', baseCard]]);
 
         expect(hasConfigOrCardValuesChanged(card, props)).toBe(true);

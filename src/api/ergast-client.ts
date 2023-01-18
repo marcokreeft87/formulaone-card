@@ -46,13 +46,13 @@ export default class ErgastClient  {
     }
 
     async GetSeasonRaces(season: number) : Promise<Race[]> {
+      console.log('races');
         const data = await this.GetData<Root>(`${season}.json`, true, 72);
         return data.MRData.RaceTable.Races;
     }
 
     async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
       const localStorageData = localStorage.getItem(endpoint);
-      console.log(localStorageData);
       if(localStorageData && cacheResult) {
         const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
 
