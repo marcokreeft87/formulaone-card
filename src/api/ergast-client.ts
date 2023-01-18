@@ -42,13 +42,12 @@ export default class ErgastClient  {
     async GetSeasons() : Promise<Season[]> {
       const data = await this.GetData<Root>('seasons.json?limit=200', true, 72);
 
-      return data.MRData.SeasonTable.Seasons;
+      return data?.MRData.SeasonTable.Seasons;
     }
 
     async GetSeasonRaces(season: number) : Promise<Race[]> {
-      console.log('races');
-        const data = await this.GetData<Root>(`${season}.json`, true, 72);
-        return data.MRData.RaceTable.Races;
+      const data = await this.GetData<Root>(`${season}.json`, true, 72);
+      return data.MRData.RaceTable.Races;
     }
 
     async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {

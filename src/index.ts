@@ -43,7 +43,7 @@ export default class FormulaOneCard extends LitElement {
         return this._cardValues;
     }
     
-    private _cardValues: Map<string, unknown>;
+    private _cardValues?: Map<string, unknown>;
 
     setConfig(config: FormulaOneCardConfig) {      
         

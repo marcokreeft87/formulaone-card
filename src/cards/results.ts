@@ -42,7 +42,7 @@ export default class Results extends BaseCard {
             </tr>`;
     }
 
-    renderHeader(race: Race): HTMLTemplateResult {
+    renderHeader(race?: Race): HTMLTemplateResult {
         
         if(race === null || race === undefined || parseInt(race.season) < 2018) {
             return null;
@@ -59,7 +59,7 @@ export default class Results extends BaseCard {
 
     render() : HTMLTemplateResult {
         const { races, selectedRace, selectedSeason } = this.getProperties();
-        
+       
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const selectedSeasonChanged = (ev: any): void => {
             const selectedSeason: number = ev.target.value;     
@@ -81,7 +81,7 @@ export default class Results extends BaseCard {
     
             properties.selectedRound = round;
             this.client.GetResults(properties.selectedSeason as number, round).then(response => {
-                properties.results = response.Races[0];
+                properties.selectedRace = response.Races[0];
                 cardValues.set('cardValues', properties);
                 this.parent.properties = cardValues;
             });
@@ -132,7 +132,7 @@ export default class Results extends BaseCard {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${selectedRace?.Results?.map(result => this.renderResultRow(result))}
+                                ${selectedRace.Results.map(result => this.renderResultRow(result))}
                             </tbody>
                         </table>` 
                 : html`<table>
@@ -146,7 +146,7 @@ export default class Results extends BaseCard {
     private getProperties() {
         const cardProperties = this.parent.properties?.get('cardValues') as CardProperties;
         const races = cardProperties?.races as Race[];
-        const selectedRace = cardProperties?.results as Race;
+        const selectedRace = cardProperties?.selectedRace as Race;
         const selectedSeason = cardProperties?.selectedSeason as string;
         return { races, selectedRace, selectedSeason };
     }
