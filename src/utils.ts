@@ -1,18 +1,25 @@
-import { HomeAssistant } from "custom-card-helpers";
 import { html, PropertyValues } from "lit";
 import { FormulaOneCardConfig, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
 import { Driver, Root } from "./api/models";
+import FormulaOneCard from ".";
+import { BaseCard } from "./cards/base-card";
 
-export const hasConfigOrEntitiesChanged = (node: FormulaOneCardConfig, changedProps: PropertyValues) => {
+export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
         return true;
     }
 
-    const oldHass = changedProps.get('_hass') as HomeAssistant;
-    if (oldHass) {
-        return oldHass.states[node.sensor] !== node.hass.states[node.sensor];
+    const card = changedProps.get('card') as BaseCard;
+    if (card) {
+        return card.parent.properties !== node.properties;
     }
+
+    const cardValues = changedProps.get('cardValues') as Map<string, unknown>;
+    if(cardValues) {
+        return cardValues != node.properties;
+    }
+
     return false;
 };
 
@@ -23,7 +30,8 @@ export const getCountryFlagByNationality = (nationality: string) => {
 }
 
 export const getCountryFlagByName = (countryName: string) => {
-    const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'}];
+    const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'},
+    { countryCode: 'UK', corrected: 'United Kingdom'}];
 
     const exception = exceptions.filter(exception => exception.countryCode == countryName);
     if(exception.length > 0)
@@ -55,7 +63,8 @@ export const getCountryFlagUrl = (countryCode: string) => {
 }
 
 export const getCircuitName = (circuitName: string) => {
-    const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}];
+    const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}, { countryDashed: 'UK', name: 'Great_Britain'}, 
+    { countryDashed: 'Monaco', name: 'Monoco'}, { countryDashed: 'Azerbaijan', name: 'Baku'}];
 
     const exception = exceptions.filter(exception => exception.countryDashed == circuitName);
     if(exception.length > 0)

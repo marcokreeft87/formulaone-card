@@ -1,8 +1,10 @@
 import { HTMLTemplateResult } from "lit-html";
+import FormulaOneCard from "..";
 import ErgastClient from "../api/ergast-client";
 import { FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
 export abstract class BaseCard {
+    parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
     client: ErgastClient;
 

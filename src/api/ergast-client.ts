@@ -1,4 +1,3 @@
-import axios, { AxiosInstance } from 'axios';
 import { LocalStorageItem } from '../types/formulaone-card-types';
 import { getRefreshTime } from '../utils';
 import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './models';
@@ -6,14 +5,6 @@ import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } fr
 export default class ErgastClient  {
 
     baseUrl = 'https://ergast.com/api/f1';
-    instance: AxiosInstance;
-
-    constructor() {
-
-      this.instance = axios.create({
-        baseURL: this.baseUrl
-      });
-    }
 
     async GetSchedule(season: number) : Promise<Race[]> {      
       const data = await this.GetData<Root>(`${season}.json`, true, 72);
@@ -51,12 +42,12 @@ export default class ErgastClient  {
     async GetSeasons() : Promise<Season[]> {
       const data = await this.GetData<Root>('seasons.json?limit=200', true, 72);
 
-      return data.MRData.SeasonTable.Seasons;
+      return data?.MRData.SeasonTable.Seasons;
     }
 
     async GetSeasonRaces(season: number) : Promise<Race[]> {
-        const data = await this.GetData<Root>(`${season}.json`, true, 72);
-        return data.MRData.RaceTable.Races;
+      const data = await this.GetData<Root>(`${season}.json`, true, 72);
+      return data.MRData.RaceTable.Races;
     }
 
     async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
@@ -72,24 +63,23 @@ export default class ErgastClient  {
         }
       }
 
-       const { data } = await this.instance.get<T>(
-            endpoint,
-            {
-              headers: {
-                Accept: 'application/json',
-              },
-            },
-          );
+      const response = await fetch(`${this.baseUrl}/${endpoint}`, {
+        headers: {
+          Accept: 'application/json',
+        }
+      });
+
+      const data = await response.json();
         
-        const item : LocalStorageItem = {
-          data: JSON.stringify(data),
-          created: new Date()
-        }
+      const item : LocalStorageItem = {
+        data: JSON.stringify(data),
+        created: new Date()
+      }
 
-        if(cacheResult) {          
-          localStorage.setItem(endpoint, JSON.stringify(item));
-        }
+      if(cacheResult) {          
+        localStorage.setItem(endpoint, JSON.stringify(item));
+      }
 
-        return data;
+      return data;
     }
 }

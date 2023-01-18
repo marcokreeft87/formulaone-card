@@ -40,7 +40,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result)            |
+| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
@@ -106,6 +106,12 @@ title: Last Result
 ```
 ![image](https://user-images.githubusercontent.com/10223677/194120925-5fc6c1a7-8b2a-4c58-b89c-d0316d70efe9.png)
 
+```
+type: custom:formulaone-card
+card_type: results
+title: Results
+```
+
 
 ## Translations
 
@@ -134,6 +140,11 @@ The following texts can be translated or altered.
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |
 | schedule | time | 'Time' |
+| results | raceheader | 'Race' | 
+| results | seasonheader | 'Season' | 
+| results | selectseason | 'Select season' | 
+| results | selectrace | 'Select race' | 
+| results | noresults | 'Please select a race thats already been run' | 
 
 Example:
 
