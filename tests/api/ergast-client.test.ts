@@ -87,8 +87,10 @@ describe('Testing ergast client file', () => {
     test('Calling GetData without data in localstorage and cacheResult true should return correct data', async () => {   
         localStorageMock.clear();        
         
-        const endpoint = '2022.json';
-        window.fetch = jest.fn().mockImplementationOnce((_input, _init) => new Promise<Response>((resolve) => {            
+        const endpoint = '2022.json';      
+        
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        window.fetch = jest.fn().mockImplementationOnce((_input, _init): Promise<Response> => new Promise<Response>((resolve) => {            
             resolve({ json: () => scheduleData } as unknown as Response);
         }));        
         

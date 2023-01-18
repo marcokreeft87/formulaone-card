@@ -1,5 +1,3 @@
-import { HomeAssistant } from "custom-card-helpers";
-import { HassEntity } from "home-assistant-js-websocket";
 import { PropertyValues } from "lit";
 import { createMock } from "ts-auto-mock";
 import FormulaOneCard from "../../src";
