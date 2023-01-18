@@ -66,7 +66,8 @@ export default class Results extends BaseCard {
             const { properties, cardValues } = this.getParentCardValues();
 
             properties.selectedSeason = selectedSeason;
-            this.client.GetSeasonRaces(selectedSeason).then(response => {     
+            this.client.GetSeasonRaces(selectedSeason).then(response => {    
+                properties.selectedRace = undefined; 
                 properties.races = response;
                 properties.results = undefined;
                 cardValues.set('cardValues', properties);
@@ -110,9 +111,9 @@ export default class Results extends BaseCard {
                     <td>
                         ${this.translation('raceheader')}<br />
                         <select name="selectedRace" @change="${selectedRaceChanged}">
-                            <option value="0">${this.translation('selectrace')}</option>
+                            <option value="0" ?selected=${selectedRace === undefined}>${this.translation('selectrace')}</option>
                             ${races?.map(race => {
-                                return html`<option value="${race.round}">${race.raceName}</option>`;
+                                return html`<option value="${race.round}" ?selected=${selectedRace?.round == race.round}>${race.raceName}</option>`;
                             })}
                         </select>
                     </td>
