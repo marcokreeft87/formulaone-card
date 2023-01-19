@@ -6,7 +6,7 @@ import { MRData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 import ErgastClient from "../../src/api/ergast-client";
 import { Mrdata, Root } from "../../src/api/models";
-import { html, HTMLTemplateResult } from "lit";
+import { HTMLTemplateResult } from "lit";
 
 describe('Testing countdown file', () => {
     const config = createMock<FormulaOneCardConfig>();
