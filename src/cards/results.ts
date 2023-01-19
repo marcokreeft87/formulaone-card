@@ -59,6 +59,22 @@ export default class Results extends BaseCard {
 
     render() : HTMLTemplateResult {
         const { races, selectedRace, selectedSeason } = this.getProperties();
+
+        if(selectedSeason === undefined) {
+            this.client.GetLastResult().then(response => { 
+                
+                const { properties, cardValues } = this.getParentCardValues();
+                properties.selectedSeason = response.season;
+                properties.selectedRace = response;
+
+                this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {    
+                    properties.races = racesResponse;
+
+                    cardValues.set('cardValues', properties);   
+                    this.parent.properties = cardValues;
+                });                
+            })
+        }
        
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const selectedSeasonChanged = (ev: any): void => {
