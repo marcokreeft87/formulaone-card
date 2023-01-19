@@ -184,6 +184,7 @@ describe('Testing index file function setConfig', () => {
     ${FormulaOneCardType.NextRace}, ${8}
     ${FormulaOneCardType.Schedule}, ${12}
     ${FormulaOneCardType.Results}, ${11}
+    ${FormulaOneCardType.Countdown}, ${6}
     `('Calling getCardSize with type should return card size', ({ type, expected }) => {  
         
         const config: FormulaOneCardConfig = {

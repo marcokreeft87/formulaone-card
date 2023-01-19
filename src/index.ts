@@ -11,7 +11,7 @@ import Schedule from './cards/schedule';
 import NextRace from './cards/next-race';
 import LastResult from './cards/last-result';
 import { BaseCard } from './cards/base-card';
-//import Countdown from './cards/countdown';
+import Countdown from './cards/countdown';
 import Results from './cards/results';
 
 console.info(
@@ -77,9 +77,9 @@ export default class FormulaOneCard extends LitElement {
             case FormulaOneCardType.LastResult:                
                 this.card = new LastResult(this.config);
                 break;
-            // case FormulaOneCardType.Countdown:                
-            //     this.card = new Countdown(this._hass, this.config);
-            //     break;
+            case FormulaOneCardType.Countdown:                
+                this.card = new Countdown(this.config);
+                break;
             case FormulaOneCardType.Results:                
                 this.card = new Results(this.config, this);
                 break;

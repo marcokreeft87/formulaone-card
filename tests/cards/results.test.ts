@@ -33,8 +33,7 @@ describe('Testing results file', () => {
                 resolve({ MRData : <Mrdata>raceData });
             });
         });
-    });
-    
+    });    
     
     parent.properties = new Map<string, unknown>();
 
