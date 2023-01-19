@@ -181,4 +181,5 @@ translations:
 ```
 
 ## TODO
-- [ ] Convert Ergast client to use fetch to reduce library size
+- [x] Convert Ergast client to use fetch to reduce library size
+- [ ] Use F1 font 
