@@ -117,6 +117,7 @@ title: Results
 type: custom:formulaone-card
 card_type: countdown
 ```
+![image](https://user-images.githubusercontent.com/10223677/213435405-fdb2ff7c-3364-43d5-80b0-0f253d9b60c8.png)
 
 ## Translations
 
