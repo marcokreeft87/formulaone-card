@@ -40,7 +40,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results)            |
+| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
