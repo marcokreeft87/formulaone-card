@@ -78,7 +78,7 @@ export default class FormulaOneCard extends LitElement {
                 this.card = new LastResult(this.config);
                 break;
             case FormulaOneCardType.Countdown:                
-                this.card = new Countdown(this.config);
+                this.card = new Countdown(this._hass, this.config);
                 break;
             case FormulaOneCardType.Results:                
                 this.card = new Results(this.config, this);

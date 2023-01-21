@@ -1,9 +1,12 @@
-import { html, PropertyValues } from "lit";
+import { html, HTMLTemplateResult, PropertyValues } from "lit";
 import { FormulaOneCardConfig, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
-import { Driver, Root } from "./api/models";
+import { Driver, Race, Root } from "./api/models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
+import { formatDateTimeRaceInfo } from "./lib/format_date_time";
+import { HomeAssistant } from "custom-card-helpers";
+import { formatDateNumeric } from "./lib/format_date";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -90,6 +93,35 @@ export const getApiLoadingMessage = () => {
 
 export const getEndOfSeasonMessage = (message: string) => {
     return html`<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${message}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`;
+} 
+
+export const renderHeader = (config: FormulaOneCardConfig, race: Race, hide_racename?: boolean): HTMLTemplateResult => {
+        
+    const countryDashed = race.Circuit.Location.country.replace(" ","-")
+    const circuitName = getCircuitName(countryDashed);
+
+    const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
+    const imageWithLinkHtml = config.image_clickable ? html`<a target="_new" href="${race.Circuit.url}">${imageHtml}</a>` : imageHtml;
+    const raceName = html`<h2><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
+    
+    return html`${(hide_racename ? html`` : raceName)} ${imageWithLinkHtml}<br>`;
+}
+
+export const renderRaceInfo = (hass: HomeAssistant, config: FormulaOneCardConfig, race: Race, card: BaseCard) => {
+    const raceDate = new Date(race.date + 'T' + race.time);
+    const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
+    const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
+    const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
+    const raceDateFormatted = formatDateTimeRaceInfo(raceDate, hass.locale);
+    const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
+    const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
+    
+    return html`<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
+                <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
+                <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
+                <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
+                <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
+                <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
 }
 
 export const getRefreshTime = (endpoint: string) => {

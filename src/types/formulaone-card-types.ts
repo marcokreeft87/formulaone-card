@@ -13,6 +13,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     previous_race?: PreviousRaceDisplay;
     standings?: StandingDisplayOptions;
     translations?: Translation;
+    show_raceinfo?: boolean;
 }
 
 export interface Translation {
