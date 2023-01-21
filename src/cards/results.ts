@@ -3,7 +3,7 @@ import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Race, Result } from "../api/models";
 import { CardProperties, FormulaOneCardConfig } from "../types/formulaone-card-types";
-import { getApiErrorMessage, getApiLoadingMessage, getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getDriverName, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class Results extends BaseCard {    
@@ -48,13 +48,7 @@ export default class Results extends BaseCard {
             return null;
         }
 
-        const data = race;
-        const countryDashed = data.Circuit.Location.country.replace(" ","-");
-        const circuitName = getCircuitName(countryDashed);
-        const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
-        const imageWithLinkHtml = this.config.image_clickable ? html`<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
-
-        return html`<h2><img height="25" src="${getCountryFlagByName(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
+        return renderHeader(this.config, race);
     }
 
     render() : HTMLTemplateResult {

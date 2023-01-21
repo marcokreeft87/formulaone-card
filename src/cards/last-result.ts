@@ -1,8 +1,8 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import { Race, Result } from "../api/models";
+import { Result } from "../api/models";
 import { FormulaOneCardConfig } from "../types/formulaone-card-types";
-import { getApiErrorMessage, getApiLoadingMessage, getCircuitName, getCountryFlagByName, getDriverName } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getDriverName, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -31,17 +31,7 @@ export default class LastResult extends BaseCard {
                 <td class="width-60 text-center">${result.points}</td>
                 <td class="width-50 text-center">${result.status}</td>
             </tr>`;
-    }
-
-    renderHeader(data: Race): HTMLTemplateResult {        
-        
-        const countryDashed = data.Circuit.Location.country.replace(" ","-");
-        const circuitName = getCircuitName(countryDashed);
-        const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
-        const imageWithLinkHtml = this.config.image_clickable ? html`<a target="_new" href="${data.Circuit.url}">${imageHtml}</a>` : imageHtml;
-
-        return html`<h2><img height="25" src="${getCountryFlagByName(data.Circuit.Location.country)}">&nbsp;  ${data.round} :  ${data.raceName}</h2>${imageWithLinkHtml}<br> `
-    }
+    }   
 
     render() : HTMLTemplateResult {
 
@@ -50,7 +40,7 @@ export default class LastResult extends BaseCard {
               ? html` 
                     <table>
                         <tr>
-                            <td>${this.renderHeader(response)}</td>
+                            <td>${renderHeader(this.config, response)}</td>
                         </tr>
                     </table>
                     <table>

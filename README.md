@@ -45,6 +45,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
+| show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown card |
 | location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 | standings         | object        |                                     | Configuration for the driver standings card     |
@@ -126,18 +127,18 @@ The following texts can be translated or altered.
 | Card type(s) | Key | Default value |
 | ----------------------------------- | ------------- | ----------------------------------- |
 | next_race, schedule | date | 'Date' |
-| next_race | practice1 | 'Practice 1' |
-| next_race | practice2 | 'Practice 2' |
-| next_race | practice3 | 'Practice 3' |
-| next_race, schedule | race' | 'Race' |
-| next_race | racename | 'Race name' |
-| next_race | circuitname | 'Circuit name' |
-| next_race, schedule | location' | 'Location' |
-| next_race | city | 'City' |
-| next_race | racetime | 'Race' |
-| next_race | sprint | 'Sprint' |
-| next_race | qualifying | 'Qualifying' |
-| next_race, schedule | endofseason | 'Season is over. See you next year!' |
+| next_race, countdown | practice1 | 'Practice 1' |
+| next_race, countdown | practice2 | 'Practice 2' |
+| next_race, countdown | practice3 | 'Practice 3' |
+| next_race, countdown, schedule | race' | 'Race' |
+| next_race, countdown | racename | 'Race name' |
+| next_race, countdown | circuitname | 'Circuit name' |
+| next_race, countdown, schedule | location' | 'Location' |
+| next_race, countdown | city | 'City' |
+| next_race, countdown | racetime | 'Race' |
+| next_race, countdown | sprint | 'Sprint' |
+| next_race, countdown | qualifying | 'Qualifying' |
+| next_race, countdown, schedule | endofseason | 'Season is over. See you next year!' |
 | constructor_standings | constructor | 'Constructor' |
 | constructor_standings, driver_standings, last_result | points | 'Pts' |
 | constructor_standings, driver_standings | wins | 'Wins' |

@@ -5,12 +5,54 @@ import { getRenderStringAsync } from "../utils";
 import { MRData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 import ErgastClient from "../../src/api/ergast-client";
-import { Mrdata, Root } from "../../src/api/models";
+import { Mrdata, Race, Root } from "../../src/api/models";
 import { HTMLTemplateResult } from "lit";
+import { HomeAssistant, NumberFormat, TimeFormat } from "custom-card-helpers";
 
 describe('Testing countdown file', () => {
+    const hass = createMock<HomeAssistant>();
+    hass.locale = {
+        language: 'NL', 
+        number_format: NumberFormat.comma_decimal,
+        time_format: TimeFormat.language
+    }
+    
     const config = createMock<FormulaOneCardConfig>();
-    const card = new Countdown(config);
+    const card = new Countdown(hass, config);const race: Race = {
+        season: '2022',
+        round: '22',
+        url: 'https://en.wikipedia.org/wiki/2022_Formula_One_World_Championship',
+        raceName: 'Season is over. See you next year!',
+        Circuit: {
+            circuitId: 'bahrain',
+            url: 'https://en.wikipedia.org/wiki/Bahrain_International_Circuit',
+            circuitName: 'Bahrain International Circuit',
+            Location: {
+                lat: '26.0325',
+                long: '50.5106',
+                locality: 'Sakhir',
+                country: 'Bahrain'
+            }
+        },
+        date: '2022-12-30',
+        time: '13:00:00Z',
+        FirstPractice: {
+            date: '2022-12-30',
+            time: '10:00:00Z'
+        },
+        SecondPractice: {
+            date: '2022-12-30',
+            time: '14:00:00Z'
+        },
+        ThirdPractice: {
+            date: '2022-12-31',
+            time: '11:00:00Z'
+        },
+        Qualifying:  {
+            date: '2022-12-31',
+            time: '14:00:00Z'                
+        }
+    };
 
     beforeAll(() => {
         jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementation((_endpoint) => {
@@ -107,6 +149,39 @@ describe('Testing countdown file', () => {
         jest.useRealTimers();
         
         expect(htmlResult).toMatch('<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon> Error getting next race <ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>');
+    }),
+    test('Calling renderheader with date end of season', async () => {   
+
+        config.show_raceinfo = true;      
+        card.config = config; 
+
+        const result = card.renderHeader(race);
+        const htmlResult = await getRenderStringAsync(result);
+        jest.useRealTimers();
+        
+        expect(htmlResult).toMatch('<table><tr><td colspan="5"><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Bahrain_Circuit.png.transform/7col/image.png"></td></tr> </table>');
+    }),
+    test('Calling renderheader with date end of season', async () => {   
+
+        config.show_raceinfo = undefined;  
+        card.config = config;     
+
+        const result = card.renderHeader(race);
+        const htmlResult = await getRenderStringAsync(result);
+        jest.useRealTimers();
+        
+        expect(htmlResult).toBe('');
+    })
+    test.each`
+    show_raceinfo | expected
+    ${undefined}, ${6}
+    ${true}, ${12}
+    ${false}, ${6}
+    `('Calling getCardSize with type should return card size', ({ show_raceinfo, expected }) => { 
+        config.show_raceinfo = show_raceinfo; 
+        card.config = config;      
+
+        expect(card.cardSize()).toBe(expected);
     });
 });
 
