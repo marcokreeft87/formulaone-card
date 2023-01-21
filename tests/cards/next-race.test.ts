@@ -4,7 +4,7 @@ import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { getRenderString, getRenderStringAsync } from '../utils';
 import { MRData } from '../testdata/schedule.json'
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
-import { Mrdata, Race, Root } from '../../src/api/models';
+import { Mrdata, Root } from '../../src/api/models';
 import ErgastClient from '../../src/api/ergast-client';
 import { getApiErrorMessage, getEndOfSeasonMessage } from '../../src/utils';
 
