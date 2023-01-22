@@ -45,4 +45,12 @@ export const style = css`
         text-decoration: none;
         color: var(--secondary-text-color);  
     }
+    img.constructor-logo {
+        width: 20px;
+        margin: auto;
+        display: block;
+        float: left;
+        background-color: white;
+        border-radius: 50%;
+    }
 `;

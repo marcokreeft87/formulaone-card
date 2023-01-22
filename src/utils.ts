@@ -66,7 +66,7 @@ export const getCountryFlagUrl = (countryCode: string) => {
     return `${ImageConstants.FlagCDN}${countryCode.toLowerCase()}.png`;
 }
 
-export const getTeamImageUrl = (teamName: string, year?: string) => {
+export const getTeamImageUrl = (teamName: string) => {
     teamName = teamName.toLocaleLowerCase().replace('_', '-');
     const exceptions = [{ teamName: 'red-bull', corrected: 'red-bull-racing'}, { teamName: 'alfa', corrected: 'alfa-romeo'}, { teamName: 'haas', corrected: 'haas-f1-team'}];
 
