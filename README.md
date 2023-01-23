@@ -71,10 +71,19 @@ title: Constructor Standings
 
 ```
 type: custom:formulaone-card
-card_type: driver_standings
-title: Driver Standings
+card_type: constructor_standings
+title: Constructor Standings
 standings:
   show_teamlogo: true
+```
+
+![image](https://user-images.githubusercontent.com/10223677/213992061-91ade5f2-68bb-4572-84a1-5d5cf38e0645.png)
+
+
+```
+type: custom:formulaone-card
+card_type: driver_standings
+title: Driver Standings
 
 ```
 ![image](https://user-images.githubusercontent.com/10223677/194120796-28532a9d-a62d-44bb-8cb8-403bfa434a8b.png)
