@@ -1,14 +1,8 @@
-// Source:
-// https://github.com/home-assistant/frontend/blob/dev/src/data/entity.ts
-// https://github.com/home-assistant/frontend/blob/dev/src/data/translation.ts
-// https://github.com/home-assistant/frontend/blob/dev/src/panels/lovelace/cards/types.ts
-
-export const UNAVAILABLE = 'unavailable';
-export const UNKNOWN = 'unknown';
-export const UNAVAILABLE_STATES = [UNAVAILABLE, UNKNOWN];
-
-export const LAST_CHANGED = 'last-changed';
-export const LAST_UPDATED = 'last-updated';
+export const ImageConstants = {
+    FlagCDN : 'https://flagcdn.com/w40/',
+    TeamLogoCDN : 'https://www.formula1.com/content/dam/fom-website/teams/',
+    F1CDN : 'https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/',
+};
 
 export const TIMESTAMP_FORMATS = ['relative', 'total', 'date', 'time', 'datetime'];
 

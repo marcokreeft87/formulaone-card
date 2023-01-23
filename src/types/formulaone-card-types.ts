@@ -23,6 +23,7 @@ export interface Translation {
 export interface StandingDisplayOptions {
     show_team?: boolean;
     show_flag?: boolean;
+    show_teamlogo?: boolean;
 }
 
 export enum PreviousRaceDisplay {

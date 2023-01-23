@@ -4,7 +4,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { FormulaOneCardConfig, FormulaOneCardType } from './types/formulaone-card-types';
 import { CSSResult, html, HTMLTemplateResult, LitElement, PropertyValues } from 'lit';
 import { checkConfig, hasConfigOrCardValuesChanged } from './utils';
-import { style } from './styles';
+import { styles } from './styles';
 import ConstructorStandings from './cards/constructor-standings';
 import DriverStandings from './cards/driver-standings';
 import Schedule from './cards/schedule';
@@ -87,7 +87,7 @@ export default class FormulaOneCard extends LitElement {
     }
 
     static get styles(): CSSResult {
-        return style;
+        return styles;
     }
 
     render() : HTMLTemplateResult {

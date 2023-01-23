@@ -1,8 +1,8 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import { DriverStanding } from "../api/models";
+import { Constructor, DriverStanding } from "../api/models";
 import { FormulaOneCardConfig } from "../types/formulaone-card-types";
-import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, getTeamImageUrl } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class DriverStandings extends BaseCard {
@@ -20,6 +20,10 @@ export default class DriverStandings extends BaseCard {
     cardSize(): number {
         return 12;
     }  
+
+    renderConstructorColumn(constructor: Constructor): HTMLTemplateResult {
+        return html`<td>${(this.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImageUrl(constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
+    }
     
     renderStandingRow(standing: DriverStanding): HTMLTemplateResult {
         return html`
@@ -27,7 +31,7 @@ export default class DriverStandings extends BaseCard {
                 <td class="width-40 text-center">${standing.position}</td>
                 <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(standing.Driver.nationality)}">&nbsp;` : '')}${standing.Driver.code}</td>
                 <td>${getDriverName(standing.Driver, this.config)}</td>
-                ${(this.config.standings?.show_team ? html`<td>${standing.Constructors[0].name}</td>` : '')}
+                ${(this.config.standings?.show_team ? html`${this.renderConstructorColumn(standing.Constructors[0])}` : '')}
                 <td class="width-60 text-center">${standing.points}</td>
                 <td class="text-center">${standing.wins}</td>
             </tr>`;

@@ -7,6 +7,7 @@ import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
 import { HomeAssistant } from "custom-card-helpers";
 import { formatDateNumeric } from "./lib/format_date";
+import { ImageConstants } from "./lib/constants";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -62,7 +63,20 @@ export const getCountryFlagUrl = (countryCode: string) => {
         countryCode = exception[0].corrected; 
     }
 
-    return `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
+    return `${ImageConstants.FlagCDN}${countryCode.toLowerCase()}.png`;
+}
+
+export const getTeamImageUrl = (teamName: string) => {
+    teamName = teamName.toLocaleLowerCase().replace('_', '-');
+    const exceptions = [{ teamName: 'red-bull', corrected: 'red-bull-racing'}, { teamName: 'alfa', corrected: 'alfa-romeo'}, { teamName: 'haas', corrected: 'haas-f1-team'}];
+
+    const exception = exceptions.filter(exception => exception.teamName == teamName);
+    if(exception.length > 0)
+    {
+        teamName = exception[0].corrected;
+    }
+
+    return `${ImageConstants.TeamLogoCDN}/2023/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`;
 }
 
 export const getCircuitName = (circuitName: string) => {
@@ -100,7 +114,7 @@ export const renderHeader = (config: FormulaOneCardConfig, race: Race, hide_race
     const countryDashed = race.Circuit.Location.country.replace(" ","-")
     const circuitName = getCircuitName(countryDashed);
 
-    const imageHtml = html`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
+    const imageHtml = html`<img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
     const imageWithLinkHtml = config.image_clickable ? html`<a target="_new" href="${race.Circuit.url}">${imageHtml}</a>` : imageHtml;
     const raceName = html`<h2><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
     
