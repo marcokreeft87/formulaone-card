@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const style = css`
+export const styles = css`    
     table {
         width: 100%;
         border-spacing: 0;
@@ -45,12 +45,13 @@ export const style = css`
         text-decoration: none;
         color: var(--secondary-text-color);  
     }
-    img.constructor-logo {
+    .constructor-logo {
         width: 20px;
         margin: auto;
         display: block;
         float: left;
         background-color: white;
         border-radius: 50%;
+        margin-right: 3px;
     }
 `;

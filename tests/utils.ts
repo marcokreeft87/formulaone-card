@@ -1,4 +1,4 @@
-import { HTMLTemplateResult } from "lit";
+import { HTMLTemplateResult, render } from "lit";
 
 export const getRenderString = (data: HTMLTemplateResult) : string => {
     

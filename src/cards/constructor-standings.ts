@@ -24,7 +24,7 @@ export default class ConstructorStandings extends BaseCard {
         return html`
             <tr>
                 <td class="width-50 text-center">${standing.position}</td>
-                <td>${(this.config.standings?.show_teamlogo ? html`<img class-"constructor-logo" height="20" width="20" src="${getTeamImageUrl(standing.Constructor.constructorId)}">&nbsp;` : '')}${standing.Constructor.name}</td>
+                <td>${(this.config.standings?.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImageUrl(standing.Constructor.constructorId)}">&nbsp;` : '')}${standing.Constructor.name}</td>
                 <td class="width-60 text-center">${standing.points}</td>
                 <td class="text-center">${standing.wins}</td>
             </tr>`;

@@ -88,6 +88,7 @@ title: Driver Standings
 standings:
   show_flag: true
   show_team: true
+  show_teamlogo: true
   
 ```
 
