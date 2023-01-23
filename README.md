@@ -65,6 +65,8 @@ image_clickable: false
 type: custom:formulaone-card
 card_type: constructor_standings
 title: Constructor Standings
+standings:
+  show_teamlogo: true
 ```
 
 ![image](https://user-images.githubusercontent.com/10223677/194120698-b981aac2-8678-4f35-afc9-ca6bb8514566.png)
