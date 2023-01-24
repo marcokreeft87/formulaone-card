@@ -63,25 +63,25 @@ export default class FormulaOneCard extends LitElement {
 
         switch(this.config.card_type) {
             case FormulaOneCardType.ConstructorStandings:
-                this.card = new ConstructorStandings(this.config);
+                this.card = new ConstructorStandings(this);
                 break;
             case FormulaOneCardType.DriverStandings:                
-                this.card = new DriverStandings(this.config);
+                this.card = new DriverStandings(this);
                 break;
             case FormulaOneCardType.Schedule:                
-                this.card = new Schedule(this._hass, this.config);
+                this.card = new Schedule(this);
                 break;
             case FormulaOneCardType.NextRace:                
-                this.card = new NextRace(this._hass, this.config); 
+                this.card = new NextRace(this); 
                 break;    
             case FormulaOneCardType.LastResult:                
-                this.card = new LastResult(this.config);
+                this.card = new LastResult(this);
                 break;
             case FormulaOneCardType.Countdown:                
-                this.card = new Countdown(this._hass, this.config);
+                this.card = new Countdown(this);
                 break;
             case FormulaOneCardType.Results:                
-                this.card = new Results(this.config, this);
+                this.card = new Results(this);
                 break;
         }
     }

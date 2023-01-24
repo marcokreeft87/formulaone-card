@@ -1,7 +1,7 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import FormulaOneCard from "..";
 import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -23,11 +23,9 @@ export default class NextRace extends BaseCard {
         'endofseason' : 'Season is over. See you next year!'
     };
 
-    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(config);
-
-        this.hass = hass;
-    }   
+    constructor(parent: FormulaOneCard) {
+        super(parent);    
+    } 
     
     cardSize(): number {
         return 8;
@@ -52,7 +50,7 @@ export default class NextRace extends BaseCard {
                 return html`<table>
                         <tbody>
                             <tr>
-                                <td colspan="5">${renderHeader(this.config, nextRace)}</td>
+                                <td colspan="5">${renderHeader(this, nextRace)}</td>
                             </tr>
                             ${renderRaceInfo( this.hass, this.config, nextRace, this)}    
                         </tbody>

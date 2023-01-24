@@ -125,14 +125,14 @@ export const getRenderStringAsyncIndex = async (data: HTMLTemplateResult) : Prom
         else if(typeof values[i] === 'object') {
             const templates = <HTMLTemplateResult[]>values[i];
             if(templates !== undefined) {
-
-                for(let j = 0; j < templates.length; j++) {
+                
+                for(let j = 0; j < templates?.length; j++) {
                     returnHtml += await getRenderStringAsyncIndex(templates[j]);
                 }
             }      
             
             const templateResult = <HTMLTemplateResult>values[i];
-            for(let j = 0; j < templateResult.values.length; j++) {
+            for(let j = 0; j < templateResult?.values.length; j++) {
                 if(templateResult.values[j] instanceof Promise<HTMLTemplateResult>) {
                     const promise = <Promise<HTMLTemplateResult>>templateResult.values[j];
                     const promiseResult = await promise;

@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
+import FormulaOneCard from "..";
 import { Result } from "../api/models";
-import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getDriverName, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -13,9 +13,9 @@ export default class LastResult extends BaseCard {
         'status' : 'Status'
     };
 
-    constructor(config: FormulaOneCardConfig) {
-        super(config);
-    }   
+    constructor(parent: FormulaOneCard) {
+        super(parent);    
+    }  
     
     cardSize(): number {
         return 11;
@@ -40,7 +40,7 @@ export default class LastResult extends BaseCard {
               ? html` 
                     <table>
                         <tr>
-                            <td>${renderHeader(this.config, response)}</td>
+                            <td>${renderHeader(this, response)}</td>
                         </tr>
                     </table>
                     <table>

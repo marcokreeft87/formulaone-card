@@ -5,7 +5,7 @@ import { BaseCard } from "./base-card";
 import { asyncReplace } from 'lit/directives/async-replace.js';
 import { Race } from "../api/models";
 import { HomeAssistant } from "custom-card-helpers";
-import { FormulaOneCardConfig } from "../types/formulaone-card-types";
+import FormulaOneCard from "..";
 
 export default class Countdown extends BaseCard {
     hass: HomeAssistant;
@@ -30,10 +30,8 @@ export default class Countdown extends BaseCard {
         'qualifying' : 'Qualifying'
     };
 
-    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(config);        
-
-        this.hass = hass;
+    constructor(parent: FormulaOneCard) {
+        super(parent);    
     }
     
     cardSize(): number {
@@ -42,7 +40,7 @@ export default class Countdown extends BaseCard {
 
     renderHeader(race: Race): HTMLTemplateResult {        
         return this.config.show_raceinfo ? 
-            html`<table><tr><td colspan="5">${renderHeader(this.config, race, true)}</td></tr>
+            html`<table><tr><td colspan="5">${renderHeader(this, race)}</td></tr>
             ${renderRaceInfo(this.hass, this.config, race, this)}</table>`
             : null;
     }

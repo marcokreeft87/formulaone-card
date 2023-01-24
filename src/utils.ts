@@ -1,13 +1,14 @@
-import { html, HTMLTemplateResult, PropertyValues } from "lit";
-import { FormulaOneCardConfig, LocalStorageItem } from "./types/formulaone-card-types";
+import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
+import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
 import { Driver, Race, Root } from "./api/models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
-import { HomeAssistant } from "custom-card-helpers";
+import { ActionHandlerEvent, handleAction, hasAction, HomeAssistant } from "custom-card-helpers";
 import { formatDateNumeric } from "./lib/format_date";
 import { ImageConstants } from "./lib/constants";
+import { actionHandler } from './directives/action-handler-directive';
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -109,16 +110,41 @@ export const getEndOfSeasonMessage = (message: string) => {
     return html`<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${message}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`;
 } 
 
-export const renderHeader = (config: FormulaOneCardConfig, race: Race, hide_racename?: boolean): HTMLTemplateResult => {
+export const clickHandler = (node: LitElement, config: FormulaOneCardConfig, hass: HomeAssistant, ev: ActionHandlerEvent) => {
+    handleAction(node, hass, config.actions, ev.detail.action);
+}
+
+export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => {
         
     const countryDashed = race.Circuit.Location.country.replace(" ","-")
     const circuitName = getCircuitName(countryDashed);
 
-    const imageHtml = html`<img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png">`;
-    const imageWithLinkHtml = config.image_clickable ? html`<a target="_new" href="${race.Circuit.url}">${imageHtml}</a>` : imageHtml;
+    const _handleAction = (ev: ActionHandlerEvent): void => {
+        if (card.hass && card.config.actions && ev.detail.action) {
+            clickHandler(card.parent, card.config, card.hass, ev);
+        }
+    }
+    
+    const hasConfigAction = card.config.image_clickable || card.config.actions !== undefined;
+    const circuitUrl = race.Circuit.url;
+
+    if(card.config.image_clickable && !card.config.actions) {
+        card.config.actions = {
+            tap_action: {
+                action: 'url',
+                url_path: circuitUrl
+            }
+        };
+    }
+
+    const imageHtml = html`<img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png" @action=${_handleAction}
+    .actionHandler=${actionHandler({
+        hasHold: hasAction(card.config.actions?.hold_action),
+        hasDoubleClick: hasAction(card.config.actions?.double_tap_action),
+      })} class="${(hasConfigAction ? ' clickable' : null)}" />`;
     const raceName = html`<h2><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
     
-    return html`${(hide_racename ? html`` : raceName)} ${imageWithLinkHtml}<br>`;
+    return html`${(card.config.card_type == FormulaOneCardType.Countdown  ? html`` : raceName)} ${imageHtml}<br>`;
 }
 
 export const renderRaceInfo = (hass: HomeAssistant, config: FormulaOneCardConfig, race: Race, card: BaseCard) => {

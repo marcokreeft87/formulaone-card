@@ -8,17 +8,23 @@ import ErgastClient from "../../src/api/ergast-client";
 import { Mrdata, Race, Root } from "../../src/api/models";
 import { HTMLTemplateResult } from "lit";
 import { HomeAssistant, NumberFormat, TimeFormat } from "custom-card-helpers";
+import FormulaOneCard from "../../src";
 
 describe('Testing countdown file', () => {
+    const parent = createMock<FormulaOneCard>({ 
+        config: createMock<FormulaOneCardConfig>(),
+    });
     const hass = createMock<HomeAssistant>();
     hass.locale = {
         language: 'NL', 
         number_format: NumberFormat.comma_decimal,
         time_format: TimeFormat.language
     }
+    parent._hass = hass;
     
     const config = createMock<FormulaOneCardConfig>();
-    const card = new Countdown(hass, config);const race: Race = {
+    const card = new Countdown(parent);
+    const race: Race = {
         season: '2022',
         round: '22',
         url: 'https://en.wikipedia.org/wiki/2022_Formula_One_World_Championship',
@@ -159,7 +165,7 @@ describe('Testing countdown file', () => {
         const htmlResult = await getRenderStringAsync(result);
         jest.useRealTimers();
         
-        expect(htmlResult).toMatch('<table><tr><td colspan="5"><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Bahrain_Circuit.png.transform/7col/image.png"></td></tr> </table>');
+        expect(htmlResult).toMatch('<table><tr><td colspan="5"><h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp; 22 : Season is over. See you next year!</h2><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Bahrain_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class="" /></td></tr> </table>');
     }),
     test('Calling renderheader with date end of season', async () => {   
 
