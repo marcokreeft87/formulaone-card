@@ -144,7 +144,7 @@ export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => 
       })} class="${(hasConfigAction ? ' clickable' : null)}" />`;
     const raceName = html`<h2><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
     
-    return html`${(card.config.card_type == FormulaOneCardType.Countdown  ? html`` : raceName)} ${imageHtml}<br>`;
+    return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${imageHtml}<br>`;
 }
 
 export const renderRaceInfo = (hass: HomeAssistant, config: FormulaOneCardConfig, race: Race, card: BaseCard) => {
