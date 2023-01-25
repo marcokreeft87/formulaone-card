@@ -1,9 +1,12 @@
 import { createMock } from "ts-auto-mock";
+import FormulaOneCard from "../../src";
 import ConstructorStandings from "../../src/cards/constructor-standings";
 import { FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
 
 describe('Testing base-card file', () => {
-    const config = createMock<FormulaOneCardConfig>();
+    const parent = createMock<FormulaOneCard>({ 
+        config: createMock<FormulaOneCardConfig>()
+    });
 
     test.each`
     key | expected
@@ -11,10 +14,10 @@ describe('Testing base-card file', () => {
     ${'points'}, ${'Punten'}
     `('Calling translation should return correct translation', ({ key, expected }) => { 
         
-        config.translations = {  
+        parent.config.translations = {  
             "points" : "Punten"
         };
-        const card = new ConstructorStandings(config);
+        const card = new ConstructorStandings(parent);
 
         expect(card.translation(key)).toBe(expected);
     })

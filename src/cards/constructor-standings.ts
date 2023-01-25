@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
+import FormulaOneCard from "..";
 import { ConstructorStanding } from "../api/models";
-import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getTeamImageUrl } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -12,8 +12,8 @@ export default class ConstructorStandings extends BaseCard {
         'wins' : 'Wins'
     };
 
-    constructor(config: FormulaOneCardConfig) {
-        super(config);
+    constructor(parent: FormulaOneCard) {
+        super(parent);
     }    
     
     cardSize(): number {        

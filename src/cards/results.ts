@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Race, Result } from "../api/models";
-import { CardProperties, FormulaOneCardConfig } from "../types/formulaone-card-types";
+import { CardProperties } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getDriverName, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -18,13 +18,10 @@ export default class Results extends BaseCard {
         'selectrace' : 'Select race',
         'noresults' : 'Please select a race thats already been run.'
     };
-    parent: FormulaOneCard;
 
-    constructor(config: FormulaOneCardConfig, parent: FormulaOneCard) {
-        super(config);
-
-        this.parent = parent;
-    }
+    constructor(parent: FormulaOneCard) {
+        super(parent);    
+    } 
     
     cardSize(): number {
         return 11;
@@ -48,7 +45,7 @@ export default class Results extends BaseCard {
             return null;
         }
 
-        return renderHeader(this.config, race);
+        return renderHeader(this, race);
     }
 
     render() : HTMLTemplateResult {

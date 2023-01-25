@@ -1,9 +1,9 @@
 import { formatTime, HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
+import FormulaOneCard from "..";
 import { Circuit, Race } from "../api/models";
 import { formatDate } from "../lib/format_date";
-import { FormulaOneCardConfig } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -16,12 +16,10 @@ export default class Schedule extends BaseCard {
         'location' : 'Location',
         'endofseason' : 'Season is over. See you next year!'
     };
-    
-    constructor(hass: HomeAssistant, config: FormulaOneCardConfig) {
-        super(config);
 
-        this.hass = hass;
-    }   
+    constructor(parent: FormulaOneCard) {
+        super(parent);    
+    }    
     
     cardSize(): number {
         return 12;

@@ -54,4 +54,7 @@ export const styles = css`
         border-radius: 50%;
         margin-right: 3px;
     }
+    .clickable {
+        cursor: pointer;
+    }
 `;

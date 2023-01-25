@@ -1,3 +1,4 @@
+import { HomeAssistant } from "custom-card-helpers";
 import { HTMLTemplateResult } from "lit-html";
 import FormulaOneCard from "..";
 import ErgastClient from "../api/ergast-client";
@@ -7,10 +8,13 @@ export abstract class BaseCard {
     parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
     client: ErgastClient;
+    hass: HomeAssistant;
 
-    constructor(config: FormulaOneCardConfig) {     
-        this.config = config;   
+    constructor(parent: FormulaOneCard) {     
+        this.config = parent.config;   
         this.client = new ErgastClient();
+        this.hass = parent._hass;
+        this.parent = parent;
     }    
 
     translation(key: string) : string {

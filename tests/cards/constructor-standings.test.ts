@@ -6,10 +6,13 @@ import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import ErgastClient from '../../src/api/ergast-client';
 import { Mrdata, Root } from '../../src/api/models';
 import { getApiErrorMessage } from '../../src/utils';
+import FormulaOneCard from '../../src';
 
 describe('Testing constructor-standings file', () => {
-    const config = createMock<FormulaOneCardConfig>();
-    const card = new ConstructorStandings(config);
+    const parent = createMock<FormulaOneCard>({ 
+        config: createMock<FormulaOneCardConfig>()
+    });
+    const card = new ConstructorStandings(parent);
 
     test('Calling render with api returning data', async () => {   
         
@@ -30,11 +33,9 @@ describe('Testing constructor-standings file', () => {
             resolve({ MRData : <Mrdata>MRData });
         }));
         
-        config.standings = {
+        card.config.standings = {
             show_teamlogo: true
         }
-
-        card.config = config;
         const result = card.render();
         const htmlResult = await getRenderStringAsync(result);
         

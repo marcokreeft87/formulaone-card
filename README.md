@@ -50,6 +50,36 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 | standings         | object        |                                     | Configuration for the driver standings card     |
 | translations      | dictionary    |  _[translations](#Translations)_          | Dictionary to override the default translation  |
+| actions           | object        |  _[Actions](#actions)_                                    | The tap, double tap or hold actions set on the image of the countdown, last-result, results and next-race cards |
+
+
+### Actions
+
+This card supports all the default HA actions, except from more-info and toggle. See [Lovelace Actions](https://www.home-assistant.io/lovelace/actions/)
+for more detailed descriptions and examples.
+
+| Name            | Type        | Default      | Description                                                                                |
+| --------------- | ----------- | ------------ | ------------------------------------------------------------------------------------------ |
+| action          | string      | **Required** | `call-service`, `url`, `navigate`, `fire-dom-event`, `none`         |
+| service         | string      |              | Service to call when `action` is `call-service`                                            |
+| service_data    | object      |              | Optional data to include when `action` is `call-service`                                   |
+| url_path        | string      |              | URL to open when `action` is `url`                                                         |
+| navigation_path | string      |              | Path to navigate to when `action` is `navigate`                                            |
+| confirmation    | bool/object | `false`      | Enable confirmation dialog                                                                 |
+| haptic          | string      | `none`       | Haptic feedback (`success`, `warning`, `failure`, `light`, `medium`, `heavy`, `selection`) |
+
+Actions example:
+
+```
+type: custom:formulaone-card
+card_type: next_race
+actions:
+  tap_action:
+    action: navigate
+    navigation_path: /lovelace/overview
+
+```
+
 
 ```
 type: custom:formulaone-card
