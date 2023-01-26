@@ -229,3 +229,4 @@ translations:
 - [ ] Sprint result card (https://ergast.com/mrd/methods/sprint/)
 - [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
 - [ ] Use F1 font 
+- [ ] Editor
