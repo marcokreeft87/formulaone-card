@@ -1,11 +1,12 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
+import { clickHandler, getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
 import { asyncReplace } from 'lit/directives/async-replace.js';
 import { Race } from "../api/models";
-import { HomeAssistant } from "custom-card-helpers";
+import { ActionHandlerEvent, hasAction, HomeAssistant } from "custom-card-helpers";
 import FormulaOneCard from "..";
+import { actionHandler } from "../directives/action-handler-directive";
 
 export default class Countdown extends BaseCard {
     hass: HomeAssistant;
@@ -40,7 +41,7 @@ export default class Countdown extends BaseCard {
 
     renderHeader(race: Race): HTMLTemplateResult {        
         return this.config.show_raceinfo ? 
-            html`<table><tr><td colspan="5">${renderHeader(this, race)}</td></tr>
+            html`<table><tr><td colspan="5">${renderHeader(this, race, true)}</td></tr>
             ${renderRaceInfo(this.hass, this.config, race, this)}</table>`
             : null;
     }
@@ -68,6 +69,12 @@ export default class Countdown extends BaseCard {
 
     render() : HTMLTemplateResult {
 
+        const _handleAction = (ev: ActionHandlerEvent): void => {
+            if (this.hass && this.config.actions && ev.detail.action) {
+                clickHandler(this.parent, this.config, this.hass, ev);
+            }
+        }
+
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
                 if(!response) {
@@ -85,9 +92,14 @@ export default class Countdown extends BaseCard {
                 }
 
                 const raceDateTime = new Date(nextRace.date + 'T' + nextRace.time);
-                const timer = this.countDownTillDate(raceDateTime);
+                const timer = this.countDownTillDate(raceDateTime);                
+                const hasConfigAction = this.config.actions !== undefined;
                 
-                return html`<table>
+                return html`<table @action=${_handleAction}
+                                .actionHandler=${actionHandler({
+                                    hasHold: hasAction(this.config.actions?.hold_action),
+                                    hasDoubleClick: hasAction(this.config.actions?.double_tap_action),
+                                })} class="${(hasConfigAction ? 'clickable' : null)}">
                                 <tr>
                                     <td>
                                         <h2><img height="25" src="${getCountryFlagByName(nextRace.Circuit.Location.country)}">&nbsp;&nbsp;  ${nextRace.round} :  ${nextRace.raceName}</h2>

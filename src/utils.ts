@@ -114,13 +114,13 @@ export const clickHandler = (node: LitElement, config: FormulaOneCardConfig, has
     handleAction(node, hass, config.actions, ev.detail.action);
 }
 
-export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => {
+export const renderHeader = (card: BaseCard, race: Race, preventClick = false): HTMLTemplateResult => {
         
     const countryDashed = race.Circuit.Location.country.replace(" ","-")
     const circuitName = getCircuitName(countryDashed);
 
     const _handleAction = (ev: ActionHandlerEvent): void => {
-        if (card.hass && card.config.actions && ev.detail.action) {
+        if (card.hass && card.config.actions && ev.detail.action && !preventClick) {
             clickHandler(card.parent, card.config, card.hass, ev);
         }
     }
