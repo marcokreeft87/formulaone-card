@@ -9,6 +9,7 @@ import { Mrdata, Race, Root } from "../../src/api/models";
 import { HTMLTemplateResult } from "lit";
 import { HomeAssistant, NumberFormat, TimeFormat } from "custom-card-helpers";
 import FormulaOneCard from "../../src";
+import * as customCardHelper from "custom-card-helpers";
 
 describe('Testing countdown file', () => {
     const parent = createMock<FormulaOneCard>({ 
@@ -88,7 +89,7 @@ describe('Testing countdown file', () => {
         const { htmlResult, date } = await getHtmlResultAndDate(card);
         jest.useRealTimers();
         
-        expect(htmlResult).toMatch('<table> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
+        expect(htmlResult).toMatch('<table @action=_handleAction .actionHandler= class=""> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
         expect(date.value).toMatch('19d 16h 0m 0s');
     }),
     test('Calling render with date equal to race start should render we are racing', async () => {   
@@ -99,7 +100,7 @@ describe('Testing countdown file', () => {
         const { htmlResult, date } = await getHtmlResultAndDate(card);
         jest.useRealTimers();
         
-        expect(htmlResult).toMatch('<table> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
+        expect(htmlResult).toMatch('<table @action=_handleAction .actionHandler= class=""> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
         expect(date.value).toMatch('We are racing!');
     }),
     test('Calling render with date an hour past race start render we are racing', async () => {   
@@ -115,7 +116,7 @@ describe('Testing countdown file', () => {
         const { htmlResult, date } = await getHtmlResultAndDate(card);
         jest.useRealTimers();
         
-        expect(htmlResult).toMatch('<table> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
+        expect(htmlResult).toMatch('<table @action=_handleAction .actionHandler= class=""> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
         expect(date.value).toMatch('We are racing!');
     }),
     test('Calling render with date an day past race start render we are racing', async () => {   
@@ -126,7 +127,7 @@ describe('Testing countdown file', () => {
         const { htmlResult, date } = await getHtmlResultAndDate(card);
         jest.useRealTimers();
         
-        expect(htmlResult).toMatch('<table> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/sa.png">&nbsp;&nbsp; 2 : Saudi Arabian Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
+        expect(htmlResult).toMatch('<table @action=_handleAction .actionHandler= class=""> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/sa.png">&nbsp;&nbsp; 2 : Saudi Arabian Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
         expect(date.value).toMatch('6d 18h 0m 0s');
     }),
     test('Calling render with date end of season', async () => {   
@@ -138,7 +139,7 @@ describe('Testing countdown file', () => {
         const htmlResult = await getRenderStringAsync(result);
         jest.useRealTimers();
         
-        expect(htmlResult).toMatch('<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>Season is over. See you next year!</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table><table>');
+        expect(htmlResult).toMatch('<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>Season is over. See you next year!</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table><table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table>');
     }),
     test('Calling render with api not returning data', async () => {   
 
@@ -177,7 +178,7 @@ describe('Testing countdown file', () => {
         jest.useRealTimers();
         
         expect(htmlResult).toBe('');
-    })
+    }),
     test.each`
     show_raceinfo | expected
     ${undefined}, ${6}
@@ -188,18 +189,58 @@ describe('Testing countdown file', () => {
         card.config = config;      
 
         expect(card.cardSize()).toBe(expected);
+    }),
+    test('Calling render with actions', async () => {   
+
+        const spy = jest.spyOn(customCardHelper, 'handleAction');
+
+        card.config.actions = {
+            tap_action: {
+                action: 'navigate',
+                navigation_path: '/lovelace/0',
+            },
+            hold_action: {
+                action: 'navigate',
+                navigation_path: '/lovelace/1',
+            },
+            double_tap_action: {
+                action: 'navigate',
+                navigation_path: '/lovelace/2',
+            }
+        }
+
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date(2022, 2, 1)); // Weird bug in jest setting this to the last of the month
+
+        const { htmlResult, date, handleAction } = await getHtmlResultAndDate(card);
+        jest.useRealTimers();
+        
+        expect(htmlResult).toMatch('<table @action=_handleAction .actionHandler= class="clickable"> <tr> <td> <h2><img height="25" src="https://flagcdn.com/w40/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1></h1> </td> </tr> </table>');
+        expect(date.value).toMatch('19d 16h 0m 0s');
+        
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        handleAction({ detail: { action: 'tap' } });
+        handleAction({ detail: { action: 'double_tap' } });
+        handleAction({ detail: { action: 'hold' } });
+        
+        expect(customCardHelper.handleAction).toBeCalledTimes(3);
+
+        spy.mockClear();
     });
 });
 
 async function getHtmlResultAndDate(card: Countdown) {
     const result = card.render();
+
     const promise = (result.values[0] as HTMLTemplateResult).values[0] as Promise<HTMLTemplateResult>;
     const promiseResult = await promise;
 
-    const iterator = (promiseResult.values[3] as HTMLTemplateResult).values[0] as AsyncIterableIterator<HTMLTemplateResult>;
+    const iterator = (promiseResult.values[6] as HTMLTemplateResult).values[0] as AsyncIterableIterator<HTMLTemplateResult>;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const handleAction = promiseResult.values[0] as Function;
 
     const date = await iterator.next();
     
     const htmlResult = await getRenderStringAsync(promiseResult);
-    return { htmlResult, date };
+    return { htmlResult, date, handleAction };
 }

@@ -53,7 +53,7 @@ describe('Testing util file function renderHeader', () => {
     test('Calling renderHeader with actions', () => {
 
         // handleAction
-        jest.spyOn(customCardHelper, 'handleAction');
+        const spy = jest.spyOn(customCardHelper, 'handleAction');
 
         card.config.actions = {
             tap_action: {
@@ -79,5 +79,39 @@ describe('Testing util file function renderHeader', () => {
         actionHandler({ detail: { action: 'hold' } });
         
         expect(customCardHelper.handleAction).toBeCalledTimes(3);
+
+        spy.mockClear();
+    }),
+    test('Calling renderHeader with actions', () => {
+
+        // handleAction
+        const spy = jest.spyOn(customCardHelper, 'handleAction');
+
+        card.config.actions = {
+            tap_action: {
+                action: 'navigate',
+                navigation_path: '/lovelace/0',
+            },
+            hold_action: {
+                action: 'navigate',
+                navigation_path: '/lovelace/1',
+            },
+            double_tap_action: {
+                action: 'navigate',
+                navigation_path: '/lovelace/2',
+            }
+        }
+        
+        const result = renderHeader(card, lastRace, true);
+
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        const actionHandler = (result.values[1] as HTMLTemplateResult).values[2] as Function;
+        actionHandler({ detail: { action: 'tap' } });
+        actionHandler({ detail: { action: 'double_tap' } });
+        actionHandler({ detail: { action: 'hold' } });
+        
+        expect(customCardHelper.handleAction).toBeCalledTimes(0);
+
+        spy.mockClear();
     })
 });
