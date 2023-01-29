@@ -56,6 +56,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
 | show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown card |
+| f1_font           | boolean       | `false`                             | Use the official F1 font for headers |
 | location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 | standings         | object        |                                     | Configuration for the driver standings card     |
@@ -172,6 +173,12 @@ card_type: countdown
 ```
 ![image](https://user-images.githubusercontent.com/10223677/213435405-fdb2ff7c-3364-43d5-80b0-0f253d9b60c8.png)
 
+```
+type: custom:formulaone-card
+card_type: countdown
+f1_font: true
+```
+
 ## Translations
 
 The following texts can be translated or altered.
@@ -238,5 +245,5 @@ translations:
 - [ ] Qualifying result card (https://ergast.com/mrd/methods/qualifying/)
 - [ ] Sprint result card (https://ergast.com/mrd/methods/sprint/)
 - [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
-- [ ] Use F1 font 
+- [x] Use F1 font 
 - [ ] Editor
