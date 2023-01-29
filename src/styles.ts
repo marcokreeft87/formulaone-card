@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const styles = css`    
+export const styles = css`
     @font-face {
         font-family: F1Bold;
         src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Bold/Formula1-Bold.woff2) format("woff2"),
@@ -27,7 +27,7 @@ export const styles = css`
         text-align: left;
     }
     tr {
-        color: var(--secondary-text-color);        
+        color: var(--secondary-text-color);
     }
     tr:nth-child(even) {
         background-color: var(--table-row-alternative-background-color, #eee);
@@ -44,7 +44,7 @@ export const styles = css`
     .width-60 {
         width: 60px;
     }
-    .hide { 
+    .hide {
         display: none;
     }
     .strikethrough {
@@ -55,7 +55,7 @@ export const styles = css`
     }
     a {
         text-decoration: none;
-        color: var(--secondary-text-color);  
+        color: var(--secondary-text-color);
     }
     .constructor-logo {
         width: 20px;
