@@ -178,6 +178,8 @@ type: custom:formulaone-card
 card_type: countdown
 f1_font: true
 ```
+![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
+
 
 ## Translations
 
