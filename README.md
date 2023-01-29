@@ -12,10 +12,27 @@ Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way
 
 ## Installation
 
-Use this button:
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcokreeft87&repository=formulaone-card&category=plugin)
 
-_OR_ Manually add [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js)
+### HACS (recommended)
+Make shure you have [HACS](https://hacs.xyz/) (Home Assistant Community Store) installed.
+<br>
+<sub>_HACS is a third party community store and is not included in Home Assistant out of the box._</sub>
+
+- Open HACS
+- Go to "Frontend" section
+- Click button with "+" icon
+- Search for "formulaone-card"
+- _OR u can click here_ [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcokreeft87&repository=formulaone-card&category=plugin) and it will take u directly to HACS (if it's installed)
+- Install repository in HACS
+- _If u are using YAML mode then add this to your_ [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/)
+  ```yaml
+  url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
+  type: module
+  ```
+- Refresh your browser
+
+### Manual install
+Manually download [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js) and add it 
 to your `<config>/www/` folder and add the following to the `configuration.yaml` file:
 ```yaml
 lovelace:
@@ -24,13 +41,6 @@ lovelace:
       type: module
 ```
 
-_OR_ install using [HACS](https://hacs.xyz/) and add this (if in YAML mode):
-```yaml
-lovelace:
-  resources:
-    - url: /hacsfiles/formulaone-card/formulaone-card.js
-      type: module
-```
 
 The above configuration can be managed directly in the Configuration -> Lovelace Dashboards -> Resources panel when not using YAML mode,
 or added by clicking the "Add to lovelace" button on the HACS dashboard after installing the plugin.
