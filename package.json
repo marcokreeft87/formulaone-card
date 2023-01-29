@@ -10,7 +10,7 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "workflow": "jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json",
-    "prebuild": "copy git-hooks\\pre-commit .git\\hooks\\ && echo 'hook copied'"
+    "prebuild": "shx cp git-hooks/pre-commit .git/hooks/ && echo '> hook copied'"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "eslint": "^8.24.0",
     "home-assistant-js-websocket": "^8.0.0",
     "lit": "^2.6.1",
+    "shx": "^0.3.4",
     "typescript": "^4.8.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
