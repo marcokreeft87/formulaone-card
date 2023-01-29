@@ -236,8 +236,6 @@ async function getHtmlResultAndDate(card: Countdown) {
     const promise = (result.values[0] as HTMLTemplateResult).values[0] as Promise<HTMLTemplateResult>;
     const promiseResult = await promise;
 
-    console.log((promiseResult.values))
-
     const iterator = (promiseResult.values[8] as HTMLTemplateResult).values[0] as AsyncIterableIterator<HTMLTemplateResult>;
     // eslint-disable-next-line @typescript-eslint/ban-types
     const handleAction = promiseResult.values[0] as Function;
