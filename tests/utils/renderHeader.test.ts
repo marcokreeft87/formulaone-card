@@ -24,10 +24,11 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace);
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch(`<h2><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class="" /><br>`);
+        expect(htmlResult).toMatch(`<h2 class=""><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class="" /><br>`);
     }),
     test('Calling renderHeader with clickable image ', () => { 
         card.config.image_clickable = true;
+        card.config.f1_font = true;
         
         const result = renderHeader(card, lastRace);
         const htmlResult = getRenderString(result);
@@ -39,7 +40,7 @@ describe('Testing util file function renderHeader', () => {
             }
           });
 
-        expect(htmlResult).toMatch(`<h2><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
+        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
     }),
     test('Calling renderHeader with image not clickable and card countdown', async () => { 
         card.config.image_clickable = undefined;

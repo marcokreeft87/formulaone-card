@@ -4,7 +4,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { FormulaOneCardConfig, FormulaOneCardType } from './types/formulaone-card-types';
 import { CSSResult, html, HTMLTemplateResult, LitElement, PropertyValues } from 'lit';
 import { checkConfig, hasConfigOrCardValuesChanged } from './utils';
-import { load_f1_font } from './fonts';
+import { loadCustomFonts } from './fonts';
 import { styles } from './styles';
 import ConstructorStandings from './cards/constructor-standings';
 import DriverStandings from './cards/driver-standings';
@@ -88,7 +88,7 @@ export default class FormulaOneCard extends LitElement {
     }
 
     static get styles(): CSSResult {
-        load_f1_font();
+        loadCustomFonts();
         return styles;
     }
 
@@ -98,7 +98,7 @@ export default class FormulaOneCard extends LitElement {
         try {
             return html`
                 <ha-card elevation="2">
-                    ${this.config.title ? html`<h1 class="card-header">${this.config.title}</h1>` : ''}
+                    ${this.config.title ? html`<h1 class="card-header${(this.config.f1_font ? ' formulaone-font' : '')}">${this.config.title}</h1>` : ''}
                     ${this.card.render()}
                 </ha-card>
             `;

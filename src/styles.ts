@@ -1,18 +1,6 @@
 import { css } from 'lit';
 
-export const styles = css`
-    @font-face {
-        font-family: F1Bold;
-        src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Bold/Formula1-Bold.woff2) format("woff2"),
-        url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Bold/Formula1-Bold.woff) format("woff");
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-    }
-    .type-custom-formulaone-card h1.card-header {
-        font-family: F1Bold;
-        font-size: 18px;
-    }
+export const styles = css`   
     table {
         width: 100%;
         border-spacing: 0;
@@ -68,5 +56,8 @@ export const styles = css`
     }
     .clickable {
         cursor: pointer;
+    }
+    .formulaone-font {
+        font-family: 'F1Bold';
     }
 `;
