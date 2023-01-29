@@ -102,12 +102,12 @@ export default class Countdown extends BaseCard {
                                 })} class="${(hasConfigAction ? 'clickable' : null)}">
                                 <tr>
                                     <td>
-                                        <h2><img height="25" src="${getCountryFlagByName(nextRace.Circuit.Location.country)}">&nbsp;&nbsp;  ${nextRace.round} :  ${nextRace.raceName}</h2>
+                                        <h2 class="${(this.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${getCountryFlagByName(nextRace.Circuit.Location.country)}">&nbsp;&nbsp;  ${nextRace.round} :  ${nextRace.raceName}</h2>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-center">
-                                        <h1>${asyncReplace(timer)}</h1>
+                                        <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${asyncReplace(timer)}</h1>
                                     </td>
                                 </tr>
                             </table>

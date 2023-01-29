@@ -142,7 +142,7 @@ export const renderHeader = (card: BaseCard, race: Race, preventClick = false): 
         hasHold: hasAction(card.config.actions?.hold_action),
         hasDoubleClick: hasAction(card.config.actions?.double_tap_action),
       })} class="${(hasConfigAction ? ' clickable' : null)}" />`;
-    const raceName = html`<h2><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
+    const raceName = html`<h2 class="${(card.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
     
     return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${imageHtml}<br>`;
 }
