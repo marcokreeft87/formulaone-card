@@ -3,7 +3,7 @@ import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Race, Result } from "../api/models";
 import { CardProperties } from "../types/formulaone-card-types";
-import { getApiErrorMessage, getApiLoadingMessage, getDriverName, renderHeader } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class Results extends BaseCard {    
@@ -140,7 +140,7 @@ export default class Results extends BaseCard {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${selectedRace.Results.map(result => this.renderResultRow(result))}
+                                ${reduceArray(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result))}
                             </tbody>
                         </table>` 
                 : html`<table>

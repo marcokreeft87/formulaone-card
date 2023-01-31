@@ -191,3 +191,7 @@ export const getRefreshTime = (endpoint: string) => {
 
     return refreshCacheHours;
 }
+
+export const reduceArray = <T>(array: T[], number: number) => {
+    return number ? array.slice(0, number) : array;
+}
