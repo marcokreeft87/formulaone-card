@@ -1,4 +1,4 @@
-import { html, HTMLTemplateResult, TemplateResult } from "lit";
+import { html, HTMLTemplateResult } from "lit";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { QualifyingResult, Race } from "../api/models";
@@ -51,9 +51,25 @@ export default class QualifyingResults extends BaseCard {
     render(): HTMLTemplateResult {
         const { races, selectedRace, selectedSeason } = this.getProperties();
 
-        // if(selectedSeason === undefined) {
-        //     return null;
-        // }
+        if(selectedSeason === undefined) {
+            this.client.GetLastResult().then(response => { 
+                                
+                this.client.GetQualifyingResults(parseInt(response.season), parseInt(response.round)).then(qualifyingResults => {
+                    const { properties, cardValues } = this.getParentCardValues();
+                    properties.selectedSeason = response.season;
+                    properties.selectedRace = qualifyingResults.Races[0]; 
+
+                    console.log(1, properties.selectedRace)
+                    
+                    this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {    
+                        properties.races = racesResponse;
+    
+                        cardValues.set('cardValues', properties);   
+                        this.parent.properties = cardValues;
+                    }); 
+                });                               
+            });
+        }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const selectedSeasonChanged = (ev: any): void => {
@@ -77,6 +93,7 @@ export default class QualifyingResults extends BaseCard {
     
             properties.selectedRound = round;
             this.client.GetQualifyingResults(properties.selectedSeason as number, round).then(response => {
+
                 properties.selectedRace = response.Races[0];
                 cardValues.set('cardValues', properties);
                 this.parent.properties = cardValues;

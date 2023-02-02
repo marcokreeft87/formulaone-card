@@ -4,13 +4,14 @@ import ErgastClient from "../../src/api/ergast-client";
 import { Mrdata, Race, Root } from "../../src/api/models";
 import Results from "../../src/cards/results";
 import { CardProperties, FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
-import { MRData as resultData } from '../testdata/results.json'
+import { MRData as resultData } from '../testdata/qualifying.json'
 import { MRData as seasonData } from '../testdata/seasons.json'
 import { MRData as raceData } from '../testdata/schedule.json'
 import { getRenderString, getRenderStringAsync, getRenderStringAsyncIndex } from "../utils";
 import { HTMLTemplateResult } from "lit";
+import QualifyingResults from "../../src/cards/qualifying-results";
 
-describe('Testing results file', () => {
+describe('Testing qualifyingresults file', () => {
     const parent = createMock<FormulaOneCard>({ 
         config: createMock<FormulaOneCardConfig>(),
     });
@@ -18,7 +19,7 @@ describe('Testing results file', () => {
 
     beforeAll(() => {
         jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementation((_endpoint) => {
-            if(_endpoint === '2022/17/results.json`') {
+            if(_endpoint === '2022/17/qualifying.json`') {
                 return new Promise<Root>((resolve) => {
                     resolve({ MRData : <Mrdata>resultData });
                 });
@@ -39,7 +40,7 @@ describe('Testing results file', () => {
     parent.properties = new Map<string, unknown>();
 
     test('Calling render without selecting season', async () => {   
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
                 
         const result = card.render();
         const htmlResult = await getRenderStringAsync(result);
@@ -49,7 +50,7 @@ describe('Testing results file', () => {
     test('Calling render with selected season', async () => {   
         
         parent.properties.set('cardValues', { selectedSeason: '1979', races: raceData.RaceTable.Races, selectedRace: undefined });
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
                 
         const result = card.render();
         const htmlResult = await getRenderStringAsyncIndex(result);    
@@ -60,8 +61,8 @@ describe('Testing results file', () => {
         
         const race = resultData.RaceTable.Races[0];
         race.round = "1";
-        parent.properties.set('cardValues', { selectedSeason: '1979', selectedRace: race, races: raceData.RaceTable.Races, results: race.Results });
-        const card = new Results(parent);
+        parent.properties.set('cardValues', { selectedSeason: '1979', selectedRace: race, races: raceData.RaceTable.Races, results: race.QualifyingResults });
+        const card = new QualifyingResults(parent);
                 
         const result = card.render();
         const htmlResult = await getRenderString(result);  
@@ -71,7 +72,7 @@ describe('Testing results file', () => {
     test('Calling selectedSeasonChanged should change parent properties', async () => {   
         
         parent.properties.set('cardValues', { selectedSeason: '1979' });
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
                 
         const result = card.render();
 
@@ -89,7 +90,7 @@ describe('Testing results file', () => {
     test('Calling selectedRaceChanged should change parent properties', async () => {   
         
         parent.properties.set('cardValues', { selectedSeason: '1979' });
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
                 
         const result = card.render();
 
@@ -105,7 +106,7 @@ describe('Testing results file', () => {
         const parentNew = createMock<FormulaOneCard>({ 
             config: createMock<FormulaOneCardConfig>(),
         });
-        const card = new Results(parentNew);
+        const card = new QualifyingResults(parentNew);
                 
         const result = card.render();
 
@@ -114,7 +115,7 @@ describe('Testing results file', () => {
         selectedRaceChangedFn({ target: { value: '17' } });
     }),
     test('Calling renderHeader with image not clickable', async () => { 
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
         card.config.image_clickable = undefined;
         
         const result = card.renderHeader(lastRace);
@@ -123,7 +124,7 @@ describe('Testing results file', () => {
         expect(htmlResult).toMatch('<h2 class=""><img height="25" src="https://flagcdn.com/w40/sg.png">&nbsp; 1 : Singapore Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class="" /><br>');
     }),
     test('Calling renderHeader with clickable image ', () => { 
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
         card.config.image_clickable = true;
         
         const result = card.renderHeader(lastRace);
@@ -132,7 +133,7 @@ describe('Testing results file', () => {
         expect(htmlResult).toMatch('<h2 class=""><img height="25" src="https://flagcdn.com/w40/sg.png">&nbsp; 1 : Singapore Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br>');
     }),
     test('Calling renderHeader with undefined race', async () => { 
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
         card.config.image_clickable = undefined;
         
         const result = card.renderHeader(undefined);
@@ -141,13 +142,13 @@ describe('Testing results file', () => {
         expect(htmlResult).toBe('');
     }),
     test('Calling cardSize with hass and sensor', () => { 
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
         expect(card.cardSize()).toBe(11);
     }),
     test('Calling render with api not returning data', async () => {   
         
         parent.properties.set('cardValues', { selectedSeason: '1979', selectedRace: undefined });
-        const card = new Results(parent);
+        const card = new QualifyingResults(parent);
 
         jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementationOnce((_endpoint) => {
                 
