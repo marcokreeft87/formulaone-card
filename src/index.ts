@@ -4,6 +4,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { FormulaOneCardConfig, FormulaOneCardType } from './types/formulaone-card-types';
 import { CSSResult, html, HTMLTemplateResult, LitElement, PropertyValues } from 'lit';
 import { checkConfig, hasConfigOrCardValuesChanged } from './utils';
+import { loadCustomFonts } from './fonts';
 import { styles } from './styles';
 import ConstructorStandings from './cards/constructor-standings';
 import DriverStandings from './cards/driver-standings';
@@ -42,13 +43,13 @@ export default class FormulaOneCard extends LitElement {
     get properties() {
         return this._cardValues;
     }
-    
+
     private _cardValues?: Map<string, unknown>;
 
-    setConfig(config: FormulaOneCardConfig) {      
-        
+    setConfig(config: FormulaOneCardConfig) {
+
         checkConfig(config);
-        
+
         this.config = { ...config };
     }
 
@@ -65,28 +66,29 @@ export default class FormulaOneCard extends LitElement {
             case FormulaOneCardType.ConstructorStandings:
                 this.card = new ConstructorStandings(this);
                 break;
-            case FormulaOneCardType.DriverStandings:                
+            case FormulaOneCardType.DriverStandings:
                 this.card = new DriverStandings(this);
                 break;
-            case FormulaOneCardType.Schedule:                
+            case FormulaOneCardType.Schedule:
                 this.card = new Schedule(this);
                 break;
-            case FormulaOneCardType.NextRace:                
-                this.card = new NextRace(this); 
-                break;    
-            case FormulaOneCardType.LastResult:                
+            case FormulaOneCardType.NextRace:
+                this.card = new NextRace(this);
+                break;
+            case FormulaOneCardType.LastResult:
                 this.card = new LastResult(this);
                 break;
-            case FormulaOneCardType.Countdown:                
+            case FormulaOneCardType.Countdown:
                 this.card = new Countdown(this);
                 break;
-            case FormulaOneCardType.Results:                
+            case FormulaOneCardType.Results:
                 this.card = new Results(this);
                 break;
         }
     }
 
     static get styles(): CSSResult {
+        loadCustomFonts();
         return styles;
     }
 
@@ -96,7 +98,7 @@ export default class FormulaOneCard extends LitElement {
         try {
             return html`
                 <ha-card elevation="2">
-                    ${this.config.title ? html`<h1 class="card-header">${this.config.title}</h1>` : ''}
+                    ${this.config.title ? html`<h1 class="card-header${(this.config.f1_font ? ' formulaone-font' : '')}">${this.config.title}</h1>` : ''}
                     ${this.card.render()}
                 </ha-card>
             `;

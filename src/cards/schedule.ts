@@ -4,7 +4,7 @@ import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Circuit, Race } from "../api/models";
 import { formatDate } from "../lib/format_date";
-import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage, reduceArray } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class Schedule extends BaseCard {
@@ -68,7 +68,7 @@ export default class Schedule extends BaseCard {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${response.map(race => this.renderScheduleRow(race))}
+                                ${reduceArray(response, this.config.row_limit).map(race => this.renderScheduleRow(race))}
                             </tbody>
                         </table>`;
             }),

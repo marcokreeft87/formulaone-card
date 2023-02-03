@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const styles = css`    
+export const styles = css`   
     table {
         width: 100%;
         border-spacing: 0;
@@ -15,7 +15,7 @@ export const styles = css`
         text-align: left;
     }
     tr {
-        color: var(--secondary-text-color);        
+        color: var(--secondary-text-color);
     }
     tr:nth-child(even) {
         background-color: var(--table-row-alternative-background-color, #eee);
@@ -32,7 +32,7 @@ export const styles = css`
     .width-60 {
         width: 60px;
     }
-    .hide { 
+    .hide {
         display: none;
     }
     .strikethrough {
@@ -43,7 +43,7 @@ export const styles = css`
     }
     a {
         text-decoration: none;
-        color: var(--secondary-text-color);  
+        color: var(--secondary-text-color);
     }
     .constructor-logo {
         width: 20px;
@@ -56,5 +56,8 @@ export const styles = css`
     }
     .clickable {
         cursor: pointer;
+    }
+    .formulaone-font {
+        font-family: 'F1Bold';
     }
 `;

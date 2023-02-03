@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { ConstructorStanding } from "../api/models";
-import { getApiErrorMessage, getApiLoadingMessage, getTeamImageUrl } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getTeamImageUrl, reduceArray } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class ConstructorStandings extends BaseCard {    
@@ -45,7 +45,7 @@ export default class ConstructorStandings extends BaseCard {
                         </tr>
                         </thead>
                         <tbody>
-                            ${response.map(standing => this.renderStandingRow(standing))}
+                            ${reduceArray(response, this.config.row_limit).map(standing => this.renderStandingRow(standing))}
                         </tbody>
                     </table>
                     `

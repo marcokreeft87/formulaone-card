@@ -15,6 +15,8 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     translations?: Translation;
     show_raceinfo?: boolean;
     actions?: ActionOptions;
+    f1_font?: boolean;
+    row_limit?: number;
 }
 
 export interface ActionOptions {

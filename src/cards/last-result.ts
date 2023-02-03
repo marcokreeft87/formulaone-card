@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Result } from "../api/models";
-import { getApiErrorMessage, getApiLoadingMessage, getDriverName, renderHeader } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -54,7 +54,7 @@ export default class LastResult extends BaseCard {
                             </tr>
                         </thead>
                         <tbody>
-                            ${response.Results.map(result => this.renderResultRow(result))}
+                            ${reduceArray(response.Results, this.config.row_limit).map(result => this.renderResultRow(result))}
                         </tbody>
                     </table>`
               : html`${getApiErrorMessage('last result')}`),
