@@ -27,7 +27,7 @@ console.info(
   type: 'formulaone-card',
   name: 'FormulaOne card',
   preview: false,
-  description: 'Present the data of hass-formulaoneapi in a pretty way',
+  description: 'Present the data of Formula One in a pretty way',
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
