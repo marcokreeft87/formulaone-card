@@ -152,6 +152,17 @@ date_locale: nl
 
 ![image](https://user-images.githubusercontent.com/10223677/194120864-be0db0e9-dd0b-42aa-8829-d094c23ef0a5.png)
 
+This card can also show the flags of the countries of the tracks:
+
+```
+type: custom:formulaone-card
+card_type: schedule
+standings:
+  show_flag: true
+
+```
+
+
 ```
 type: custom:formulaone-card
 card_type: last_result
@@ -166,6 +177,19 @@ card_type: results
 title: Results
 ```
 ![image](https://user-images.githubusercontent.com/10223677/213260361-6af23d9e-e716-44d8-9cea-f7ce8cdb1142.png)
+
+This card can also show the flags and team names of the driver, alongside the logo of the teams:
+
+```
+type: custom:formulaone-card
+card_type: results
+title: Results
+standings:
+  show_flag: true
+  show_team: true
+  show_teamlogo: true
+  
+```
 
 ```
 type: custom:formulaone-card
@@ -184,11 +208,24 @@ f1_font: true
 ```
 type: custom:formulaone-card
 card_type: qualifying_results
+title: Qualifying
 f1_font: true
 
 ```
 ![image](https://user-images.githubusercontent.com/10223677/216780167-df1cd864-9c54-47fe-afed-cb0c6b4cd4bb.png)
 
+This card can also show the flags and team names of the driver, alongside the logo of the teams:
+
+```
+type: custom:formulaone-card
+card_type: qualifying_results
+standings:
+  show_flag: true
+  show_team: true
+  show_teamlogo: true
+
+```
+  
 
 ## Translations
 
@@ -212,8 +249,8 @@ The following texts can be translated or altered.
 | constructor_standings | constructor | 'Constructor' |
 | constructor_standings, driver_standings, last_result | points | 'Pts' |
 | constructor_standings, driver_standings | wins | 'Wins' |
-| driver_standings | team | 'Team' |
-| driver_standings, last_result | driver | 'Driver' |
+| driver_standings, results, qualifying_results | team | 'Team' |
+| driver_standings, last_result, results, qualifying_results | driver | 'Driver' |
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |
 | schedule | time | 'Time' |

@@ -2,13 +2,14 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Race, Result } from "../api/models";
-import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class Results extends BaseCard {    
     defaultTranslations = {
         'driver' : 'Driver',   
         'grid' : 'Grid',
+        'team' : 'Team',
         'points' : 'Points',
         'status' : 'Status',
         'raceheader' : 'Race',
@@ -31,7 +32,8 @@ export default class Results extends BaseCard {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
-                <td>${getDriverName(result.Driver, this.config)}</td>
+                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
+                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this.config, result.Constructor)}` : '')}
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
                 <td class="width-50 text-center">${result.status}</td>
@@ -133,6 +135,7 @@ export default class Results extends BaseCard {
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th>${this.translation('driver')}</th>
+                                    ${(this.config.standings?.show_team ? html`<th>${this.translation('team')}</th>` : '')}
                                     <th class="text-center">${this.translation('grid')}</th>
                                     <th class="text-center">${this.translation('points')}</th>
                                     <th>${this.translation('status')}</th>

@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
 import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
-import { Driver, Race, Root } from "./api/models";
+import { Constructor, Driver, Race, Root } from "./api/models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
@@ -36,7 +36,7 @@ export const getCountryFlagByNationality = (nationality: string) => {
 
 export const getCountryFlagByName = (countryName: string) => {
     const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'},
-    { countryCode: 'UK', corrected: 'United Kingdom'}];
+    { countryCode: 'UK', corrected: 'United Kingdom'}, { countryCode: 'United States', corrected: 'United States of America'}];
 
     const exception = exceptions.filter(exception => exception.countryCode == countryName);
     if(exception.length > 0)
@@ -194,4 +194,8 @@ export const getRefreshTime = (endpoint: string) => {
 
 export const reduceArray = <T>(array: T[], number: number) => {
     return number ? array.slice(0, number) : array;
+}
+
+export const renderConstructorColumn = (config: FormulaOneCardConfig, constructor: Constructor): HTMLTemplateResult => {
+    return html`<td>${(config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImageUrl(constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
 }
