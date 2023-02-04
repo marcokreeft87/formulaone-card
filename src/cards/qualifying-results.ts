@@ -58,8 +58,6 @@ export default class QualifyingResults extends BaseCard {
                     const { properties, cardValues } = this.getParentCardValues();
                     properties.selectedSeason = response.season;
                     properties.selectedRace = qualifyingResults.Races[0]; 
-
-                    console.log(1, properties.selectedRace)
                     
                     this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {    
                         properties.races = racesResponse;
