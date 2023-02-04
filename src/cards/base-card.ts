@@ -2,7 +2,8 @@ import { HomeAssistant } from "custom-card-helpers";
 import { HTMLTemplateResult } from "lit-html";
 import FormulaOneCard from "..";
 import ErgastClient from "../api/ergast-client";
-import { FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
+import { Race } from "../api/models";
+import { CardProperties, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
 export abstract class BaseCard {
     parent: FormulaOneCard;
@@ -30,5 +31,19 @@ export abstract class BaseCard {
 
     abstract cardSize() : number;
 
-    abstract defaultTranslations: Translation;
+    abstract defaultTranslations: Translation;    
+
+    protected getProperties() {
+        const cardProperties = this.parent.properties?.get('cardValues') as CardProperties;
+        const races = cardProperties?.races as Race[];
+        const selectedRace = cardProperties?.selectedRace as Race;
+        const selectedSeason = cardProperties?.selectedSeason as string;
+        return { races, selectedRace, selectedSeason };
+    }
+
+    protected getParentCardValues() {
+        const cardValues = this.parent.properties ?? new Map<string, unknown>();
+        const properties = cardValues.get('cardValues') as CardProperties ?? {} as CardProperties;
+        return { properties, cardValues };
+    }
 }
