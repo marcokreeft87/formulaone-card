@@ -2,13 +2,14 @@ import { html, HTMLTemplateResult } from "lit";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { QualifyingResult, Race } from "../api/models";
-import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
 
 export default class QualifyingResults extends BaseCard {
     defaultTranslations = {
         'driver' : 'Driver',   
+        'team' : 'Team',
         'q1' : 'Q1',
         'q2' : 'Q2',
         'q3' : 'Q3',
@@ -41,7 +42,8 @@ export default class QualifyingResults extends BaseCard {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
-                <td>${getDriverName(result.Driver, this.config)}</td>
+                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
+                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this.config, result.Constructor)}` : '')}
                 <td>${result.Q1}</td>
                 <td>${result.Q2}</td>
                 <td>${result.Q3}</td>
@@ -137,6 +139,7 @@ export default class QualifyingResults extends BaseCard {
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th>${this.translation('driver')}</th>
+                                    ${(this.config.standings?.show_team ? html`<th>${this.translation('team')}</th>` : '')}
                                     <th class="text-center">${this.translation('q1')}</th>
                                     <th class="text-center">${this.translation('q2')}</th>
                                     <th class="text-center">${this.translation('q3')}</th>

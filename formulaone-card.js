@@ -89,46 +89,48 @@
                             </tr>
                             ${(0,r.renderRaceInfo)(this.hass,this.config,e,this)}    
                         </tbody>
-                    </table>`:(0,r.getEndOfSeasonMessage)(this.translation("endofseason"))})),i.html`${(0,r.getApiLoadingMessage)()}`)}`}}e.default=s},433:(t,e,n)=>{Object.defineProperty(e,"__esModule",{value:!0});const i=n(392),a=n(345),r=n(593),o=n(243);class s extends o.BaseCard{constructor(t){super(t),this.defaultTranslations={driver:"Driver",q1:"Q1",q2:"Q2",q3:"Q3",raceheader:"Race",seasonheader:"Season",selectseason:"Select season",selectrace:"Select race",noresults:"Please select a race thats already been run."}}cardSize(){return 11}renderHeader(t){return null==t||parseInt(t.season)<2018?null:(0,r.renderHeader)(this,t)}renderResultRow(t){return i.html`
+                    </table>`:(0,r.getEndOfSeasonMessage)(this.translation("endofseason"))})),i.html`${(0,r.getApiLoadingMessage)()}`)}`}}e.default=s},433:(t,e,n)=>{Object.defineProperty(e,"__esModule",{value:!0});const i=n(392),a=n(345),r=n(593),o=n(243);class s extends o.BaseCard{constructor(t){super(t),this.defaultTranslations={driver:"Driver",team:"Team",q1:"Q1",q2:"Q2",q3:"Q3",raceheader:"Race",seasonheader:"Season",selectseason:"Select season",selectrace:"Select race",noresults:"Please select a race thats already been run."}}cardSize(){return 11}renderHeader(t){return null==t||parseInt(t.season)<2018?null:(0,r.renderHeader)(this,t)}renderResultRow(t){var e,n;return i.html`
             <tr>
                 <td class="width-50 text-center">${t.position}</td>
-                <td>${(0,r.getDriverName)(t.Driver,this.config)}</td>
+                <td>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_flag)?i.html`<img height="10" width="20" src="${(0,r.getCountryFlagByNationality)(t.Driver.nationality)}">&nbsp;`:""}${(0,r.getDriverName)(t.Driver,this.config)}</td>
+                ${(null===(n=this.config.standings)||void 0===n?void 0:n.show_team)?i.html`${(0,r.renderConstructorColumn)(this.config,t.Constructor)}`:""}
                 <td>${t.Q1}</td>
                 <td>${t.Q2}</td>
                 <td>${t.Q3}</td>
-            </tr>`}render(){const{races:t,selectedRace:e,selectedSeason:n}=this.getProperties();void 0===n&&this.client.GetLastResult().then((t=>{this.client.GetQualifyingResults(parseInt(t.season),parseInt(t.round)).then((e=>{const{properties:n,cardValues:i}=this.getParentCardValues();n.selectedSeason=t.season,n.selectedRace=e.Races[0],this.client.GetSeasonRaces(parseInt(t.season)).then((t=>{n.races=t,i.set("cardValues",n),this.parent.properties=i}))}))}));const o=t=>{const e=t.target.value,{properties:n,cardValues:i}=this.getParentCardValues();n.selectedSeason=e,this.client.GetSeasonRaces(e).then((t=>{n.selectedRace=void 0,n.races=t,n.results=void 0,i.set("cardValues",n),this.parent.properties=i}))};return i.html`   
+            </tr>`}render(){var t;const{races:e,selectedRace:n,selectedSeason:o}=this.getProperties();void 0===o&&this.client.GetLastResult().then((t=>{this.client.GetQualifyingResults(parseInt(t.season),parseInt(t.round)).then((e=>{const{properties:n,cardValues:i}=this.getParentCardValues();n.selectedSeason=t.season,n.selectedRace=e.Races[0],this.client.GetSeasonRaces(parseInt(t.season)).then((t=>{n.races=t,i.set("cardValues",n),this.parent.properties=i}))}))}));const s=t=>{const e=t.target.value,{properties:n,cardValues:i}=this.getParentCardValues();n.selectedSeason=e,this.client.GetSeasonRaces(e).then((t=>{n.selectedRace=void 0,n.races=t,n.results=void 0,i.set("cardValues",n),this.parent.properties=i}))};return i.html`   
             <table>
                 <tr>
                     <td> 
                         ${this.translation("seasonheader")}<br />                      
-                        ${(0,a.until)(this.client.GetSeasons().then((t=>{const e=null==t?void 0:t.reverse();return e?i.html`<select name="selectedSeason" @change="${o}">
+                        ${(0,a.until)(this.client.GetSeasons().then((t=>{const e=null==t?void 0:t.reverse();return e?i.html`<select name="selectedSeason" @change="${s}">
                                             <option value="0">${this.translation("selectseason")}</option>
-                                            ${e.map((t=>i.html`<option value="${t.season}" ?selected=${n===t.season}>${t.season}</option>`))}
+                                            ${e.map((t=>i.html`<option value="${t.season}" ?selected=${o===t.season}>${t.season}</option>`))}
                                         </select>`:i.html`${(0,r.getApiErrorMessage)("seasons")}`})),i.html`${(0,r.getApiLoadingMessage)()}`)}                 
                     </td>
                     <td>
                         ${this.translation("raceheader")}<br />
                         <select name="selectedRace" @change="${t=>{const e=t.target.value,{properties:n,cardValues:i}=this.getParentCardValues();n.selectedRound=e,this.client.GetQualifyingResults(n.selectedSeason,e).then((t=>{n.selectedRace=t.Races[0],i.set("cardValues",n),this.parent.properties=i}))}}">
-                            <option value="0" ?selected=${void 0===e}>${this.translation("selectrace")}</option>
-                            ${null==t?void 0:t.map((t=>i.html`<option value="${t.round}" ?selected=${(null==e?void 0:e.round)==t.round}>${t.raceName}</option>`))}
+                            <option value="0" ?selected=${void 0===n}>${this.translation("selectrace")}</option>
+                            ${null==e?void 0:e.map((t=>i.html`<option value="${t.round}" ?selected=${(null==n?void 0:n.round)==t.round}>${t.raceName}</option>`))}
                         </select>
                     </td>
                 </tr></table>
-                ${e?i.html`<table>
+                ${n?i.html`<table>
                             <thead>                              
                                 <tr>
-                                    <td colspan="5">${this.renderHeader(e)}</td>
+                                    <td colspan="5">${this.renderHeader(n)}</td>
                                 </tr>                  
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th>${this.translation("driver")}</th>
+                                    ${(null===(t=this.config.standings)||void 0===t?void 0:t.show_team)?i.html`<th>${this.translation("team")}</th>`:""}
                                     <th class="text-center">${this.translation("q1")}</th>
                                     <th class="text-center">${this.translation("q2")}</th>
                                     <th class="text-center">${this.translation("q3")}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${(0,r.reduceArray)(e.QualifyingResults,this.config.row_limit).map((t=>this.renderResultRow(t)))}
+                                ${(0,r.reduceArray)(n.QualifyingResults,this.config.row_limit).map((t=>this.renderResultRow(t)))}
                             </tbody>
                         </table>`:i.html`<table>
                             <tr>
