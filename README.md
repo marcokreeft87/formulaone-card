@@ -187,7 +187,7 @@ card_type: qualifying_results
 f1_font: true
 
 ```
-![image](https://user-images.githubusercontent.com/10223677/216780072-0c3a8e53-a323-46bb-a6ca-d85977dc560e.png)
+![image](https://user-images.githubusercontent.com/10223677/216780167-df1cd864-9c54-47fe-afed-cb0c6b4cd4bb.png)
 
 
 ## Translations
