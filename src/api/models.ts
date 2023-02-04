@@ -10,7 +10,7 @@ export interface Root {
     offset: string
     total: string
     RaceTable?: RaceTable
-    SeasonTable?: SeasonTable;
+    SeasonTable?: SeasonTable
     StandingsTable?: StandingsTable
   }
 
@@ -58,6 +58,7 @@ export interface Root {
     date: string
     time: string
     Results?: Result[]
+    QualifyingResults?: QualifyingResult[]
     FirstPractice: FirstPractice
     SecondPractice: SecondPractice
     ThirdPractice?: ThirdPractice
@@ -97,6 +98,16 @@ export interface Root {
     Qualifying: Qualifying
     Sprint?: Sprint
   }
+
+  export interface QualifyingResult {
+    number: string;
+    position: string;
+    Driver: Driver;
+    Constructor: Constructor;
+    Q1: string;
+    Q2: string;
+    Q3: string;
+ }
   
   export interface Driver {
     driverId: string

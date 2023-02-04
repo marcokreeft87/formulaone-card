@@ -5,6 +5,7 @@ import { MRData as resultData } from '../testdata/results.json'
 import { MRData as driverStandingsData } from '../testdata/driverStandings.json'
 import { MRData as constructorStandingsData } from '../testdata/constructorStandings.json'
 import { MRData as seasonData } from '../testdata/seasons.json'
+import { MRData as qualifyingData } from '../testdata/qualifying.json'
 import LocalStorageMock from '../testdata/localStorageMock';
 import { LocalStorageItem } from '../../src/types/formulaone-card-types';
 
@@ -77,6 +78,22 @@ describe('Testing ergast client file', () => {
         }));
 
         await expect(client.GetSeasonRaces(2022)).resolves.toBe(scheduleData.RaceTable.Races);
+    }),
+    test('Calling GetQualifyingResults should return correct data', async () => {           
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
+            resolve({ MRData : <Mrdata>qualifyingData });
+        }));
+
+        await expect(client.GetQualifyingResults(2022, 2)).resolves.toBe(qualifyingData.RaceTable);
+    }),
+    test('Calling GetQualifyingResults should not return correct data', async () => {           
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
+            resolve(undefined as unknown as Root);
+        }));
+
+        await expect(client.GetQualifyingResults(2022, 2)).resolves.toBe(undefined);
     }),
     test('Calling GetData with data in localstorage and cacheResult true should return correct data', async () => {           
         localStorageMock.setItem('2022.json', JSON.stringify({ data: JSON.stringify({ MRData: scheduleData }), created: new Date() }));    
