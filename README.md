@@ -180,9 +180,12 @@ f1_font: true
 ```
 ![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
 
+
+```
 type: custom:formulaone-card
 card_type: qualifying_results
 f1_font: true
+
 ```
 ![image](https://user-images.githubusercontent.com/10223677/216780072-0c3a8e53-a323-46bb-a6ca-d85977dc560e.png)
 
