@@ -50,7 +50,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
+| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown,qualifying_results)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
@@ -61,7 +61,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 | standings         | object        |                                     | Configuration for the driver standings card     |
 | translations      | dictionary    |  _[translations](#Translations)_          | Dictionary to override the default translation  |
-| actions           | object        |  _[Actions](#actions)_                                    | The tap, double tap or hold actions set on the image of the countdown, last-result, results and next-race cards |
+| actions           | object        |  _[Actions](#actions)_                                    | The tap, double tap or hold actions set on the image of the countdown, last_result, results, qualifying_results and next-race cards |
 
 
 ### Actions
@@ -180,6 +180,12 @@ f1_font: true
 ```
 ![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
 
+type: custom:formulaone-card
+card_type: qualifying_results
+f1_font: true
+```
+![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
+
 
 ## Translations
 
@@ -208,11 +214,11 @@ The following texts can be translated or altered.
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |
 | schedule | time | 'Time' |
-| results | raceheader | 'Race' | 
-| results | seasonheader | 'Season' | 
-| results | selectseason | 'Select season' | 
-| results | selectrace | 'Select race' | 
-| results | noresults | 'Please select a race thats already been run' | 
+| results,qualifying_results | raceheader | 'Race' | 
+| results.qualifying_results | seasonheader | 'Season' | 
+| results,qualifying_results | selectseason | 'Select season' | 
+| results,qualifying_results | selectrace | 'Select race' | 
+| results,qualifying_results | noresults | 'Please select a race thats already been run' | 
 | countdown | days | 'd' |
 | countdown | hours' : 'h' |
 | countdown | minutes' : 'm' |
@@ -244,7 +250,7 @@ translations:
 
 ## TODO
 - [x] Convert Ergast client to use fetch to reduce library size
-- [ ] Qualifying result card (https://ergast.com/mrd/methods/qualifying/)
+- [x] Qualifying result card (https://ergast.com/mrd/methods/qualifying/)
 - [ ] Sprint result card (https://ergast.com/mrd/methods/sprint/)
 - [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
 - [x] Use F1 font 
