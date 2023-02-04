@@ -167,6 +167,19 @@ title: Results
 ```
 ![image](https://user-images.githubusercontent.com/10223677/213260361-6af23d9e-e716-44d8-9cea-f7ce8cdb1142.png)
 
+This card can also show the flags and team names of the driver:
+
+```
+type: custom:formulaone-card
+card_type: results
+title: Results
+standings:
+  show_flag: true
+  show_team: true
+  show_teamlogo: true
+  
+```
+
 ```
 type: custom:formulaone-card
 card_type: countdown
@@ -212,7 +225,7 @@ The following texts can be translated or altered.
 | constructor_standings | constructor | 'Constructor' |
 | constructor_standings, driver_standings, last_result | points | 'Pts' |
 | constructor_standings, driver_standings | wins | 'Wins' |
-| driver_standings | team | 'Team' |
+| driver_standings, results | team | 'Team' |
 | driver_standings, last_result | driver | 'Driver' |
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |

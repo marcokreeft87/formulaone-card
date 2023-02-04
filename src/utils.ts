@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
 import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
 import * as countries from './data/countries.json';
-import { Driver, Race, Root } from "./api/models";
+import { Constructor, Driver, Race, Root } from "./api/models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
@@ -194,4 +194,8 @@ export const getRefreshTime = (endpoint: string) => {
 
 export const reduceArray = <T>(array: T[], number: number) => {
     return number ? array.slice(0, number) : array;
+}
+
+export const renderConstructorColumn = (config: FormulaOneCardConfig, constructor: Constructor): HTMLTemplateResult => {
+    return html`<td>${(config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImageUrl(constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
 }
