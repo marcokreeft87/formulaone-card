@@ -2,7 +2,6 @@ import { createMock } from "ts-auto-mock";
 import FormulaOneCard from "../../src";
 import ErgastClient from "../../src/api/ergast-client";
 import { Mrdata, Race, Root } from "../../src/api/models";
-import Results from "../../src/cards/results";
 import { CardProperties, FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
 import { MRData as resultData } from '../testdata/qualifying.json'
 import { MRData as seasonData } from '../testdata/seasons.json'
@@ -150,6 +149,7 @@ describe('Testing qualifyingresults file', () => {
         parent.properties.set('cardValues', { selectedSeason: '1979', selectedRace: undefined });
         const card = new QualifyingResults(parent);
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementationOnce((_endpoint) => {
                 
             return new Promise<Root>((resolve) => {
