@@ -152,6 +152,17 @@ date_locale: nl
 
 ![image](https://user-images.githubusercontent.com/10223677/194120864-be0db0e9-dd0b-42aa-8829-d094c23ef0a5.png)
 
+This card can also show the flags of the countries of the tracks:
+
+```
+type: custom:formulaone-card
+card_type: schedule
+standings:
+  show_flag: true
+
+```
+
+
 ```
 type: custom:formulaone-card
 card_type: last_result

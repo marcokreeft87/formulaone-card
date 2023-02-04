@@ -36,7 +36,7 @@ export const getCountryFlagByNationality = (nationality: string) => {
 
 export const getCountryFlagByName = (countryName: string) => {
     const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'},
-    { countryCode: 'UK', corrected: 'United Kingdom'}];
+    { countryCode: 'UK', corrected: 'United Kingdom'}, { countryCode: 'United States', corrected: 'United States of America'}];
 
     const exception = exceptions.filter(exception => exception.countryCode == countryName);
     if(exception.length > 0)
