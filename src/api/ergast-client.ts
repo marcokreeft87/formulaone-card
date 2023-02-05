@@ -33,6 +33,12 @@ export default class ErgastClient  {
       return data?.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
     }
 
+    async GetSprintResults(season: number, round: number) : Promise<RaceTable> {
+      const data = await this.GetData<Root>(`${season}/${round}/sprint.json`, false, 0);
+
+      return data?.MRData.RaceTable;
+    }
+
     async GetQualifyingResults(season: number, round: number) : Promise<RaceTable> {
       const data = await this.GetData<Root>(`${season}/${round}/qualifying.json`, false, 0);
 

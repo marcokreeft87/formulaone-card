@@ -47,7 +47,33 @@ export default class Results extends BaseCard {
             });
         }
 
+        if(selectedRace?.SprintResults) {
+            tabs.push({
+                title: 'Sprint',
+                icon: 'mdi:timer-outline',
+                content: this.renderQualifying(selectedRace)
+            });
+        }
+
         return tabs;
+    }
+
+    renderSprint(selectedRace: Race) : HTMLTemplateResult {
+        return html`<table class="nopadding">
+                    <thead>                    
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>${this.translation('driver')}</th>
+                            ${(this.config.standings?.show_team ? html`<th>${this.translation('team')}</th>` : '')}
+                            <th class="text-center">${this.translation('grid')}</th>
+                            <th class="text-center">${this.translation('points')}</th>
+                            <th class="text-center">${this.translation('status')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result))}
+                    </tbody>
+                </table>` ;
     }
 
     renderQualifying(selectedRace: Race): HTMLTemplateResult {
@@ -210,15 +236,21 @@ export default class Results extends BaseCard {
         const { properties, cardValues } = this.getParentCardValues();
 
         properties.selectedRound = round;
+        
         this.client.GetResults(properties.selectedSeason as number, round).then(response => {
 
             this.client.GetQualifyingResults(parseInt(response.season), parseInt(response.round)).then(qualifyingResults => {
                 const race = response.Races[0];
                 race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
 
-                properties.selectedRace = race;
-                cardValues.set('cardValues', properties);
-                this.parent.properties = cardValues;
+                this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {
+                    console.log('1', sprintResults);
+                    race.SprintResults = sprintResults?.Races[0]?.Results;
+
+                    properties.selectedRace = race;
+                    cardValues.set('cardValues', properties);
+                    this.parent.properties = cardValues;
+                });
             });
         });
     }
@@ -246,12 +278,17 @@ export default class Results extends BaseCard {
                 const race = response;
                 race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
 
-                properties.selectedRace = race;
-                this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {
-                    properties.races = racesResponse;
+                this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {
+                    console.log('2', sprintResults);
+                    race.SprintResults = sprintResults?.Races[0]?.Results;
 
-                    cardValues.set('cardValues', properties);
-                    this.parent.properties = cardValues;
+                    properties.selectedRace = race;
+                    this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {
+                        properties.races = racesResponse;
+    
+                        cardValues.set('cardValues', properties);
+                        this.parent.properties = cardValues;
+                    });
                 });
             });
         });

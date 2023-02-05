@@ -38,7 +38,7 @@ export abstract class BaseCard {
         const races = cardProperties?.races as Race[];
         const selectedRace = cardProperties?.selectedRace as Race;
         const selectedSeason = cardProperties?.selectedSeason as string;
-        const selectedTabIndex = cardProperties?.selectedTabIndex as number;
+        const selectedTabIndex = cardProperties?.selectedTabIndex as number ?? 0;
         return { races, selectedRace, selectedSeason, selectedTabIndex };
     }
 

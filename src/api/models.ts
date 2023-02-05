@@ -59,6 +59,7 @@ export interface Root {
     time: string
     Results?: Result[]
     QualifyingResults?: QualifyingResult[]
+    SprintResults?: Result[]
     FirstPractice: FirstPractice
     SecondPractice: SecondPractice
     ThirdPractice?: ThirdPractice
@@ -92,11 +93,11 @@ export interface Root {
     status: string
     Time?: Time
     FastestLap: FastestLap
-    FirstPractice: FirstPractice
-    SecondPractice: SecondPractice
-    ThirdPractice?: ThirdPractice
-    Qualifying: Qualifying
-    Sprint?: Sprint
+    // FirstPractice: FirstPractice
+    // SecondPractice: SecondPractice
+    // ThirdPractice?: ThirdPractice
+    // Qualifying: Qualifying
+    // Sprint?: Sprint
   }
 
   export interface QualifyingResult {
