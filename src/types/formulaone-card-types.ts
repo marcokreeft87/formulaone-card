@@ -49,9 +49,7 @@ export enum FormulaOneCardType {
     Schedule = 'schedule',
     LastResult = 'last_result',
     Results = 'results',    
-    Countdown = 'countdown',
-    QualifyingResults = 'qualifying_results',
-    POC = 'poc'
+    Countdown = 'countdown'
 }
 
 export interface LocalStorageItem {
@@ -76,6 +74,12 @@ export interface FormulaOneCardTab {
     title: string
     icon: string
     content: HTMLTemplateResult
+}
+
+export interface SelectChangeEvent {
+    target: {
+        value: string;
+    }
 }
 
 export interface mwcTabBarEvent extends Event {

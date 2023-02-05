@@ -66,4 +66,7 @@ export const styles = css`
     .formulaone-font {
         font-family: 'F1Bold';
     }
+    .mdc-tab:not(.mdc-tab--active) .mdc-tab__icon {
+        color: var(--secondary-text-color);
+    }
 `;
