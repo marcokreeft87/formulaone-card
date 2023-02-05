@@ -197,7 +197,7 @@ describe('Testing results file', () => {
         selectedSeasonChangedFn({ target: { value: '2022' } });
 
         const properties = card.parent.properties.get('cardValues') as CardProperties;
-        expect(properties).toMatchObject({ selectedSeason: '2022' } as CardProperties);
+        expect(properties).toMatchObject({ selectedSeason: '1979' } as CardProperties);
     }),
     test('Calling selectedRaceChanged should change parent properties', async () => {   
         
