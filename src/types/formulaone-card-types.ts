@@ -1,4 +1,5 @@
 import { ActionConfig, ActionHandlerOptions, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
+import { HTMLTemplateResult } from 'lit';
 
 export interface FormulaOneCardConfig extends LovelaceCardConfig {    
     show_icon?: boolean;
@@ -49,7 +50,8 @@ export enum FormulaOneCardType {
     LastResult = 'last_result',
     Results = 'results',    
     Countdown = 'countdown',
-    QualifyingResults = 'qualifying_results'
+    QualifyingResults = 'qualifying_results',
+    POC = 'poc'
 }
 
 export interface LocalStorageItem {
@@ -69,3 +71,15 @@ export interface ActionHandler extends HTMLElement {
 export interface ActionHandlerElement extends HTMLElement {
     actionHandler?: boolean;
 }
+
+export interface FormulaOneCardTab {
+    title: string
+    icon: string
+    content: HTMLTemplateResult
+}
+
+export interface mwcTabBarEvent extends Event {
+    detail: {
+      index: number;
+    };
+  }

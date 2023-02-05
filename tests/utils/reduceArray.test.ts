@@ -24,4 +24,22 @@ describe('reduceArray', () => {
 
         expect(result.length).toBe(0);
     });
+
+    it('should return an empty array if the array is undefined', () => {        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any  
+        const limit = 20;
+        const result = reduceArray(undefined, limit);
+
+        expect(result.length).toBe(0);
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    it('should return an empty array if the limit is undefined', () => {
+        const array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result = reduceArray(array, undefined);
+
+        expect(result.length).toBe(12);
+    });
 });
