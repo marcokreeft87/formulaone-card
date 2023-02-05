@@ -204,28 +204,13 @@ f1_font: true
 ```
 ![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
 
-
-```
-type: custom:formulaone-card
-card_type: qualifying_results
-title: Qualifying
-f1_font: true
-
-```
-![image](https://user-images.githubusercontent.com/10223677/216780167-df1cd864-9c54-47fe-afed-cb0c6b4cd4bb.png)
-
-This card can also show the flags and team names of the driver, alongside the logo of the teams:
-
-```
-type: custom:formulaone-card
-card_type: qualifying_results
-standings:
-  show_flag: true
-  show_team: true
-  show_teamlogo: true
-
-```
-  
+## Icons
+The following icons can be altered.
+| Card type(s)                        | Key           | Default value                       |
+| ----------------------------------- | ------------- | ----------------------------------- |
+| results                             | results       | mdi:trophy                          |        
+| results                             | qualifying    | mdi:timer-outline                   |
+| results                             | sprint        | mdi:flag-checkered                  |
 
 ## Translations
 
@@ -249,16 +234,17 @@ The following texts can be translated or altered.
 | constructor_standings | constructor | 'Constructor' |
 | constructor_standings, driver_standings, last_result | points | 'Pts' |
 | constructor_standings, driver_standings | wins | 'Wins' |
-| driver_standings, results, qualifying_results | team | 'Team' |
-| driver_standings, last_result, results, qualifying_results | driver | 'Driver' |
+| driver_standings, results | team | 'Team' |
+| driver_standings, last_result, results | driver | 'Driver' |
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |
 | schedule | time | 'Time' |
-| results,qualifying_results | raceheader | 'Race' | 
-| results.qualifying_results | seasonheader | 'Season' | 
-| results,qualifying_results | selectseason | 'Select season' | 
-| results,qualifying_results | selectrace | 'Select race' | 
-| results,qualifying_results | noresults | 'Please select a race thats already been run' | 
+| results | raceheader | 'Race' | 
+| results | seasonheader | 'Season' | 
+| results | selectseason | 'Select season' | 
+| results | selectrace | 'Select race' | 
+| results | noresults | 'Please select a race thats already been run' | 
+| results | nosprint | 'No sprint race results available.' |
 | countdown | days | 'd' |
 | countdown | hours' : 'h' |
 | countdown | minutes' : 'm' |
@@ -291,7 +277,7 @@ translations:
 ## TODO
 - [x] Convert Ergast client to use fetch to reduce library size
 - [x] Qualifying result card (https://ergast.com/mrd/methods/qualifying/)
-- [ ] Sprint result card (https://ergast.com/mrd/methods/sprint/)
+- [x] Sprint result card (https://ergast.com/mrd/methods/sprint/)
 - [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
 - [x] Use F1 font 
 - [ ] Editor

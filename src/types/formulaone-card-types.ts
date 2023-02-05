@@ -18,6 +18,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     actions?: ActionOptions;
     f1_font?: boolean;
     row_limit?: number;
+    icons?: CustomIcons;
 }
 
 export interface ActionOptions {
@@ -27,6 +28,10 @@ export interface ActionOptions {
 }
 
 export interface Translation {
+    [key: string]: string;
+}
+
+export interface CustomIcons {
     [key: string]: string;
 }
 

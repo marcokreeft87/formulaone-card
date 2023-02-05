@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { QualifyingResult, Race, Result } from "../api/models";
-import { FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
+import { CustomIcons, FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -18,11 +18,18 @@ export default class Results extends BaseCard {
         'seasonheader' : 'Season',
         'selectseason' : 'Select season',
         'selectrace' : 'Select race',
-        'noresults' : 'Please select a race thats already been run.',        
+        'noresults' : 'Please select a race thats already been run.',    
+        'nosprint' : 'No sprint race results available.',    
         'q1' : 'Q1',
         'q2' : 'Q2',
         'q3' : 'Q3',
     };
+
+    icons: CustomIcons = {
+        'sprint' : 'mdi:flag-checkered',
+        'qualifying' : 'mdi:timer-outline',
+        'results' : 'mdi:trophy',
+    }
 
     constructor(parent: FormulaOneCard) {
         super(parent);    
@@ -35,31 +42,24 @@ export default class Results extends BaseCard {
     renderTabs(selectedRace: Race) : FormulaOneCardTab[] {
         const tabs: FormulaOneCardTab[] = [{
             title: 'Results',
-            icon: 'mdi:trophy',
+            icon: this.icon('results'),
             content: this.renderResults(selectedRace)
+        }, {
+            title: 'Qualifying',
+            icon: this.icon('qualifying'),
+            content: this.renderQualifying(selectedRace)
+        }, {
+            title: 'Sprint',
+            icon: this.icon('sprint'),
+            content: this.renderSprint(selectedRace)
         }];
-
-        if(selectedRace?.QualifyingResults) {
-            tabs.push({
-                title: 'Qualifying',
-                icon: 'mdi:timer-outline',
-                content: this.renderQualifying(selectedRace)
-            });
-        }
-
-        if(selectedRace?.SprintResults) {
-            tabs.push({
-                title: 'Sprint',
-                icon: 'mdi:timer-outline',
-                content: this.renderQualifying(selectedRace)
-            });
-        }
 
         return tabs;
     }
 
     renderSprint(selectedRace: Race) : HTMLTemplateResult {
-        return html`<table class="nopadding">
+        return selectedRace?.SprintResults ? 
+            html`<table class="nopadding">
                     <thead>                    
                         <tr>
                             <th>&nbsp;</th>
@@ -73,11 +73,17 @@ export default class Results extends BaseCard {
                     <tbody>
                         ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result))}
                     </tbody>
-                </table>` ;
+                </table>`
+            : html`<table class="nopadding">
+                <tr>
+                    <td class="text-center">${this.translation('nosprint')}</td>
+                </tr>
+            </table>`;
     }
 
     renderQualifying(selectedRace: Race): HTMLTemplateResult {
-        return html`<table class="nopadding">
+        return selectedRace?.QualifyingResults ?
+            html`<table class="nopadding">
                     <thead>                   
                         <tr>
                             <th>&nbsp;</th>
@@ -91,7 +97,12 @@ export default class Results extends BaseCard {
                     <tbody>
                         ${reduceArray(selectedRace.QualifyingResults, this.config.row_limit).map(result => this.renderQualifyingResultRow(result))}
                     </tbody>
-                </table>` ;
+                </table>`            
+            : html`<table class="nopadding">
+                    <tr>
+                        <td>${this.translation('noresults')}</td>
+                    </tr>
+                </table>`;
     }
 
     renderResults(selectedRace: Race): HTMLTemplateResult {
@@ -210,7 +221,6 @@ export default class Results extends BaseCard {
                             ${tabs.map(
                                 (tab) =>  html`
                                         <mwc-tab
-                                        label="${tab.title}"
                                         ?hasImageIcon=${tab.icon}
                                         ><ha-icon
                                                 slot="icon"
@@ -243,9 +253,9 @@ export default class Results extends BaseCard {
                 const race = response.Races[0];
                 race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
 
-                this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {
-                    console.log('1', sprintResults);
-                    race.SprintResults = sprintResults?.Races[0]?.Results;
+                this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {                    
+                    /* istanbul ignore next */  
+                    race.SprintResults = sprintResults?.Races[0]?.SprintResults;
 
                     properties.selectedRace = race;
                     cardValues.set('cardValues', properties);
@@ -256,11 +266,12 @@ export default class Results extends BaseCard {
     }
 
     private setRaces(ev: SelectChangeEvent) {
-        const selectedSeason: number = parseInt(ev.target.value);
+        const selectedSeason = ev.target.value;
         const { properties, cardValues } = this.getParentCardValues();
 
-        properties.selectedSeason = selectedSeason;
-        this.client.GetSeasonRaces(selectedSeason).then(response => {
+        this.client.GetSeasonRaces(parseInt(selectedSeason)).then(response => {            
+
+            properties.selectedSeason = selectedSeason;
             properties.selectedRace = undefined;
             properties.races = response;
             cardValues.set('cardValues', properties);
@@ -279,8 +290,7 @@ export default class Results extends BaseCard {
                 race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
 
                 this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {
-                    console.log('2', sprintResults);
-                    race.SprintResults = sprintResults?.Races[0]?.Results;
+                    race.SprintResults = sprintResults?.Races[0]?.SprintResults;
 
                     properties.selectedRace = race;
                     this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {
@@ -299,5 +309,14 @@ export default class Results extends BaseCard {
         properties.selectedTabIndex = index;
         cardValues.set('cardValues', properties);
         this.parent.properties = cardValues;
+    }       
+
+    icon(key: string) : string {
+
+        if(!this.config.icons || Object.keys(this.config.icons).indexOf(key) < 0) {
+            return this.icons[key];
+        }
+
+        return this.config.icons[key];
     }
 }
