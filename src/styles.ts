@@ -7,6 +7,12 @@ export const styles = css`
         border-collapse: separate;
         padding: 0px 16px 16px;
     }
+    table.nopadding {
+        padding: 0px;
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: separate;
+    }
     th {
         background-color: var(--table-row-alternative-background-color, #eee);
     }
@@ -59,5 +65,8 @@ export const styles = css`
     }
     .formulaone-font {
         font-family: 'F1Bold';
+    }
+    ha-icon {
+        color: var(--secondary-text-color);
     }
 `;

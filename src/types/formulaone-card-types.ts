@@ -1,4 +1,5 @@
 import { ActionConfig, ActionHandlerOptions, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
+import { HTMLTemplateResult } from 'lit';
 
 export interface FormulaOneCardConfig extends LovelaceCardConfig {    
     show_icon?: boolean;
@@ -17,6 +18,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     actions?: ActionOptions;
     f1_font?: boolean;
     row_limit?: number;
+    icons?: CustomIcons;
 }
 
 export interface ActionOptions {
@@ -26,6 +28,10 @@ export interface ActionOptions {
 }
 
 export interface Translation {
+    [key: string]: string;
+}
+
+export interface CustomIcons {
     [key: string]: string;
 }
 
@@ -48,8 +54,7 @@ export enum FormulaOneCardType {
     Schedule = 'schedule',
     LastResult = 'last_result',
     Results = 'results',    
-    Countdown = 'countdown',
-    QualifyingResults = 'qualifying_results'
+    Countdown = 'countdown'
 }
 
 export interface LocalStorageItem {
@@ -69,3 +74,21 @@ export interface ActionHandler extends HTMLElement {
 export interface ActionHandlerElement extends HTMLElement {
     actionHandler?: boolean;
 }
+
+export interface FormulaOneCardTab {
+    title: string
+    icon: string
+    content: HTMLTemplateResult
+}
+
+export interface SelectChangeEvent {
+    target: {
+        value: string;
+    }
+}
+
+export interface mwcTabBarEvent extends Event {
+    detail: {
+      index: number;
+    };
+  }

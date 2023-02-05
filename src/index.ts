@@ -14,7 +14,6 @@ import LastResult from './cards/last-result';
 import { BaseCard } from './cards/base-card';
 import Countdown from './cards/countdown';
 import Results from './cards/results';
-import QualifyingResults from './cards/qualifying-results';
 
 console.info(
     `%c FORMULAONE-CARD %c ${packageJson.version}`,
@@ -84,9 +83,6 @@ export default class FormulaOneCard extends LitElement {
                 break;
             case FormulaOneCardType.Results:
                 this.card = new Results(this);
-                break;
-            case FormulaOneCardType.QualifyingResults:
-                this.card = new QualifyingResults(this);
                 break;
         }
     }

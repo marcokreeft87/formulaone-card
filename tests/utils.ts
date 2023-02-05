@@ -100,6 +100,19 @@ export const getRenderStringAsync = async (data: HTMLTemplateResult) : Promise<s
 
 export const getRenderStringAsyncIndex = async (data: HTMLTemplateResult) : Promise<string> => {
     
+    // loop through the strings and values and build the html string iteratively
+    // if the value is a string, add it to the html string
+    // if the value is an object, check if it is a template result or an array of template results
+    // if it is a template result, call this function recursively
+    // if it is an array of template results, loop through the array and call this function recursively for each item
+    // if the value is a promise, await the promise and call this function recursively
+    // if the value is a function, add the function name to the html string
+    // if the value is undefined, add an empty string to the html string
+    // if the value is null, add an empty string to the html string
+    // if the value is a number, add the number to the html string
+    // if the value is a boolean, add the boolean to the html string
+    //
+
     let returnHtml = '';
     if(!data) {
         return returnHtml;
