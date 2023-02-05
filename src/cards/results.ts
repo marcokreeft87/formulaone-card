@@ -179,7 +179,6 @@ export default class Results extends BaseCard {
 
         const tabs = this.renderTabs(selectedRace);
 
-        //https://github.com/kinghat/tabbed-card/blob/main/src/tabbed-card.ts
         return html`
         <table>
             <tr>
