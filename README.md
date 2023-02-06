@@ -26,7 +26,7 @@ Make shure you have [HACS](https://hacs.xyz/) (Home Assistant Community Store) i
 - Install repository in HACS
 - _If u are using YAML mode then add this to your_ [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/)
   ```yaml
-  url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
+  url: /hacsfiles/formulaone-card/formulaone-card.js
   type: module
   ```
 - Refresh your browser
