@@ -176,7 +176,7 @@ type: custom:formulaone-card
 card_type: results
 title: Results
 ```
-![image](https://user-images.githubusercontent.com/10223677/213260361-6af23d9e-e716-44d8-9cea-f7ce8cdb1142.png)
+![image](https://user-images.githubusercontent.com/10223677/216916869-4d2dc991-3429-45f8-b286-0b08d538031f.png)
 
 This card can also show the flags and team names of the driver, alongside the logo of the teams:
 
