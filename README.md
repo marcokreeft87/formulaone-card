@@ -275,9 +275,7 @@ translations:
 ```
 
 ## TODO
-- [x] Convert Ergast client to use fetch to reduce library size
-- [x] Qualifying result card (https://ergast.com/mrd/methods/qualifying/)
-- [x] Sprint result card (https://ergast.com/mrd/methods/sprint/)
-- [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
-- [x] Use F1 font 
 - [ ] Editor
+- [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
+- [ ] Use mwc for dropdowns
+- [ ] Better way for unit testing
