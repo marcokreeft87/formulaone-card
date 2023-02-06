@@ -1,8 +1,8 @@
-import { LocalStorageItem } from '../types/formulaone-card-types';
 import { getRefreshTime } from '../utils';
+import { ClientBase } from './client-base';
 import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './models';
 
-export default class ErgastClient  {
+export default class ErgastClient extends ClientBase {
 
     baseUrl = 'https://ergast.com/api/f1';
 
@@ -60,38 +60,5 @@ export default class ErgastClient  {
     async GetSeasonRaces(season: number) : Promise<Race[]> {
       const data = await this.GetData<Root>(`${season}.json`, true, 72);
       return data.MRData.RaceTable.Races;
-    }
-
-    async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
-      const localStorageData = localStorage.getItem(endpoint);
-      if(localStorageData && cacheResult) {
-        const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
-
-        const checkDate = new Date();
-        checkDate.setHours(checkDate.getHours() - hoursBeforeInvalid);
-
-        if(new Date(item.created) > checkDate) {
-          return <T>JSON.parse(item.data);
-        }
-      }
-
-      const response = await fetch(`${this.baseUrl}/${endpoint}`, {
-        headers: {
-          Accept: 'application/json',
-        }
-      });
-
-      const data = await response.json();
-        
-      const item : LocalStorageItem = {
-        data: JSON.stringify(data),
-        created: new Date()
-      }
-
-      if(cacheResult) {          
-        localStorage.setItem(endpoint, JSON.stringify(item));
-      }
-
-      return data;
     }
 }
