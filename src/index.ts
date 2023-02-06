@@ -14,6 +14,7 @@ import LastResult from './cards/last-result';
 import { BaseCard } from './cards/base-card';
 import Countdown from './cards/countdown';
 import Results from './cards/results';
+import RestCountryClient from './api/restcountry-client';
 
 console.info(
     `%c FORMULAONE-CARD %c ${packageJson.version}`,
@@ -42,6 +43,13 @@ export default class FormulaOneCard extends LitElement {
     }
     get properties() {
         return this._cardValues;
+    }
+
+    constructor() {
+        super();
+        
+        const countryClient = new RestCountryClient();
+        countryClient.GetAll();
     }
 
     private _cardValues?: Map<string, unknown>;

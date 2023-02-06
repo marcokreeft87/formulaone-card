@@ -10,6 +10,9 @@ import { MRData } from '../testdata/results.json'
 import { getRenderString } from "../utils";
 import * as customCardHelper from "custom-card-helpers";
 import { FormulaOneCardType } from "../../src/types/formulaone-card-types";
+import RestCountryClient from "../../src/api/restcountry-client";
+import { Country } from "../../src/types/rest-country-types";
+import * as countries from '../testdata/countries.json'
 
 describe('Testing util file function renderHeader', () => {
 
@@ -17,6 +20,12 @@ describe('Testing util file function renderHeader', () => {
     card.hass = createMock<HomeAssistant>();
     card.parent = createMock<FormulaOneCard>();
     const lastRace = <Race>MRData.RaceTable.Races[0];
+    
+    beforeAll(() => {
+        jest.spyOn(RestCountryClient.prototype, 'GetCountriesFromLocalStorage').mockImplementation(() => {
+            return countries as Country[];
+        });
+    });
     
     test('Calling renderHeader with image not clickable', async () => { 
         card.config.image_clickable = undefined;

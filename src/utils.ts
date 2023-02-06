@@ -1,6 +1,5 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
 import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
-import * as countries from './data/countries.json';
 import { Constructor, Driver, Race, Root } from "./api/models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
@@ -9,6 +8,7 @@ import { ActionHandlerEvent, handleAction, hasAction, HomeAssistant } from "cust
 import { formatDateNumeric } from "./lib/format_date";
 import { ImageConstants } from "./lib/constants";
 import { actionHandler } from './directives/action-handler-directive';
+import RestCountryClient from "./api/restcountry-client";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -28,25 +28,30 @@ export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps:
     return false;
 };
 
-export const getCountryFlagByNationality = (nationality: string) => {
-    const country = countries.filter(x => x.Nationality === nationality)[0];
+export const getCountries = () => {
+    const countryClient = new RestCountryClient();
+    return countryClient.GetCountriesFromLocalStorage();
+}
 
-    return getCountryFlagUrl(country.Code);
+export const getCountryFlagByNationality = (nationality: string) => {
+    const countries = getCountries();
+    
+    const country = countries.filter(x => x.demonym == nationality);
+    if(country.length > 1)
+    {
+        return country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png;
+    }
+
+    return country[0].flags.png;
 }
 
 export const getCountryFlagByName = (countryName: string) => {
-    const exceptions = [{ countryCode: 'USA', corrected: 'United States of America'}, { countryCode: 'UAE', corrected: 'United Arab Emirates'},
-    { countryCode: 'UK', corrected: 'United Kingdom'}, { countryCode: 'United States', corrected: 'United States of America'}];
+    const countries = getCountries();
+    
+    const country = countries.filter(x => x.name == countryName || x.nativeName == countryName ||
+        x.altSpellings?.includes(countryName))[0];
 
-    const exception = exceptions.filter(exception => exception.countryCode == countryName);
-    if(exception.length > 0)
-    {
-        countryName = exception[0].corrected;
-    }
-
-    const country = countries.filter(x => x.Country === countryName)[0];
-
-    return getCountryFlagUrl(country.Code);
+    return country.flags.png;
 }
 
 export const checkConfig = (config: FormulaOneCardConfig) => {
@@ -54,18 +59,6 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
         throw new Error('Please define FormulaOne card type (card_type).');
     }
 };
-
-export const getCountryFlagUrl = (countryCode: string) => {
-    const exceptions = [{ countryCode: 'USA', corrected: 'US'}, { countryCode: 'UAE', corrected: 'AE'}];
-
-    const exception = exceptions.filter(exception => exception.countryCode == countryCode);
-    if(exception.length > 0)
-    {
-        countryCode = exception[0].corrected; 
-    }
-
-    return `${ImageConstants.FlagCDN}${countryCode.toLowerCase()}.png`;
-}
 
 export const getTeamImageUrl = (teamName: string) => {
     teamName = teamName.toLocaleLowerCase().replace('_', '-');

@@ -1,5 +1,5 @@
 export const ImageConstants = {
-    FlagCDN : 'https://flagcdn.com/w40/',
+    FlagCDN : 'https://flagcdn.com/w320/',
     TeamLogoCDN : 'https://www.formula1.com/content/dam/fom-website/teams/',
     F1CDN : 'https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/',
 };
