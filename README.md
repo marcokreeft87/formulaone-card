@@ -279,3 +279,4 @@ translations:
 - [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
 - [ ] Use mwc for dropdowns
 - [ ] Better way for unit testing
+- [ ] Weather forecast next race (https://github.com/marcokreeft87/formulaone-card/discussions/145)
