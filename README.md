@@ -52,7 +52,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
 | card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown,qualifying_results)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
-| date_locale       | string        |                                     | Override the locale used for the date and time formatting   |
+| date_locale       | string        |                                     | Override the locale used for the date and time formatting. [Available options listed here](https://www.w3.org/International/O-charset-lang.html)|
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
 | show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown card |
