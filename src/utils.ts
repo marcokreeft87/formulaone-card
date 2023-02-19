@@ -108,7 +108,7 @@ export const clickHandler = (node: LitElement, config: FormulaOneCardConfig, has
 }
 
 export const renderHeader = (card: BaseCard, race: Race, preventClick = false): HTMLTemplateResult => {
-        
+    
     const countryDashed = race.Circuit.Location.country.replace(" ","-")
     const circuitName = getCircuitName(countryDashed);
 
@@ -137,7 +137,7 @@ export const renderHeader = (card: BaseCard, race: Race, preventClick = false): 
       })} class="${(hasConfigAction ? ' clickable' : null)}" />`;
     const raceName = html`<h2 class="${(card.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
     
-    return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${imageHtml}<br>`;
+    return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${(card.config.hide_tracklayout ? html`` : imageHtml)}<br>`;
 }
 
 export const renderRaceInfo = (hass: HomeAssistant, config: FormulaOneCardConfig, race: Race, card: BaseCard) => {
