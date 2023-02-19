@@ -123,5 +123,13 @@ describe('Testing util file function renderHeader', () => {
         expect(customCardHelper.handleAction).toBeCalledTimes(0);
 
         spy.mockClear();
+    }),
+    test('Calling renderHeader with config hide_tracklayout true', () => {
+        card.config.hide_tracklayout = true;
+        card.config.card_type = FormulaOneCardType.Results;
+        const result = renderHeader(card, lastRace);
+        const htmlResult = getRenderString(result);
+
+        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2>`);
     })
 });

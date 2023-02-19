@@ -56,6 +56,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
 | show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown card |
+| hide_tracklayout  | boolean       | `false`                             | Hide the track layout image in the card |
 | f1_font           | boolean       | `false`                             | Use the official F1 font for headers |
 | location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |

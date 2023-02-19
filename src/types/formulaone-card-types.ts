@@ -1,7 +1,7 @@
 import { ActionConfig, ActionHandlerOptions, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
 import { HTMLTemplateResult } from 'lit';
 
-export interface FormulaOneCardConfig extends LovelaceCardConfig {    
+export interface FormulaOneCardConfig extends LovelaceCardConfig {
     show_icon?: boolean;
     title?: string;
     name?: string;
@@ -15,6 +15,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     standings?: StandingDisplayOptions;
     translations?: Translation;
     show_raceinfo?: boolean;
+    hide_tracklayout?: boolean;
     actions?: ActionOptions;
     f1_font?: boolean;
     row_limit?: number;
@@ -53,7 +54,7 @@ export enum FormulaOneCardType {
     NextRace = 'next_race',
     Schedule = 'schedule',
     LastResult = 'last_result',
-    Results = 'results',    
+    Results = 'results',
     Countdown = 'countdown'
 }
 
@@ -89,6 +90,6 @@ export interface SelectChangeEvent {
 
 export interface mwcTabBarEvent extends Event {
     detail: {
-      index: number;
+        index: number;
     };
-  }
+}
