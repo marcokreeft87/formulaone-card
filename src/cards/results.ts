@@ -209,9 +209,12 @@ export default class Results extends BaseCard {
                     </select>
                 </td>
             </tr>
-            ${selectedRace 
-                ? html`<tr><td colspan="2">${this.renderHeader(selectedRace)}</td></tr>
-                        <tr>
+        </table>
+        
+        ${selectedRace 
+            ? html`<table>
+                        <tr><td colspan="2">${this.renderHeader(selectedRace)}</td></tr>
+                        <tr class="transparent">
                             <td colspan="2">
                                 <mwc-tab-bar
                                 @MDCTabBar:activated=${(ev: mwcTabBarEvent) => 
@@ -235,9 +238,10 @@ export default class Results extends BaseCard {
                                 </article>
                             </section>
                             </td>
-                        </tr>` 
+                        </tr>                    
+                    </table>` 
                 : html``}
-        </table>`;
+        `;
     }
 
     private setSelectedRace(ev: SelectChangeEvent) {

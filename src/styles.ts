@@ -69,4 +69,7 @@ export const styles = css`
     ha-icon {
         color: var(--secondary-text-color);
     }
+    .transparent {
+        background-color: transparent !important;
+    }        
 `;
