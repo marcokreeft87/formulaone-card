@@ -16,6 +16,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     translations?: Translation;
     show_raceinfo?: boolean;
     hide_tracklayout?: boolean;
+    hide_racedatetimes?: boolean;
     actions?: ActionOptions;
     f1_font?: boolean;
     row_limit?: number;

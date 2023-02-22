@@ -52,7 +52,7 @@ export default class NextRace extends BaseCard {
                             <tr>
                                 <td colspan="5">${renderHeader(this, nextRace)}</td>
                             </tr>
-                            ${renderRaceInfo( this.hass, this.config, nextRace, this)}    
+                            ${renderRaceInfo(this, nextRace)}    
                         </tbody>
                     </table>`
                 }),

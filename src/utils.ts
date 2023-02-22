@@ -140,7 +140,14 @@ export const renderHeader = (card: BaseCard, race: Race, preventClick = false): 
     return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${(card.config.hide_tracklayout ? html`` : imageHtml)}<br>`;
 }
 
-export const renderRaceInfo = (hass: HomeAssistant, config: FormulaOneCardConfig, race: Race, card: BaseCard) => {
+export const renderRaceInfo = (card: BaseCard, race: Race) => {
+    const config = card.config;
+    const hass = card.hass;
+
+    if(config.hide_racedatetimes) {
+        return html``;
+    }
+
     const raceDate = new Date(race.date + 'T' + race.time);
     const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
     const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);

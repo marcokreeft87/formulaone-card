@@ -42,7 +42,7 @@ export default class Countdown extends BaseCard {
     renderHeader(race: Race): HTMLTemplateResult {        
         return this.config.show_raceinfo ? 
             html`<table><tr><td colspan="5">${renderHeader(this, race, true)}</td></tr>
-            ${renderRaceInfo(this.hass, this.config, race, this)}</table>`
+            ${renderRaceInfo(this, race)}</table>`
             : null;
     }
 
