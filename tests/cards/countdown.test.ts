@@ -1,6 +1,6 @@
 import { createMock } from "ts-auto-mock";
 import Countdown from "../../src/cards/countdown";
-import { FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
+import { CountdownType, FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
 import { getRenderStringAsync } from "../utils";
 import { MRData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
@@ -236,6 +236,26 @@ describe('Testing countdown file', () => {
 
         spy.mockClear();
     });
+    
+    // test.each`
+    // countdown_type | expected
+    // ${CountdownType.Practice1}, ${new Date("2022-03-25T14:00:00.000Z")}
+    // ${CountdownType.Practice2}, ${new Date("2022-03-25T17:00:00.000Z")}
+    // ${CountdownType.Practice3}, ${new Date("2022-03-26T14:00:00.000Z")}
+    // ${CountdownType.Qualifying}, ${new Date("2022-03-26T17:00:00.000Z")}    
+    // ${CountdownType.Race}, ${new Date("2022-03-27T17:00:00.000Z")}
+    // `('Calling render with countdown_type qualifying', async ({ countdown_type, expected }) => {
+    //     config.countdown_type = countdown_type; 
+    //     card.config = config;     
+        
+    //     jest.useFakeTimers();
+    //     jest.setSystemTime(new Date(2022, 2, 21)); // Weird bug in jest setting this to the last of the month
+
+    //     const result = card.getNextEvent(MRData.RaceTable.Races);
+    //     jest.useRealTimers();
+        
+    //     expect(result.raceDateTime).toBe(expected);
+    // });
 });
 
 async function getHtmlResultAndDate(card: Countdown) {

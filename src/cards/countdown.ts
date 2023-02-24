@@ -7,6 +7,7 @@ import { Race } from "../api/models";
 import { ActionHandlerEvent, hasAction, HomeAssistant } from "custom-card-helpers";
 import FormulaOneCard from "..";
 import { actionHandler } from "../directives/action-handler-directive";
+import { CountdownType } from "../types/formulaone-card-types";
 
 export default class Countdown extends BaseCard {
     hass: HomeAssistant;
@@ -81,17 +82,12 @@ export default class Countdown extends BaseCard {
                     return html`${getApiErrorMessage('next race')}`
                 }
 
-                const nextRace = response.filter(race =>  {
-                    const raceDateTime = new Date(race.date + 'T' + race.time);
-                    raceDateTime.setHours(raceDateTime.getHours() + 3);
-                    return raceDateTime >= new Date();
-                })[0];
+                const { nextRace, raceDateTime } = this.getNextEvent(response);
 
                 if(!nextRace) {
                     return getEndOfSeasonMessage(this.translation('endofseason'));
                 }
 
-                const raceDateTime = new Date(nextRace.date + 'T' + nextRace.time);
                 const timer = this.countDownTillDate(raceDateTime);                
                 const hasConfigAction = this.config.actions !== undefined;
                 
@@ -116,5 +112,41 @@ export default class Countdown extends BaseCard {
             }),
             html`${getApiLoadingMessage()}`
         )}`;
+    }
+
+    getNextEvent(response: Race[]) {
+
+        const nextRace = response.filter(race => {
+            const raceDateTime = new Date(race.date + 'T' + race.time);
+            raceDateTime.setHours(raceDateTime.getHours() + 3);
+            return raceDateTime >= new Date();
+        })[0];
+
+        let raceDateTime = null;
+        if(nextRace) {
+            switch(this.config.countdown_type as CountdownType) {
+                case CountdownType.Practice1:
+                    raceDateTime = new Date(nextRace.FirstPractice.date + 'T' + nextRace.FirstPractice.time);
+                    break;
+                case CountdownType.Practice2:
+                    raceDateTime = new Date(nextRace.SecondPractice.date + 'T' + nextRace.SecondPractice.time);
+                    break;
+                case CountdownType.Practice3:
+                    raceDateTime = new Date(nextRace.ThirdPractice.date + 'T' + nextRace.ThirdPractice.time);
+                    break;
+                case CountdownType.Qualifying:                
+                    raceDateTime = new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time);
+                    console.log(4, raceDateTime)
+                    break;
+                case CountdownType.Sprint:
+                    raceDateTime = new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time);
+                    break;            
+                default:
+                    raceDateTime = new Date(nextRace.date + 'T' + nextRace.time);
+                    break;
+            }
+        }
+
+        return { nextRace, raceDateTime };
     }
 }
