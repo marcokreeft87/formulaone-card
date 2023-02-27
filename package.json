@@ -28,7 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.52.0",
     "codecov": "^3.8.3",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "home-assistant-js-websocket": "^8.0.1",
     "lit": "^2.6.1",
     "typescript": "^4.9.5",
@@ -36,7 +36,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/plugin-transform-runtime": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
     "babel-jest": "^29.4.3",
