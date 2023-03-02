@@ -136,10 +136,11 @@ export default class Countdown extends BaseCard {
                     break;
                 case CountdownType.Qualifying:                
                     raceDateTime = new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time);
-                    console.log(4, raceDateTime)
                     break;
-                case CountdownType.Sprint:
-                    raceDateTime = new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time);
+                case CountdownType.Sprint:                    
+                    if(nextRace.Sprint) {
+                        raceDateTime = new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time);
+                    }
                     break;            
                 default:
                     raceDateTime = new Date(nextRace.date + 'T' + nextRace.time);
