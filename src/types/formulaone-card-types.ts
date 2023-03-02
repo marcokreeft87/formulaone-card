@@ -21,6 +21,16 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     f1_font?: boolean;
     row_limit?: number;
     icons?: CustomIcons;
+    countdown_type?: CountdownType;
+}
+
+export enum CountdownType {
+    Race = "race",
+    Qualifying = "qualifying",
+    Practice1 = "practice1",
+    Practice2 = "practice2",
+    Practice3 = "practice3",
+    Sprint = "sprint"
 }
 
 export interface ActionOptions {

@@ -1,6 +1,6 @@
 import { createMock } from "ts-auto-mock";
 import Countdown from "../../src/cards/countdown";
-import { FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
+import { CountdownType, FormulaOneCardConfig } from "../../src/types/formulaone-card-types";
 import { getRenderStringAsync } from "../utils";
 import { MRData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
@@ -235,6 +235,26 @@ describe('Testing countdown file', () => {
         expect(customCardHelper.handleAction).toBeCalledTimes(3);
 
         spy.mockClear();
+    }),    
+    test.each`
+    countdown_type | current_date | expected
+    ${CountdownType.Practice1}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-22T11:30:00.000Z")}
+    ${CountdownType.Practice2}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-23T10:30:00.000Z")}
+    ${CountdownType.Practice3}, ${new Date(2022, 2, 1)}, ${new Date("2022-03-19T12:00:00.000Z")}
+    ${CountdownType.Qualifying}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-22T15:00:00.000Z")}    
+    ${CountdownType.Race}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-24T13:00:00.000Z")}  
+    ${CountdownType.Sprint}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-23T14:30:00.000Z")}
+    `(`Calling render with countdown_type $countdown_type`, async ({ countdown_type, current_date, expected }) => {
+        config.countdown_type = countdown_type; 
+        card.config = config;     
+        
+        jest.useFakeTimers();
+        jest.setSystemTime(current_date); // Weird bug in jest setting this to the last of the month
+
+        const result = card.getNextEvent(MRData.RaceTable.Races);
+        jest.useRealTimers();
+        
+        expect(result.raceDateTime).toMatchObject(expected);
     });
 });
 
