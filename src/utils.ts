@@ -149,7 +149,7 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
     }    
 
     console.log(card.weatherClient);
-    card.weatherClient.GetForecast(race.Circuit.Location.lat, race.Circuit.Location.long, race.date).then(data => {
+    card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, race.date, race.date).then(data => {
         const weatherData = data.days[0];
 
         console.log(weatherData);

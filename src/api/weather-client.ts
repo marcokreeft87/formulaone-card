@@ -2,30 +2,23 @@ import { ClientBase } from "./client-base";
 import { RootObject } from "./weather-models";
 
 export default class WeatherClient extends ClientBase {
-    baseUrl: 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/';
-    apiKey: string;
+  private readonly apiKey: string;
+  baseUrl = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline';
 
-    constructor(apiKey: string) {
-        super();
-        
-        this.apiKey = apiKey;
-    }
+  constructor(apiKey: string) {
+    super();
+    this.apiKey = apiKey;
+  }
 
-    async GetForecast(latitude: string, longitude: string, date: string) {
+  async getWeatherData(latitude: string, longitude: string, startDate: string, endDate: string) : Promise<RootObject> {
+    const endpoint = `${latitude},${longitude}/${startDate}/${endDate}`;
+    const unitGroup = 'metric';
+    const contentType = 'json';
 
+    const url = `${endpoint}?unitGroup=${unitGroup}&key=${this.apiKey}&contentType=${contentType}`;
 
-        fetch(`${this.baseUrl}/${latitude},${longitude}/${date}/${date}?unitGroup=metric&key=${this.apiKey}&contentType=json`, {
-           
-                headers: {
-                  Accept: 'application/json',
-                }
-        }).then(data => {
-        
-            console.log(data);
-        });
+    const data = await this.GetData<RootObject>(url, true, 24);
 
-        const data = await this.GetData<RootObject>(`${latitude},${longitude}/${date}/${date}?unitGroup=metric&key=${this.apiKey}&contentType=json`, true, 72);
-
-        return data;
-    }
+    return data;
+  }
 }
