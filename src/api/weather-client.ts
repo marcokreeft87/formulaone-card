@@ -21,4 +21,16 @@ export default class WeatherClient extends ClientBase {
 
     return data;
   }
+
+  async getWeatherDataRange(latitude: string, longitude: string, startDate: string, endDate: string) : Promise<WeatherResponse> {
+    const endpoint = `${latitude},${longitude}/${startDate}/${endDate}`;
+    const unitGroup = 'metric';
+    const contentType = 'json';
+
+    const url = `${endpoint}?unitGroup=${unitGroup}&key=${this.apiKey}&contentType=${contentType}`;
+
+    const data = await this.GetData<WeatherResponse>(url, true, 24);
+
+    return data;
+  }
 }
