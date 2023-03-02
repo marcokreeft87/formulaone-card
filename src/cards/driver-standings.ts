@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
-import { DriverStanding } from "../api/models";
+import { DriverStanding } from "../api/f1-models";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn } from "../utils";
 import { BaseCard } from "./base-card";
 

@@ -1,7 +1,6 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import FormulaOneCard from "..";
 import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -22,10 +21,6 @@ export default class NextRace extends BaseCard {
         'qualifying' : 'Qualifying',
         'endofseason' : 'Season is over. See you next year!'
     };
-
-    constructor(parent: FormulaOneCard) {
-        super(parent);    
-    } 
     
     cardSize(): number {
         return 8;

@@ -14,7 +14,9 @@ export abstract class ClientBase {
           if(new Date(item.created) > checkDate) {
             return <T>JSON.parse(item.data);
           }
-        }
+        }        
+        
+        console.log(endpoint);
   
         const response = await fetch(`${this.baseUrl}/${endpoint}`, {
           headers: {

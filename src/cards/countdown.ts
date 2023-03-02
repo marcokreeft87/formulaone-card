@@ -3,7 +3,7 @@ import { until } from 'lit-html/directives/until.js';
 import { clickHandler, getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
 import { asyncReplace } from 'lit/directives/async-replace.js';
-import { Race } from "../api/models";
+import { Race } from "../api/f1-models";
 import { ActionHandlerEvent, hasAction, HomeAssistant } from "custom-card-helpers";
 import FormulaOneCard from "..";
 import { actionHandler } from "../directives/action-handler-directive";

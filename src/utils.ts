@@ -1,6 +1,6 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
 import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
-import { Constructor, Driver, Race, Root } from "./api/models";
+import { Constructor, Driver, Race, Root } from "./api/f1-models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
@@ -146,7 +146,14 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
 
     if(config.hide_racedatetimes) {
         return html``;
-    }
+    }    
+
+    console.log(card.weatherClient);
+    card.weatherClient.GetForecast(race.Circuit.Location.lat, race.Circuit.Location.long, race.date).then(data => {
+        const weatherData = data.days[0];
+
+        console.log(weatherData);
+    });
 
     const raceDate = new Date(race.date + 'T' + race.time);
     const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);

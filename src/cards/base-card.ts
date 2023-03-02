@@ -2,7 +2,8 @@ import { HomeAssistant } from "custom-card-helpers";
 import { HTMLTemplateResult } from "lit-html";
 import FormulaOneCard from "..";
 import ErgastClient from "../api/ergast-client";
-import { Race } from "../api/models";
+import { Race } from "../api/f1-models";
+import WeatherClient from "../api/weather-client";
 import { CardProperties, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
 export abstract class BaseCard {
@@ -10,12 +11,14 @@ export abstract class BaseCard {
     config: FormulaOneCardConfig;  
     client: ErgastClient;
     hass: HomeAssistant;
+    weatherClient: WeatherClient;
 
     constructor(parent: FormulaOneCard) {     
         this.config = parent.config;   
         this.client = new ErgastClient();
         this.hass = parent._hass;
         this.parent = parent;
+        this.weatherClient = new WeatherClient('R69TG493HYLZWLP3UKKJDTPB2');
     }    
 
     translation(key: string) : string {
