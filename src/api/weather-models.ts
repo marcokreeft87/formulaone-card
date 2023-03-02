@@ -104,7 +104,7 @@ export interface CurrentConditions {
     moonphase: number;
 }
 
-export interface RootObject {
+export interface WeatherResponse {
     queryCost: number;
     latitude: number;
     longitude: number;

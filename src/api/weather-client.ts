@@ -1,5 +1,5 @@
 import { ClientBase } from "./client-base";
-import { RootObject } from "./weather-models";
+import { WeatherResponse } from "./weather-models";
 
 export default class WeatherClient extends ClientBase {
   private readonly apiKey: string;
@@ -10,14 +10,14 @@ export default class WeatherClient extends ClientBase {
     this.apiKey = apiKey;
   }
 
-  async getWeatherData(latitude: string, longitude: string, startDate: string, endDate: string) : Promise<RootObject> {
-    const endpoint = `${latitude},${longitude}/${startDate}/${endDate}`;
+  async getWeatherData(latitude: string, longitude: string, date: string) : Promise<WeatherResponse> {
+    const endpoint = `${latitude},${longitude}/${date}`;
     const unitGroup = 'metric';
     const contentType = 'json';
 
     const url = `${endpoint}?unitGroup=${unitGroup}&key=${this.apiKey}&contentType=${contentType}`;
 
-    const data = await this.GetData<RootObject>(url, true, 24);
+    const data = await this.GetData<WeatherResponse>(url, true, 3);
 
     return data;
   }
