@@ -10,7 +10,7 @@ import { ImageConstants } from "./lib/constants";
 import { actionHandler } from './directives/action-handler-directive';
 import RestCountryClient from "./api/restcountry-client";
 import { until } from 'lit-html/directives/until.js';
-import { WeatherResponse } from "./api/weather-models";
+import { Day } from "./api/weather-models";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -174,7 +174,7 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
         const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
         const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
         
-        return html`<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
+        return html`${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
                     <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
                     <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
                     <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
@@ -183,8 +183,9 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
     }))}`;    
 }
 
-export const renderWeatherInfo = (weatherData: WeatherResponse, config: FormulaOneCardConfig) => {
-    return html``;
+export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig) => {
+    // TODO Get weather info for exact hour
+    return html`<tr><td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> Wind</td><td>${weatherData.windspeed}</td><td>&nbsp;</td><td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> Wind</td><td>${weatherData.temp}</td></tr>`;
 }
 
 export const getRefreshTime = (endpoint: string) => {
