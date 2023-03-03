@@ -185,6 +185,7 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
 
 export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig) => {
     // TODO Get weather info for exact hour
+    // Display like weather card
     return html`<tr><td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> Wind</td><td>${weatherData.windspeed}</td><td>&nbsp;</td><td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> Wind</td><td>${weatherData.temp}</td></tr>`;
 }
 
