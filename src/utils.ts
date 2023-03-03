@@ -1,5 +1,5 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
-import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
+import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, WeatherUnit } from "./types/formulaone-card-types";
 import { Constructor, Driver, Race, Root } from "./api/f1-models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
@@ -184,9 +184,13 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
 }
 
 export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig) => {
+    const windUnit = config.weather_options?.unit === WeatherUnit.Metric ? 'km/h' : 'mph';
+    const tempUnit = config.weather_options?.unit === WeatherUnit.MilesFahrenheit ? '°F' : '°C';
     // TODO Get weather info for exact hour
     // Display like weather card
-    return html`<tr><td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> Wind</td><td>${weatherData.windspeed}</td><td>&nbsp;</td><td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> Wind</td><td>${weatherData.temp}</td></tr>`;
+    // different icons for rain, snow, sun, clouds, wind, etc
+    return html`<tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${weatherData.winddir} ${weatherData.windspeed} ${windUnit}</td><td>&nbsp;</td><td colspan="2">${weatherData.temp} ${tempUnit} <ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon></td></tr>
+                <tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-pouringn"></ha-icon> ${weatherData.precip} mm</td><td>&nbsp;</td><td colspan="2">${weatherData.precipprob} % <ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon></td></tr>`;
 }
 
 export const getRefreshTime = (endpoint: string) => {

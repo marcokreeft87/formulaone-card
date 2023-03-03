@@ -18,7 +18,7 @@ export abstract class BaseCard {
         this.client = new ErgastClient();
         this.hass = parent._hass;
         this.parent = parent;
-        this.weatherClient = new WeatherClient('R69TG493HYLZWLP3UKKJDTPB2');
+        this.weatherClient = new WeatherClient(this.config.weather_options?.api_key ?? '');
     }    
 
     translation(key: string) : string {
