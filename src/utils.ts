@@ -189,9 +189,46 @@ export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig
     // TODO Get weather info for exact hour
     // Display like weather card
     // different icons for rain, snow, sun, clouds, wind, etc
-    return html`<tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${weatherData.winddir} ${weatherData.windspeed} ${windUnit}</td><td>&nbsp;</td><td colspan="2">${weatherData.temp} ${tempUnit} <ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon></td></tr>
-                <tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-pouringn"></ha-icon> ${weatherData.precip} mm</td><td>&nbsp;</td><td colspan="2">${weatherData.precipprob} % <ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon></td></tr>`;
+    return html`<tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${calculateWindDirection(weatherData.winddir)} ${weatherData.windspeed} ${windUnit}</td><td>&nbsp;</td><td colspan="2"><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> ${weatherData.temp} ${tempUnit}</td></tr>
+                <tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon> ${weatherData.precip} mm</td><td>&nbsp;</td><td colspan="2"><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon> ${weatherData.precipprob} %</td></tr>`;
 }
+
+export const calculateWindDirection = (windDirection: number) => {
+    if(windDirection >= 348.75 || windDirection < 11.25) {
+        return 'N';
+    } else if(windDirection >= 11.25 && windDirection < 33.75) {
+        return 'NNE';
+    } else if(windDirection >= 33.75 && windDirection < 56.25) {
+        return 'NE';
+    } else if(windDirection >= 56.25 && windDirection < 78.75) {
+        return 'ENE';
+    } else if(windDirection >= 78.75 && windDirection < 101.25) {
+        return 'E';
+    } else if(windDirection >= 101.25 && windDirection < 123.75) {
+        return 'ESE';
+    } else if(windDirection >= 123.75 && windDirection < 146.25) {
+        return 'SE';
+    } else if(windDirection >= 146.25 && windDirection < 168.75) {
+        return 'SSE';
+    } else if(windDirection >= 168.75 && windDirection < 191.25) {
+        return 'S';
+    } else if(windDirection >= 191.25 && windDirection < 213.75) {
+        return 'SSW';
+    } else if(windDirection >= 213.75 && windDirection < 236.25) {
+        return 'SW';
+    } else if(windDirection >= 236.25 && windDirection < 258.75) {
+        return 'WSW';
+    } else if(windDirection >= 258.75 && windDirection < 281.25) {
+        return 'W';
+    } else if(windDirection >= 281.25 && windDirection < 303.75) {
+        return 'WNW';
+    } else if(windDirection >= 303.75 && windDirection < 326.25) {
+        return 'NW';
+    } else if(windDirection >= 326.25 && windDirection < 348.75) {
+        return 'NNW';
+    }
+}
+
 
 export const getRefreshTime = (endpoint: string) => {
     let refreshCacheHours = 24;
