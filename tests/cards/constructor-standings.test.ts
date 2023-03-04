@@ -4,7 +4,7 @@ import { getRenderString, getRenderStringAsync } from '../utils';
 import { MRData } from '../testdata/constructorStandings.json'
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import ErgastClient from '../../src/api/ergast-client';
-import { Mrdata, Root } from '../../src/api/models';
+import { Mrdata, Root } from '../../src/api/f1-models';
 import { getApiErrorMessage } from '../../src/utils';
 import FormulaOneCard from '../../src';
 

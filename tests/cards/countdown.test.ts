@@ -5,7 +5,7 @@ import { getRenderStringAsync } from "../utils";
 import { MRData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 import ErgastClient from "../../src/api/ergast-client";
-import { Mrdata, Race, Root } from "../../src/api/models";
+import { Mrdata, Race, Root } from "../../src/api/f1-models";
 import { HTMLTemplateResult } from "lit";
 import { HomeAssistant, NumberFormat, TimeFormat } from "custom-card-helpers";
 import FormulaOneCard from "../../src";

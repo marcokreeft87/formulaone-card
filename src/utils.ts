@@ -153,11 +153,6 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
     const configWeatherApi = true;
     const promise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
 
-    console.log(card.weatherClient);
-    // card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`).then(data => {
-        
-    // });
-
     return html`${until(promise.then(data => {
 
         const weatherData = data.days[0];

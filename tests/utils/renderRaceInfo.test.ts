@@ -1,7 +1,7 @@
 import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { createMock } from 'ts-auto-mock';
 import FormulaOneCard from '../../src';
-import { Race } from '../../src/api/models';
+import { Race } from '../../src/api/f1-models';
 import { BaseCard } from '../../src/cards/base-card';
 import { renderRaceInfo } from '../../src/utils';
 import { getRenderString } from '../utils';
