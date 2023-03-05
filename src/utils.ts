@@ -142,7 +142,7 @@ export const renderHeader = (card: BaseCard, race: Race, preventClick = false): 
     return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${(card.config.hide_tracklayout ? html`` : imageHtml)}<br>`;
 }
 
-export const renderRaceInfo = (card: BaseCard, race: Race) => {
+export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) => {
     const config = card.config;
     const hass = card.hass;
 
@@ -150,18 +150,16 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
         return html``;
     }    
 
-    const configWeatherApi = true;
+    const configWeatherApi = config.show_weather && config.weather_options?.api_key !== undefined;
     const promise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
 
     return html`${until(promise.then(data => {
 
-        const weatherData = data.days[0];
-
-        console.log(weatherData);
-
-        const weatherInfo = renderWeatherInfo(weatherData, config);
+        const weatherData = data?.days[0];
 
         const raceDate = new Date(race.date + 'T' + race.time);
+        const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
+
         const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
         const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
         const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
@@ -178,14 +176,32 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
     }))}`;    
 }
 
-export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig) => {
+export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig, raceDate: Date) => {
+    if(!weatherData) {
+        return html``;
+    }
+
     const windUnit = config.weather_options?.unit === WeatherUnit.Metric ? 'km/h' : 'mph';
     const tempUnit = config.weather_options?.unit === WeatherUnit.MilesFahrenheit ? '°F' : '°C';
-    // TODO Get weather info for exact hour
-    // Display like weather card
-    // different icons for rain, snow, sun, clouds, wind, etc
-    return html`<tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${calculateWindDirection(weatherData.winddir)} ${weatherData.windspeed} ${windUnit}</td><td>&nbsp;</td><td colspan="2"><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> ${weatherData.temp} ${tempUnit}</td></tr>
-                <tr><td colspan="2"><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon> ${weatherData.precip} mm</td><td>&nbsp;</td><td colspan="2"><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon> ${weatherData.precipprob} %</td></tr>`;
+    const hourData = weatherData.hours[raceDate.getHours()];    
+
+    return html`<tr>
+                    <td colspan="5">
+                        <table class="weather-info">
+                            <tr>
+                                <td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${calculateWindDirection(hourData.winddir)} ${hourData.windspeed} ${windUnit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon> ${hourData.precip} mm</td>
+                                <td><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon> ${hourData.precipprob}%</td>
+                            </tr>
+                            <tr>
+                                <td><ha-icon slot="icon" icon="mdi:clouds"></ha-icon> ${hourData.cloudcover} %</td>
+                                <td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> ${hourData.temp} ${tempUnit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:sun-thermometer"></ha-icon> ${hourData.feelslike} ${tempUnit}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td colspan="5">&nbsp;</td></tr>`;
 }
 
 export const calculateWindDirection = (windDirection: number) => {

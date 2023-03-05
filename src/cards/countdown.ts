@@ -40,10 +40,10 @@ export default class Countdown extends BaseCard {
         return this.config.show_raceinfo ? 12 : 6;
     }
 
-    renderHeader(race: Race): HTMLTemplateResult {        
+    renderHeader(race: Race, raceDateTime: Date): HTMLTemplateResult {        
         return this.config.show_raceinfo ? 
             html`<table><tr><td colspan="5">${renderHeader(this, race, true)}</td></tr>
-            ${renderRaceInfo(this, race)}</table>`
+            ${renderRaceInfo(this, race, raceDateTime)}</table>`
             : null;
     }
 
@@ -107,7 +107,7 @@ export default class Countdown extends BaseCard {
                                     </td>
                                 </tr>
                             </table>
-                            ${this.renderHeader(nextRace)}`;
+                            ${this.renderHeader(nextRace, raceDateTime)}`;
 
             }),
             html`${getApiLoadingMessage()}`

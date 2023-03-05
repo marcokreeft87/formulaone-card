@@ -3,7 +3,7 @@ import { LocalStorageItem } from "../../src/types/formulaone-card-types";
 import LocalStorageMock from "../testdata/localStorageMock";
 import * as countryData from '../testdata/countries.json'
 
-describe('Testing ergast client file', () => {
+describe('Testing restcountry client file', () => {
 
     const client = new RestCountryClient();    
     const localStorageMock = new LocalStorageMock();

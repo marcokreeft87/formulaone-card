@@ -170,7 +170,7 @@ describe('Testing countdown file', () => {
         config.show_raceinfo = true;   
         card.config = config; 
 
-        const result = card.renderHeader(race);
+        const result = card.renderHeader(race, new Date(2022, 11, 30));
         const htmlResult = await getRenderStringAsync(result);
         jest.useRealTimers();
         
@@ -181,7 +181,7 @@ describe('Testing countdown file', () => {
         config.show_raceinfo = undefined;  
         card.config = config;     
 
-        const result = card.renderHeader(race);
+        const result = card.renderHeader(race, new Date(2022, 11, 30));
         const htmlResult = await getRenderStringAsync(result);
         jest.useRealTimers();
         
