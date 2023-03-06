@@ -240,7 +240,6 @@ export const calculateWindDirection = (windDirection: number) => {
     }
 }
 
-
 export const getRefreshTime = (endpoint: string) => {
     let refreshCacheHours = 24;
     const now = new Date();

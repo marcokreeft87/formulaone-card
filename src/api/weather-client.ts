@@ -18,9 +18,7 @@ export default class WeatherClient extends ClientBase {
 
     const url = `${endpoint}?unitGroup=${this.unitGroup}&key=${this.apiKey}&contentType=${contentType}`;
 
-    const data = await this.GetData<WeatherResponse>(url, true, 3);
-
-    console.log(data);
+    const data = await this.GetData<WeatherResponse>(url, true, 1);
 
     return data;
   }
