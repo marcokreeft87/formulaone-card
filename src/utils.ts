@@ -205,38 +205,30 @@ export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig
 }
 
 export const calculateWindDirection = (windDirection: number) => {
-    if(windDirection >= 348.75 || windDirection < 11.25) {
-        return 'N';
-    } else if(windDirection >= 11.25 && windDirection < 33.75) {
-        return 'NNE';
-    } else if(windDirection >= 33.75 && windDirection < 56.25) {
-        return 'NE';
-    } else if(windDirection >= 56.25 && windDirection < 78.75) {
-        return 'ENE';
-    } else if(windDirection >= 78.75 && windDirection < 101.25) {
-        return 'E';
-    } else if(windDirection >= 101.25 && windDirection < 123.75) {
-        return 'ESE';
-    } else if(windDirection >= 123.75 && windDirection < 146.25) {
-        return 'SE';
-    } else if(windDirection >= 146.25 && windDirection < 168.75) {
-        return 'SSE';
-    } else if(windDirection >= 168.75 && windDirection < 191.25) {
-        return 'S';
-    } else if(windDirection >= 191.25 && windDirection < 213.75) {
-        return 'SSW';
-    } else if(windDirection >= 213.75 && windDirection < 236.25) {
-        return 'SW';
-    } else if(windDirection >= 236.25 && windDirection < 258.75) {
-        return 'WSW';
-    } else if(windDirection >= 258.75 && windDirection < 281.25) {
-        return 'W';
-    } else if(windDirection >= 281.25 && windDirection < 303.75) {
-        return 'WNW';
-    } else if(windDirection >= 303.75 && windDirection < 326.25) {
-        return 'NW';
-    } else if(windDirection >= 326.25 && windDirection < 348.75) {
-        return 'NNW';
+    const directions = [    
+      { label: 'N', range: [0, 11.25] },
+      { label: 'NNE', range: [11.25, 33.75] },
+      { label: 'NE', range: [33.75, 56.25] },
+      { label: 'ENE', range: [56.25, 78.75] },
+      { label: 'E', range: [78.75, 101.25] },
+      { label: 'ESE', range: [101.25, 123.75] },
+      { label: 'SE', range: [123.75, 146.25] },
+      { label: 'SSE', range: [146.25, 168.75] },
+      { label: 'S', range: [168.75, 191.25] },
+      { label: 'SSW', range: [191.25, 213.75] },
+      { label: 'SW', range: [213.75, 236.25] },
+      { label: 'WSW', range: [236.25, 258.75] },
+      { label: 'W', range: [258.75, 281.25] },
+      { label: 'WNW', range: [281.25, 303.75] },
+      { label: 'NW', range: [303.75, 326.25] },
+      { label: 'NNW', range: [326.25, 348.75] },
+      { label: 'N', range: [348.75, 360]}
+    ];
+  
+    for (const { label, range } of directions) {
+      if (windDirection >= range[0] && windDirection <= range[1]) {
+        return label;
+      }
     }
 }
 
