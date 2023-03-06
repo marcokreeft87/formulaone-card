@@ -1,7 +1,7 @@
 import { createMock } from "ts-auto-mock";
 import FormulaOneCard from "../../src";
 import ErgastClient from "../../src/api/ergast-client";
-import { Mrdata, QualifyingResult, Race, Result, Root } from "../../src/api/models";
+import { Mrdata, QualifyingResult, Race, Result, Root } from "../../src/api/f1-models";
 import Results from "../../src/cards/results";
 import { CardProperties, FormulaOneCardConfig, mwcTabBarEvent } from "../../src/types/formulaone-card-types";
 import { MRData as resultData } from '../testdata/results.json'

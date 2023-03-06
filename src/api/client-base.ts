@@ -5,6 +5,7 @@ export abstract class ClientBase {
 
     async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number) : Promise<T> {
         const localStorageData = localStorage.getItem(endpoint);
+
         if(localStorageData && cacheResult) {
           const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
   
@@ -14,7 +15,7 @@ export abstract class ClientBase {
           if(new Date(item.created) > checkDate) {
             return <T>JSON.parse(item.data);
           }
-        }
+        }                
   
         const response = await fetch(`${this.baseUrl}/${endpoint}`, {
           headers: {

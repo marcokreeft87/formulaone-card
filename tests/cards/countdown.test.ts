@@ -5,7 +5,7 @@ import { getRenderStringAsync } from "../utils";
 import { MRData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 import ErgastClient from "../../src/api/ergast-client";
-import { Mrdata, Race, Root } from "../../src/api/models";
+import { Mrdata, Race, Root } from "../../src/api/f1-models";
 import { HTMLTemplateResult } from "lit";
 import { HomeAssistant, NumberFormat, TimeFormat } from "custom-card-helpers";
 import FormulaOneCard from "../../src";
@@ -170,7 +170,7 @@ describe('Testing countdown file', () => {
         config.show_raceinfo = true;   
         card.config = config; 
 
-        const result = card.renderHeader(race);
+        const result = card.renderHeader(race, new Date(2022, 11, 30));
         const htmlResult = await getRenderStringAsync(result);
         jest.useRealTimers();
         
@@ -181,7 +181,7 @@ describe('Testing countdown file', () => {
         config.show_raceinfo = undefined;  
         card.config = config;     
 
-        const result = card.renderHeader(race);
+        const result = card.renderHeader(race, new Date(2022, 11, 30));
         const htmlResult = await getRenderStringAsync(result);
         jest.useRealTimers();
         

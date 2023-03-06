@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Frontend card for Home Assistant to display Formula One data",
   "main": "index.js",
   "scripts": {
@@ -44,6 +44,7 @@
     "custom-card-helpers": "^1.9.0",
     "isomorphic-fetch": "^3.0.0",
     "jest-environment-jsdom": "^29.4.3",
+    "jest-fetch-mock": "^3.0.3",
     "jest-ts-auto-mock": "^2.1.0",
     "ts-auto-mock": "^3.6.4",
     "ts-jest": "^29.0.5",

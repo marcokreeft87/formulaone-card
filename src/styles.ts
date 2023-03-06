@@ -72,4 +72,11 @@ export const styles = css`
     .transparent {
         background-color: transparent !important;
     }        
+    .weather-info {
+        padding: 10px;
+    }
+
+    .weather-info td {
+        width: 33%;
+    }
 `;

@@ -1,10 +1,10 @@
 import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { createMock } from 'ts-auto-mock';
 import FormulaOneCard from '../src/index';
-import { CardProperties, FormulaOneCardConfig, FormulaOneCardType } from '../src/types/formulaone-card-types';
+import { FormulaOneCardConfig, FormulaOneCardType } from '../src/types/formulaone-card-types';
 import { getRenderString, getRenderStringAsyncIndex } from './utils';
 import { LitElement, PropertyValues } from 'lit';
-import { Mrdata, Root } from '../src/api/models';
+import { Mrdata, Root } from '../src/api/f1-models';
 import { MRData as scheduleData } from './testdata/schedule.json'
 import { MRData as constructorStandingsData } from './testdata/constructorStandings.json'
 import { MRData as driverStandingsData } from './testdata/driverStandings.json'

@@ -3,7 +3,7 @@ import { until } from 'lit-html/directives/until.js';
 import { clickHandler, getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
 import { asyncReplace } from 'lit/directives/async-replace.js';
-import { Race } from "../api/models";
+import { Race } from "../api/f1-models";
 import { ActionHandlerEvent, hasAction, HomeAssistant } from "custom-card-helpers";
 import FormulaOneCard from "..";
 import { actionHandler } from "../directives/action-handler-directive";
@@ -40,10 +40,10 @@ export default class Countdown extends BaseCard {
         return this.config.show_raceinfo ? 12 : 6;
     }
 
-    renderHeader(race: Race): HTMLTemplateResult {        
+    renderHeader(race: Race, raceDateTime: Date): HTMLTemplateResult {        
         return this.config.show_raceinfo ? 
             html`<table><tr><td colspan="5">${renderHeader(this, race, true)}</td></tr>
-            ${renderRaceInfo(this, race)}</table>`
+            ${renderRaceInfo(this, race, raceDateTime)}</table>`
             : null;
     }
 
@@ -107,7 +107,7 @@ export default class Countdown extends BaseCard {
                                     </td>
                                 </tr>
                             </table>
-                            ${this.renderHeader(nextRace)}`;
+                            ${this.renderHeader(nextRace, raceDateTime)}`;
 
             }),
             html`${getApiLoadingMessage()}`

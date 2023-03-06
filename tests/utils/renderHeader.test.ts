@@ -2,7 +2,7 @@ import { HomeAssistant } from "custom-card-helpers";
 import { HTMLTemplateResult } from "lit";
 import { createMock } from "ts-auto-mock";
 import FormulaOneCard from "../../src";
-import { Race } from "../../src/api/models";
+import { Race } from "../../src/api/f1-models";
 import { BaseCard } from "../../src/cards/base-card";
 import { ImageConstants } from "../../src/lib/constants";
 import { renderHeader } from "../../src/utils";

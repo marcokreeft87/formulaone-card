@@ -1,6 +1,6 @@
 import { getRefreshTime } from '../utils';
 import { ClientBase } from './client-base';
-import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './models';
+import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './f1-models';
 
 export default class ErgastClient extends ClientBase {
 

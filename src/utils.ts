@@ -1,6 +1,6 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
-import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem } from "./types/formulaone-card-types";
-import { Constructor, Driver, Race, Root } from "./api/models";
+import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, WeatherUnit } from "./types/formulaone-card-types";
+import { Constructor, Driver, Race, Root } from "./api/f1-models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
@@ -9,6 +9,8 @@ import { formatDateNumeric } from "./lib/format_date";
 import { ImageConstants } from "./lib/constants";
 import { actionHandler } from './directives/action-handler-directive';
 import RestCountryClient from "./api/restcountry-client";
+import { until } from 'lit-html/directives/until.js';
+import { Day } from "./api/weather-models";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -140,28 +142,94 @@ export const renderHeader = (card: BaseCard, race: Race, preventClick = false): 
     return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${(card.config.hide_tracklayout ? html`` : imageHtml)}<br>`;
 }
 
-export const renderRaceInfo = (card: BaseCard, race: Race) => {
+export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) => {
     const config = card.config;
     const hass = card.hass;
 
     if(config.hide_racedatetimes) {
         return html``;
+    }    
+
+    const configWeatherApi = config.show_weather && config.weather_options?.api_key !== undefined;
+    const promise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
+
+    return html`${until(promise.then(data => {
+
+        const weatherData = data?.days[0];
+
+        const raceDate = new Date(race.date + 'T' + race.time);
+        const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
+
+        const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
+        const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
+        const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
+        const raceDateFormatted = formatDateTimeRaceInfo(raceDate, hass.locale);
+        const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
+        const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
+        
+        return html`${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
+                    <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
+                    <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
+                    <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
+                    <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
+                    <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
+    }))}`;    
+}
+
+export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig, raceDate: Date) => {
+    if(!weatherData) {
+        return html``;
     }
 
-    const raceDate = new Date(race.date + 'T' + race.time);
-    const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
-    const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
-    const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
-    const raceDateFormatted = formatDateTimeRaceInfo(raceDate, hass.locale);
-    const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
-    const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
-    
-    return html`<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
-                <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
-                <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
-                <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
-                <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
-                <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
+    const windUnit = config.weather_options?.unit === WeatherUnit.Metric ? 'km/h' : 'mph';
+    const tempUnit = config.weather_options?.unit === WeatherUnit.MilesFahrenheit ? '°F' : '°C';
+    const hourData = weatherData.hours[raceDate.getHours()];    
+
+    return html`<tr>
+                    <td colspan="5">
+                        <table class="weather-info">
+                            <tr>
+                                <td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${calculateWindDirection(hourData.winddir)} ${hourData.windspeed} ${windUnit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon> ${hourData.precip} mm</td>
+                                <td><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon> ${hourData.precipprob}%</td>
+                            </tr>
+                            <tr>
+                                <td><ha-icon slot="icon" icon="mdi:clouds"></ha-icon> ${hourData.cloudcover} %</td>
+                                <td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> ${hourData.temp} ${tempUnit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:sun-thermometer"></ha-icon> ${hourData.feelslike} ${tempUnit}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td colspan="5">&nbsp;</td></tr>`;
+}
+
+export const calculateWindDirection = (windDirection: number) => {
+    const directions = [    
+      { label: 'N', range: [0, 11.25] },
+      { label: 'NNE', range: [11.25, 33.75] },
+      { label: 'NE', range: [33.75, 56.25] },
+      { label: 'ENE', range: [56.25, 78.75] },
+      { label: 'E', range: [78.75, 101.25] },
+      { label: 'ESE', range: [101.25, 123.75] },
+      { label: 'SE', range: [123.75, 146.25] },
+      { label: 'SSE', range: [146.25, 168.75] },
+      { label: 'S', range: [168.75, 191.25] },
+      { label: 'SSW', range: [191.25, 213.75] },
+      { label: 'SW', range: [213.75, 236.25] },
+      { label: 'WSW', range: [236.25, 258.75] },
+      { label: 'W', range: [258.75, 281.25] },
+      { label: 'WNW', range: [281.25, 303.75] },
+      { label: 'NW', range: [303.75, 326.25] },
+      { label: 'NNW', range: [326.25, 348.75] },
+      { label: 'N', range: [348.75, 360]}
+    ];
+  
+    for (const { label, range } of directions) {
+      if (windDirection >= range[0] && windDirection <= range[1]) {
+        return label;
+      }
+    }
 }
 
 export const getRefreshTime = (endpoint: string) => {

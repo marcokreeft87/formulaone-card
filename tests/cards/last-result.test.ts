@@ -3,7 +3,7 @@ import { createMock } from 'ts-auto-mock';
 import { getRenderString, getRenderStringAsync } from '../utils';
 import { MRData } from '../testdata/results.json'
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
-import { Mrdata, Root } from '../../src/api/models';
+import { Mrdata, Root } from '../../src/api/f1-models';
 import ErgastClient from '../../src/api/ergast-client';
 import { getApiErrorMessage } from '../../src/utils';
 import FormulaOneCard from '../../src';

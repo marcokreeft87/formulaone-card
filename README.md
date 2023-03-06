@@ -66,6 +66,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | actions           | object        |  _[Actions](#actions)_                                    | The tap, double tap or hold actions set on the image of the countdown, last_result, results, qualifying_results and next-race cards |
 | row_limit         | number        |                                     | Limit the schedule, results, last_result, driver_standings and constructor_standings to this amount of row |
 | countdown_type    | string        | 'race'                              | Set the event to countdown to (race,qualifying,practice1,practice2,practice3,sprint) |
+| show_weather      | boolean       | `false`                             | Show the _[weather forecast](#Forecast)_ of the upcoming race |
 
 
 ### Actions
@@ -278,9 +279,20 @@ translations:
 
 ```
 
+## Forecast
+
+For this feature to work you have to get an API key [here](https://www.visualcrossing.com/sign-up)
+
+```
+show_weather: true
+weather_options:
+  unit: metric
+  api_key: [YOUR API KEY HERE]
+```
+
 ## TODO
 - [ ] Editor
 - [ ] Live timing poc (https://livetiming.formula1.com/static/2022/2022-11-20_Abu_Dhabi_Grand_Prix/2022-11-20_Race/RaceControlMessages.json) 
 - [ ] Use mwc for dropdowns
 - [ ] Better way for unit testing
-- [ ] Weather forecast next race (https://github.com/marcokreeft87/formulaone-card/discussions/145)
+- [x] Weather forecast next race (https://github.com/marcokreeft87/formulaone-card/discussions/145)

@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
-import { QualifyingResult, Race, Result } from "../api/models";
+import { QualifyingResult, Race, Result } from "../api/f1-models";
 import { CustomIcons, FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader } from "../utils";
 import { BaseCard } from "./base-card";

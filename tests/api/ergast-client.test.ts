@@ -1,5 +1,5 @@
 import ErgastClient from '../../src/api/ergast-client';
-import { Mrdata, Root } from '../../src/api/models';
+import { Mrdata, Root } from '../../src/api/f1-models';
 import { MRData as scheduleData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 import { MRData as driverStandingsData } from '../testdata/driverStandings.json'

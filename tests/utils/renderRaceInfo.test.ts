@@ -1,10 +1,11 @@
 import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { createMock } from 'ts-auto-mock';
 import FormulaOneCard from '../../src';
-import { Race } from '../../src/api/models';
+import { Race } from '../../src/api/f1-models';
 import { BaseCard } from '../../src/cards/base-card';
+import { WeatherUnit } from '../../src/types/formulaone-card-types';
 import { renderRaceInfo } from '../../src/utils';
-import { getRenderString } from '../utils';
+import { getRenderString, getRenderStringAsyncIndex } from '../utils';
 
 describe('Testing util file function renderRaceInfo', () => {
 
@@ -53,11 +54,11 @@ describe('Testing util file function renderRaceInfo', () => {
         },
     };
 
-    test('Given config with hide_raceinfo = false when raceinfo is rendered then raceinfo is rendered', () => {
+    test('Given config with hide_raceinfo = false when raceinfo is rendered then raceinfo is rendered', async () => {
         card.config.hide_racedatetimes = false;
 
         const result = renderRaceInfo(card, race);
-        const htmlResult = getRenderString(result);
+        const htmlResult = await getRenderStringAsyncIndex(result);
 
         expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
     }),
@@ -68,11 +69,58 @@ describe('Testing util file function renderRaceInfo', () => {
 
         expect(htmlResult).toBe('');
     }),
-    test('Given config with hide_raceinfo = undefined when raceinfo is rendered then raceinfo is rendered', () => {
+    test('Given config with hide_raceinfo = undefined when raceinfo is rendered then raceinfo is rendered', async () => {
         card.config.hide_racedatetimes = undefined;
         const result = renderRaceInfo(card, race);
-        const htmlResult = getRenderString(result);
+        const htmlResult = await getRenderStringAsyncIndex(result);
 
         expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
-    });
+    }),
+    test('Given config with show_weather = true and no weather options when raceinfo is rendered then weather is rendered', async () => {
+        card.config.hide_racedatetimes = false;
+        card.config.show_weather = true;
+
+        const result = renderRaceInfo(card, race);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
+    }),
+    test('Given config with show_weather = true and weather options without api key when raceinfo is rendered then weather is rendered', async () => {
+        card.config.hide_racedatetimes = false;
+        card.config.show_weather = true;
+        card.config.weather_options = {
+            api_key: undefined,
+        };
+
+        const result = renderRaceInfo(card, race);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
+    }),
+    test('Given config with show_weather = true and weather options unit metric when raceinfo is rendered then weather is rendered', async () => {
+        card.config.hide_racedatetimes = false;
+        card.config.show_weather = true;
+        card.config.weather_options = {
+            api_key: 'fakekey',
+            unit: WeatherUnit.Metric,
+        };
+
+        const result = renderRaceInfo(card, race);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
+    }),
+    test('Given config with show_weather = true and weather options unit MilesFahrenheit when raceinfo is rendered then weather is rendered', async () => {
+        card.config.hide_racedatetimes = false;
+        card.config.show_weather = true;
+        card.config.weather_options = {
+            api_key: 'fakekey',
+            unit: WeatherUnit.MilesFahrenheit,
+        };
+
+        const result = renderRaceInfo(card, race);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
+    })
 })

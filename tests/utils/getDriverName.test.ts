@@ -1,5 +1,5 @@
 import { createMock } from 'ts-auto-mock';
-import { Driver } from '../../src/api/models';
+import { Driver } from '../../src/api/f1-models';
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import { getDriverName } from '../../src/utils';
 

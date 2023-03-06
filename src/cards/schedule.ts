@@ -2,7 +2,7 @@ import { formatTime, HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
-import { Circuit, Race } from "../api/models";
+import { Circuit, Race } from "../api/f1-models";
 import { formatDate } from "../lib/format_date";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, reduceArray } from "../utils";
 import { BaseCard } from "./base-card";

@@ -22,6 +22,25 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     row_limit?: number;
     icons?: CustomIcons;
     countdown_type?: CountdownType;
+    show_weather?: boolean;
+    weather_options?: WeatherOptions;
+}
+
+export interface WeatherOptions {
+    api_key?: string;
+    unit?: WeatherUnit;
+    show_icon?: boolean;
+    show_precipitation?: boolean;
+    show_wind?: boolean;
+    show_temperature?: boolean;
+    show_cloud_cover?: boolean;
+    show_visibility?: boolean;
+}
+
+export enum WeatherUnit {
+    Metric = 'metric',
+    MilesCelsius = 'uk',
+    MilesFahrenheit = 'us'
 }
 
 export enum CountdownType {
