@@ -3,7 +3,7 @@ import { createMock } from 'ts-auto-mock';
 import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { getRenderString, getRenderStringAsync, getRenderStringAsyncIndex } from '../utils';
 import { MRData } from '../testdata/schedule.json'
-import { FormulaOneCardConfig, WeatherUnit } from '../../src/types/formulaone-card-types';
+import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import { Mrdata, Root } from '../../src/api/f1-models';
 import ErgastClient from '../../src/api/ergast-client';
 import { getApiErrorMessage, getEndOfSeasonMessage } from '../../src/utils';
@@ -11,8 +11,6 @@ import FormulaOneCard from '../../src';
 import RestCountryClient from '../../src/api/restcountry-client';
 import { Country } from '../../src/types/rest-country-types';
 import * as countries from '../testdata/countries.json'
-import fetchMock from "jest-fetch-mock";
-import { WeatherResponse } from '../../src/api/weather-models';
 
 describe('Testing next-race file', () => {
     const parent = createMock<FormulaOneCard>({ 
