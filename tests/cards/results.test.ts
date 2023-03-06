@@ -27,13 +27,32 @@ describe('Testing results file', () => {
         });
 
         jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementation((_endpoint) => {
+            
             if(_endpoint === '2022/17/results.json`') {
                 return new Promise<Root>((resolve) => {
                     resolve({ MRData : <Mrdata>resultData });
                 });
             }
 
-            if(_endpoint.indexOf('sprint.json') > 0 ){ // === '2022/NaN/sprint.json`') {
+            if(_endpoint === '2022/0/results.json`') {
+                return new Promise<Root>((resolve) => {
+                    resolve(undefined as unknown as Root);
+                });
+            }
+
+            if (_endpoint === '2022/4/sprint.json') {
+                return Promise.resolve({ MRData : <Mrdata>sprintData });
+            }
+            
+            if (_endpoint === '2022/5/sprint.json') {
+                const copy = sprintData as unknown as Mrdata;
+                if(copy.RaceTable != null && copy.RaceTable.Races != null)
+                    copy.RaceTable.Races[0] = undefined as unknown as Race;
+
+                return Promise.resolve({ MRData : <Mrdata>copy });
+            }
+
+            if(_endpoint.indexOf('sprint.json') > 0 ){ 
                 return new Promise<Root>((resolve) => {
                     resolve(undefined as unknown as Root);
                 });
@@ -43,6 +62,10 @@ describe('Testing results file', () => {
                 return new Promise<Root>((resolve) => {
                     resolve({ MRData : <Mrdata>seasonData });
                 });
+            }
+
+            if (_endpoint === '2022/2/qualifying.json' || _endpoint === '2022/4/qualifying.json') {
+                return Promise.resolve({ MRData : <Mrdata>qualifyingData });
             }
     
             return new Promise<Root>((resolve) => {
@@ -309,5 +332,70 @@ describe('Testing results file', () => {
         const htmlResult = await getRenderStringAsync(result);
 
         expect(htmlResult).toMatch('<table> <tr> <td> Season<br /> <table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon> Error getting seasons <ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table><table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table> </td> <td> Race<br /> <select name="selectedRace" @change="selectedRaceChanged"> <option value="0" ?selected=>Select race</option> </select> </td> </tr> </table>');
+    }),
+    test('Calling render with selectedSeason undefined', async () => {
+    
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date(2022, 2, 27, 15, 10, 0)); // Weird bug in jest setting this to the last of the month
+
+        parent.properties.set('cardValues', { selectedSeason: undefined, selectedRace: undefined });
+        const card = new Results(parent);
+
+        const result = card.render();
+        const htmlResult = await getRenderStringAsync(result);
+
+        expect(htmlResult).toMatch('<table> <tr> <td> Season<br /> <select name="selectedSeason" @change="selectedSeasonChanged"> <option value="0">Select season</option> <option value="1979" ?selected=>1979</option><option value="1978" ?selected=>1978</option><option value="1977" ?selected=>1977</option><option value="1976" ?selected=>1976</option><option value="1975" ?selected=>1975</option><option value="1974" ?selected=>1974</option><option value="1973" ?selected=>1973</option><option value="1972" ?selected=>1972</option><option value="1971" ?selected=>1971</option><option value="1970" ?selected=>1970</option><option value="1969" ?selected=>1969</option><option value="1968" ?selected=>1968</option><option value="1967" ?selected=>1967</option><option value="1966" ?selected=>1966</option><option value="1965" ?selected=>1965</option><option value="1964" ?selected=>1964</option><option value="1963" ?selected=>1963</option><option value="1962" ?selected=>1962</option><option value="1961" ?selected=>1961</option><option value="1960" ?selected=>1960</option><option value="1959" ?selected=>1959</option><option value="1958" ?selected=>1958</option><option value="1957" ?selected=>1957</option><option value="1956" ?selected=>1956</option><option value="1955" ?selected=>1955</option><option value="1954" ?selected=>1954</option><option value="1953" ?selected=>1953</option><option value="1952" ?selected=>1952</option><option value="1951" ?selected=>1951</option><option value="1950" ?selected=>1950</option> </select><table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table> </td> <td> Race<br /> <select name="selectedRace" @change="selectedRaceChanged"> <option value="0" ?selected=>Select race</option> </select> </td> </tr> </table>');
+        
+        jest.useRealTimers();
+    }),
+    test('Calling render with selectedSeason undefined with sprint race', async () => {
+    
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date(2022, 3, 23, 16, 35, 0)); // Weird bug in jest setting this to the last of the month
+
+        parent.properties.set('cardValues', { selectedSeason: undefined, selectedRace: undefined });
+        const card = new Results(parent);
+
+        const result = card.render();
+        const htmlResult = await getRenderStringAsync(result);
+
+        console.log(htmlResult)
+
+        expect(htmlResult).toMatch('<table> <tr> <td> Season<br /> <select name="selectedSeason" @change="selectedSeasonChanged"> <option value="0">Select season</option> <option value="1950" ?selected=>1950</option><option value="1951" ?selected=>1951</option><option value="1952" ?selected=>1952</option><option value="1953" ?selected=>1953</option><option value="1954" ?selected=>1954</option><option value="1955" ?selected=>1955</option><option value="1956" ?selected=>1956</option><option value="1957" ?selected=>1957</option><option value="1958" ?selected=>1958</option><option value="1959" ?selected=>1959</option><option value="1960" ?selected=>1960</option><option value="1961" ?selected=>1961</option><option value="1962" ?selected=>1962</option><option value="1963" ?selected=>1963</option><option value="1964" ?selected=>1964</option><option value="1965" ?selected=>1965</option><option value="1966" ?selected=>1966</option><option value="1967" ?selected=>1967</option><option value="1968" ?selected=>1968</option><option value="1969" ?selected=>1969</option><option value="1970" ?selected=>1970</option><option value="1971" ?selected=>1971</option><option value="1972" ?selected=>1972</option><option value="1973" ?selected=>1973</option><option value="1974" ?selected=>1974</option><option value="1975" ?selected=>1975</option><option value="1976" ?selected=>1976</option><option value="1977" ?selected=>1977</option><option value="1978" ?selected=>1978</option><option value="1979" ?selected=>1979</option> </select><table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table> </td> <td> Race<br /> <select name="selectedRace" @change="selectedRaceChanged"> <option value="0" ?selected=>Select race</option> </select> </td> </tr> </table>');
+        
+        jest.useRealTimers();
+    }),
+    test('Calling render with selectedSeason undefined no results', async () => {
+    
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date(2022, 2, 27, 15, 10, 0)); // Weird bug in jest setting this to the last of the month
+
+        parent.properties.set('cardValues', { selectedSeason: undefined, selectedRace: undefined });
+        const card = new Results(parent);
+
+        const result = card.render();
+        const htmlResult = await getRenderStringAsync(result);
+
+        expect(htmlResult).toMatch('<table> <tr> <td> Season<br /> <select name="selectedSeason" @change="selectedSeasonChanged"> <option value="0">Select season</option> <option value="1979" ?selected=>1979</option><option value="1978" ?selected=>1978</option><option value="1977" ?selected=>1977</option><option value="1976" ?selected=>1976</option><option value="1975" ?selected=>1975</option><option value="1974" ?selected=>1974</option><option value="1973" ?selected=>1973</option><option value="1972" ?selected=>1972</option><option value="1971" ?selected=>1971</option><option value="1970" ?selected=>1970</option><option value="1969" ?selected=>1969</option><option value="1968" ?selected=>1968</option><option value="1967" ?selected=>1967</option><option value="1966" ?selected=>1966</option><option value="1965" ?selected=>1965</option><option value="1964" ?selected=>1964</option><option value="1963" ?selected=>1963</option><option value="1962" ?selected=>1962</option><option value="1961" ?selected=>1961</option><option value="1960" ?selected=>1960</option><option value="1959" ?selected=>1959</option><option value="1958" ?selected=>1958</option><option value="1957" ?selected=>1957</option><option value="1956" ?selected=>1956</option><option value="1955" ?selected=>1955</option><option value="1954" ?selected=>1954</option><option value="1953" ?selected=>1953</option><option value="1952" ?selected=>1952</option><option value="1951" ?selected=>1951</option><option value="1950" ?selected=>1950</option> </select><table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table> </td> <td> Race<br /> <select name="selectedRace" @change="selectedRaceChanged"> <option value="0" ?selected=>Select race</option> </select> </td> </tr> </table>');
+        
+        jest.useRealTimers();
+    }),
+    test('Calling render with selectedSeason undefined no results', async () => {
+    
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date(2022, 4, 7, 22, 10, 0)); // Weird bug in jest setting this to the last of the month
+
+        parent.properties.set('cardValues', { selectedSeason: undefined, selectedRace: undefined });
+        const card = new Results(parent);
+
+        const result = card.render();
+        const htmlResult = await getRenderStringAsync(result);
+
+        console.log(htmlResult)
+        console.log(new Date());
+
+        expect(htmlResult).toMatch('<table> <tr> <td> Season<br /> <select name="selectedSeason" @change="selectedSeasonChanged"> <option value="0">Select season</option> <option value="1950" ?selected=>1950</option><option value="1951" ?selected=>1951</option><option value="1952" ?selected=>1952</option><option value="1953" ?selected=>1953</option><option value="1954" ?selected=>1954</option><option value="1955" ?selected=>1955</option><option value="1956" ?selected=>1956</option><option value="1957" ?selected=>1957</option><option value="1958" ?selected=>1958</option><option value="1959" ?selected=>1959</option><option value="1960" ?selected=>1960</option><option value="1961" ?selected=>1961</option><option value="1962" ?selected=>1962</option><option value="1963" ?selected=>1963</option><option value="1964" ?selected=>1964</option><option value="1965" ?selected=>1965</option><option value="1966" ?selected=>1966</option><option value="1967" ?selected=>1967</option><option value="1968" ?selected=>1968</option><option value="1969" ?selected=>1969</option><option value="1970" ?selected=>1970</option><option value="1971" ?selected=>1971</option><option value="1972" ?selected=>1972</option><option value="1973" ?selected=>1973</option><option value="1974" ?selected=>1974</option><option value="1975" ?selected=>1975</option><option value="1976" ?selected=>1976</option><option value="1977" ?selected=>1977</option><option value="1978" ?selected=>1978</option><option value="1979" ?selected=>1979</option> </select><table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon> Loading... <ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table> </td> <td> Race<br /> <select name="selectedRace" @change="selectedRaceChanged"> <option value="0" ?selected=>Select race</option> </select> </td> </tr> </table>');
+        
+        jest.useRealTimers();
     })
 });

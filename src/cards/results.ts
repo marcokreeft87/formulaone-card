@@ -249,23 +249,26 @@ export default class Results extends BaseCard {
         const { properties, cardValues } = this.getParentCardValues();
 
         properties.selectedRound = round;
-        
-        this.client.GetResults(properties.selectedSeason as number, round).then(response => {
 
-            this.client.GetQualifyingResults(parseInt(response.season), parseInt(response.round)).then(qualifyingResults => {
-                const race = response.Races[0];
-                race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+        const selectedSeason = properties.selectedSeason as number;
+        Promise.all([this.client.GetResults(selectedSeason, round), 
+            this.client.GetQualifyingResults(selectedSeason, round),
+            this.client.GetSprintResults(selectedSeason, round)])
+            .then(([results, qualifyingResults, sprintResults]) => {
 
-                this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {                    
-                    /* istanbul ignore next */  
-                    race.SprintResults = sprintResults?.Races[0]?.SprintResults;
+                const race = results.Races.length > 0 ? results.Races[0] : null;
+                console.log(race)
+                if(race) {
+                    race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+                    race.SprintResults = sprintResults?.Races[0]?.SprintResults
+                    console.log(sprintResults);
+                    properties.selectedSeason = race.season;
+                }
 
-                    properties.selectedRace = race;
-                    cardValues.set('cardValues', properties);
-                    this.parent.properties = cardValues;
-                });
+                properties.selectedRace = race;
+                cardValues.set('cardValues', properties);
+                this.parent.properties = cardValues;
             });
-        });
     }
 
     private setRaces(ev: SelectChangeEvent) {
@@ -282,29 +285,68 @@ export default class Results extends BaseCard {
         });
     }
 
-    private getLastResult() {
-        this.client.GetLastResult().then(response => {
+    private getUpcomingRace(now: Date, races: Race[]) : Race {
+        
+        const nextRaces = races.filter(race =>  {
 
-            const { properties, cardValues } = this.getParentCardValues();
-            properties.selectedSeason = response.season;
+            const raceDateTime = new Date(race.date + 'T' + race.time);
+            const qualifyingDateTime = new Date(race.Qualifying.date + 'T' + race.Qualifying.time);
+            const sprintDateTime = race.Sprint ? new Date(race.Sprint.date + 'T' + race.Sprint.time) : null;
 
-            this.client.GetQualifyingResults(parseInt(response.season), parseInt(response.round)).then(qualifyingResults => {
-                const race = response;
-                race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+            if(raceDateTime >= now && (qualifyingDateTime < now && (sprintDateTime === null || sprintDateTime < now))) {
+                return true;
+            }
 
-                this.client.GetSprintResults(parseInt(response.season), parseInt(response.round)).then(sprintResults => {
-                    race.SprintResults = sprintResults?.Races[0]?.SprintResults;
-
-                    properties.selectedRace = race;
-                    this.client.GetSeasonRaces(parseInt(response.season)).then(racesResponse => {
-                        properties.races = racesResponse;
-    
-                        cardValues.set('cardValues', properties);
-                        this.parent.properties = cardValues;
-                    });
-                });
-            });
+            return false;
         });
+
+        return nextRaces.length > 0 ? nextRaces[0] : null;
+    }
+
+    private getLastResult() {
+
+        const now = new Date();
+
+        this.client.GetSchedule(now.getFullYear()).then(response => { 
+
+            const upcomingRace = this.getUpcomingRace(now, response);
+
+            let season : number = new Date().getFullYear();
+            let round : number = upcomingRace !== null ? parseInt(upcomingRace.round) : 0;
+
+            let race = { } as Race;
+            if(upcomingRace !== null) {
+                race = upcomingRace;
+                round = parseInt(race.round);
+                season = parseInt(race.season);
+            } else {
+                this.client.GetLastResult().then(response => {
+                    race = response;
+                    round = parseInt(response.round);
+                    season = parseInt(response.season);
+                });
+            }
+
+            console.log(season, round);
+            Promise.all([this.client.GetQualifyingResults(season, round), 
+                        this.client.GetSprintResults(season, round),
+                        this.client.GetSeasonRaces(season)])
+                .then(([qualifyingResults, sprintResults, seasonRaces]) => {
+                                            
+                    const { properties, cardValues } = this.getParentCardValues();
+
+                    race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+                    race.SprintResults = sprintResults?.Races[0]?.SprintResults;
+                    
+                    properties.races = seasonRaces;
+                    properties.selectedRace = race;
+                    properties.selectedSeason = season.toString();
+                    
+                    cardValues.set('cardValues', properties);
+                    this.parent.properties = cardValues;
+                });
+        });
+        
     }
 
     setSelectedTabIndex(index: number) {        
