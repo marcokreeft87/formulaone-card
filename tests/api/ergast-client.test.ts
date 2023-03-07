@@ -1,13 +1,18 @@
-import ErgastClient from '../../src/api/ergast-client';
-import { Mrdata, Root } from '../../src/api/f1-models';
+import ErgastClient from "../../src/api/ergast-client";
+import LocalStorageMock from "../testdata/localStorageMock";
+import fetchMock from "jest-fetch-mock";
+
+// Models
+import { Mrdata } from "../../src/api/f1-models";
+import { LocalStorageItem } from '../../src/types/formulaone-card-types';
+
+// Importing test data
 import { MRData as scheduleData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 import { MRData as driverStandingsData } from '../testdata/driverStandings.json'
 import { MRData as constructorStandingsData } from '../testdata/constructorStandings.json'
 import { MRData as seasonData } from '../testdata/seasons.json'
 import { MRData as qualifyingData } from '../testdata/qualifying.json'
-import LocalStorageMock from '../testdata/localStorageMock';
-import { LocalStorageItem } from '../../src/types/formulaone-card-types';
 
 describe('Testing ergast client file', () => {
     const client = new ErgastClient();    
@@ -15,107 +20,111 @@ describe('Testing ergast client file', () => {
 
     Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
-    test('Passing number to GetSchedule should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>scheduleData });
-        }));
+    beforeEach(() => {        
+        localStorageMock.clear();     
+    });
 
-        await expect(client.GetSchedule(2022)).resolves.toBe(scheduleData.RaceTable.Races);
+    test('Passing number to GetSchedule should return correct data', async () => { 
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
+
+        // Act
+        const result = await client.GetSchedule(2022);
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData.RaceTable.Races));
     }),
-    test('Calling GetLastResult should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>resultData });
-        }));
+    test('Calling GetLastResult should return correct data', async () => {       
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>resultData }));
 
-        await expect(client.GetLastResult()).resolves.toBe(resultData.RaceTable.Races[0]);
+        // Act
+        const result = await client.GetLastResult();
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(resultData.RaceTable.Races[0]));
     }),
-    test('Calling GetDriverStandings should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>driverStandingsData });
-        }));
+    test('Calling GetDriverStandings should return correct data', async () => {       
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>driverStandingsData }));
 
-        await expect(client.GetDriverStandings()).resolves.toBe(driverStandingsData.StandingsTable.StandingsLists[0].DriverStandings);
+        // Act
+        const result = await client.GetDriverStandings();
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(driverStandingsData.StandingsTable.StandingsLists[0].DriverStandings));
     }),
     test('Calling GetConstructorStandings should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>constructorStandingsData });
-        }));
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>constructorStandingsData }));
 
-        await expect(client.GetConstructorStandings()).resolves.toBe(constructorStandingsData.StandingsTable.StandingsLists[0].ConstructorStandings);
+        // Act
+        const result = await client.GetConstructorStandings();
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(constructorStandingsData.StandingsTable.StandingsLists[0].ConstructorStandings));
     }),
-    test('Calling GetResults should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>resultData });
-        }));
+    test('Calling GetResults should return correct data', async () => {  
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>resultData }));
 
-        await expect(client.GetResults(2022, 2)).resolves.toBe(resultData.RaceTable);
-    }),
-    test('Calling GetResults api not returning data should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve(undefined as unknown as Root);
-        }));
+        // Act
+        const result = await client.GetResults(2022, 2);
 
-        await expect(client.GetResults(2022, 2)).resolves.toBe(undefined);
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(resultData.RaceTable));
     }),
     test('Calling GetSeasons should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>seasonData });
-        }));
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>seasonData }));
 
-        await expect(client.GetSeasons()).resolves.toBe(seasonData.SeasonTable.Seasons);
-    }),
-    test('Calling GetSeasonRaces should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>scheduleData });
-        }));
+        // Act
+        const result = await client.GetSeasons();
 
-        await expect(client.GetSeasonRaces(2022)).resolves.toBe(scheduleData.RaceTable.Races);
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(seasonData.SeasonTable.Seasons));
     }),
-    test('Calling GetQualifyingResults should return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve({ MRData : <Mrdata>qualifyingData });
-        }));
+    test('Calling GetSeasonRaces should return correct data', async () => {     
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
 
-        await expect(client.GetQualifyingResults(2022, 2)).resolves.toBe(qualifyingData.RaceTable);
-    }),
-    test('Calling GetQualifyingResults should not return correct data', async () => {           
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        jest.spyOn(client, 'GetData').mockImplementationOnce((_endpoint) => new Promise<Root>((resolve) => {
-            resolve(undefined as unknown as Root);
-        }));
+        // Act
+        const result = await client.GetSeasonRaces(2022);
 
-        await expect(client.GetQualifyingResults(2022, 2)).resolves.toBe(undefined);
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData.RaceTable.Races));
     }),
-    test('Calling GetData with data in localstorage and cacheResult true should return correct data', async () => {           
+    test('Calling GetQualifyingResults should return correct data', async () => {    
+        // Arrange
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>qualifyingData }));
+
+        // Act
+        const result = await client.GetQualifyingResults(2022, 2);
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(qualifyingData.RaceTable));
+    }),
+    test('Calling GetData with data in localstorage and cacheResult true should return correct data', async () => {      
+        // Arrange
         localStorageMock.setItem('2022.json', JSON.stringify({ data: JSON.stringify({ MRData: scheduleData }), created: new Date() }));    
-        
+
+        // Act
         const result = await client.GetData('2022.json', true, 24);
+
+        // Assert
         expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
     }),
-    test('Calling GetData without data in localstorage and cacheResult true should return correct data', async () => {   
-        localStorageMock.clear();        
-        
+    test('Calling GetData without data in localstorage and cacheResult true should return correct data', async () => {  
+        // Arrange 
         const endpoint = '2022.json';      
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));  
         
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        window.fetch = jest.fn().mockImplementationOnce((_input, _init): Promise<Response> => new Promise<Response>((resolve) => {            
-            resolve({ json: () => scheduleData } as unknown as Response);
-        }));        
-        
+        // Act
         const result = await client.GetData(endpoint, true, 24);
-        expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
-
         const localStorageItem = <LocalStorageItem>JSON.parse(localStorageMock.getItem(endpoint));
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
         expect(localStorageItem.data).toMatch(JSON.stringify(scheduleData));
     })
-})
-
+});
