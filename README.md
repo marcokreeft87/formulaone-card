@@ -296,3 +296,4 @@ weather_options:
 - [ ] Use mwc for dropdowns
 - [ ] Better way for unit testing
 - [x] Weather forecast next race (https://github.com/marcokreeft87/formulaone-card/discussions/145)
+- [ ] Convert jest tests to fetchMock
