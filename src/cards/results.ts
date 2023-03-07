@@ -244,24 +244,25 @@ export default class Results extends BaseCard {
         `;
     }
 
-    private setSelectedRace(ev: SelectChangeEvent) {
+    setSelectedRace(ev: SelectChangeEvent) {
         const round = parseInt(ev.target.value);
         const { properties, cardValues } = this.getParentCardValues();
 
         properties.selectedRound = round;
 
         const selectedSeason = properties.selectedSeason as number;
+
         Promise.all([this.client.GetResults(selectedSeason, round), 
             this.client.GetQualifyingResults(selectedSeason, round),
             this.client.GetSprintResults(selectedSeason, round)])
             .then(([results, qualifyingResults, sprintResults]) => {
 
                 const race = results.Races.length > 0 ? results.Races[0] : null;
-                console.log(race)
                 if(race) {
                     race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+                    /* istanbul ignore next */
                     race.SprintResults = sprintResults?.Races[0]?.SprintResults
-                    console.log(sprintResults);
+                    console.log(`${selectedSeason} round ${round}`, sprintResults);
                     properties.selectedSeason = race.season;
                 }
 
@@ -327,7 +328,6 @@ export default class Results extends BaseCard {
                 });
             }
 
-            console.log(season, round);
             Promise.all([this.client.GetQualifyingResults(season, round), 
                         this.client.GetSprintResults(season, round),
                         this.client.GetSeasonRaces(season)])

@@ -35,7 +35,6 @@ export default class ErgastClient extends ClientBase {
 
     async GetSprintResults(season: number, round: number) : Promise<RaceTable> {
       const data = await this.GetData<Root>(`${season}/${round}/sprint.json`, false, 0);
-      console.log(`${season}/${round}/sprint.json`, data?.MRData.RaceTable)
 
       return data?.MRData.RaceTable;
     }
