@@ -22,6 +22,10 @@ export abstract class ClientBase {
             Accept: 'application/json',
           }
         });
+
+        if(!response || !response.ok) {
+          return null;
+        }        
   
         const data = await response.json();
           
