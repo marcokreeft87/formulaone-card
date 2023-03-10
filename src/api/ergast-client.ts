@@ -7,6 +7,7 @@ export default class ErgastClient extends ClientBase {
     baseUrl = 'https://ergast.com/api/f1';
 
     async GetSchedule(season: number) : Promise<Race[]> {      
+      console.log(season)
       const data = await this.GetData<Root>(`${season}.json`, true, 72);
 
       return data?.MRData.RaceTable.Races;
@@ -42,13 +43,13 @@ export default class ErgastClient extends ClientBase {
     async GetQualifyingResults(season: number, round: number) : Promise<RaceTable> {
       const data = await this.GetData<Root>(`${season}/${round}/qualifying.json`, false, 0);
 
-      return data?.MRData.RaceTable;
+      return data.MRData.RaceTable;
     }
     
     async GetResults(season: number, round: number) : Promise<RaceTable> {      
       const data = await this.GetData<Root>(`${season}/${round}/results.json`, false, 0);
 
-      return data?.MRData.RaceTable;
+      return data.MRData.RaceTable;
     }
 
     async GetSeasons() : Promise<Season[]> {
