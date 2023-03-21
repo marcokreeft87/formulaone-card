@@ -237,7 +237,7 @@ describe('Testing countdown file', () => {
         expect(customCardHelper.handleAction).toBeCalledTimes(3);
 
         spy.mockClear();
-    }),    
+    }),
     test.each`
     countdown_type | current_date | expected   
     ${CountdownType.Practice1}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-22T11:30:00.000Z")}
@@ -327,6 +327,32 @@ describe('Testing countdown file', () => {
         // Assert
         expect(htmlResult).toMatch(`<table @action=_handleAction .actionHandler= class="clickable"> <tr> <td> <h2 class="${withFont ? 'formulaone-font' : ''}"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp;&nbsp; 4 : Emilia Romagna Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1 class="${withFont ? 'formulaone-font' : ''}"></h1> </td> </tr> </table>`);
         expect(date.value).toMatch(expected);
+    }),
+    test('Calling constructor without countdown_type should set countdown_type',  () => {   
+        // Arrange
+        const config = createMock<FormulaOneCardConfig>();
+        config.countdown_type = undefined;
+        const parent = createMock<FormulaOneCard>();
+        parent.config = config;
+
+        // Act
+        const card = new Countdown(parent);
+
+        // Assert
+        expect(card.config.countdown_type).toBe(CountdownType.Race);
+    }),
+    test('Calling constructor with countdown_type should not change countdown_type',  () => {   
+        // Arrange
+        const config = createMock<FormulaOneCardConfig>();
+        config.countdown_type = CountdownType.Practice1;
+        const parent = createMock<FormulaOneCard>();
+        parent.config = config;
+
+        // Act
+        const card = new Countdown(parent);
+
+        // Assert
+        expect(card.config.countdown_type).toBe(CountdownType.Practice1);
     });
 });
 
