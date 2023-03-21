@@ -29,11 +29,12 @@ export default class Countdown extends BaseCard {
         'city': 'City',
         'racetime' : 'Race',
         'sprint' : 'Sprint',
-        'qualifying' : 'Qualifying'
+        'qualifying' : 'Qualifying',
+        'until' : 'Until'
     };
 
     constructor(parent: FormulaOneCard) {
-        super(parent);    
+        super(parent);
     }
     
     cardSize(): number {
@@ -74,7 +75,7 @@ export default class Countdown extends BaseCard {
             if (this.hass && this.config.actions && ev.detail.action) {
                 clickHandler(this.parent, this.config, this.hass, ev);
             }
-        }
+        };
 
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
@@ -82,7 +83,7 @@ export default class Countdown extends BaseCard {
                     return html`${getApiErrorMessage('next race')}`
                 }
 
-                const { nextRace, raceDateTime } = this.getNextEvent(response);
+                const { nextRace, raceDateTime, countdownType } = this.getNextEvent(response);
 
                 if(!nextRace) {
                     return getEndOfSeasonMessage(this.translation('endofseason'));
@@ -106,6 +107,15 @@ export default class Countdown extends BaseCard {
                                         <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${asyncReplace(timer)}</h1>
                                     </td>
                                 </tr>
+                                ${(
+                                    Array.isArray(this.config.countdown_type) && this.config.countdown_type.length > 1 ?
+                                        html`<tr>
+                                                <td class="text-center">
+                                                    <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${this.translation('until')} ${this.translation(countdownType.toLowerCase())}</h1>
+                                                </td>
+                                            </tr>`
+                                        : null
+                                )}
                             </table>
                             ${this.renderHeader(nextRace, raceDateTime)}`;
 
@@ -123,31 +133,25 @@ export default class Countdown extends BaseCard {
         })[0];
 
         let raceDateTime = null;
+        let countdownType = this.config.countdown_type as CountdownType;
         if(nextRace) {
-            switch(this.config.countdown_type as CountdownType) {
-                case CountdownType.Practice1:
-                    raceDateTime = new Date(nextRace.FirstPractice.date + 'T' + nextRace.FirstPractice.time);
-                    break;
-                case CountdownType.Practice2:
-                    raceDateTime = new Date(nextRace.SecondPractice.date + 'T' + nextRace.SecondPractice.time);
-                    break;
-                case CountdownType.Practice3:
-                    raceDateTime = new Date(nextRace.ThirdPractice.date + 'T' + nextRace.ThirdPractice.time);
-                    break;
-                case CountdownType.Qualifying:                
-                    raceDateTime = new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time);
-                    break;
-                case CountdownType.Sprint:                    
-                    if(nextRace.Sprint) {
-                        raceDateTime = new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time);
-                    }
-                    break;            
-                default:
-                    raceDateTime = new Date(nextRace.date + 'T' + nextRace.time);
-                    break;
-            }
+            const countdownTypes = this.config.countdown_type as CountdownType[];
+
+            const raceEvents = [
+                { Date: new Date(nextRace.FirstPractice.date + 'T' + nextRace.FirstPractice.time), Type: CountdownType.Practice1 },
+                { Date: new Date(nextRace.SecondPractice.date + 'T' + nextRace.SecondPractice.time), Type: CountdownType.Practice2 },
+                { Date: nextRace.ThirdPractice ? new Date(nextRace.ThirdPractice.date + 'T' + nextRace.ThirdPractice.time) : null, Type: CountdownType.Practice3 },
+                { Date: nextRace.Sprint ? new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time) : null, Type: CountdownType.Sprint },
+                { Date: new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time), Type: CountdownType.Qualifying },
+                { Date: new Date(nextRace.date + 'T' + nextRace.time), Type: CountdownType.Race }
+            ].filter(x => x.Date).filter(x => x.Date > new Date()).sort((a, b) => a.Date.getTime() - b.Date.getTime());
+
+            // Get the first countdown type that occurs in race events and get the date and time for that event
+            const nextEvent = raceEvents.filter(x => countdownTypes?.includes(x.Type))[0];
+            raceDateTime = nextEvent?.Date;
+            countdownType = nextEvent?.Type ?? countdownType;
         }
 
-        return { nextRace, raceDateTime };
+        return { nextRace, raceDateTime, countdownType };
     }
 }

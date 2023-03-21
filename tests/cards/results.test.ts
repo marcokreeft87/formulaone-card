@@ -30,7 +30,6 @@ describe('Testing results file', () => {
         spyClient = jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementation((_endpoint) => {
 
             if(_endpoint === '2022/17/results.json' || _endpoint === '2022/6/results.json') {
-                console.log(1, resultData.RaceTable)
                 return new Promise<Root>((resolve) => {
                     resolve({ MRData : <Mrdata>resultData });
                 });

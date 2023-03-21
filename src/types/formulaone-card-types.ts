@@ -21,7 +21,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     f1_font?: boolean;
     row_limit?: number;
     icons?: CustomIcons;
-    countdown_type?: CountdownType;
+    countdown_type?: CountdownType | CountdownType[] | undefined;
     show_weather?: boolean;
     weather_options?: WeatherOptions;
 }
