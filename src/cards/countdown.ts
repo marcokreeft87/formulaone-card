@@ -35,6 +35,8 @@ export default class Countdown extends BaseCard {
 
     constructor(parent: FormulaOneCard) {
         super(parent);
+        
+        this.config.countdown_type = this.config.countdown_type ?? CountdownType.Race;
     }
     
     cardSize(): number {
