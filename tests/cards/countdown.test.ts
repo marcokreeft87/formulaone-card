@@ -349,7 +349,7 @@ describe('Testing countdown file', () => {
         const { htmlResult, date } = await getHtmlResultAndDate(card);
 
         // Assert
-        expect(htmlResult).toMatch(`<table @action=_handleAction .actionHandler= class=\"clickable\"> <tr> <td> <h2 class=\"${withFont ? 'formulaone-font' : ''}\"><img height=\"25\" src=\"https://flagcdn.com/w320/it.png\">&nbsp;&nbsp; 4 : Emilia Romagna Grand Prix</h2> </td> </tr> <tr> <td class=\"text-center\"> <h1 class=\"${withFont ? 'formulaone-font' : ''}\"></h1> </td> </tr> </table>`);
+        expect(htmlResult).toMatch(`<table @action=_handleAction .actionHandler= class="clickable"> <tr> <td> <h2 class="${withFont ? 'formulaone-font' : ''}"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp;&nbsp; 4 : Emilia Romagna Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1 class="${withFont ? 'formulaone-font' : ''}"></h1> </td> </tr> </table>`);
         expect(date.value).toMatch(expected);
     });
 });
