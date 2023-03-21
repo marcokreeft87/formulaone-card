@@ -305,14 +305,14 @@ describe('Testing countdown file', () => {
         expect(result.raceDateTime).toMatchObject(expected);
     }),
     test.each`
-    current_date | expected | hasSprint | withFont
-    ${new Date(2022, 3, 22, 13, 0)}, ${"0d 0h 30m 0s"}, ${true}, ${true} // Practice 1
-    ${new Date(2022, 3, 22, 16, 30)}, ${"0d 0h 30m 0s"}, ${true}, ${true} // Qualifying
-    ${new Date(2022, 3, 23, 12, 0)}, ${"0d 0h 30m 0s"}, ${true}, ${true} // Practice 2
-    ${new Date(2022, 3, 23, 14, 20)}, ${"0d 2h 10m 0s"}, ${true}, ${true} // Sprint
-    ${new Date(2022, 3, 24, 10)}, ${"0d 5h 0m 0s"}, ${true}, ${true} // Race
-    ${new Date(2022, 3, 23, 14, 20)}, ${"0d 2h 10m 0s"}, ${false} , ${false}// Race
-    `(`Calling render with race, events in the future $current_date`, async ({ current_date, expected, hasSprint, withFont }) => {
+    current_date | expected | withFont
+    ${new Date(2022, 3, 22, 13, 0)}, ${"0d 0h 30m 0s"}, ${true} // Practice 1
+    ${new Date(2022, 3, 22, 16, 30)}, ${"0d 0h 30m 0s"}, ${true} // Qualifying
+    ${new Date(2022, 3, 23, 12, 0)}, ${"0d 0h 30m 0s"}, ${true} // Practice 2
+    ${new Date(2022, 3, 23, 14, 20)}, ${"0d 2h 10m 0s"}, ${true} // Sprint
+    ${new Date(2022, 3, 24, 10)}, ${"0d 5h 0m 0s"}, ${true} // Race
+    ${new Date(2022, 3, 23, 14, 20)}, ${"0d 2h 10m 0s"},${false}// Race
+    `(`Calling render with race, events in the future $current_date`, async ({ current_date, expected, withFont }) => {
         // Arrange      
         jest.setSystemTime(current_date); // Weird bug in jest setting this to the last of the month  
 
