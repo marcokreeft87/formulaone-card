@@ -320,31 +320,7 @@ describe('Testing countdown file', () => {
         config.countdown_type = [ CountdownType.Practice1, CountdownType.Practice2, CountdownType.Practice3, CountdownType.Qualifying, CountdownType.Sprint, CountdownType.Race ];
         config.f1_font = withFont;
         card.config = config;
-
-        const races = [{
-            season: '2022',
-            round: '1',
-            url: 'https://en.wikipedia.org/wiki/2022_Bahrain_Grand_Prix',
-            raceName: 'Bahrain Grand Prix',
-            Circuit: {
-                circuitId: 'bahrain',
-                url: 'http://en.wikipedia.org/wiki/Bahrain_International_Circuit',
-                circuitName: 'Bahrain International Circuit',
-                Location: {
-                    lat: '26.0325',
-                    long: '50.5106',
-                    locality: 'Sakhir',
-                    country: 'Bahrain'
-                }
-            },
-            date: '2022-04-24',
-            time: '13:00:00Z',
-            FirstPractice: { date: '2022-04-22', time: '11:30:00Z' },
-            SecondPractice: { date: '2022-04-23', time: '10:30:00Z' },
-            Qualifying: { date: '2022-04-22', time: '15:00:00Z' },
-            Sprint: hasSprint ? { date: '2022-04-23', time: '14:30:00Z' } : undefined
-        } as Race];
-
+        
         // Act
         const { htmlResult, date } = await getHtmlResultAndDate(card);
 
