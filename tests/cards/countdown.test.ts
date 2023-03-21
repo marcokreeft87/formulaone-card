@@ -91,6 +91,7 @@ describe('Testing countdown file', () => {
 
     test('Calling render with date in future should render countdown', async () => {   
         // Arrange
+        card.config.countdown_type = CountdownType.Race;
         jest.setSystemTime(new Date(2022, 2, 1)); // Weird bug in jest setting this to the last of the month
         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
 
@@ -127,6 +128,7 @@ describe('Testing countdown file', () => {
     }),
     test('Calling render with date an day past race start render countdown till next race', async () => {   
         // Arrange
+        card.config.countdown_type = CountdownType.Race;
         jest.setSystemTime(new Date(2022, 2, 21)); // Weird bug in jest setting this to the last of the month
         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
 
@@ -201,6 +203,7 @@ describe('Testing countdown file', () => {
         const spy = jest.spyOn(customCardHelper, 'handleAction');
 
         card.config.f1_font = true;
+        card.config.countdown_type = undefined;
         card.config.actions = {
             tap_action: {
                 action: 'navigate',
@@ -224,7 +227,7 @@ describe('Testing countdown file', () => {
         
         // Assert
         expect(htmlResult).toMatch('<table @action=_handleAction .actionHandler= class="clickable"> <tr> <td> <h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/bh.png">&nbsp;&nbsp; 1 : Bahrain Grand Prix</h2> </td> </tr> <tr> <td class="text-center"> <h1 class="formulaone-font"></h1> </td> </tr> </table>');
-        expect(date.value).toMatch('19d 16h 0m 0s');
+        expect(date.value).toMatch('We are racing!');
         
         // eslint-disable-next-line @typescript-eslint/ban-types
         handleAction({ detail: { action: 'tap' } });
@@ -236,13 +239,13 @@ describe('Testing countdown file', () => {
         spy.mockClear();
     }),    
     test.each`
-    countdown_type | current_date | expected
+    countdown_type | current_date | expected   
     ${CountdownType.Practice1}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-22T11:30:00.000Z")}
     ${CountdownType.Practice2}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-23T10:30:00.000Z")}
     ${CountdownType.Practice3}, ${new Date(2022, 2, 1)}, ${new Date("2022-03-19T12:00:00.000Z")}
     ${CountdownType.Qualifying}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-22T15:00:00.000Z")}    
     ${CountdownType.Race}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-24T13:00:00.000Z")}  
-    ${CountdownType.Sprint}, ${new Date(2022, 3, 19)}, ${new Date("2022-04-23T14:30:00.000Z")}
+    ${CountdownType.Sprint}, ${new Date(2022, 3, 19, 11, 0)}, ${new Date("2022-04-23T14:30:00.000Z")}
     `(`Calling render with countdown_type $countdown_type`, async ({ countdown_type, current_date, expected }) => {
         // Arrange
         config.countdown_type = countdown_type; 
@@ -254,6 +257,100 @@ describe('Testing countdown file', () => {
         
         // Assert       
         expect(result.raceDateTime).toMatchObject(expected);
+    }), 
+    test.each`
+    current_date | expected | hasSprint
+    ${new Date(2022, 3, 22, 13, 0)}, ${new Date("2022-04-22T11:30:00.000Z")}, ${true} // Practice 1
+    ${new Date(2022, 3, 22, 16, 30)}, ${new Date("2022-04-22T15:00:00.000Z")}, ${true} // Qualifying
+    ${new Date(2022, 3, 23, 12, 0)}, ${new Date("2022-04-23T10:30:00.000Z")}, ${true} // Practice 2
+    ${new Date(2022, 3, 23, 14, 20)}, ${new Date("2022-04-23T14:30:00.000Z")}, ${true} // Sprint
+    ${new Date(2022, 3, 24, 10)}, ${new Date("2022-04-24T13:00:00.000Z")}, ${true} // Race
+    ${new Date(2022, 3, 23, 14, 20)}, ${new Date("2022-04-24T13:00:00.000Z")}, ${false} // Race
+    `(`Calling render with race, events in the future $current_date`, async ({ current_date, expected, hasSprint }) => {
+        // Arrange      
+        jest.setSystemTime(current_date); // Weird bug in jest setting this to the last of the month  
+
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
+        config.countdown_type = [ CountdownType.Practice1, CountdownType.Practice2, CountdownType.Practice3, CountdownType.Qualifying, CountdownType.Sprint, CountdownType.Race ];
+        card.config = config;
+
+        const races = [{
+            season: '2022',
+            round: '1',
+            url: 'https://en.wikipedia.org/wiki/2022_Bahrain_Grand_Prix',
+            raceName: 'Bahrain Grand Prix',
+            Circuit: {
+                circuitId: 'bahrain',
+                url: 'http://en.wikipedia.org/wiki/Bahrain_International_Circuit',
+                circuitName: 'Bahrain International Circuit',
+                Location: {
+                    lat: '26.0325',
+                    long: '50.5106',
+                    locality: 'Sakhir',
+                    country: 'Bahrain'
+                }
+            },
+            date: '2022-04-24',
+            time: '13:00:00Z',
+            FirstPractice: { date: '2022-04-22', time: '11:30:00Z' },
+            SecondPractice: { date: '2022-04-23', time: '10:30:00Z' },
+            Qualifying: { date: '2022-04-22', time: '15:00:00Z' },
+            Sprint: hasSprint ? { date: '2022-04-23', time: '14:30:00Z' } : undefined
+        } as Race];
+
+        // Act
+        const result = card.getNextEvent(races);
+
+        // Assert
+        expect(result.raceDateTime).toMatchObject(expected);
+    }),
+    test.each`
+    current_date | expected | hasSprint | withFont
+    ${new Date(2022, 3, 22, 13, 0)}, ${"0d 0h 30m 0s"}, ${true}, ${true} // Practice 1
+    ${new Date(2022, 3, 22, 16, 30)}, ${"0d 0h 30m 0s"}, ${true}, ${true} // Qualifying
+    ${new Date(2022, 3, 23, 12, 0)}, ${"0d 0h 30m 0s"}, ${true}, ${true} // Practice 2
+    ${new Date(2022, 3, 23, 14, 20)}, ${"0d 2h 10m 0s"}, ${true}, ${true} // Sprint
+    ${new Date(2022, 3, 24, 10)}, ${"0d 5h 0m 0s"}, ${true}, ${true} // Race
+    ${new Date(2022, 3, 23, 14, 20)}, ${"0d 2h 10m 0s"}, ${false} , ${false}// Race
+    `(`Calling render with race, events in the future $current_date`, async ({ current_date, expected, hasSprint, withFont }) => {
+        // Arrange      
+        jest.setSystemTime(current_date); // Weird bug in jest setting this to the last of the month  
+
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
+        config.countdown_type = [ CountdownType.Practice1, CountdownType.Practice2, CountdownType.Practice3, CountdownType.Qualifying, CountdownType.Sprint, CountdownType.Race ];
+        config.f1_font = withFont;
+        card.config = config;
+
+        const races = [{
+            season: '2022',
+            round: '1',
+            url: 'https://en.wikipedia.org/wiki/2022_Bahrain_Grand_Prix',
+            raceName: 'Bahrain Grand Prix',
+            Circuit: {
+                circuitId: 'bahrain',
+                url: 'http://en.wikipedia.org/wiki/Bahrain_International_Circuit',
+                circuitName: 'Bahrain International Circuit',
+                Location: {
+                    lat: '26.0325',
+                    long: '50.5106',
+                    locality: 'Sakhir',
+                    country: 'Bahrain'
+                }
+            },
+            date: '2022-04-24',
+            time: '13:00:00Z',
+            FirstPractice: { date: '2022-04-22', time: '11:30:00Z' },
+            SecondPractice: { date: '2022-04-23', time: '10:30:00Z' },
+            Qualifying: { date: '2022-04-22', time: '15:00:00Z' },
+            Sprint: hasSprint ? { date: '2022-04-23', time: '14:30:00Z' } : undefined
+        } as Race];
+
+        // Act
+        const { htmlResult, date } = await getHtmlResultAndDate(card);
+
+        // Assert
+        expect(htmlResult).toMatch(`<table @action=_handleAction .actionHandler= class=\"clickable\"> <tr> <td> <h2 class=\"${withFont ? 'formulaone-font' : ''}\"><img height=\"25\" src=\"https://flagcdn.com/w320/it.png\">&nbsp;&nbsp; 4 : Emilia Romagna Grand Prix</h2> </td> </tr> <tr> <td class=\"text-center\"> <h1 class=\"${withFont ? 'formulaone-font' : ''}\"></h1> </td> </tr> </table>`);
+        expect(date.value).toMatch(expected);
     });
 });
 

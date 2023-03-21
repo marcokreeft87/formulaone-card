@@ -7,7 +7,6 @@ export default class ErgastClient extends ClientBase {
     baseUrl = 'https://ergast.com/api/f1';
 
     async GetSchedule(season: number) : Promise<Race[]> {      
-      console.log(season)
       const data = await this.GetData<Root>(`${season}.json`, true, 72);
 
       return data?.MRData.RaceTable.Races;
