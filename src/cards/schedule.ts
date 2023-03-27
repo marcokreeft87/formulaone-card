@@ -26,7 +26,7 @@ export default class Schedule extends BaseCard {
     }
 
     renderLocation(circuit: Circuit) {
-        const locationConcatted = html`${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByName(circuit.Location.country)}">&nbsp;` : '')}${circuit.Location.locality}, ${circuit.Location.country}`;
+        const locationConcatted = html`${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByName(this, circuit.Location.country)}">&nbsp;` : '')}${circuit.Location.locality}, ${circuit.Location.country}`;
         return this.config.location_clickable ? html`<a href="${circuit.url}" target="_blank">${locationConcatted}</a>` : locationConcatted;
     }
 

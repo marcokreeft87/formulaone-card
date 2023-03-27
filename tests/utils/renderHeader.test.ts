@@ -33,7 +33,7 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace);
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch(`<h2 class=""><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class="" /><br>`);
+        expect(htmlResult).toMatch(`<h2 class=""><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="" @action=_handleAction .actionHandler= class="" /><br>`);
     }),
     test('Calling renderHeader with clickable image ', () => { 
         card.config.image_clickable = true;
@@ -49,7 +49,7 @@ describe('Testing util file function renderHeader', () => {
             }
           });
 
-        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
+        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
     }),
     test('Calling renderHeader with image not clickable and card countdown', async () => { 
         card.config.image_clickable = undefined;
@@ -58,7 +58,7 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace);
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch(`<img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
+        expect(htmlResult).toMatch(`<img width="100%" src="" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
     }),
     test('Calling renderHeader with actions', () => {
 
@@ -83,7 +83,7 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace);
 
         // eslint-disable-next-line @typescript-eslint/ban-types
-        const actionHandler = (result.values[1] as HTMLTemplateResult).values[2] as Function;
+        const actionHandler = (result.values[1] as HTMLTemplateResult).values[1] as Function;
         actionHandler({ detail: { action: 'tap' } });
         actionHandler({ detail: { action: 'double_tap' } });
         actionHandler({ detail: { action: 'hold' } });
@@ -115,7 +115,7 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace, true);
 
         // eslint-disable-next-line @typescript-eslint/ban-types
-        const actionHandler = (result.values[1] as HTMLTemplateResult).values[2] as Function;
+        const actionHandler = (result.values[1] as HTMLTemplateResult).values[1] as Function;
         actionHandler({ detail: { action: 'tap' } });
         actionHandler({ detail: { action: 'double_tap' } });
         actionHandler({ detail: { action: 'hold' } });
@@ -130,6 +130,6 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace);
         const htmlResult = getRenderString(result);
 
-        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="${ImageConstants.FlagCDN}sg.png">&nbsp; 17 : Singapore Grand Prix</h2>`);
+        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2>`);
     })
 });

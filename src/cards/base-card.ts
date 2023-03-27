@@ -3,6 +3,7 @@ import { HTMLTemplateResult } from "lit-html";
 import FormulaOneCard from "..";
 import ErgastClient from "../api/ergast-client";
 import { Race } from "../api/f1-models";
+import ImageClient from "../api/image-client";
 import WeatherClient from "../api/weather-client";
 import { CardProperties, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 
@@ -12,6 +13,7 @@ export abstract class BaseCard {
     client: ErgastClient;
     hass: HomeAssistant;
     weatherClient: WeatherClient;
+    imageClient: ImageClient;
 
     constructor(parent: FormulaOneCard) {     
         this.config = parent.config;   
@@ -19,6 +21,7 @@ export abstract class BaseCard {
         this.hass = parent._hass;
         this.parent = parent;
         this.weatherClient = new WeatherClient(this.config.weather_options?.api_key ?? '');
+        this.imageClient = new ImageClient();
     }    
 
     translation(key: string) : string {
