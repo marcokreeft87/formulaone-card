@@ -4,7 +4,6 @@ import { createMock } from "ts-auto-mock";
 import FormulaOneCard from "../../src";
 import { Race } from "../../src/api/f1-models";
 import { BaseCard } from "../../src/cards/base-card";
-import { ImageConstants } from "../../src/lib/constants";
 import { renderHeader } from "../../src/utils";
 import { MRData } from '../testdata/results.json'
 import { getRenderString } from "../utils";

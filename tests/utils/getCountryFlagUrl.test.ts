@@ -18,7 +18,7 @@ describe('Testing util file function getCountryFlagUrl', () => {
 
         jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(() => null);
         jest.spyOn(ImageClient.prototype, 'GetImage').mockImplementation((url: string) => {
-            return '';
+            return url;
         });
     });
 
