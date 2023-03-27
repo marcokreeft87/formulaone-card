@@ -1,5 +1,4 @@
 import { LocalStorageItem } from "../types/formulaone-card-types";
-import * as packageJson from '../../package.json';
 
 export default class ImageClient {
 
