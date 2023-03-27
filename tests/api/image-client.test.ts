@@ -5,10 +5,6 @@ import LocalStorageMock from "../testdata/localStorageMock";
 // Models
 import ImageClient from "../../src/api/image-client";
 
-// Data
-import * as packageJson from '../../package.json';
-
-
 const localStorageMock = new LocalStorageMock();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
@@ -29,14 +25,14 @@ describe('Testing image client file', () => {
         const image = client.GetImage('fakeurl');
 
         // Assert
-        expect(JSON.stringify(image)).toMatch(JSON.stringify(`fakeurl?v=${packageJson.version}`));
+        expect(JSON.stringify(image)).toMatch(JSON.stringify(`fakeurl`));
     }),
 
     test('Calling GetImage should return correct data with localstorage', async () => {
 
         // Arrange
         fetchMock.mockResponseOnce(JSON.stringify('fakeurl'));
-        localStorageMock.setItem(`fakeurl?v=${packageJson.version}`, JSON.stringify({ data: 'fakedata', created: new Date() }));
+        localStorageMock.setItem(`fakeurl`, JSON.stringify({ data: 'fakedata', created: new Date() }));
 
         // Act
         const image = client.GetImage('fakeurl');

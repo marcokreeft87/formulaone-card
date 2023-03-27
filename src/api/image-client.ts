@@ -5,9 +5,6 @@ export default class ImageClient {
 
     // Get image by url with fetch and save to local storage for 24 hours base64 encoded
     GetImage(url: string): string {
-        // Add version to url to force reload
-        url = `${url}?v=${packageJson.version}`;
-
         // Check local storage for image
         const localStorageData = localStorage.getItem(url);
 
