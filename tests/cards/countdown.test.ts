@@ -14,13 +14,14 @@ import FormulaOneCard from "../../src";
 import * as customCardHelper from "custom-card-helpers";
 import RestCountryClient from "../../src/api/restcountry-client";
 import { Country } from "../../src/types/rest-country-types";
+import ImageClient from "../../src/api/image-client";
 
 // Importing test data
 import * as countries from '../testdata/countries.json'
 import { MRData as scheduleData } from '../testdata/schedule.json'
 
 describe('Testing countdown file', () => {
-    
+        
     const parent = createMock<FormulaOneCard>({ 
         config: createMock<FormulaOneCardConfig>(),
     });
@@ -77,6 +78,9 @@ describe('Testing countdown file', () => {
         localStorageMock.clear();     
         fetchMock.resetMocks();
         jest.useFakeTimers();
+        
+        jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(() => null);
+        jest.spyOn(ImageClient.prototype, 'GetImage').mockImplementation((url: string) => { return url; });  
     });
 
     beforeAll(() => {

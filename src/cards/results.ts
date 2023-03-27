@@ -133,8 +133,8 @@ export default class Results extends BaseCard {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
-                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
-                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this.config, result.Constructor)}` : '')}
+                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(this, result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
+                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor)}` : '')}
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
                 <td class="width-50 text-center">${result.status}</td>
@@ -145,8 +145,8 @@ export default class Results extends BaseCard {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
-                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
-                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this.config, result.Constructor)}` : '')}
+                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(this, result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
+                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor)}` : '')}
                 <td>${result.Q1}</td>
                 <td>${result.Q2}</td>
                 <td>${result.Q3}</td>

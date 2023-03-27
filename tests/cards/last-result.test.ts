@@ -13,9 +13,15 @@ import { getApiErrorMessage } from '../../src/utils';
 import FormulaOneCard from '../../src';
 import RestCountryClient from '../../src/api/restcountry-client';
 import { Country } from '../../src/types/rest-country-types';
+import ImageClient from '../../src/api/image-client';
 
 // Importing test data
 import * as countries from '../testdata/countries.json'
+
+beforeEach(() => {    
+    jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(() => null);
+    jest.spyOn(ImageClient.prototype, 'GetImage').mockImplementation((url: string) => { return url; });
+});
 
 describe('Testing last-result file', () => {
     const parent = createMock<FormulaOneCard>({ 

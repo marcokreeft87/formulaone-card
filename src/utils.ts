@@ -35,25 +35,25 @@ export const getCountries = () => {
     return countryClient.GetCountriesFromLocalStorage();
 }
 
-export const getCountryFlagByNationality = (nationality: string) => {
+export const getCountryFlagByNationality = (card: BaseCard, nationality: string) => {
     const countries = getCountries();
     
     const country = countries.filter(x => x.demonym == nationality);
     if(country.length > 1)
     {
-        return country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png;
+        return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png);
     }
 
-    return country[0].flags.png;
+    return card.imageClient.GetImage(country[0].flags.png);
 }
 
-export const getCountryFlagByName = (countryName: string) => {
+export const getCountryFlagByName = (card: BaseCard, countryName: string) => {
     const countries = getCountries();
     
     const country = countries.filter(x => x.name == countryName || x.nativeName == countryName ||
         x.altSpellings?.includes(countryName))[0];
 
-    return country.flags.png;
+    return card.imageClient.GetImage(country.flags.png);
 }
 
 export const checkConfig = (config: FormulaOneCardConfig) => {
@@ -62,7 +62,7 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
     }
 };
 
-export const getTeamImageUrl = (teamName: string) => {
+export const getTeamImage = (card: BaseCard, teamName: string) => {
     teamName = teamName.toLocaleLowerCase().replace('_', '-');
     const exceptions = [{ teamName: 'red-bull', corrected: 'red-bull-racing'}, { teamName: 'alfa', corrected: 'alfa-romeo'}, { teamName: 'haas', corrected: 'haas-f1-team'}];
 
@@ -72,7 +72,7 @@ export const getTeamImageUrl = (teamName: string) => {
         teamName = exception[0].corrected;
     }
 
-    return `${ImageConstants.TeamLogoCDN}/2023/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`;
+    return card.imageClient.GetImage(`${ImageConstants.TeamLogoCDN}/2023/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`);
 }
 
 export const getCircuitName = (circuitName: string) => {
@@ -132,12 +132,12 @@ export const renderHeader = (card: BaseCard, race: Race, preventClick = false): 
         };
     }
 
-    const imageHtml = html`<img width="100%" src="${ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png" @action=${_handleAction}
+    const imageHtml = html`<img width="100%" src="${card.imageClient.GetImage(`${ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png`)}" @action=${_handleAction}
     .actionHandler=${actionHandler({
         hasHold: hasAction(card.config.actions?.hold_action),
         hasDoubleClick: hasAction(card.config.actions?.double_tap_action),
       })} class="${(hasConfigAction ? ' clickable' : null)}" />`;
-    const raceName = html`<h2 class="${(card.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${getCountryFlagByName(race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
+    const raceName = html`<h2 class="${(card.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${getCountryFlagByName(card, race.Circuit.Location.country)}">&nbsp;  ${race.round} :  ${race.raceName}</h2>`;
     
     return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${(card.config.hide_tracklayout ? html`` : imageHtml)}<br>`;
 }
@@ -268,6 +268,6 @@ export const reduceArray = <T>(array?: T[], number?: number) => {
     return number ? array.slice(0, number) : array;
 }
 
-export const renderConstructorColumn = (config: FormulaOneCardConfig, constructor: Constructor): HTMLTemplateResult => {
-    return html`<td>${(config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImageUrl(constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
+export const renderConstructorColumn = (card: BaseCard, constructor: Constructor): HTMLTemplateResult => {
+    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
 }

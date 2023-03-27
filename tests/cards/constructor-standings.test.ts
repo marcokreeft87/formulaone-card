@@ -10,6 +10,7 @@ import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
 import { Mrdata } from '../../src/api/f1-models';
 import { getApiErrorMessage } from '../../src/utils';
 import FormulaOneCard from '../../src';
+import ImageClient from '../../src/api/image-client';
 
 // Importing test data
 import { MRData } from '../testdata/constructorStandings.json'
@@ -26,6 +27,9 @@ describe('Testing constructor-standings file', () => {
     beforeEach(() => {
         localStorageMock.clear();     
         fetchMock.resetMocks();
+        
+        jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(() => null);
+        jest.spyOn(ImageClient.prototype, 'GetImage').mockImplementation((url: string) => { return url; });  
     });
 
     test('Calling render with api returning data', async () => {   

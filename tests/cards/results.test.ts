@@ -14,6 +14,7 @@ import { getRenderString, getRenderStringAsync, getRenderStringAsyncIndex } from
 import { HTMLTemplateResult } from "lit";
 import RestCountryClient from "../../src/api/restcountry-client";
 import { Country } from "../../src/types/rest-country-types";
+import ImageClient from "../../src/api/image-client";
 
 describe('Testing results file', () => {
     const parent = createMock<FormulaOneCard>({
@@ -25,7 +26,9 @@ describe('Testing results file', () => {
     beforeAll(() => {
         jest.spyOn(RestCountryClient.prototype, 'GetCountriesFromLocalStorage').mockImplementation(() => {
             return countries as Country[];
-        });
+        });   
+        jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(() => null);
+        jest.spyOn(ImageClient.prototype, 'GetImage').mockImplementation((url: string) => { return url; });        
 
         spyClient = jest.spyOn(ErgastClient.prototype, 'GetData').mockImplementation((_endpoint) => {
 
