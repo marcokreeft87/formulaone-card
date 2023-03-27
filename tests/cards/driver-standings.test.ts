@@ -8,8 +8,7 @@ import DriverStandings from '../../src/cards/driver-standings';
 import { getRenderString, getRenderStringAsync } from '../utils';
 import { MRData } from '../testdata/driverStandings.json'
 import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
-import { Mrdata
- } from '../../src/api/f1-models';
+import { Mrdata } from '../../src/api/f1-models';
 import { getApiErrorMessage } from '../../src/utils';
 import FormulaOneCard from '../../src';
 import RestCountryClient from '../../src/api/restcountry-client';
@@ -17,6 +16,12 @@ import { Country } from '../../src/types/rest-country-types';
 
 // Importing test data
 import * as countries from '../testdata/countries.json'
+import ImageClient from "../../src/api/image-client";
+
+beforeEach(() => {    
+    jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(() => null);
+    jest.spyOn(ImageClient.prototype, 'GetImage').mockImplementation((url: string) => { return url; });
+});
 
 describe('Testing driver-standings file', () => {
     const parent = createMock<FormulaOneCard>({ 
