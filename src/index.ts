@@ -37,6 +37,7 @@ export default class FormulaOneCard extends LitElement {
     @property() _hass?: HomeAssistant;
     @property() config?: FormulaOneCardConfig;
     @property() card: BaseCard;
+    @property() warning: string;
     @property() set properties(values: Map<string, unknown>) {
         this._cardValues = values;
         this.update(values);
@@ -48,8 +49,7 @@ export default class FormulaOneCard extends LitElement {
     constructor() {
         super();
         
-        const countryClient = new RestCountryClient();
-        countryClient.GetAll();
+        this.setCountryCache();
     }
 
     private _cardValues?: Map<string, unknown>;
@@ -59,6 +59,14 @@ export default class FormulaOneCard extends LitElement {
         checkConfig(config);
 
         this.config = { ...config };
+    }
+
+    setCountryCache() {
+        new RestCountryClient().GetAll().catch(() => { 
+            console.log('Country API is down, so flags are not available at the moment!')
+            this.warning = 'Country API is down, so flags are not available at the moment!'; 
+            this.update(this._cardValues);
+        });
     }
 
     protected shouldUpdate(changedProps: PropertyValues): boolean {
@@ -106,6 +114,7 @@ export default class FormulaOneCard extends LitElement {
         try {
             return html`
                 <ha-card elevation="2">
+                    ${this.warning ? html`<hui-warning>${this.warning}</hui-warning>` : ''}
                     ${this.config.title ? html`<h1 class="card-header${(this.config.f1_font ? ' formulaone-font' : '')}">${this.config.title}</h1>` : ''}
                     ${this.card.render()}
                 </ha-card>

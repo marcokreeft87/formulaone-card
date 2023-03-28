@@ -158,7 +158,7 @@ describe('Testing countdown file', () => {
     test('Calling render with api not returning data', async () => {   
         // Arrange
         jest.setSystemTime(new Date(2022, 11, 30)); // Weird bug in jest setting this to the last of the month
-        fetchMock.mockResponseOnce('{}', { status: 500 });
+        fetchMock.mockRejectOnce(new Error('API not available'));
 
         // Act
         const result = card.render();

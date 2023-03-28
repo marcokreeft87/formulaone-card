@@ -36,8 +36,8 @@ export default class DriverStandings extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetDriverStandings().then(response => response
-              ? html`
+            this.client.GetDriverStandings().then(response =>
+              html`
                     <table>
                         <thead>
                         <tr>
@@ -53,7 +53,8 @@ export default class DriverStandings extends BaseCard {
                         </tbody>
                     </table>
                     `
-              : html`${getApiErrorMessage('standings')}`),
+                )
+              .catch(() => html`${getApiErrorMessage('standings')}`),
             html`${getApiLoadingMessage()}`,
           )}`;
     }

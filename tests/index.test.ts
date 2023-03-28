@@ -277,6 +277,31 @@ describe('Testing index file function setConfig', () => {
         // Assert
         expect(updateSpy).toHaveBeenCalled();
         expect(card.properties).toEqual(new Map([['races', []]]));
+    }),
+    test('Calling constructor should set warning', async () => {
+        // Arrange       
+        fetchMock.mockReject(new Error('Error for warning'));
+        // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+        const updateSpy = jest.spyOn(LitElement.prototype as any, 'update').mockImplementationOnce(() => { });
+        jest.spyOn(RestCountryClient.prototype, 'GetAll').mockImplementationOnce(() => { return Promise.reject(new Error()); });
+
+        // Act
+        const formulaOneCard = new FormulaOneCard();
+        formulaOneCard.setCountryCache();
+
+        // Assert
+        expect(updateSpy).toHaveBeenCalled();
+    }),
+    test('Calling render with warning should show warning', async () => {
+        // Arrange
+        card.warning = 'Error for warning';
+
+        // Act
+        const result = card.render();
+
+        // Assert
+        const htmlResult = getRenderString(result);
+        expect(htmlResult).toMatch('<ha-card elevation="2"> <hui-warning>Error for warning</hui-warning> <h1 class="card-header">Test</h1> </ha-card>');
     })
 })
 

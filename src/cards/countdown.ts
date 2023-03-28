@@ -81,9 +81,6 @@ export default class Countdown extends BaseCard {
 
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
-                if(!response) {
-                    return html`${getApiErrorMessage('next race')}`
-                }
 
                 const { nextRace, raceDateTime, countdownType } = this.getNextEvent(response);
 
@@ -121,6 +118,8 @@ export default class Countdown extends BaseCard {
                             </table>
                             ${this.renderHeader(nextRace, raceDateTime)}`;
 
+            }).catch(() => {
+                return html`${getApiErrorMessage('next race')}`
             }),
             html`${getApiLoadingMessage()}`
         )}`;

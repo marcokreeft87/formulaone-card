@@ -48,9 +48,6 @@ export default class Schedule extends BaseCard {
 
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
-                if(!response) {
-                    return html`${getApiErrorMessage('schedule')}`
-                }
                 const next_race = response.filter(race =>  {
                     return new Date(race.date + 'T' + race.time) >= new Date();
                 })[0];
@@ -71,6 +68,8 @@ export default class Schedule extends BaseCard {
                                 ${reduceArray(response, this.config.row_limit).map(race => this.renderScheduleRow(race))}
                             </tbody>
                         </table>`;
+            }).catch(() => {
+                return html`${getApiErrorMessage('schedule')}`
             }),
             html`${getApiLoadingMessage()}`
         )}`;
