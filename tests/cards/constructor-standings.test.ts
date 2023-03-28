@@ -59,7 +59,7 @@ describe('Testing constructor-standings file', () => {
     }),
     test('Calling render with api not returning data', async () => {   
         // Arrange
-        fetchMock.mockResponseOnce('{}', { status: 500 });
+        fetchMock.mockRejectOnce(new Error('Error'));
         
         // Act
         const result = card.render();

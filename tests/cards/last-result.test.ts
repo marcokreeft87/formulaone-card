@@ -56,7 +56,7 @@ describe('Testing last-result file', () => {
     }),
     test('Calling render with api not returning data', async () => {   
         // Arrange
-        fetchMock.mockResponseOnce('{}', { status: 500 });
+        fetchMock.mockRejectOnce(new Error('API is down'));
         const card = new LastResult(parent);
         
         // Act

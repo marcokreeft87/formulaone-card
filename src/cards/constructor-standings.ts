@@ -33,8 +33,8 @@ export default class ConstructorStandings extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetConstructorStandings().then(response => response
-              ? html`
+            this.client.GetConstructorStandings().then(response => 
+                html`
                     <table>
                         <thead>
                         <tr>
@@ -48,8 +48,8 @@ export default class ConstructorStandings extends BaseCard {
                             ${reduceArray(response, this.config.row_limit).map(standing => this.renderStandingRow(standing))}
                         </tbody>
                     </table>
-                    `
-              : html`${getApiErrorMessage('standings')}`),
+                    `)
+                    .catch(() => html`${getApiErrorMessage('standings')}`),
             html`${getApiLoadingMessage()}`,
           )}`;
     }

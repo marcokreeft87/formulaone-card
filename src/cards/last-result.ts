@@ -36,8 +36,8 @@ export default class LastResult extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetLastResult().then(response => response
-              ? html` 
+            this.client.GetLastResult().then(response => 
+                html` 
                     <table>
                         <tr>
                             <td>${renderHeader(this, response)}</td>
@@ -56,8 +56,8 @@ export default class LastResult extends BaseCard {
                         <tbody>
                             ${reduceArray(response.Results, this.config.row_limit).map(result => this.renderResultRow(result))}
                         </tbody>
-                    </table>`
-              : html`${getApiErrorMessage('last result')}`),
+                    </table>`)
+                    .catch(() => html`${getApiErrorMessage('last result')}`),
             html`${getApiLoadingMessage()}`,
           )}`;
     }

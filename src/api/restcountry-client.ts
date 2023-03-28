@@ -6,7 +6,7 @@ export default class RestCountryClient extends ClientBase {
     
     baseUrl = 'https://restcountries.com/v2';
 
-    async GetAll() : Promise<Country[]> {        
+    async GetAll() : Promise<Country[]> {      
         return await this.GetData<Country[]>('all', true, 730);
     }
     

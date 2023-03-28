@@ -186,17 +186,18 @@ export default class Results extends BaseCard {
                     ${this.translation('seasonheader')}<br />                      
                     ${until(
                         this.client.GetSeasons().then(response => { 
-                                const seasons = response?.reverse();
-                                return seasons
-                                ? html`<select name="selectedSeason" @change="${selectedSeasonChanged}">
+                            const seasons = response.reverse();
+                                return html`<select name="selectedSeason" @change="${selectedSeasonChanged}">
                                         <option value="0">${this.translation('selectseason')}</option>
                                         ${seasons.map(season => {
                                             return html`<option value="${season.season}" ?selected=${selectedSeason === season.season}>${season.season}</option>`;
                                         })}
-                                    </select>`
-                                : html`${getApiErrorMessage('seasons')}`;
+                                    </select>`;
+                               
+                            }).catch(() => {
+                                return html`${getApiErrorMessage('seasons')}`;
                             }),
-                        html`${getApiLoadingMessage()}`,
+                            html`${getApiLoadingMessage()}`,
                         )}                 
                 </td>
                 <td>
@@ -257,7 +258,7 @@ export default class Results extends BaseCard {
             this.client.GetSprintResults(selectedSeason, round)])
             .then(([results, qualifyingResults, sprintResults]) => {
 
-                const race = results.Races.length > 0 ? results.Races[0] : null;
+                const race = results.Races[0];
                 if(race) {
                     race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
                     /* istanbul ignore next */
@@ -334,7 +335,7 @@ export default class Results extends BaseCard {
                         const { properties, cardValues } = this.getParentCardValues();
 
                         race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
-                        race.SprintResults = sprintResults?.Races[0]?.SprintResults;
+                        race.SprintResults = sprintResults.Races[0]?.SprintResults;
                         
                         properties.races = seasonRaces;
                         properties.selectedRace = race;

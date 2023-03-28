@@ -30,10 +30,6 @@ export default class NextRace extends BaseCard {
 
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
-                if(!response) {
-                    return html`${getApiErrorMessage('next race')}`
-                }
-
                 const nextRace = response.filter(race =>  {
                     return new Date(race.date + 'T' + race.time) >= new Date();
                 })[0];
@@ -50,6 +46,8 @@ export default class NextRace extends BaseCard {
                             ${renderRaceInfo(this, nextRace)}    
                         </tbody>
                     </table>`
+                }).catch(() => { 
+                    return html`${getApiErrorMessage('next race')}`;
                 }),
             html`${getApiLoadingMessage()}`
         )}`;

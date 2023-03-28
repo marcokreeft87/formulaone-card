@@ -277,6 +277,17 @@ describe('Testing index file function setConfig', () => {
         // Assert
         expect(updateSpy).toHaveBeenCalled();
         expect(card.properties).toEqual(new Map([['races', []]]));
-    })
+    })//,
+    // test('Calling constructor should set warning', () => {
+    //     // Arrange        
+    //     localStorageMock.clear();     
+    //     fetchMock.mockRejectOnce(new Error('Error for warning'));
+
+    //     // Act
+    //     const card = new FormulaOneCard();
+
+    //     // Assert
+    //     expect(card.warning).toBe('Country API is down, so flags are not available at the moment!');
+    // })
 })
 

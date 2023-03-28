@@ -24,7 +24,7 @@ export abstract class ClientBase {
     });
 
     if (!response || !response.ok) {
-      return null;
+      return Promise.reject(response);
     }
 
     const data = await response.json();
