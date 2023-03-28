@@ -49,10 +49,7 @@ export default class FormulaOneCard extends LitElement {
     constructor() {
         super();
         
-        new RestCountryClient().GetAll().catch(() => { 
-            this.warning = 'Country API is down, so flags are not available at the moment!'; 
-            this.update(this._cardValues);
-        });
+        this.setCountryCache();
     }
 
     private _cardValues?: Map<string, unknown>;
@@ -62,6 +59,14 @@ export default class FormulaOneCard extends LitElement {
         checkConfig(config);
 
         this.config = { ...config };
+    }
+
+    setCountryCache() {
+        new RestCountryClient().GetAll().catch(() => { 
+            console.log('Country API is down, so flags are not available at the moment!')
+            this.warning = 'Country API is down, so flags are not available at the moment!'; 
+            this.update(this._cardValues);
+        });
     }
 
     protected shouldUpdate(changedProps: PropertyValues): boolean {
