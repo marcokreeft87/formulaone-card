@@ -24,6 +24,8 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
             return html``;
         }
 
+
+        // example : https://github.com/custom-cards/slider-button-card/blob/main/src/editor.ts
         return html`
 
                 <paper-dropdown-menu
