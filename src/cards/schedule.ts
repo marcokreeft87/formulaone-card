@@ -4,6 +4,7 @@ import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Circuit, Race } from "../api/f1-models";
 import { formatDate } from "../lib/format_date";
+import { PreviousRaceDisplay } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, reduceArray } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -48,12 +49,18 @@ export default class Schedule extends BaseCard {
 
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
-                const next_race = response.filter(race =>  {
+
+                const schedule = this.config.previous_race === PreviousRaceDisplay.Hide ? response.filter(race => {
+                    return new Date(race.date + 'T' + race.time) >= new Date();
+                }) : response;
+
+                const next_race = schedule.filter(race =>  {
                     return new Date(race.date + 'T' + race.time) >= new Date();
                 })[0];
                 if(!next_race) {
                     return getEndOfSeasonMessage(this.translation('endofseason'));
                 }
+
                 return html`<table>
                             <thead>
                                 <tr>
@@ -65,7 +72,7 @@ export default class Schedule extends BaseCard {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${reduceArray(response, this.config.row_limit).map(race => this.renderScheduleRow(race))}
+                                ${reduceArray(schedule, this.config.row_limit).map(race => this.renderScheduleRow(race))}
                             </tbody>
                         </table>`;
             }).catch(() => {
