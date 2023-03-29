@@ -26,6 +26,14 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     weather_options?: WeatherOptions;
 }
 
+export interface ValueChangedEvent {
+    target: {
+        value: string;
+        configValue: string;
+        checked?: boolean;
+    }
+}
+
 export interface WeatherOptions {
     api_key?: string;
     unit?: WeatherUnit;
