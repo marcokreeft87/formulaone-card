@@ -1,7 +1,6 @@
 import { fireEvent, HomeAssistant, LovelaceCardEditor } from "custom-card-helpers";
 import { LitElement } from "lit";
 import { html, TemplateResult } from "lit-html";
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
 import { customElement, property, state } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME } from "./consts";
 import { FormulaOneCardConfig, FormulaOneCardType, ValueChangedEvent } from "./types/formulaone-card-types";
@@ -25,35 +24,31 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
         }
 
 
+        const cardTypes: {id: string; name: string}[] = [];
+
+        for (const [key, value] of Object.entries(FormulaOneCardType)) {
+            cardTypes.push({id: value, name: key});
+        }
+
         // example : https://github.com/custom-cards/slider-button-card/blob/main/src/editor.ts
         return html`
-
                 <paper-dropdown-menu
-                  label="Test"
+                  label="Card Type (Required)"
                 >
                   <paper-listbox 
                     slot="dropdown-content" 
                     attr-for-selected="item-value"
-                    .configValue=${'slider.direction'}
-                    @selected-item-changed=${this._valueChanged}
+                    .configValue=${'card_type'}
+                    @selected-item-changed=${this._valueChangedSelect}
                     .selected=${this._name}
                   >
-                  <paper-item .itemValue="0">0</paper-item>
-                  <paper-item .itemValue="0">0</paper-item>
-                  <paper-item .itemValue="0">0</paper-item>
-                  <paper-item .itemValue="0">0</paper-item>
-                  <paper-item .itemValue="0">0</paper-item>
-                 
+                  ${cardTypes.map((cardType) => {
+                      return html`
+                        <paper-item .itemValue=${cardType.id} .configValue=${'card_type'}>${cardType.name}</paper-item>
+                      `;
+                      })}                 
                   </paper-listbox>
-                </paper-dropdown-menu>
-
-         <mwc-select label="filled" fixed-menu-position fixedMenuPosition>
-            <mwc-list-item></mwc-list-item>
-            <mwc-list-item value="0">Item 0</mwc-list-item>
-            <mwc-list-item value="1">Item 1</mwc-list-item>
-            <mwc-list-item value="2">Item 2</mwc-list-item>
-            <mwc-list-item value="3">Item 3</mwc-list-item>
-        </mwc-select>           
+                </paper-dropdown-menu>         
                 `;
 
 
@@ -75,11 +70,38 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
     // private _valueChanged(ev: CustomEvent): void {
     //     fireEvent(this, "config-changed", { config: ev.detail.value });
     // }
+    private _valueChangedSelect(ev: ValueChangedEvent): void {
+        console.log(ev.detail.value.parentElement.configValue);
+        if (!this.config || !this.hass) {
+            return;
+        }
+        //const 
+        // if (this[`_${target.configValue}`] === target.value) {
+        //     return;
+        // }
+        const itemValue = ev.detail.value.itemValue;
+        const configValue = ev.detail.value.parentElement.configValue;
+        if (configValue) {
+            if (ev.detail.value.itemValue === '') {
+                const tmpConfig = { ...this.config };
+                delete tmpConfig[configValue];
+                this.config = tmpConfig;
+            } else {
+                this.config = {
+                    ...this.config,
+                    [configValue]: itemValue,
+                };
+            }
+        }
+        fireEvent(this, 'config-changed', { config: this.config });
+    }
+
     private _valueChanged(ev: ValueChangedEvent): void {
         if (!this.config || !this.hass) {
             return;
         }
         const target = ev.target;
+        //const 
         // if (this[`_${target.configValue}`] === target.value) {
         //     return;
         // }

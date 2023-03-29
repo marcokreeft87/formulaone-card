@@ -27,11 +27,20 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
 }
 
 export interface ValueChangedEvent {
+    detail: {
+        value: {
+            itemValue: string;
+            parentElement: {
+                configValue: string;
+            };
+        }
+    };
     target: {
         value: string;
         configValue: string;
         checked?: boolean;
-    }
+    };
+    
 }
 
 export interface WeatherOptions {
