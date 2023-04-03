@@ -36,7 +36,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@babel/plugin-transform-runtime": "^7.21.4",
     "@babel/preset-env": "^7.20.2",
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
     "babel-jest": "^29.5.0",
