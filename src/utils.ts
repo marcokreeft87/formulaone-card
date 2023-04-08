@@ -10,7 +10,7 @@ import { ImageConstants } from "./lib/constants";
 import { actionHandler } from './directives/action-handler-directive';
 import RestCountryClient from "./api/restcountry-client";
 import { until } from 'lit-html/directives/until.js';
-import { Day } from "./api/weather-models";
+import { Day, Hour } from "./api/weather-models";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -183,7 +183,7 @@ export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig
 
     const windUnit = config.weather_options?.unit === WeatherUnit.Metric ? 'km/h' : 'mph';
     const tempUnit = config.weather_options?.unit === WeatherUnit.MilesFahrenheit ? '°F' : '°C';
-    const hourData = weatherData.hours[raceDate.getHours()];    
+    const hourData = weatherData.hours ? weatherData.hours[raceDate.getHours()] : weatherData as Hour;    
 
     return html`<tr>
                     <td colspan="5">
