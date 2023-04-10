@@ -47,7 +47,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-ts-auto-mock": "^2.1.0",
     "ts-auto-mock": "^3.6.4",
-    "ts-jest": "^29.0.5",
+    "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
     "ttypescript": "^1.5.15",
     "yarn": "^1.22.19"
