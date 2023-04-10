@@ -28,7 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.1",
     "codecov": "^3.8.3",
-    "eslint": "^8.37.0",
+    "eslint": "^8.38.0",
     "home-assistant-js-websocket": "^8.0.1",
     "lit": "^2.7.0",
     "typescript": "^4.9.5",
