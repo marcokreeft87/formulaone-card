@@ -93,6 +93,7 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
             return html``;
         }
 
+        // https://github.com/custom-cards/slider-button-card/blob/main/src/editor.ts
 
         const cardTypes: {id: string; name: string}[] = [];
 
