@@ -46,7 +46,8 @@ export default class FormulaOneCard extends LitElement {
     get properties() {
         return this._cardValues;
     }
-
+    
+    /* istanbul ignore next */
     public static async getConfigElement(): Promise<LovelaceCardEditor> {
         await import("./editor");
         return document.createElement(CARD_EDITOR_NAME) as LovelaceCardEditor;

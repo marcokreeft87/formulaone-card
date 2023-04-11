@@ -140,7 +140,6 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
                             ${this.generateCheckbox('show_raceinfo', 'Show race information', this._showRaceinfo)}
                             ${this.generateCheckbox('hide_tracklayout', 'Hide track layout', this._hideTracklayout)}
                             ${this.generateCheckbox('hide_racedatetimes', 'Hide race dates and times', this._hideRacedatetimes)}
-                            // ${this.generateCheckbox('show_weather', 'Show weather', this._showWeather)}                        
                         </div>
                     </div>
                 </div>
@@ -150,9 +149,6 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
 
     }
 
-    // private _valueChanged(ev: CustomEvent): void {
-    //     fireEvent(this, "config-changed", { config: ev.detail.value });
-    // }
     private _valueChangedSelect(ev: ValueChangedEvent): void {
         console.log(ev.detail.value.parentElement.configValue);
         if (!this.config || !this.hass) {
