@@ -1,6 +1,6 @@
 import * as packageJson from '../package.json';
 import { property, customElement } from 'lit/decorators.js';
-import { HomeAssistant } from 'custom-card-helpers';
+import { HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
 import { FormulaOneCardConfig, FormulaOneCardType } from './types/formulaone-card-types';
 import { CSSResult, html, HTMLTemplateResult, LitElement, PropertyValues } from 'lit';
 import { checkConfig, hasConfigOrCardValuesChanged } from './utils';
@@ -15,9 +15,10 @@ import { BaseCard } from './cards/base-card';
 import Countdown from './cards/countdown';
 import Results from './cards/results';
 import RestCountryClient from './api/restcountry-client';
+import { CARD_EDITOR_NAME, CARD_NAME } from './consts';
 
 console.info(
-    `%c FORMULAONE-CARD %c ${packageJson.version}`,
+    `%c ${CARD_NAME.toUpperCase()} %c ${packageJson.version}`,
     'color: cyan; background: black; font-weight: bold;',
     'color: darkblue; background: white; font-weight: bold;'
 );
@@ -32,7 +33,7 @@ console.info(
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-@customElement('formulaone-card')
+@customElement(CARD_NAME)
 export default class FormulaOneCard extends LitElement {
     @property() _hass?: HomeAssistant;
     @property() config?: FormulaOneCardConfig;
@@ -53,6 +54,12 @@ export default class FormulaOneCard extends LitElement {
     }
 
     private _cardValues?: Map<string, unknown>;
+
+    /* istanbul ignore next */
+    public static async getConfigElement(): Promise<LovelaceCardEditor> {
+        await import("./editor");
+        return document.createElement(CARD_EDITOR_NAME) as LovelaceCardEditor;
+    }
 
     setConfig(config: FormulaOneCardConfig) {
 
