@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Frontend card for Home Assistant to display Formula One data",
   "main": "index.js",
   "scripts": {
@@ -25,19 +25,19 @@
   "homepage": "https://github.com/marcokreeft87/formulaone-card#readme",
   "devDependencies": {
     "@types/jest": "^29.5.0",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
     "codecov": "^3.8.3",
-    "eslint": "^8.36.0",
+    "eslint": "^8.38.0",
     "home-assistant-js-websocket": "^8.0.1",
-    "lit": "^2.7.0",
+    "lit": "^2.7.2",
     "typescript": "^4.9.5",
-    "webpack": "^5.76.3",
+    "webpack": "^5.78.0",
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.21.0",
-    "@babel/preset-env": "^7.20.2",
+    "@babel/plugin-transform-runtime": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
     "babel-jest": "^29.5.0",
     "compression-webpack-plugin": "^10.0.0",
@@ -47,7 +47,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-ts-auto-mock": "^2.1.0",
     "ts-auto-mock": "^3.6.4",
-    "ts-jest": "^29.0.5",
+    "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
     "ttypescript": "^1.5.15",
     "yarn": "^1.22.19"
