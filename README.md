@@ -14,16 +14,19 @@ Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way
 
 
 ### HACS (recommended)
-Make shure you have [HACS](https://hacs.xyz/) (Home Assistant Community Store) installed.
+Make sure you have [HACS](https://hacs.xyz/) (Home Assistant Community Store) installed.
 <br>
 <sub>_HACS is a third party community store and is not included in Home Assistant out of the box._</sub>
 
+Just click here to directly go to the repository in HACS and click "Download": [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcokreeft87&repository=formulaone-card&category=plugin)
+
+Or: 
 - Open HACS
 - Go to "Frontend" section
 - Click button with "+" icon
 - Search for "formulaone-card"
-- _OR u can click here_ [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcokreeft87&repository=formulaone-card&category=plugin) and it will take u directly to HACS (if it's installed)
-- Install repository in HACS
+- Click "Download" button and install repository in HACS
+
 - _If u are using YAML mode then add this to your_ [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/)
   ```yaml
   url: /hacsfiles/formulaone-card/formulaone-card.js
@@ -86,7 +89,7 @@ for more detailed descriptions and examples.
 
 Actions example:
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: next_race
 actions:
@@ -96,8 +99,11 @@ actions:
 
 ```
 
+## Example configurations
 
-```
+### Next race
+
+```yaml
 type: custom:formulaone-card
 card_type: next_race
 title: Next Race
@@ -107,7 +113,9 @@ image_clickable: false
 
 ![image](https://user-images.githubusercontent.com/10223677/194120592-3df715bc-888d-460b-8743-ec1ab6017b96.png)
 
-```
+### Constructor standings
+
+```yaml
 type: custom:formulaone-card
 card_type: constructor_standings
 title: Constructor Standings
@@ -115,7 +123,7 @@ title: Constructor Standings
 
 ![image](https://user-images.githubusercontent.com/10223677/194120698-b981aac2-8678-4f35-afc9-ca6bb8514566.png)
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: constructor_standings
 title: Constructor Standings
@@ -125,8 +133,9 @@ standings:
 
 ![image](https://user-images.githubusercontent.com/10223677/213992061-91ade5f2-68bb-4572-84a1-5d5cf38e0645.png)
 
+### Driver standings
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: driver_standings
 title: Driver Standings
@@ -136,7 +145,7 @@ title: Driver Standings
 
 This card can also show the flags and team names of the driver:
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: driver_standings
 title: Driver Standings
@@ -147,7 +156,9 @@ standings:
   
 ```
 
-```
+### Schedule
+
+```yaml
 type: custom:formulaone-card
 card_type: schedule
 title: Schedule
@@ -159,7 +170,7 @@ date_locale: nl
 
 This card can also show the flags of the countries of the tracks:
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: schedule
 standings:
@@ -167,8 +178,9 @@ standings:
 
 ```
 
+### Last results
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: last_result
 title: Last Result
@@ -176,7 +188,9 @@ title: Last Result
 ```
 ![image](https://user-images.githubusercontent.com/10223677/194120925-5fc6c1a7-8b2a-4c58-b89c-d0316d70efe9.png)
 
-```
+### Results
+
+```yaml
 type: custom:formulaone-card
 card_type: results
 title: Results
@@ -185,7 +199,7 @@ title: Results
 
 This card can also show the flags and team names of the driver, alongside the logo of the teams:
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: results
 title: Results
@@ -196,13 +210,15 @@ standings:
   
 ```
 
-```
+### Countdown
+
+```yaml
 type: custom:formulaone-card
 card_type: countdown
 ```
 ![image](https://user-images.githubusercontent.com/10223677/213435405-fdb2ff7c-3364-43d5-80b0-0f253d9b60c8.png)
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: countdown
 f1_font: true
@@ -258,7 +274,7 @@ The following texts can be translated or altered.
 
 Example:
 
-```
+```yaml
 type: custom:formulaone-card
 card_type: next_race
 title: Next Race
@@ -280,11 +296,11 @@ translations:
 
 ```
 
-## Forecast
+## Weather forecast
 
 For this feature to work you have to get an API key [here](https://www.visualcrossing.com/sign-up)
 
-```
+```yaml
 show_weather: true
 weather_options:
   unit: metric
