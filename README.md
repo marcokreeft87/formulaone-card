@@ -27,6 +27,7 @@ Or:
 - Search for "formulaone-card"
 - Click "Download" button and install repository in HACS
 
+In both situations:
 - _If u are using YAML mode then add this to your_ [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/)
   ```yaml
   url: /hacsfiles/formulaone-card/formulaone-card.js
