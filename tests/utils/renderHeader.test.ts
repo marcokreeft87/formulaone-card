@@ -130,5 +130,18 @@ describe('Testing util file function renderHeader', () => {
         const htmlResult = getRenderString(result);
 
         expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2>`);
+    }),
+    test('Calling renderHeader with Miami with image not clickable', async () => { 
+        card.config.image_clickable = undefined;
+        card.config.hide_tracklayout = false;
+        lastRace.Circuit.Location.country = "USA";
+        lastRace.Circuit.Location.locality = "Miami";
+        
+        const result = renderHeader(card, lastRace);
+        const htmlResult = getRenderString(result);
+
+        console.log(htmlResult);
+
+        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
     })
 });
