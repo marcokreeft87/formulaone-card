@@ -140,8 +140,6 @@ describe('Testing util file function renderHeader', () => {
         const result = renderHeader(card, lastRace);
         const htmlResult = getRenderString(result);
 
-        console.log(htmlResult);
-
         expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
     })
 });
