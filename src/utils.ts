@@ -1,6 +1,6 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
 import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, WeatherUnit } from "./types/formulaone-card-types";
-import { Constructor, Driver, Race, Root } from "./api/f1-models";
+import { Constructor, Driver, Race, Root, Location } from "./api/f1-models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
@@ -75,7 +75,9 @@ export const getTeamImage = (card: BaseCard, teamName: string) => {
     return card.imageClient.GetImage(`${ImageConstants.TeamLogoCDN}/2023/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`);
 }
 
-export const getCircuitName = (circuitName: string) => {
+export const getCircuitName = (location: Location) => {
+    
+    let circuitName = location.country.replace(" ","-")
     const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}, { countryDashed: 'UK', name: 'Great_Britain'}, 
     { countryDashed: 'Monaco', name: 'Monoco'}, { countryDashed: 'Azerbaijan', name: 'Baku'}, { countryDashed: 'Saudi-Arabia', name: 'Saudi_Arabia'}];
 
@@ -83,6 +85,11 @@ export const getCircuitName = (circuitName: string) => {
     if(exception.length > 0)
     {
         circuitName = exception[0].name; 
+    }
+
+    if(location.country == 'USA' && location.locality != 'Austin')
+    {
+        circuitName = location.locality;
     }
 
     return circuitName;
@@ -111,8 +118,7 @@ export const clickHandler = (node: LitElement, config: FormulaOneCardConfig, has
 
 export const renderHeader = (card: BaseCard, race: Race, preventClick = false): HTMLTemplateResult => {
     
-    const countryDashed = race.Circuit.Location.country.replace(" ","-")
-    const circuitName = getCircuitName(countryDashed);
+    const circuitName = getCircuitName(race.Circuit.Location);
 
     const _handleAction = (ev: ActionHandlerEvent): void => {
         if (card.hass && card.config.actions && ev.detail.action && !preventClick) {
