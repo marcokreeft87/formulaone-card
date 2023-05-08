@@ -141,5 +141,16 @@ describe('Testing util file function renderHeader', () => {
         const htmlResult = getRenderString(result);
 
         expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
+    }),
+    test('Calling renderHeader with Imola  with image not clickable', async () => { 
+        card.config.image_clickable = undefined;
+        card.config.hide_tracklayout = false;
+        lastRace.Circuit.Location.country = "Italy";
+        lastRace.Circuit.Location.locality = "Imola";
+        
+        const result = renderHeader(card, lastRace);
+        const htmlResult = getRenderString(result);
+
+        expect(htmlResult).toMatch(`<h2 class="formulaone-font"><img height="25" src="">&nbsp; 17 : Singapore Grand Prix</h2> <img width="100%" src="" @action=_handleAction .actionHandler= class=" clickable" /><br>`);
     })
 });

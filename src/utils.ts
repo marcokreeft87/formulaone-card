@@ -92,6 +92,11 @@ export const getCircuitName = (location: Location) => {
         circuitName = location.locality;
     }
 
+    if(location.country == 'Italy' && location.locality == 'Imola')
+    {
+        circuitName = "Emilia_Romagna";
+    }
+
     return circuitName;
 }
 
