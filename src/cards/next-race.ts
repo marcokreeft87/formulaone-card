@@ -27,11 +27,17 @@ export default class NextRace extends BaseCard {
     }
     
     render() : HTMLTemplateResult {
-
         return html`${until(
             this.client.GetSchedule(new Date().getFullYear()).then(response => {
+                
+                const delay = this.config.next_race_delay || 0;
                 const nextRace = response.filter(race =>  {
-                    return new Date(race.date + 'T' + race.time) >= new Date();
+                    const nextRaceDate = new Date(race.date + 'T' + race.time);
+
+                    // Add the delay to the hours of the next race
+                    nextRaceDate.setHours(nextRaceDate.getHours() + delay);
+
+                    return nextRaceDate >= new Date();
                 })[0];
 
                 if(!nextRace) {
