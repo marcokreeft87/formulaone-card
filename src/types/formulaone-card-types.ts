@@ -25,6 +25,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     show_weather?: boolean;
     weather_options?: WeatherOptions;
     next_race_delay?: number;
+    show_lastyears_result?: boolean;
 }
 
 export interface ValueChangedEvent {

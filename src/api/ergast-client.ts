@@ -62,4 +62,21 @@ export default class ErgastClient extends ClientBase {
 
       return data.MRData.RaceTable.Races;
     }
+
+    async GetLastYearsResults(circuitName: string) : Promise<Race> {
+      
+      // Get schedule of last year
+      const lastYear = new Date().getFullYear() - 1;
+      const data = await this.GetData<Root>(`${lastYear}.json`, true, 72);
+
+      // Get the index of the circuit on the schedule of last year
+      const raceRound = data.MRData.RaceTable.Races.findIndex((race: Race) => {
+        return race.Circuit.circuitName === circuitName;
+      }) + 1; 
+
+      // Get the results of the last year race
+      const results = await this.GetData<Root>(`${lastYear}/${raceRound}/results.json`, false, 0);
+
+      return results.MRData.RaceTable.Races[0];
+    }
 }

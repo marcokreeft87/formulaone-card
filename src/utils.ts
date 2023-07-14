@@ -162,14 +162,17 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
     }    
 
     const configWeatherApi = config.show_weather && config.weather_options?.api_key !== undefined;
-    const promise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
+    const weatherPromise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
+    const lastYearPromise = config.show_lastyears_result ? card.client.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
 
-    return html`${until(promise.then(data => {
-
-        const weatherData = data?.days[0];
+    const promises = Promise.all([weatherPromise, lastYearPromise]);
+    
+    return html`${until(promises.then(([weather, lastYearData]) => {
+        const weatherData = weather?.days[0];
 
         const raceDate = new Date(race.date + 'T' + race.time);
         const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
+        const lastYearsResult = renderLastYearsResults(config, lastYearData)
 
         const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
         const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
@@ -178,13 +181,36 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
         const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
         const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
         
-        return html`${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
+        return html`${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
                     <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
                     <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
                     <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
                     <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
                     <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
-    }))}`;    
+    }))}`;
+}
+
+export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: Race) => {
+    if(!raceData) {
+        return html``;
+    }
+
+    const result = raceData.Results ? raceData.Results[0] : null;
+
+    return html`<tr>
+        <td colspan="5">
+            <table class="weather-info">
+                <tr>
+                    <td class="text-center">
+                        <h1 class="${(config.f1_font ? 'formulaone-font' : '')}">
+                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${new Date(raceData.date).getFullYear()}
+                        </h1>
+                        <h2 class="${(config.f1_font ? 'formulaone-font' : '')}">${result?.Driver.givenName} ${result?.Driver.familyName} (${result?.Constructor.name})</h2>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <tr><td colspan="5">&nbsp;</td></tr>`;
 }
 
 export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig, raceDate: Date) => {

@@ -156,7 +156,6 @@ describe('Testing schedule file', () => {
 
         // Assert
         const htmlResult = await getRenderStringAsync(result);        
-        console.log(htmlResult)
         expect(htmlResult).toMatch(expected);
     }),
     test('Calling cardSize', () => { 

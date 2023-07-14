@@ -150,7 +150,6 @@ export class FormulaOneCardEditor extends LitElement implements LovelaceCardEdit
     }
 
     private _valueChangedSelect(ev: ValueChangedEvent): void {
-        console.log(ev.detail.value.parentElement.configValue);
         if (!this.config || !this.hass) {
             return;
         }
