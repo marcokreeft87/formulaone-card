@@ -128,8 +128,7 @@ describe('Testing ergast client file', () => {
         expect(localStorageItem.data).toMatch(JSON.stringify(scheduleData));
     }),
     test('Calling GetLastYearsResults without data in localstorage and cacheResult true should return correct data', async () => {  
-        // Arrange 
-        const endpoint = '2022.json';      
+        // Arrange      
         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));  
         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>resultData }));
         

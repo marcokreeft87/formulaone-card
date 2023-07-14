@@ -14,42 +14,6 @@ describe('Testing util file function renderLastYearsResults', () => {
         language: 'NL', 
         number_format: NumberFormat.comma_decimal,
         time_format: TimeFormat.language
-    }
-
-    const race : Race = {
-        season: '2021',
-        round: '1',
-        url: 'https://en.wikipedia.org/wiki/2021_Abu_Dhabi_Grand_Prix',
-        Sprint: {
-            date: '2021-12-11',
-            time: '15:00:00Z',
-        },
-        Qualifying: {
-            date: '2021-12-11',
-            time: '18:00:00Z',
-        },
-        FirstPractice: {
-            date: '2021-12-09',
-            time: '11:00:00Z',
-        },
-        SecondPractice: {
-            date: '2021-12-10',
-            time: '12:00:00Z',
-        },
-        time: '18:00:00Z',
-        date: '2021-12-12',
-        raceName: 'Abu Dhabi Grand Prix',
-        Circuit: {
-            circuitId: 'yas_marina',
-            url: 'http://en.wikipedia.org/wiki/Yas_Marina_Circuit',
-            circuitName: 'Yas Marina Circuit',
-            Location: {
-                lat: '24.4672',
-                long: '54.6031',
-                locality: 'Abu Dhabi',
-                country: 'United Arab Emirates',
-            }
-        },
     };
 
     test('Given config with hide_raceinfo = false when raceinfo is rendered then raceinfo is rendered', async () => {
