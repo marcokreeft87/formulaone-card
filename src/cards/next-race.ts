@@ -19,7 +19,7 @@ export default class NextRace extends BaseCard {
         'racetime' : 'Race',
         'sprint' : 'Sprint',
         'qualifying' : 'Qualifying',
-        'endofseason' : 'Season is over. See you next year!'
+        'endofseason' : 'Season is over. See you next year!',
     };
     
     cardSize(): number {
@@ -42,7 +42,7 @@ export default class NextRace extends BaseCard {
 
                 if(!nextRace) {
                     return getEndOfSeasonMessage(this.translation('endofseason'));
-                }
+                }                
                 
                 return html`<table>
                         <tbody>

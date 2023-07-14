@@ -1,11 +1,14 @@
 import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { createMock } from 'ts-auto-mock';
+import fetchMock from "jest-fetch-mock";
 import FormulaOneCard from '../../src';
-import { Race } from '../../src/api/f1-models';
+import { Mrdata, Race } from '../../src/api/f1-models';
 import { BaseCard } from '../../src/cards/base-card';
 import { WeatherUnit } from '../../src/types/formulaone-card-types';
 import { renderRaceInfo } from '../../src/utils';
 import { getRenderString, getRenderStringAsyncIndex } from '../utils';
+import { MRData as scheduleData } from '../testdata/schedule.json'
+import { MRData as resultData } from '../testdata/results.json'
 
 describe('Testing util file function renderRaceInfo', () => {
 
@@ -122,5 +125,19 @@ describe('Testing util file function renderRaceInfo', () => {
         const htmlResult = await getRenderStringAsyncIndex(result);
 
         expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
+    }),
+    test('Given config with show_lastyears_result = true when raceinfo is rendered then last years result is rendered', async () => {
+        card.config.hide_racedatetimes = false;
+        card.config.show_lastyears_result = true;
+        jest.useFakeTimers();
+        
+        jest.setSystemTime(new Date(2022, 3, 20)); // Weird bug in jest setting this to the last of the month
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>resultData }));
+
+        const result = renderRaceInfo(card, race);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toBe('<tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class=""> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> </h1> <h2 class=""> ()</h2> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr><tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class=""> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> </h1> <h2 class=""> ()</h2> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr><tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class=""> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> </h1> <h2 class=""> ()</h2> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr><tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class=""> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> </h1> <h2 class=""> ()</h2> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr><tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class=""> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> </h1> <h2 class=""> ()</h2> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr><tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class=""> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> </h1> <h2 class=""> ()</h2> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr><tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
     })
 })

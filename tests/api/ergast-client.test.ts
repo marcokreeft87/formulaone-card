@@ -126,5 +126,17 @@ describe('Testing ergast client file', () => {
         // Assert
         expect(JSON.stringify(result)).toMatch(JSON.stringify(scheduleData));
         expect(localStorageItem.data).toMatch(JSON.stringify(scheduleData));
+    }),
+    test('Calling GetLastYearsResults without data in localstorage and cacheResult true should return correct data', async () => {  
+        // Arrange 
+        const endpoint = '2022.json';      
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>scheduleData }));  
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>resultData }));
+        
+        // Act
+        const result = await client.GetLastYearsResults('Hungaroring');
+
+        // Assert
+        expect(JSON.stringify(result)).toMatch(JSON.stringify(resultData.RaceTable.Races[0]));
     })
 });

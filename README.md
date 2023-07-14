@@ -72,6 +72,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | countdown_type    | string or array | 'race'                              | Set the event to countdown to (race,qualifying,practice1,practice2,practice3,sprint) |
 | show_weather      | boolean       | `false`                             | Show the _[weather forecast](#Forecast)_ of the upcoming race |
 | next_race_delay   | number        |                                     | Delay (in hours) before the card switches to the next race |
+| show_lastyears_result | boolean   | `false`                             | Show the winner of last year (next_race)            |
 
 
 ### Actions
