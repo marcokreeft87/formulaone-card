@@ -196,16 +196,20 @@ export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: R
     }
 
     const result = raceData.Results ? raceData.Results[0] : null;
+    const fastest = raceData.Results?.filter((result) => result.FastestLap.rank === '1')[0];
 
     return html`<tr>
         <td colspan="5">
             <table class="weather-info">
                 <tr>
                     <td class="text-center">
-                        <h1 class="${(config.f1_font ? 'formulaone-font' : '')}">
-                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${new Date(raceData.date).getFullYear()}
-                        </h1>
-                        <h2 class="${(config.f1_font ? 'formulaone-font' : '')}">${result?.Driver.givenName} ${result?.Driver.familyName} (${result?.Constructor.name})</h2>
+                        <h1 class="${(config.f1_font ? 'formulaone-font' : '')}">${new Date(raceData.date).getFullYear()}</h1>
+                        <h2 class="${(config.f1_font ? 'formulaone-font' : '')}">
+                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${result?.Driver.givenName} ${result?.Driver.familyName} (${result?.Constructor.name})
+                        </h2>
+                        <h3 class="${(config.f1_font ? 'formulaone-font' : '')}">
+                            <ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon> ${fastest?.Driver.givenName} ${fastest?.Driver.familyName} (${fastest?.FastestLap?.Time.time})
+                        </h3>
                     </td>
                 </tr>
             </table>
