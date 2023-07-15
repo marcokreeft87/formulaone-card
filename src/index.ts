@@ -70,7 +70,6 @@ export default class FormulaOneCard extends LitElement {
 
     setCountryCache() {
         new RestCountryClient().GetAll().catch(() => { 
-            console.log('Country API is down, so flags are not available at the moment!')
             this.warning = 'Country API is down, so flags are not available at the moment!'; 
             this.update(this._cardValues);
         });
