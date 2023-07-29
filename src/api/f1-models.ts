@@ -92,7 +92,7 @@ export interface Root {
     laps: string
     status: string
     Time?: Time
-    FastestLap: FastestLap
+    FastestLap?: FastestLap | undefined
     // FirstPractice: FirstPractice
     // SecondPractice: SecondPractice
     // ThirdPractice?: ThirdPractice

@@ -196,7 +196,7 @@ export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: R
     }
 
     const result = raceData.Results ? raceData.Results[0] : null;
-    const fastest = raceData.Results?.filter((result) => result.FastestLap.rank === '1')[0];
+    const fastest = raceData.Results?.filter((result) => result.FastestLap?.rank === '1')[0];
 
     return html`<tr>
         <td colspan="5">
