@@ -30,5 +30,18 @@ describe('Testing util file function renderLastYearsResults', () => {
         const htmlResult = await getRenderStringAsyncIndex(result);
 
         expect(htmlResult).toBe('<tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class="formulaone-font"></h1> <h2 class="formulaone-font"> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> Sergio Pérez (Red Bull) </h2> <h3 class="formulaone-font"> <ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon> George Russell (1:46.458) </h3> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr>');
+    }),
+    test('Given config and data without fastest lap with hide_raceinfo = false when raceinfo is rendered then raceinfo is rendered', async () => {
+        card.config.f1_font = true;
+
+        const raceData = resultData.RaceTable.Races[0] as Race;
+        raceData.Results?.forEach(element => {
+            element.FastestLap = undefined;
+        });
+
+        const result = renderLastYearsResults(card.config, raceData);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toBe('<tr> <td colspan="5"> <table class="weather-info"> <tr> <td class="text-center"> <h1 class="formulaone-font"></h1> <h2 class="formulaone-font"> <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> Sergio Pérez (Red Bull) </h2> <h3 class="formulaone-font"> <ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon> () </h3> </td> </tr> </table> </td> <tr><td colspan="5">&nbsp;</td></tr>');
     })
 });
