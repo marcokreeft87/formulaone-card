@@ -3,6 +3,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
+import { formatDateNumeric } from "../lib/format_date";
 
 export default class NextRace extends BaseCard {
     hass: HomeAssistant;
@@ -49,7 +50,15 @@ export default class NextRace extends BaseCard {
                             <tr>
                                 <td colspan="5">${renderHeader(this, nextRace)}</td>
                             </tr>
-                            ${renderRaceInfo(this, nextRace)}    
+                            ${this.config.show_raceinfo ? 
+                                renderRaceInfo(this, nextRace) : 
+                                this.config.only_show_date ? 
+                                    html`<tr>
+                                        <td class="text-center">
+                                            <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${formatDateNumeric(new Date(nextRace.date + 'T' + nextRace.time), this.hass.locale, this.config.date_locale)}</h1>
+                                        </td>
+                                    </tr>` : null
+                                }  
                         </tbody>
                     </table>`
                 }).catch(() => { 
