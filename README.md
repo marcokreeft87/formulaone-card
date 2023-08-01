@@ -54,7 +54,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| card_type         | string        |  **Required**                       | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
+| card_type         | string        | **Required**                        | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting. [Available options listed here](https://www.w3.org/International/O-charset-lang.html)|
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
@@ -72,7 +72,8 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | countdown_type    | string or array | 'race'                              | Set the event to countdown to (race,qualifying,practice1,practice2,practice3,sprint) |
 | show_weather      | boolean       | `false`                             | Show the _[weather forecast](#Forecast)_ of the upcoming race |
 | next_race_delay   | number        |                                     | Delay (in hours) before the card switches to the next race |
-| show_lastyears_result | boolean   | `false`                             | Show the winner of last year (next_race)            |
+| show_lastyears_result | boolean   | `false`                             | Show the winner of last year (next_race, countdown) |
+| only_show_date    | boolean       | `false`                             | Show the date of the next race (next_race)          |
 
 
 ### Actions
