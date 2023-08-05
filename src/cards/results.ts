@@ -43,19 +43,22 @@ export default class Results extends BaseCard {
         const tabs: FormulaOneCardTab[] = [{
             title: 'Results',
             icon: this.icon('results'),
-            content: this.renderResults(selectedRace)
+            content: this.renderResults(selectedRace),
+            order: this.tabOrder('results')
         }, {
             title: 'Qualifying',
             icon: this.icon('qualifying'),
-            content: this.renderQualifying(selectedRace)
+            content: this.renderQualifying(selectedRace),
+            order: this.tabOrder('qualifying')
         }, {
             title: 'Sprint',
             icon: this.icon('sprint'),
             content: this.renderSprint(selectedRace),
-            hide: !selectedRace?.SprintResults
+            hide: !selectedRace?.SprintResults,
+            order: this.tabOrder('sprint')
         }];
 
-        return tabs;
+        return tabs.sort((a, b) => a.order - b.order);
     }
 
     renderSprint(selectedRace: Race) : HTMLTemplateResult {
@@ -362,5 +365,11 @@ export default class Results extends BaseCard {
         }
 
         return this.config.icons[key];
+    }
+
+    tabOrder(tab: string) : number {
+        const tabsOrder = this.config.tabs_order?.map(tab => tab.toLowerCase()) ?? ['results', 'qualifying', 'sprint'];
+
+        return tabsOrder.indexOf(tab);
     }
 }

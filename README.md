@@ -74,6 +74,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | next_race_delay   | number        |                                     | Delay (in hours) before the card switches to the next race |
 | show_lastyears_result | boolean   | `false`                             | Show the winner of last year (next_race, countdown) |
 | only_show_date    | boolean       | `false`                             | Show the date of the next race (next_race)          |
+| tabs_order        | array         |'results', 'qualifying', 'sprint'    | Determine the order of the tabs (result)    |
 
 
 ### Actions

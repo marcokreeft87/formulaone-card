@@ -27,6 +27,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     next_race_delay?: number;
     show_lastyears_result?: boolean;
     only_show_date?: boolean;
+    tabs_order?: string[];
 }
 
 export interface ValueChangedEvent {
@@ -130,7 +131,8 @@ export interface FormulaOneCardTab {
     title: string
     icon: string
     content: HTMLTemplateResult,
-    hide?: boolean
+    hide?: boolean,
+    order?: number
 }
 
 export interface SelectChangeEvent {
