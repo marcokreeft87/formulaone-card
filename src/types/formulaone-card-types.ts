@@ -129,7 +129,8 @@ export interface ActionHandlerElement extends HTMLElement {
 export interface FormulaOneCardTab {
     title: string
     icon: string
-    content: HTMLTemplateResult
+    content: HTMLTemplateResult,
+    hide?: boolean
 }
 
 export interface SelectChangeEvent {

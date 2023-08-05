@@ -51,7 +51,8 @@ export default class Results extends BaseCard {
         }, {
             title: 'Sprint',
             icon: this.icon('sprint'),
-            content: this.renderSprint(selectedRace)
+            content: this.renderSprint(selectedRace),
+            hide: !selectedRace?.SprintResults
         }];
 
         return tabs;
@@ -221,7 +222,7 @@ export default class Results extends BaseCard {
                                 @MDCTabBar:activated=${(ev: mwcTabBarEvent) => 
                                     (this.setSelectedTabIndex(ev.detail.index))}
                             >
-                            ${tabs.map(
+                            ${tabs.filter(tab => !tab.hide).map(
                                 (tab) =>  html`
                                         <mwc-tab
                                         ?hasImageIcon=${tab.icon}
@@ -235,7 +236,7 @@ export default class Results extends BaseCard {
                             </mwc-tab-bar>
                             <section>
                                 <article>
-                                ${tabs.find((_, index) => index == selectedTabIndex).content}
+                                ${tabs.filter(tab => !tab.hide).find((_, index) => index == selectedTabIndex).content}
                                 </article>
                             </section>
                             </td>
