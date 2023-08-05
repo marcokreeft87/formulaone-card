@@ -436,6 +436,46 @@ describe('Testing results file', () => {
         expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/results.json", {"headers": {"Accept": "application/json"}});
         expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/qualifying.json", {"headers": {"Accept": "application/json"}});
         expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/sprint.json", {"headers": {"Accept": "application/json"}});
+    }),    
+    test('Calling setSelectedRace with selectedSeason undefined no results', async () => {
+        // Arrange
+        parent.properties.set('cardValues', { selectedSeason: '2022', selectedRace: undefined });
+        const card = new Results(parent);
+
+        setFetchMock();
+
+        // Act
+        card.setSelectedRace({ target: { value: '5' } });
+
+        // Assert
+        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/results.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/qualifying.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/sprint.json", {"headers": {"Accept": "application/json"}});
+    }),
+    test('Calling render without tab_order should arrange tabs in default order', async () => {
+        // Arrange
+        const card = new Results(parent);
+
+        // Act
+        const tabs = card.renderTabs(lastRace);
+
+        // Assert
+        expect(tabs[0].title).toBe('Results');
+        expect(tabs[1].title).toBe('Qualifying');
+        expect(tabs[2].title).toBe('Sprint');
+    }),
+    test('Calling render without tab_order should arrange tabs in given order', async () => {
+        // Arrange
+        const card = new Results(parent);
+        card.config.tabs_order = ['Qualifying', 'Sprint', 'Results'];
+
+        // Act
+        const tabs = card.renderTabs(lastRace);
+
+        // Assert
+        expect(tabs[0].title).toBe('Qualifying');
+        expect(tabs[1].title).toBe('Sprint');
+        expect(tabs[2].title).toBe('Results');
     })
 
     function setFetchMock() {
