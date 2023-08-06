@@ -93,11 +93,6 @@ export interface Root {
     status: string
     Time?: Time
     FastestLap?: FastestLap | undefined
-    // FirstPractice: FirstPractice
-    // SecondPractice: SecondPractice
-    // ThirdPractice?: ThirdPractice
-    // Qualifying: Qualifying
-    // Sprint?: Sprint
   }
 
   export interface QualifyingResult {
