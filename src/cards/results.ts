@@ -75,7 +75,7 @@ export default class Results extends BaseCard {
                         </tr>
                     </thead>
                     <tbody>
-                        ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result))}
+                        ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result, false))}
                     </tbody>
                 </table>`
             : html`<table class="nopadding">
@@ -110,6 +110,7 @@ export default class Results extends BaseCard {
     }
 
     renderResults(selectedRace: Race): HTMLTemplateResult {
+        const fastest = selectedRace?.Results?.filter((result) => result.FastestLap?.rank === '1')[0];
         return selectedRace ?
             html`<table class="nopadding">
                     <thead>                    
@@ -123,8 +124,13 @@ export default class Results extends BaseCard {
                         </tr>
                     </thead>
                     <tbody>
-                        ${reduceArray(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result))}
+                        ${reduceArray(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result, result.position === fastest?.position))}
                     </tbody>
+                    ${fastest ? html`<tfoot>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-right"><small>* Fastest lap: ${fastest.FastestLap.Time.time}</small></td>
+                    </tfoot>` : ''}
                 </table>` 
         : html`<table class="nopadding">
                     <tr>
@@ -133,11 +139,11 @@ export default class Results extends BaseCard {
                 </table>`;
     }
 
-    renderResultRow(result: Result): HTMLTemplateResult {
+    renderResultRow(result: Result, fastest: boolean): HTMLTemplateResult {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
-                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(this, result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
+                <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(this, result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}${fastest ? ' *' : ''}</td>
                 ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor)}` : '')}
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
