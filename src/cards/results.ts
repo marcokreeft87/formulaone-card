@@ -18,8 +18,7 @@ export default class Results extends BaseCard {
         'seasonheader' : 'Season',
         'selectseason' : 'Select season',
         'selectrace' : 'Select race',
-        'noresults' : 'Please select a race thats already been run.',    
-        'nosprint' : 'No sprint race results available.',    
+        'noresults' : 'Please select a race thats already been run.',
         'q1' : 'Q1',
         'q2' : 'Q2',
         'q3' : 'Q3',
@@ -78,11 +77,7 @@ export default class Results extends BaseCard {
                         ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result, false))}
                     </tbody>
                 </table>`
-            : html`<table class="nopadding">
-                <tr>
-                    <td class="text-center">${this.translation('nosprint')}</td>
-                </tr>
-            </table>`;
+            : null;
     }
 
     renderQualifying(selectedRace: Race): HTMLTemplateResult {
@@ -102,16 +97,12 @@ export default class Results extends BaseCard {
                         ${reduceArray(selectedRace.QualifyingResults, this.config.row_limit).map(result => this.renderQualifyingResultRow(result))}
                     </tbody>
                 </table>`            
-            : html`<table class="nopadding">
-                    <tr>
-                        <td>${this.translation('noresults')}</td>
-                    </tr>
-                </table>`;
+            : null;
     }
 
     renderResults(selectedRace: Race): HTMLTemplateResult {
         const fastest = selectedRace?.Results?.filter((result) => result.FastestLap?.rank === '1')[0];
-        return selectedRace ?
+        return selectedRace?.Results ?
             html`<table class="nopadding">
                     <thead>                    
                         <tr>
@@ -132,11 +123,7 @@ export default class Results extends BaseCard {
                             <td colspan="6" class="text-right"><small>* Fastest lap: ${fastest.FastestLap.Time.time}</small></td>
                     </tfoot>` : ''}
                 </table>` 
-        : html`<table class="nopadding">
-                    <tr>
-                        <td>${this.translation('noresults')}</td>
-                    </tr>
-                </table>`;
+        : null;
     }
 
     renderResultRow(result: Result, fastest: boolean): HTMLTemplateResult {
@@ -225,31 +212,32 @@ export default class Results extends BaseCard {
         ${selectedRace 
             ? html`<table>
                         <tr><td colspan="2">${this.renderHeader(selectedRace)}</td></tr>
-                        <tr class="transparent">
-                            <td colspan="2">
-                                <mwc-tab-bar
-                                @MDCTabBar:activated=${(ev: mwcTabBarEvent) => 
-                                    (this.setSelectedTabIndex(ev.detail.index))}
-                            >
-                            ${tabs.filter(tab => !tab.hide).map(
-                                (tab) =>  html`
-                                        <mwc-tab
-                                        ?hasImageIcon=${tab.icon}
-                                        ><ha-icon
-                                                slot="icon"
-                                                icon="${tab.icon}"
-                                            ></ha-icon>
-                                        </mwc-tab>
-                                    `,
-                                )}                    
-                            </mwc-tab-bar>
-                            <section>
-                                <article>
-                                ${tabs.filter(tab => !tab.hide).find((_, index) => index == selectedTabIndex).content}
-                                </article>
-                            </section>
-                            </td>
-                        </tr>                    
+                        ${tabs.filter(tab => tab.content).length > 0 ?
+                            html`<tr class="transparent">
+                                <td colspan="2">
+                                    <mwc-tab-bar
+                                    @MDCTabBar:activated=${(ev: mwcTabBarEvent) => 
+                                        (this.setSelectedTabIndex(ev.detail.index))}
+                                >
+                                ${tabs.filter(tab => !tab.hide).map(
+                                    (tab) =>  html`
+                                            <mwc-tab
+                                            ?hasImageIcon=${tab.icon}
+                                            ><ha-icon
+                                                    slot="icon"
+                                                    icon="${tab.icon}"
+                                                ></ha-icon>
+                                            </mwc-tab>
+                                        `,
+                                    )}                    
+                                </mwc-tab-bar>
+                                <section>
+                                    <article>
+                                    ${tabs.filter(tab => !tab.hide).find((_, index) => index == selectedTabIndex).content}
+                                    </article>
+                                </section>
+                                </td>
+                            </tr>` : html`<tr><td colspan="2">${this.translation('noresults')}</td></tr>`}                    
                     </table>` 
                 : html``}
         `;
@@ -265,15 +253,18 @@ export default class Results extends BaseCard {
 
         Promise.all([this.client.GetResults(selectedSeason, round), 
             this.client.GetQualifyingResults(selectedSeason, round),
-            this.client.GetSprintResults(selectedSeason, round)])
-            .then(([results, qualifyingResults, sprintResults]) => {
+            this.client.GetSprintResults(selectedSeason, round),
+            this.client.GetSchedule(selectedSeason)])
+            .then(([results, qualifyingResults, sprintResults, schedule]) => {
 
-                const race = results.Races[0];
+                let race = results.Races[0];
                 if(race) {
                     race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
                     /* istanbul ignore next */
                     race.SprintResults = sprintResults?.Races[0]?.SprintResults
                     properties.selectedSeason = race.season;
+                } else {
+                    race = schedule.filter(item => parseInt(item.round) == round)[0];
                 }
 
                 properties.selectedRace = race;
