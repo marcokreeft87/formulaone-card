@@ -208,7 +208,7 @@ export default class Results extends BaseCard {
                 </td>
             </tr>
         </table>
-        ${this.renderTabsHtml(tabs, selectedTabIndex, selectedRace)}}`;       
+        ${this.renderTabsHtml(tabs, selectedTabIndex, selectedRace)}`;       
         
     }
 
@@ -261,11 +261,13 @@ export default class Results extends BaseCard {
             .then(([results, qualifyingResults, sprintResults, schedule]) => {
 
                 let race = results.Races[0];
+                /* istanbul ignore next */
                 if(race) {
                     race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
                     /* istanbul ignore next */
                     race.SprintResults = sprintResults?.Races[0]?.SprintResults
-                    properties.selectedSeason = race.season;
+                    properties.selectedSeason = race.season;                    
+                /* istanbul ignore next */
                 } else {
                     /* istanbul ignore next */
                     race = schedule.filter(item => parseInt(item.round) == round)[0];

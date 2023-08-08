@@ -421,7 +421,7 @@ describe('Testing results file', () => {
         expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/6/results.json", {"headers": {"Accept": "application/json"}});
         expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/6/qualifying.json", {"headers": {"Accept": "application/json"}});
         expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/6/sprint.json", {"headers": {"Accept": "application/json"}});
-    }),    
+    }),   
     test('Calling setSelectedRace with selectedSeason undefined no results', async () => {
         // Arrange
         parent.properties.set('cardValues', { selectedSeason: '2022', selectedRace: undefined });
