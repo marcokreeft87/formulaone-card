@@ -7,9 +7,9 @@ import FormulaOneCard from "../../src";
 import ErgastClient from "../../src/api/ergast-client";
 import { FastestLap, Mrdata, QualifyingResult, Race, Result, Root } from "../../src/api/f1-models";
 import Results from "../../src/cards/results";
-import { CardProperties, FormulaOneCardConfig, mwcTabBarEvent } from "../../src/types/formulaone-card-types";
+import { CardProperties, FormulaOneCardConfig, FormulaOneCardTab, mwcTabBarEvent } from "../../src/types/formulaone-card-types";
 import { getRenderString, getRenderStringAsync, getRenderStringAsyncIndex } from "../utils";
-import { HTMLTemplateResult } from "lit";
+import { HTMLTemplateResult, html } from "lit";
 import RestCountryClient from "../../src/api/restcountry-client";
 import { Country } from "../../src/types/rest-country-types";
 import ImageClient from "../../src/api/image-client";
@@ -105,7 +105,7 @@ describe('Testing results file', () => {
 
         // Assert
         // eslint-disable-next-line @typescript-eslint/ban-types
-        const func = (result.values[7] as HTMLTemplateResult).values[1] as Function;
+        const func = ((result.values[7] as HTMLTemplateResult).values[1] as HTMLTemplateResult).values[0] as Function;
         func({ detail: { index: 23 }  } as mwcTabBarEvent);
 
         const cardValues = card.parent.properties.get('cardValues') as CardProperties;
@@ -496,6 +496,58 @@ describe('Testing results file', () => {
         expect(tabs[0].title).toBe('Qualifying');
         expect(tabs[1].title).toBe('Sprint');
         expect(tabs[2].title).toBe('Results');
+    }),    
+    test('Calling renderTabsHtml with race, tabs and selected index should return expected html', async () => {
+        // Arrange
+        const race = resultData.RaceTable.Races[0] as Race;
+        
+        const card = new Results(parent);
+        const tabs: FormulaOneCardTab[] = [
+            { title: 'Qualifying', content: html`Qualifying`, icon: 'speed' },
+            { title: 'Sprint', content: html`Sprint`, icon: 'speed' },
+            { title: 'Results', content: html`Results`, icon: 'speed' }
+        ];
+
+        // Act
+        const result = card.renderTabsHtml(tabs, 1, race);        
+        const htmlResult = await getRenderString(result);
+
+        // Assert
+        expect(htmlResult).toBe('<table> <tr><td colspan="2"><h2 class=""><img height="25" src="https://flagcdn.com/w320/sg.png">&nbsp; 1 : Singapore Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br></td></tr> <tr class="transparent"> <td colspan="2"> <mwc-tab-bar @MDCTabBar:activated= > <mwc-tab ?hasImageIcon=speed ><ha-icon slot="icon" icon="speed" ></ha-icon> </mwc-tab> <mwc-tab ?hasImageIcon=speed ><ha-icon slot="icon" icon="speed" ></ha-icon> </mwc-tab> <mwc-tab ?hasImageIcon=speed ><ha-icon slot="icon" icon="speed" ></ha-icon> </mwc-tab> </mwc-tab-bar> <section> <article> Sprint </article> </section> </td> </tr> </table>');
+    }),  
+    test('Calling renderTabsHtml with race, tabs and selected index should return expected html', async () => {
+        // Arrange
+        const race = resultData.RaceTable.Races[0] as Race;
+        
+        const card = new Results(parent);
+        const tabs: FormulaOneCardTab[] = [
+            { title: 'Qualifying', content: null as unknown as HTMLTemplateResult, icon: 'speed' },
+            { title: 'Sprint', content: null as unknown as HTMLTemplateResult, icon: 'speed' },
+            { title: 'Results', content: null as unknown as HTMLTemplateResult, icon: 'speed' }
+        ];
+
+        // Act
+        const result = card.renderTabsHtml(tabs, 1, race);        
+        const htmlResult = await getRenderString(result);
+        
+        // Assert
+        expect(htmlResult).toBe('<table> <tr><td colspan="2"><h2 class=""><img height="25" src="https://flagcdn.com/w320/sg.png">&nbsp; 1 : Singapore Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/7col/image.png" @action=_handleAction .actionHandler= class=" clickable" /><br></td></tr> <tr><td colspan="2">Please select a race thats already been run.</td></tr> </table>');
+    }),
+    test('Calling renderTabsHtml with race undefined, tabs and selected index should return expected html', async () => {
+        // Arrange        
+        const card = new Results(parent);
+        const tabs: FormulaOneCardTab[] = [
+            { title: 'Qualifying', content: html`Qualifying`, icon: 'speed' },
+            { title: 'Sprint', content: html`Sprint`, icon: 'speed' },
+            { title: 'Results', content: html`Results`, icon: 'speed' }
+        ];
+
+        // Act
+        const result = card.renderTabsHtml(tabs, 1, undefined);        
+        const htmlResult = await getRenderString(result);
+
+        // Assert
+        expect(htmlResult).toBe('');
     })
 
     function setFetchMock() {

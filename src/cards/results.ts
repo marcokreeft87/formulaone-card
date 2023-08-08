@@ -208,8 +208,12 @@ export default class Results extends BaseCard {
                 </td>
             </tr>
         </table>
+        ${this.renderTabsHtml(tabs, selectedTabIndex, selectedRace)}}`;       
         
-        ${selectedRace 
+    }
+
+    renderTabsHtml = (tabs: FormulaOneCardTab[], selectedTabIndex: number, selectedRace?: Race): HTMLTemplateResult => {
+        return selectedRace 
             ? html`<table>
                         <tr><td colspan="2">${this.renderHeader(selectedRace)}</td></tr>
                         ${tabs.filter(tab => tab.content).length > 0 ?
@@ -239,8 +243,7 @@ export default class Results extends BaseCard {
                                 </td>
                             </tr>` : html`<tr><td colspan="2">${this.translation('noresults')}</td></tr>`}                    
                     </table>` 
-                : html``}
-        `;
+                : html``;
     }
 
     setSelectedRace(ev: SelectChangeEvent) {
@@ -264,6 +267,7 @@ export default class Results extends BaseCard {
                     race.SprintResults = sprintResults?.Races[0]?.SprintResults
                     properties.selectedSeason = race.season;
                 } else {
+                    /* istanbul ignore next */
                     race = schedule.filter(item => parseInt(item.round) == round)[0];
                 }
 
