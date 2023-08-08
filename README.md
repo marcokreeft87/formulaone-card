@@ -270,7 +270,6 @@ The following texts can be translated or altered.
 | results | selectseason | 'Select season' | 
 | results | selectrace | 'Select race' | 
 | results | noresults | 'Please select a race thats already been run' | 
-| results | nosprint | 'No sprint race results available.' |
 | countdown | days | 'd' |
 | countdown | hours | 'h' |
 | countdown | minutes | 'm' |
