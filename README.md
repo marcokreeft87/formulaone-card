@@ -10,6 +10,10 @@
 
 Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way 
 
+Watch a demo of the card by BeardedTinker!
+
+[![Demo of BeardedTinker](https://img.youtube.com/vi/z7blY6D-Qmk/0.jpg)](https://www.youtube.com/watch?v=z7blY6D-Qmk)
+
 ## Installation
 
 
