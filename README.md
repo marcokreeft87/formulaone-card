@@ -63,7 +63,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting. [Available options listed here](https://www.w3.org/International/O-charset-lang.html)|
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
-| show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown card |
+| show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown and next_race card |
 | hide_tracklayout  | boolean       | `false`                             | Hide the track layout image in the card |
 | hide_racedatetimes | boolean       | `false`                        | Hide the race information (dates and times of the qualifications/race/sprint) in the card |
 | f1_font           | boolean       | `false`                             | Use the official F1 font for headers |
