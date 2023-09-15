@@ -101,6 +101,7 @@ Actions example:
 ```yaml
 type: custom:formulaone-card
 card_type: next_race
+show_raceinfo: true
 actions:
   tap_action:
     action: navigate
