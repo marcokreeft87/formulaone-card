@@ -1,277 +1,86 @@
-import { fireEvent, HomeAssistant, LovelaceCardEditor } from "custom-card-helpers";
-import { css, CSSResult, LitElement } from "lit";
+import { css } from "lit";
 import { html, TemplateResult } from "lit-html";
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME } from "./consts";
-import { FormulaOneCardConfig, FormulaOneCardType, ValueChangedEvent } from "./types/formulaone-card-types";
+import { CountdownType, FormulaOneCardType, PreviousRaceDisplay } from "./types/formulaone-card-types";
+import { EditorForm, FormControlType } from "./lib/editor-form";
 
 @customElement(CARD_EDITOR_NAME)
-export class FormulaOneCardEditor extends LitElement implements LovelaceCardEditor {
-    @property({ attribute: false }) public hass?: HomeAssistant;
-    @state() private config?: FormulaOneCardConfig;
-
-    setConfig(config: FormulaOneCardConfig): void {
-        this.config = config;
-    }
-
-    get _cardType(): string {
-        return this.config?.card_type || '';
-    }
-
-    get _title(): string {
-        return this.config?.title || null;
-    }
-
-    get _f1_font(): boolean {
-        return typeof this.config?.f1_font === 'undefined' ? false : this.config?.f1_font;
-    }  
-    
-    get _dateLocale(): string {
-        return this.config?.date_locale || null;
-    }
-
-    get _imageClickable(): boolean {
-        return typeof this.config?.image_clickable === 'undefined' ? false : this.config?.image_clickable;
-    }
-
-    get _showCarnumber(): boolean {
-        return typeof this.config?.show_carnumber === 'undefined' ? false : this.config?.show_carnumber;
-    }
-
-    get _locationClickable(): boolean {
-        return typeof this.config?.location_clickable === 'undefined' ? false : this.config?.location_clickable;
-    }
-
-    get _previousRace(): string {
-        return this.config?.previous_race || undefined;
-    }
-
-    // TODO standings options
-
-    // TODO translations
-
-    get _showRaceinfo(): boolean {
-        return typeof this.config?.show_raceinfo === 'undefined' ? false : this.config?.show_raceinfo;
-    }
-
-    get _hideTracklayout(): boolean {
-        return typeof this.config?.hide_tracklayout === 'undefined' ? false : this.config?.hide_tracklayout;
-    }
-
-    get _hideRacedatetimes(): boolean {
-        return typeof this.config?.hide_racedatetimes === 'undefined' ? false : this.config?.hide_racedatetimes;
-    }
-
-    // TODO actions
-
-    get _showWeather(): boolean {
-        return typeof this.config?.show_weather === 'undefined' ? false : this.config?.show_weather;
-    }
-
-    // TODO weather options
-
-    // TODO Countdown type
-
-    get _rowLimit(): number {
-        return this.config?.row_limit || undefined;
-    }
-
-    protected generateCheckbox(configValue: string, label: string, checked: boolean): TemplateResult {
-        return html`
-            <ha-formfield label=${label}>
-                <ha-switch
-                    .checked=${checked}
-                    .configValue=${configValue}
-                    @change=${this._valueChanged}
-                ></ha-switch>
-            </ha-formfield>
-        `;
-    }
+export class FormulaOneCardEditor extends EditorForm {
 
     protected render(): TemplateResult {
-        if (!this.hass || !this.config) {
+        if (!this._hass || !this._config) {
             return html``;
         }
 
-        // https://github.com/custom-cards/slider-button-card/blob/main/src/editor.ts
-
-        const cardTypes: {id: string; name: string}[] = [];
-
-        for (const [key, value] of Object.entries(FormulaOneCardType)) {
-            cardTypes.push({id: value, name: key});
-        }
-
-        return html`
-            <div class="card-config">
-                <div class="tabs">
-                <div class="tab">
-                    <input type="checkbox" id="entity" class="tab-checkbox">
-                    <label class="tab-label" for="entity">Basic configuration</label>
-                    <div class="tab-content">
-                        <paper-dropdown-menu
-                            label="Card Type (Required)"
-                        >
-                            <paper-listbox 
-                            slot="dropdown-content" 
-                            attr-for-selected="item-value"
-                            .configValue=${'card_type'}
-                            @selected-item-changed=${this._valueChangedSelect}
-                            .selected=${this._cardType}
-                            >
-                            ${cardTypes.map((cardType) => {
-                                return html`
-                                <paper-item .itemValue=${cardType.id} .configValue=${'card_type'}>${cardType.name}</paper-item>
-                                `;
-                                })}                 
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                        <paper-input
-                            label="Title"
-                            .value=${this._title}
-                            .placeholder=${this._title}
-                            .configValue=${'title'}
-                            @value-changed=${this._valueChanged}
-                        ></paper-input>
-                        <div class="side-by-side">                            
-                            ${this.generateCheckbox('f1_font', 'Use F1 font', this._f1_font)}  
-                            ${this.generateCheckbox('image_clickable', 'Image clickable', this._imageClickable)}
-                            ${this.generateCheckbox('show_carnumber', 'Show carnumber', this._showCarnumber)}
-                            ${this.generateCheckbox('location_clickable', 'Location clickable', this._locationClickable)}
-                            ${this.generateCheckbox('show_raceinfo', 'Show race information', this._showRaceinfo)}
-                            ${this.generateCheckbox('hide_tracklayout', 'Hide track layout', this._hideTracklayout)}
-                            ${this.generateCheckbox('hide_racedatetimes', 'Hide race dates and times', this._hideRacedatetimes)}
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            `;
-
+        return this.renderForm([
+            { controls: [{ label: "Card Type (Required)", configValue: "card_type", type: FormControlType.Dropdown, items: this.getDropdownOptionsFromEnum(FormulaOneCardType) }] },
+            { controls: [{ label: "Title", configValue: "title", type: FormControlType.Textbox }] },
+            {
+                label: "Basic configuration",
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Use F1 font", configValue: "f1_font", type: FormControlType.Switch },
+                    { label: "Image clickable", configValue: "image_clickable", type: FormControlType.Switch },
+                    { label: "Show carnumber", configValue: "show_carnumber", type: FormControlType.Switch },
+                    { label: "Location clickable", configValue: "location_clickable", type: FormControlType.Switch },
+                    { label: "Show race information", configValue: "show_raceinfo", type: FormControlType.Switch },
+                    { label: "Hide track layout", configValue: "hide_tracklayout", type: FormControlType.Switch },
+                    { label: "Hide race dates and times", configValue: "hide_racedatetimes", type: FormControlType.Switch },
+                    { label: "Show last years result", configValue: "show_lastyears_result", type: FormControlType.Switch },
+                    { label: "Only show date", configValue: "only_show_date", type: FormControlType.Switch }
+                ]
+            },    
+            {
+                label: "Countdown Type",
+                cssClass: 'side-by-side',
+                controls: [{ configValue: "countdown_type", type: FormControlType.Checkboxes, items: this.getDropdownOptionsFromEnum(CountdownType) }]
+            },
+            {
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Next race delay", configValue: "next_race_delay", type: FormControlType.Textbox },
+                    { label: "Row limit", configValue: "row_limit", type: FormControlType.Textbox },
+                ]
+            },
+            { controls: [{ label: "Previous race", configValue: "previous_race", type: FormControlType.Dropdown, items: this.getDropdownOptionsFromEnum(PreviousRaceDisplay) }] },
+            {
+                label: "Standings",
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Show team", configValue: "standings.show_team", type: FormControlType.Switch },
+                    { label: "Show flag", configValue: "standings.show_flag", type: FormControlType.Switch },
+                    { label: "Show teamlogo", configValue: "standings.show_teamlogo", type: FormControlType.Switch }
+                ]
+            }, 
+        ]);
     }
 
-    private _valueChangedSelect(ev: ValueChangedEvent): void {
-        if (!this.config || !this.hass) {
-            return;
-        }
-        //const 
-        // if (this[`_${target.configValue}`] === target.value) {
-        //     return;
-        // }
-        const itemValue = ev.detail.value.itemValue;
-        const configValue = ev.detail.value.parentElement.configValue;
-        if (configValue) {
-            if (ev.detail.value.itemValue === '') {
-                const tmpConfig = { ...this.config };
-                delete tmpConfig[configValue];
-                this.config = tmpConfig;
-            } else {
-                this.config = {
-                    ...this.config,
-                    [configValue]: itemValue,
-                };
-            }
-        }
-        fireEvent(this, 'config-changed', { config: this.config });
-    }
-
-    private _valueChanged(ev: ValueChangedEvent): void {
-        if (!this.config || !this.hass) {
-            return;
-        }
-        const target = ev.target;
-        //const 
-        // if (this[`_${target.configValue}`] === target.value) {
-        //     return;
-        // }
-        if (target.configValue) {
-            if (target.value === '') {
-                const tmpConfig = { ...this.config };
-                delete tmpConfig[target.configValue];
-                this.config = tmpConfig;
-            } else {
-                this.config = {
-                    ...this.config,
-                    [target.configValue]: target.checked !== undefined ? target.checked : target.value,
-                };
-            }
-        }
-        fireEvent(this, 'config-changed', { config: this.config });
-    }
-
-    static get styles(): CSSResult {
+    static get styles() {
         return css`
-          ha-switch {
-            padding: 16px 6px;
-          }
-          .side-by-side {
-            display: flex;
-            flex-flow: row wrap;
-          }
-          .side-by-side > * {
-            padding-right: 8px;
-            width: 50%;
-            flex-flow: column wrap;
-            box-sizing: border-box;
-          }
-          .side-by-side > *:last-child {
-            flex: 1;
-            padding-right: 0;
-          }
-          .suffix {
-            margin: 0 8px;
-          }
-          .group {
-            padding: 15px;
-            border: 1px solid var(--primary-text-color)
-          }
-          .tabs {
-            overflow: hidden;        
-          }
-          .tab {
-            width: 100%;
-            color: var(--primary-text-color);
-            overflow: hidden;
-          }
-          .tab-label {
-            display: flex;
-            justify-content: space-between;
-            padding: 1em 1em 1em 0em;
-            border-bottom: 1px solid var(--secondary-text-color);
-            font-weight: bold;
-            cursor: pointer;
-          }
-          .tab-label:hover {
-            /*background: #1a252f;*/
-          }
-          .tab-label::after {
-            content: "❯";
-            width: 1em;
-            height: 1em;
-            text-align: center;
-            transition: all 0.35s;
-          }
-          .tab-content {
-            max-height: 0;
-            padding: 0 1em;
-            background: var(--secondary-background-color);
-            transition: all 0.35s;
-          }
-          input.tab-checkbox {
-            position: absolute;
-            opacity: 0;
-            z-index: -1;
-          }      
-          input.tab-checkbox:checked + .tab-label {
-            border-color: var(--accent-color);
-          }
-          input.tab-checkbox:checked + .tab-label::after {
-            transform: rotate(90deg);
-          }
-          input.tab-checkbox:checked ~ .tab-content {
-            max-height: 100vh;
-            padding: 1em;
-          }      
+            .form-row {
+                margin-bottom: 10px;
+            }
+            .form-control {
+                display: flex;
+                align-items: center;
+            }
+            ha-switch {
+                padding: 16px 6px;
+            }
+            .side-by-side {
+                display: flex;
+                flex-flow: row wrap;
+            }            
+            .side-by-side > label {
+                width: 100%;
+            }
+            .side-by-side > .form-control {
+                width: 50%;
+            }
+            ha-textfield { 
+                width: 100%;
+            }
         `;
-      
     }
 }
