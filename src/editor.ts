@@ -2,7 +2,7 @@ import { css } from "lit";
 import { html, TemplateResult } from "lit-html";
 import { customElement } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME } from "./consts";
-import { CountdownType, FormulaOneCardType, PreviousRaceDisplay } from "./types/formulaone-card-types";
+import { CountdownType, FormulaOneCardType, PreviousRaceDisplay, WeatherUnit } from "./types/formulaone-card-types";
 import EditorForm from '@marcokreeft/ha-editor-formbuilder'
 import { FormControlType } from "@marcokreeft/ha-editor-formbuilder/dist/interfaces";
 
@@ -54,6 +54,31 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Show teamlogo", configValue: "standings.show_teamlogo", type: FormControlType.Switch }
                 ]
             }, 
+            {
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Next race delay", configValue: "next_race_delay", type: FormControlType.Textbox },
+                    { label: "Row limit", configValue: "row_limit", type: FormControlType.Textbox },
+                ]
+            },
+            {
+                label: "Weather",
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Show weather", configValue: "show_weather", type: FormControlType.Switch },
+                    { type: FormControlType.Filler },
+                    { label: "API key", configValue: "weather_options.api_key", type: FormControlType.Textbox },
+                    { label: "Unit", configValue: "weather_options.unit", type: FormControlType.Dropdown, items: this.getDropdownOptionsFromEnum(WeatherUnit) },
+                    { label: "Show icon", configValue: "weather_options.show_icon", type: FormControlType.Switch },
+                    { label: "Show precipitation", configValue: "weather_options.show_precipitation", type: FormControlType.Switch },
+                    { label: "Show wind", configValue: "weather_options.show_wind", type: FormControlType.Switch },
+                    { label: "Show temperature", configValue: "weather_options.show_temperature", type: FormControlType.Switch },
+                    { label: "Show cloud coverage", configValue: "weather_options.show_cloud_cover", type: FormControlType.Switch },
+                    { label: "Show visibility", configValue: "weather_options.show_visibility", type: FormControlType.Switch },
+                    { label: "Show Icon", configValue: "weather_options.show_icon", type: FormControlType.Switch },
+                    { label: "Show Icon", configValue: "weather_options.show_icon", type: FormControlType.Switch },
+                ]
+            }, 
         ]);
     }
 
@@ -82,6 +107,9 @@ export class FormulaOneCardEditor extends EditorForm {
             }
             ha-textfield { 
                 width: 100%;
+            }
+            .hidden {
+                display: none;
             }
         `;
     }

@@ -23,7 +23,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     icons?: CustomIcons;
     countdown_type?: CountdownType | CountdownType[] | undefined;//x
     show_weather?: boolean;
-    weather_options?: WeatherOptions;
+    weather_options?: WeatherOptions;//x
     next_race_delay?: number;//x
     show_lastyears_result?: boolean;//x
     only_show_date?: boolean;//x
@@ -51,7 +51,7 @@ export interface WeatherOptions {
     api_key?: string;
     unit?: WeatherUnit;
     show_icon?: boolean;
-    show_precipitation?: boolean;
+    show_precipitation?: boolean; 
     show_wind?: boolean;
     show_temperature?: boolean;
     show_cloud_cover?: boolean;
