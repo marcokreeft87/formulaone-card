@@ -3,7 +3,8 @@ import { html, TemplateResult } from "lit-html";
 import { customElement } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME } from "./consts";
 import { CountdownType, FormulaOneCardType, PreviousRaceDisplay } from "./types/formulaone-card-types";
-import { EditorForm, FormControlType } from "./lib/editor-form";
+import EditorForm from '@marcokreeft/ha-editor-formbuilder'
+import { FormControlType } from "@marcokreeft/ha-editor-formbuilder/dist/interfaces";
 
 @customElement(CARD_EDITOR_NAME)
 export class FormulaOneCardEditor extends EditorForm {
@@ -76,7 +77,8 @@ export class FormulaOneCardEditor extends EditorForm {
                 width: 100%;
             }
             .side-by-side > .form-control {
-                width: 50%;
+                width: 49%;
+                padding: 2px;
             }
             ha-textfield { 
                 width: 100%;
