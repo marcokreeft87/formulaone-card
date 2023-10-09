@@ -7,7 +7,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     name?: string;//x
     hass?: HomeAssistant;//x
     card_type?: FormulaOneCardType;//x
-    date_locale?: string;
+    date_locale?: string;//x
     image_clickable?: boolean;//x
     show_carnumber?: boolean;//x
     location_clickable?: boolean;//x
@@ -22,12 +22,12 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     row_limit?: number;//x
     icons?: CustomIcons;
     countdown_type?: CountdownType | CountdownType[] | undefined;//x
-    show_weather?: boolean;
+    show_weather?: boolean;//x
     weather_options?: WeatherOptions;//x
     next_race_delay?: number;//x
     show_lastyears_result?: boolean;//x
     only_show_date?: boolean;//x
-    tabs_order?: string[];
+    tabs_order?: string[];//x
 }
 
 export interface ValueChangedEvent {

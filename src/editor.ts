@@ -21,6 +21,8 @@ export class FormulaOneCardEditor extends EditorForm {
                 label: "Basic configuration",
                 cssClass: 'side-by-side',
                 controls: [
+                    { label: "Date locale", configValue: "date_locale", type: FormControlType.Textbox },
+                    { type: FormControlType.Filler },
                     { label: "Use F1 font", configValue: "f1_font", type: FormControlType.Switch },
                     { label: "Image clickable", configValue: "image_clickable", type: FormControlType.Switch },
                     { label: "Show carnumber", configValue: "show_carnumber", type: FormControlType.Switch },
@@ -74,9 +76,13 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Show wind", configValue: "weather_options.show_wind", type: FormControlType.Switch },
                     { label: "Show temperature", configValue: "weather_options.show_temperature", type: FormControlType.Switch },
                     { label: "Show cloud coverage", configValue: "weather_options.show_cloud_cover", type: FormControlType.Switch },
-                    { label: "Show visibility", configValue: "weather_options.show_visibility", type: FormControlType.Switch },
-                    { label: "Show Icon", configValue: "weather_options.show_icon", type: FormControlType.Switch },
-                    { label: "Show Icon", configValue: "weather_options.show_icon", type: FormControlType.Switch },
+                    { label: "Show visibility", configValue: "weather_options.show_visibility", type: FormControlType.Switch }
+                ]
+            }, 
+            {
+                label: "Tabs",
+                controls: [
+                    { label: "Tabs order", configValue: "tabs_order", type: FormControlType.Textbox }
                 ]
             }, 
         ]);
