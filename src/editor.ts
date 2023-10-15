@@ -5,6 +5,7 @@ import { CARD_EDITOR_NAME } from "./consts";
 import { CountdownType, FormulaOneCardType, PreviousRaceDisplay, WeatherUnit } from "./types/formulaone-card-types";
 import EditorForm from '@marcokreeft/ha-editor-formbuilder'
 import { FormControlType } from "@marcokreeft/ha-editor-formbuilder/dist/interfaces";
+import { getDropdownOptionsFromEnum } from "@marcokreeft/ha-editor-formbuilder/dist/utils/entities";
 
 @customElement(CARD_EDITOR_NAME)
 export class FormulaOneCardEditor extends EditorForm {
@@ -15,14 +16,12 @@ export class FormulaOneCardEditor extends EditorForm {
         }
 
         return this.renderForm([
-            { controls: [{ label: "Card Type (Required)", configValue: "card_type", type: FormControlType.Dropdown, items: this.getDropdownOptionsFromEnum(FormulaOneCardType) }] },
+            { controls: [{ label: "Card Type (Required)", configValue: "card_type", type: FormControlType.Dropdown, items: getDropdownOptionsFromEnum(FormulaOneCardType) }] },
             { controls: [{ label: "Title", configValue: "title", type: FormControlType.Textbox }] },
             {
                 label: "Basic configuration",
                 cssClass: 'side-by-side',
                 controls: [
-                    { label: "Date locale", configValue: "date_locale", type: FormControlType.Textbox },
-                    { type: FormControlType.Filler },
                     { label: "Use F1 font", configValue: "f1_font", type: FormControlType.Switch },
                     { label: "Image clickable", configValue: "image_clickable", type: FormControlType.Switch },
                     { label: "Show carnumber", configValue: "show_carnumber", type: FormControlType.Switch },
@@ -31,24 +30,31 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Hide track layout", configValue: "hide_tracklayout", type: FormControlType.Switch },
                     { label: "Hide race dates and times", configValue: "hide_racedatetimes", type: FormControlType.Switch },
                     { label: "Show last years result", configValue: "show_lastyears_result", type: FormControlType.Switch },
-                    { label: "Only show date", configValue: "only_show_date", type: FormControlType.Switch }
+                    { label: "Only show date", configValue: "only_show_date", type: FormControlType.Switch },
+                    { type: FormControlType.Filler },
+                    { label: "Row limit", configValue: "row_limit", type: FormControlType.Textbox },
+                    { label: "Date locale", configValue: "date_locale", type: FormControlType.Textbox }
                 ]
             },    
             {
                 label: "Countdown Type",
+                hidden: this._config.card_type !== FormulaOneCardType.Countdown,
                 cssClass: 'side-by-side',
-                controls: [{ configValue: "countdown_type", type: FormControlType.Checkboxes, items: this.getDropdownOptionsFromEnum(CountdownType) }]
+                controls: [{ configValue: "countdown_type", type: FormControlType.Checkboxes, items: getDropdownOptionsFromEnum(CountdownType) }]
             },
             {
-                cssClass: 'side-by-side',
+                hidden: this._config.card_type !== FormulaOneCardType.NextRace,
                 controls: [
                     { label: "Next race delay", configValue: "next_race_delay", type: FormControlType.Textbox },
-                    { label: "Row limit", configValue: "row_limit", type: FormControlType.Textbox },
                 ]
             },
-            { controls: [{ label: "Previous race", configValue: "previous_race", type: FormControlType.Dropdown, items: this.getDropdownOptionsFromEnum(PreviousRaceDisplay) }] },
+            { 
+                hidden: this._config.card_type !== FormulaOneCardType.Schedule,
+                controls: [{ label: "Previous race", configValue: "previous_race", type: FormControlType.Dropdown, items: getDropdownOptionsFromEnum(PreviousRaceDisplay) }] 
+            },
             {
                 label: "Standings",
+                hidden: this._config.card_type !== FormulaOneCardType.ConstructorStandings && this._config.card_type !== FormulaOneCardType.DriverStandings,
                 cssClass: 'side-by-side',
                 controls: [
                     { label: "Show team", configValue: "standings.show_team", type: FormControlType.Switch },
@@ -57,20 +63,18 @@ export class FormulaOneCardEditor extends EditorForm {
                 ]
             }, 
             {
-                cssClass: 'side-by-side',
-                controls: [
-                    { label: "Next race delay", configValue: "next_race_delay", type: FormControlType.Textbox },
-                    { label: "Row limit", configValue: "row_limit", type: FormControlType.Textbox },
-                ]
-            },
-            {
                 label: "Weather",
-                cssClass: 'side-by-side',
+                hidden: this._config.card_type !== FormulaOneCardType.NextRace && this._config.card_type !== FormulaOneCardType.Countdown,
                 controls: [
-                    { label: "Show weather", configValue: "show_weather", type: FormControlType.Switch },
-                    { type: FormControlType.Filler },
+                    { label: "Show weather", configValue: "show_weather", type: FormControlType.Switch }
+                ]
+            }, 
+            {
+                cssClass: 'side-by-side',
+                hidden: (this._config.card_type !== FormulaOneCardType.NextRace && this._config.card_type !== FormulaOneCardType.Countdown) || !this._config.show_weather,
+                controls: [
                     { label: "API key", configValue: "weather_options.api_key", type: FormControlType.Textbox },
-                    { label: "Unit", configValue: "weather_options.unit", type: FormControlType.Dropdown, items: this.getDropdownOptionsFromEnum(WeatherUnit) },
+                    { label: "Unit", configValue: "weather_options.unit", type: FormControlType.Dropdown, items: getDropdownOptionsFromEnum(WeatherUnit) },
                     { label: "Show icon", configValue: "weather_options.show_icon", type: FormControlType.Switch },
                     { label: "Show precipitation", configValue: "weather_options.show_precipitation", type: FormControlType.Switch },
                     { label: "Show wind", configValue: "weather_options.show_wind", type: FormControlType.Switch },
@@ -78,9 +82,10 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Show cloud coverage", configValue: "weather_options.show_cloud_cover", type: FormControlType.Switch },
                     { label: "Show visibility", configValue: "weather_options.show_visibility", type: FormControlType.Switch }
                 ]
-            }, 
+            },
             {
                 label: "Tabs",
+                hidden: this._config.card_type !== FormulaOneCardType.Results,
                 controls: [
                     { label: "Tabs order", configValue: "tabs_order", type: FormControlType.Textbox }
                 ]
