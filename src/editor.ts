@@ -35,7 +35,7 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Row limit", configValue: "row_limit", type: FormControlType.Textbox },
                     { label: "Date locale", configValue: "date_locale", type: FormControlType.Textbox }
                 ]
-            },    
+            },
             {
                 label: "Countdown Type",
                 hidden: this._config.card_type !== FormulaOneCardType.Countdown,
@@ -48,9 +48,9 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Next race delay", configValue: "next_race_delay", type: FormControlType.Textbox },
                 ]
             },
-            { 
+            {
                 hidden: this._config.card_type !== FormulaOneCardType.Schedule,
-                controls: [{ label: "Previous race", configValue: "previous_race", type: FormControlType.Dropdown, items: getDropdownOptionsFromEnum(PreviousRaceDisplay) }] 
+                controls: [{ label: "Previous race", configValue: "previous_race", type: FormControlType.Dropdown, items: getDropdownOptionsFromEnum(PreviousRaceDisplay) }]
             },
             {
                 label: "Standings",
@@ -61,14 +61,14 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Show flag", configValue: "standings.show_flag", type: FormControlType.Switch },
                     { label: "Show teamlogo", configValue: "standings.show_teamlogo", type: FormControlType.Switch }
                 ]
-            }, 
+            },
             {
                 label: "Weather",
                 hidden: this._config.card_type !== FormulaOneCardType.NextRace && this._config.card_type !== FormulaOneCardType.Countdown,
                 controls: [
                     { label: "Show weather", configValue: "show_weather", type: FormControlType.Switch }
                 ]
-            }, 
+            },
             {
                 cssClass: 'side-by-side',
                 hidden: (this._config.card_type !== FormulaOneCardType.NextRace && this._config.card_type !== FormulaOneCardType.Countdown) || !this._config.show_weather,
@@ -89,7 +89,7 @@ export class FormulaOneCardEditor extends EditorForm {
                 controls: [
                     { label: "Tabs order", configValue: "tabs_order", type: FormControlType.Textbox }
                 ]
-            }, 
+            },
         ]);
     }
 
@@ -121,6 +121,11 @@ export class FormulaOneCardEditor extends EditorForm {
             }
             .hidden {
                 display: none;
+            }
+            @media (max-width: 600px) {
+                .side-by-side > .form-control {
+                    width: 48%;
+                }
             }
         `;
     }
