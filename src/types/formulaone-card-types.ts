@@ -3,31 +3,31 @@ import { HTMLTemplateResult } from 'lit';
 
 export interface FormulaOneCardConfig extends LovelaceCardConfig {
     show_icon?: boolean;
-    title?: string;
-    name?: string;
-    hass?: HomeAssistant;
-    card_type?: FormulaOneCardType;
-    date_locale?: string;
-    image_clickable?: boolean;
-    show_carnumber?: boolean;
-    location_clickable?: boolean;
-    previous_race?: PreviousRaceDisplay;
-    standings?: StandingDisplayOptions;
+    title?: string;//x
+    name?: string;//x
+    hass?: HomeAssistant;//x
+    card_type?: FormulaOneCardType;//x
+    date_locale?: string;//x
+    image_clickable?: boolean;//x
+    show_carnumber?: boolean;//x
+    location_clickable?: boolean;//x
+    previous_race?: PreviousRaceDisplay;//x
+    standings?: StandingDisplayOptions;//x
     translations?: Translation;
-    show_raceinfo?: boolean;
-    hide_tracklayout?: boolean;
-    hide_racedatetimes?: boolean;
+    show_raceinfo?: boolean;//x
+    hide_tracklayout?: boolean;//x
+    hide_racedatetimes?: boolean;//x
     actions?: ActionOptions;
-    f1_font?: boolean;
-    row_limit?: number;
+    f1_font?: boolean; //x
+    row_limit?: number;//x
     icons?: CustomIcons;
-    countdown_type?: CountdownType | CountdownType[] | undefined;
-    show_weather?: boolean;
-    weather_options?: WeatherOptions;
-    next_race_delay?: number;
-    show_lastyears_result?: boolean;
-    only_show_date?: boolean;
-    tabs_order?: string[];
+    countdown_type?: CountdownType | CountdownType[] | undefined;//x
+    show_weather?: boolean;//x
+    weather_options?: WeatherOptions;//x
+    next_race_delay?: number;//x
+    show_lastyears_result?: boolean;//x
+    only_show_date?: boolean;//x
+    tabs_order?: string[];//x
 }
 
 export interface ValueChangedEvent {
@@ -51,7 +51,7 @@ export interface WeatherOptions {
     api_key?: string;
     unit?: WeatherUnit;
     show_icon?: boolean;
-    show_precipitation?: boolean;
+    show_precipitation?: boolean; 
     show_wind?: boolean;
     show_temperature?: boolean;
     show_cloud_cover?: boolean;

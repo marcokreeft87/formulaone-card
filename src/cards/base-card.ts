@@ -37,7 +37,7 @@ export abstract class BaseCard {
 
     abstract cardSize() : number;
 
-    abstract defaultTranslations: Translation;    
+    abstract defaultTranslations: Translation;
 
     protected getProperties() {
         const cardProperties = this.parent.properties?.get('cardValues') as CardProperties;
