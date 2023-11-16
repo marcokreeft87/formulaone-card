@@ -1,11 +1,10 @@
-import { css } from "lit";
 import { html, TemplateResult } from "lit-html";
-import { customElement } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME } from "./consts";
 import { CountdownType, FormulaOneCardType, PreviousRaceDisplay, WeatherUnit } from "./types/formulaone-card-types";
 import EditorForm from '@marcokreeft/ha-editor-formbuilder'
 import { FormControlType } from "@marcokreeft/ha-editor-formbuilder/dist/interfaces";
 import { getDropdownOptionsFromEnum } from "@marcokreeft/ha-editor-formbuilder/dist/utils/entities";
+import { css, CSSResult, customElement } from "lit-element";
 
 @customElement(CARD_EDITOR_NAME)
 export class FormulaOneCardEditor extends EditorForm {
@@ -93,7 +92,7 @@ export class FormulaOneCardEditor extends EditorForm {
         ]);
     }
 
-    static get styles() {
+    static get styles() : CSSResult {
         return css`
             .form-row {
                 margin-bottom: 10px;
