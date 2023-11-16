@@ -87,9 +87,9 @@ export const getCircuitName = (location: Location) => {
         circuitName = exception[0].name; 
     }
 
-    if(location.country == 'USA' && location.locality != 'Austin')
+    if((location.country == 'USA' || location.country == 'United States') && location.locality != 'Austin')
     {
-        circuitName = location.locality;
+        circuitName = location.locality.replace(" ","_");
     }
 
     if(location.country == 'Italy' && location.locality == 'Imola')
