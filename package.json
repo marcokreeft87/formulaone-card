@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.22.5",
-    "@babel/preset-env": "^7.22.14",
+    "@babel/preset-env": "^7.23.7",
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
     "@marcokreeft/ha-editor-formbuilder": "^2023.10.9",
     "babel-jest": "^29.7.0",
