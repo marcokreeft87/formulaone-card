@@ -51,7 +51,7 @@
     "jest-ts-auto-mock": "^2.1.0",
     "minify-html-literals-loader": "^1.1.1",
     "ts-auto-mock": "^3.6.4",
-    "ts-jest": "^29.1.1",
+    "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
     "ttypescript": "^1.5.15",
     "yarn": "^1.22.21"
