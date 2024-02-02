@@ -8,6 +8,9 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card/badge?style=flat-square)](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card)
 
 
+# Unfortunately the ergast API won't be updated for the 2024 season so this card will only display historic data from now on :(
+
+
 Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way 
 
 Watch a demo of the card by BeardedTinker!
