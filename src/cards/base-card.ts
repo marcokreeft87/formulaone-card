@@ -6,6 +6,7 @@ import { Race } from "../api/f1-models";
 import ImageClient from "../api/image-client";
 import WeatherClient from "../api/weather-client";
 import { CardProperties, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
+import { SportsTimesClient } from "../api/sportstimes-client";
 
 export abstract class BaseCard {
     parent: FormulaOneCard;
@@ -14,6 +15,7 @@ export abstract class BaseCard {
     hass: HomeAssistant;
     weatherClient: WeatherClient;
     imageClient: ImageClient;
+    sportsTimesClient: SportsTimesClient;
 
     constructor(parent: FormulaOneCard) {     
         this.config = parent.config;   
@@ -22,6 +24,7 @@ export abstract class BaseCard {
         this.parent = parent;
         this.weatherClient = new WeatherClient(this.config.weather_options?.api_key ?? '');
         this.imageClient = new ImageClient();
+        this.sportsTimesClient = new SportsTimesClient();
     }    
 
     translation(key: string) : string {

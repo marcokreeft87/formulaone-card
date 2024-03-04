@@ -1,2 +1,2783 @@
-/*! For license information please see formulaone-card.js.LICENSE.txt */
-(()=>{"use strict";var t={898:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(313),r=i(11),o=i(194),s=i(382);class a extends r.LitElement{constructor(){super(...arguments),this.controlRenderers={[o.FormControlType.Dropdown]:s.renderDropdown,[o.FormControlType.Radio]:s.renderRadio,[o.FormControlType.Checkboxes]:s.renderCheckboxes,[o.FormControlType.EntityDropdown]:s.renderDropdown,[o.FormControlType.Switch]:s.renderSwitch,[o.FormControlType.Textbox]:s.renderTextbox,[o.FormControlType.Filler]:s.renderFiller}}setConfig(t){this._config=t}set hass(t){this._hass=t}renderForm(t){return r.html`<div class="card-config">${t.map((t=>{const e=t.cssClass?`form-row ${t.cssClass}`:"form-row";return t.hidden?"":r.html`<div class="${e}"><label>${t.label}</label> ${t.controls.map((t=>this.renderControl(t)))}</div>`}))}</div>`}renderControl(t){const e=this.controlRenderers[t.type];if(!e)throw new Error(`Unsupported control type: ${t.type}`);return e(this,t)}_valueChanged(t){if(!this._config||!this._hass)return;const e=t.target,i=t.detail;if("HA-CHECKBOX"===e.tagName){const t=this._config[e.configValue].indexOf(e.value);e.checked&&t<0?this._config[e.configValue]=[...this._config[e.configValue],e.value]:!e.checked&&t>-1&&(this._config[e.configValue]=[...this._config[e.configValue].slice(0,t),...this._config[e.configValue].slice(t+1)])}else if(e.configValue)if(e.configValue.indexOf(".")>-1){const[t,i]=e.configValue.split(".");this._config={...this._config,[t]:{...this._config[t],[i]:e.checked}}}else this._config={...this._config,[e.configValue]:void 0===e.checked&&(null==i?void 0:i.value)?e.checked||i.value:e.value||e.checked};(0,n.fireEvent)(this,"config-changed",{config:this._config},{bubbles:!0,composed:!0}),this.requestUpdate("_config")}static get styles(){return r.css`.form-row{margin-bottom:10px}.form-control{display:flex;align-items:center}ha-switch{padding:16px 6px}.side-by-side{display:flex;flex-flow:row wrap}.side-by-side>label{width:100%}.side-by-side>.form-control{width:49%;padding:2px}ha-textfield{width:100%}`}}e.default=a},194:(t,e)=>{var i;Object.defineProperty(e,"__esModule",{value:!0}),e.FormControlType=void 0,function(t){t.Dropdown="dropdown",t.Checkbox="checkbox",t.Checkboxes="checkboxes",t.Radio="radio",t.Switch="switch",t.Textbox="textbox",t.Filler="filler",t.EntityDropdown="entity-dropdown"}(i||(e.FormControlType=i={}))},382:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.renderCheckboxes=e.renderRadio=e.renderDropdown=e.renderSwitch=e.renderTextbox=e.renderEntityDropdown=e.renderFiller=void 0;const n=i(11),r=i(429);e.renderFiller=()=>n.html`<div class="form-control"></div>`,e.renderEntityDropdown=(t,e)=>{var i;return n.html`<div class="form-control"><ha-entity-picker label="${e.label}" .value="${null!==(i=t._config[e.configValue])&&void 0!==i?i:""}" .configValue="${e.configValue}" .hass="${t._hass}" domain-filter="${e.domain}" @change="${t._valueChanged}"></ha-entity-picker></div>`},e.renderTextbox=(t,e)=>{var i;return n.html`<div class="form-control"><ha-textfield label="${e.label}" .value="${null!==(i=t._config[e.configValue])&&void 0!==i?i:""}" .configValue="${e.configValue}" @change="${t._valueChanged}"></ha-textfield></div>`},e.renderSwitch=(t,e)=>n.html`<div class="form-control"><ha-switch id="${e.configValue}" name="${e.configValue}" .checked="${t._config[e.configValue]}" .configValue="${e.configValue}" @change="${t._valueChanged}"></ha-switch><label for="${e.configValue}">${e.label}</label></div>`,e.renderDropdown=(t,e)=>{var i;const o=null!==(i=e.items)&&void 0!==i?i:(0,r.getEntitiesByDomain)(t._hass,e.domain);return n.html`<div class="form-control"><ha-combo-box label="${e.label}" .value="${t._config[e.configValue]}" .configValue="${e.configValue}" .items="${o}" @value-changed="${t._valueChanged}" @change="${t._valueChanged}"></ha-combo-box></div>`},e.renderRadio=(t,e)=>n.html`<div class="form-control"><label>${e.label}</label> ${e.items.map((i=>n.html`<ha-radio id="${e.configValue}_${i.value}" name="${e.configValue}" .checked="${t._config[e.configValue]===i.value}" .configValue="${e.configValue}" .value="${i.value}" @change="${t._valueChanged}"></ha-radio><label for="${e.configValue}_${i.value}">${i.label}</label>`))}</div>`,e.renderCheckboxes=(t,e)=>n.html`<label>${e.label}</label> ${e.items.map((i=>{var r;return n.html`<div class="form-control"><ha-checkbox id="${e.configValue}_${i.value}" name="${e.configValue}[]" .checked="${(null===(r=t._config[e.configValue])||void 0===r?void 0:r.indexOf(i.value))>-1}" .configValue="${e.configValue}" .value="${i.value}" @change="${t._valueChanged}"></ha-checkbox><label for="${e.configValue}_${i.value}">${i.label}</label></div>`}))}`},429:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.getDropdownOptionsFromEnum=e.formatList=e.getEntitiesByDeviceClass=e.getEntitiesByDomain=void 0,e.getEntitiesByDomain=(t,i)=>Object.keys(t.states).filter((t=>t.substr(0,t.indexOf("."))===i)).map((i=>(0,e.formatList)(i,t))),e.getEntitiesByDeviceClass=(t,i,n)=>Object.keys(t.states).filter((e=>e.substr(0,e.indexOf("."))===i&&t.states[e].attributes.device_class===n)).map((i=>(0,e.formatList)(i,t))),e.formatList=(t,e)=>({label:e.states[t].attributes.friendly_name,value:t}),e.getDropdownOptionsFromEnum=t=>{const e=[];for(const[i,n]of Object.entries(t))e.push({value:n,label:i});return e}},313:(t,e,i)=>{i.r(e),i.d(e,{DEFAULT_DOMAIN_ICON:()=>J,DEFAULT_PANEL:()=>X,DEFAULT_VIEW_ENTITY_ID:()=>at,DOMAINS_HIDE_MORE_INFO:()=>et,DOMAINS_MORE_INFO_NO_HISTORY:()=>it,DOMAINS_TOGGLE:()=>rt,DOMAINS_WITH_CARD:()=>Z,DOMAINS_WITH_MORE_INFO:()=>tt,NumberFormat:()=>n,STATES_OFF:()=>nt,TimeFormat:()=>r,UNIT_C:()=>ot,UNIT_F:()=>st,applyThemesOnElement:()=>L,computeCardSize:()=>H,computeDomain:()=>U,computeEntity:()=>j,computeRTL:()=>V,computeRTLDirection:()=>B,computeStateDisplay:()=>K,computeStateDomain:()=>G,createThing:()=>ut,debounce:()=>ht,domainIcon:()=>pt,evaluateFilter:()=>ft,fireEvent:()=>lt,fixedIcons:()=>mt,formatDate:()=>d,formatDateMonth:()=>y,formatDateMonthYear:()=>g,formatDateNumeric:()=>h,formatDateShort:()=>p,formatDateTime:()=>C,formatDateTimeNumeric:()=>E,formatDateTimeWithSeconds:()=>S,formatDateWeekday:()=>l,formatDateYear:()=>$,formatNumber:()=>Y,formatTime:()=>x,formatTimeWeekday:()=>P,formatTimeWithSeconds:()=>k,forwardHaptic:()=>gt,getLovelace:()=>Et,handleAction:()=>bt,handleActionConfig:()=>$t,handleClick:()=>wt,hasAction:()=>Ct,hasConfigOrEntityChanged:()=>At,hasDoubleClick:()=>St,isNumericState:()=>q,navigate:()=>vt,numberFormatToLocale:()=>z,relativeTime:()=>M,round:()=>W,stateIcon:()=>Rt,timerTimeRemaining:()=>F,toggleEntity:()=>_t,turnOnOffEntities:()=>Tt,turnOnOffEntity:()=>yt});var n,r,o,s=function(){return s=Object.assign||function(t){for(var e,i=1,n=arguments.length;i<n;i++)for(var r in e=arguments[i])Object.prototype.hasOwnProperty.call(e,r)&&(t[r]=e[r]);return t},s.apply(this,arguments)},a={second:45,minute:45,hour:22,day:5},l=function(t,e){return c(e).format(t)},c=function(t){return new Intl.DateTimeFormat(t.language,{weekday:"long",month:"long",day:"numeric"})},d=function(t,e){return u(e).format(t)},u=function(t){return new Intl.DateTimeFormat(t.language,{year:"numeric",month:"long",day:"numeric"})},h=function(t,e){return m(e).format(t)},m=function(t){return new Intl.DateTimeFormat(t.language,{year:"numeric",month:"numeric",day:"numeric"})},p=function(t,e){return f(e).format(t)},f=function(t){return new Intl.DateTimeFormat(t.language,{day:"numeric",month:"short"})},g=function(t,e){return v(e).format(t)},v=function(t){return new Intl.DateTimeFormat(t.language,{month:"long",year:"numeric"})},y=function(t,e){return _(e).format(t)},_=function(t){return new Intl.DateTimeFormat(t.language,{month:"long"})},$=function(t,e){return b(e).format(t)},b=function(t){return new Intl.DateTimeFormat(t.language,{year:"numeric"})};(o=n||(n={})).language="language",o.system="system",o.comma_decimal="comma_decimal",o.decimal_comma="decimal_comma",o.space_comma="space_comma",o.none="none",function(t){t.language="language",t.system="system",t.am_pm="12",t.twenty_four="24"}(r||(r={}));var w=function(t){if(t.time_format===r.language||t.time_format===r.system){var e=t.time_format===r.language?t.language:void 0,i=(new Date).toLocaleString(e);return i.includes("AM")||i.includes("PM")}return t.time_format===r.am_pm},C=function(t,e){return A(e).format(t)},A=function(t){return new Intl.DateTimeFormat(t.language,{year:"numeric",month:"long",day:"numeric",hour:w(t)?"numeric":"2-digit",minute:"2-digit",hour12:w(t)})},S=function(t,e){return T(e).format(t)},T=function(t){return new Intl.DateTimeFormat(t.language,{year:"numeric",month:"long",day:"numeric",hour:w(t)?"numeric":"2-digit",minute:"2-digit",second:"2-digit",hour12:w(t)})},E=function(t,e){return D(e).format(t)},D=function(t){return new Intl.DateTimeFormat(t.language,{year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit",hour12:w(t)})},x=function(t,e){return R(e).format(t)},R=function(t){return new Intl.DateTimeFormat(t.language,{hour:"numeric",minute:"2-digit",hour12:w(t)})},k=function(t,e){return O(e).format(t)},O=function(t){return new Intl.DateTimeFormat(t.language,{hour:w(t)?"numeric":"2-digit",minute:"2-digit",second:"2-digit",hour12:w(t)})},P=function(t,e){return N(e).format(t)},N=function(t){return new Intl.DateTimeFormat(t.language,{hour:w(t)?"numeric":"2-digit",minute:"2-digit",second:"2-digit",hour12:w(t)})},M=function(t,e,i,n){void 0===n&&(n=!0);var r=function(t,e,i){void 0===e&&(e=Date.now()),void 0===i&&(i={});var n=s(s({},a),i||{}),r=(+t-+e)/1e3;if(Math.abs(r)<n.second)return{value:Math.round(r),unit:"second"};var o=r/60;if(Math.abs(o)<n.minute)return{value:Math.round(o),unit:"minute"};var l=r/3600;if(Math.abs(l)<n.hour)return{value:Math.round(l),unit:"hour"};var c=r/86400;if(Math.abs(c)<n.day)return{value:Math.round(c),unit:"day"};var d=new Date(t),u=new Date(e),h=d.getFullYear()-u.getFullYear();if(Math.round(Math.abs(h))>0)return{value:Math.round(h),unit:"year"};var m=12*h+d.getMonth()-u.getMonth();if(Math.round(Math.abs(m))>0)return{value:Math.round(m),unit:"month"};var p=r/604800;return{value:Math.round(p),unit:"week"}}(t,i);return n?function(t){return new Intl.RelativeTimeFormat(t.language,{numeric:"auto"})}(e).format(r.value,r.unit):Intl.NumberFormat(e.language,{style:"unit",unit:r.unit,unitDisplay:"long"}).format(Math.abs(r.value))};function F(t){var e,i=3600*(e=t.attributes.remaining.split(":").map(Number))[0]+60*e[1]+e[2];if("active"===t.state){var n=(new Date).getTime(),r=new Date(t.last_changed).getTime();i=Math.max(i-(n-r)/1e3,0)}return i}function I(){return(I=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var i=arguments[e];for(var n in i)Object.prototype.hasOwnProperty.call(i,n)&&(t[n]=i[n])}return t}).apply(this,arguments)}var L=function(t,e,i,n){void 0===n&&(n=!1),t._themes||(t._themes={});var r=e.default_theme;("default"===i||i&&e.themes[i])&&(r=i);var o=I({},t._themes);if("default"!==r){var s=e.themes[r];Object.keys(s).forEach((function(e){var i="--"+e;t._themes[i]="",o[i]=s[e]}))}if(t.updateStyles?t.updateStyles(o):window.ShadyCSS&&window.ShadyCSS.styleSubtree(t,o),n){var a=document.querySelector("meta[name=theme-color]");if(a){a.hasAttribute("default-content")||a.setAttribute("default-content",a.getAttribute("content"));var l=o["--primary-color"]||a.getAttribute("default-content");a.setAttribute("content",l)}}},H=function(t){return"function"==typeof t.getCardSize?t.getCardSize():4};function U(t){return t.substr(0,t.indexOf("."))}function j(t){return t.substr(t.indexOf(".")+1)}function V(t){var e,i=(null==t||null==(e=t.locale)?void 0:e.language)||"en";return t.translationMetadata.translations[i]&&t.translationMetadata.translations[i].isRTL||!1}function B(t){return V(t)?"rtl":"ltr"}function G(t){return U(t.entity_id)}var q=function(t){return!!t.attributes.unit_of_measurement||!!t.attributes.state_class},z=function(t){switch(t.number_format){case n.comma_decimal:return["en-US","en"];case n.decimal_comma:return["de","es","it"];case n.space_comma:return["fr","sv","cs"];case n.system:return;default:return t.language}},W=function(t,e){return void 0===e&&(e=2),Math.round(t*Math.pow(10,e))/Math.pow(10,e)},Y=function(t,e,i){var r=e?z(e):void 0;if(Number.isNaN=Number.isNaN||function t(e){return"number"==typeof e&&t(e)},(null==e?void 0:e.number_format)!==n.none&&!Number.isNaN(Number(t))&&Intl)try{return new Intl.NumberFormat(r,Q(t,i)).format(Number(t))}catch(e){return console.error(e),new Intl.NumberFormat(void 0,Q(t,i)).format(Number(t))}return"string"==typeof t?t:W(t,null==i?void 0:i.maximumFractionDigits).toString()+("currency"===(null==i?void 0:i.style)?" "+i.currency:"")},Q=function(t,e){var i=I({maximumFractionDigits:2},e);if("string"!=typeof t)return i;if(!e||!e.minimumFractionDigits&&!e.maximumFractionDigits){var n=t.indexOf(".")>-1?t.split(".")[1].length:0;i.minimumFractionDigits=n,i.maximumFractionDigits=n}return i},K=function(t,e,i,n){var r=void 0!==n?n:e.state;if("unknown"===r||"unavailable"===r)return t("state.default."+r);if(q(e)){if("monetary"===e.attributes.device_class)try{return Y(r,i,{style:"currency",currency:e.attributes.unit_of_measurement})}catch(t){}return Y(r,i)+(e.attributes.unit_of_measurement?" "+e.attributes.unit_of_measurement:"")}var o=G(e);if("input_datetime"===o){var s;if(void 0===n)return e.attributes.has_date&&e.attributes.has_time?(s=new Date(e.attributes.year,e.attributes.month-1,e.attributes.day,e.attributes.hour,e.attributes.minute),C(s,i)):e.attributes.has_date?(s=new Date(e.attributes.year,e.attributes.month-1,e.attributes.day),d(s,i)):e.attributes.has_time?((s=new Date).setHours(e.attributes.hour,e.attributes.minute),x(s,i)):e.state;try{var a=n.split(" ");if(2===a.length)return C(new Date(a.join("T")),i);if(1===a.length){if(n.includes("-"))return d(new Date(n+"T00:00"),i);if(n.includes(":")){var l=new Date;return x(new Date(l.toISOString().split("T")[0]+"T"+n),i)}}return n}catch(t){return n}}return"humidifier"===o&&"on"===r&&e.attributes.humidity?e.attributes.humidity+" %":"counter"===o||"number"===o||"input_number"===o?Y(r,i):e.attributes.device_class&&t("component."+o+".state."+e.attributes.device_class+"."+r)||t("component."+o+".state._."+r)||r},J="mdi:bookmark",X="lovelace",Z=["climate","cover","configurator","input_select","input_number","input_text","lock","media_player","scene","script","timer","vacuum","water_heater","weblink"],tt=["alarm_control_panel","automation","camera","climate","configurator","cover","fan","group","history_graph","input_datetime","light","lock","media_player","script","sun","updater","vacuum","water_heater","weather"],et=["input_number","input_select","input_text","scene","weblink"],it=["camera","configurator","history_graph","scene"],nt=["closed","locked","off"],rt=new Set(["fan","input_boolean","light","switch","group","automation"]),ot="°C",st="°F",at="group.default_view",lt=function(t,e,i,n){n=n||{},i=null==i?{}:i;var r=new Event(e,{bubbles:void 0===n.bubbles||n.bubbles,cancelable:Boolean(n.cancelable),composed:void 0===n.composed||n.composed});return r.detail=i,t.dispatchEvent(r),r},ct=new Set(["call-service","divider","section","weblink","cast","select"]),dt={alert:"toggle",automation:"toggle",climate:"climate",cover:"cover",fan:"toggle",group:"group",input_boolean:"toggle",input_number:"input-number",input_select:"input-select",input_text:"input-text",light:"toggle",lock:"lock",media_player:"media-player",remote:"toggle",scene:"scene",script:"script",sensor:"sensor",timer:"timer",switch:"toggle",vacuum:"toggle",water_heater:"climate",input_datetime:"input-datetime"},ut=function(t,e){void 0===e&&(e=!1);var i=function(t,e){return n("hui-error-card",{type:"error",error:t,config:e})},n=function(t,e){var n=window.document.createElement(t);try{if(!n.setConfig)return;n.setConfig(e)}catch(n){return console.error(t,n),i(n.message,e)}return n};if(!t||"object"!=typeof t||!e&&!t.type)return i("No type defined",t);var r=t.type;if(r&&r.startsWith("custom:"))r=r.substr(7);else if(e)if(ct.has(r))r="hui-"+r+"-row";else{if(!t.entity)return i("Invalid config given.",t);var o=t.entity.split(".",1)[0];r="hui-"+(dt[o]||"text")+"-entity-row"}else r="hui-"+r+"-card";if(customElements.get(r))return n(r,t);var s=i("Custom element doesn't exist: "+t.type+".",t);s.style.display="None";var a=setTimeout((function(){s.style.display=""}),2e3);return customElements.whenDefined(t.type).then((function(){clearTimeout(a),lt(s,"ll-rebuild",{},s)})),s},ht=function(t,e,i){var n;return void 0===i&&(i=!1),function(){var r=[].slice.call(arguments),o=this,s=i&&!n;clearTimeout(n),n=setTimeout((function(){n=null,i||t.apply(o,r)}),e),s&&t.apply(o,r)}},mt={alert:"mdi:alert",automation:"mdi:playlist-play",calendar:"mdi:calendar",camera:"mdi:video",climate:"mdi:thermostat",configurator:"mdi:settings",conversation:"mdi:text-to-speech",device_tracker:"mdi:account",fan:"mdi:fan",group:"mdi:google-circles-communities",history_graph:"mdi:chart-line",homeassistant:"mdi:home-assistant",homekit:"mdi:home-automation",image_processing:"mdi:image-filter-frames",input_boolean:"mdi:drawing",input_datetime:"mdi:calendar-clock",input_number:"mdi:ray-vertex",input_select:"mdi:format-list-bulleted",input_text:"mdi:textbox",light:"mdi:lightbulb",mailbox:"mdi:mailbox",notify:"mdi:comment-alert",person:"mdi:account",plant:"mdi:flower",proximity:"mdi:apple-safari",remote:"mdi:remote",scene:"mdi:google-pages",script:"mdi:file-document",sensor:"mdi:eye",simple_alarm:"mdi:bell",sun:"mdi:white-balance-sunny",switch:"mdi:flash",timer:"mdi:timer",updater:"mdi:cloud-upload",vacuum:"mdi:robot-vacuum",water_heater:"mdi:thermometer",weblink:"mdi:open-in-new"};function pt(t,e){if(t in mt)return mt[t];switch(t){case"alarm_control_panel":switch(e){case"armed_home":return"mdi:bell-plus";case"armed_night":return"mdi:bell-sleep";case"disarmed":return"mdi:bell-outline";case"triggered":return"mdi:bell-ring";default:return"mdi:bell"}case"binary_sensor":return e&&"off"===e?"mdi:radiobox-blank":"mdi:checkbox-marked-circle";case"cover":return"closed"===e?"mdi:window-closed":"mdi:window-open";case"lock":return e&&"unlocked"===e?"mdi:lock-open":"mdi:lock";case"media_player":return e&&"off"!==e&&"idle"!==e?"mdi:cast-connected":"mdi:cast";case"zwave":switch(e){case"dead":return"mdi:emoticon-dead";case"sleeping":return"mdi:sleep";case"initializing":return"mdi:timer-sand";default:return"mdi:z-wave"}default:return console.warn("Unable to find icon for domain "+t+" ("+e+")"),"mdi:bookmark"}}var ft=function(t,e){var i=e.value||e,n=e.attribute?t.attributes[e.attribute]:t.state;switch(e.operator||"=="){case"==":return n===i;case"<=":return n<=i;case"<":return n<i;case">=":return n>=i;case">":return n>i;case"!=":return n!==i;case"regex":return n.match(i);default:return!1}},gt=function(t){lt(window,"haptic",t)},vt=function(t,e,i){void 0===i&&(i=!1),i?history.replaceState(null,"",e):history.pushState(null,"",e),lt(window,"location-changed",{replace:i})},yt=function(t,e,i){void 0===i&&(i=!0);var n,r=U(e),o="group"===r?"homeassistant":r;switch(r){case"lock":n=i?"unlock":"lock";break;case"cover":n=i?"open_cover":"close_cover";break;default:n=i?"turn_on":"turn_off"}return t.callService(o,n,{entity_id:e})},_t=function(t,e){var i=nt.includes(t.states[e].state);return yt(t,e,i)},$t=function(t,e,i,n){if(n||(n={action:"more-info"}),!n.confirmation||n.confirmation.exemptions&&n.confirmation.exemptions.some((function(t){return t.user===e.user.id}))||(gt("warning"),confirm(n.confirmation.text||"Are you sure you want to "+n.action+"?")))switch(n.action){case"more-info":(i.entity||i.camera_image)&&lt(t,"hass-more-info",{entityId:i.entity?i.entity:i.camera_image});break;case"navigate":n.navigation_path&&vt(0,n.navigation_path);break;case"url":n.url_path&&window.open(n.url_path);break;case"toggle":i.entity&&(_t(e,i.entity),gt("success"));break;case"call-service":if(!n.service)return void gt("failure");var r=n.service.split(".",2);e.callService(r[0],r[1],n.service_data,n.target),gt("success");break;case"fire-dom-event":lt(t,"ll-custom",n)}},bt=function(t,e,i,n){var r;"double_tap"===n&&i.double_tap_action?r=i.double_tap_action:"hold"===n&&i.hold_action?r=i.hold_action:"tap"===n&&i.tap_action&&(r=i.tap_action),$t(t,e,i,r)},wt=function(t,e,i,n,r){var o;if(r&&i.double_tap_action?o=i.double_tap_action:n&&i.hold_action?o=i.hold_action:!n&&i.tap_action&&(o=i.tap_action),o||(o={action:"more-info"}),!o.confirmation||o.confirmation.exemptions&&o.confirmation.exemptions.some((function(t){return t.user===e.user.id}))||confirm(o.confirmation.text||"Are you sure you want to "+o.action+"?"))switch(o.action){case"more-info":(o.entity||i.entity||i.camera_image)&&(lt(t,"hass-more-info",{entityId:o.entity?o.entity:i.entity?i.entity:i.camera_image}),o.haptic&&gt(o.haptic));break;case"navigate":o.navigation_path&&(vt(0,o.navigation_path),o.haptic&&gt(o.haptic));break;case"url":o.url_path&&window.open(o.url_path),o.haptic&&gt(o.haptic);break;case"toggle":i.entity&&(_t(e,i.entity),o.haptic&&gt(o.haptic));break;case"call-service":if(!o.service)return;var s=o.service.split(".",2),a=s[0],l=s[1],c=I({},o.service_data);"entity"===c.entity_id&&(c.entity_id=i.entity),e.callService(a,l,c,o.target),o.haptic&&gt(o.haptic);break;case"fire-dom-event":lt(t,"ll-custom",o),o.haptic&&gt(o.haptic)}};function Ct(t){return void 0!==t&&"none"!==t.action}function At(t,e,i){if(e.has("config")||i)return!0;if(t.config.entity){var n=e.get("hass");return!n||n.states[t.config.entity]!==t.hass.states[t.config.entity]}return!1}function St(t){return void 0!==t&&"none"!==t.action}var Tt=function(t,e,i){void 0===i&&(i=!0);var n={};e.forEach((function(e){if(nt.includes(t.states[e].state)===i){var r=U(e),o=["cover","lock"].includes(r)?r:"homeassistant";o in n||(n[o]=[]),n[o].push(e)}})),Object.keys(n).forEach((function(e){var r;switch(e){case"lock":r=i?"unlock":"lock";break;case"cover":r=i?"open_cover":"close_cover";break;default:r=i?"turn_on":"turn_off"}t.callService(e,r,{entity_id:n[e]})}))},Et=function(){var t=document.querySelector("home-assistant");if(t=(t=(t=(t=(t=(t=(t=(t=t&&t.shadowRoot)&&t.querySelector("home-assistant-main"))&&t.shadowRoot)&&t.querySelector("app-drawer-layout partial-panel-resolver"))&&t.shadowRoot||t)&&t.querySelector("ha-panel-lovelace"))&&t.shadowRoot)&&t.querySelector("hui-root")){var e=t.lovelace;return e.current_view=t.___curView,e}return null},Dt={humidity:"mdi:water-percent",illuminance:"mdi:brightness-5",temperature:"mdi:thermometer",pressure:"mdi:gauge",power:"mdi:flash",signal_strength:"mdi:wifi"},xt={binary_sensor:function(t,e){var i="off"===t;switch(null==e?void 0:e.attributes.device_class){case"battery":return i?"mdi:battery":"mdi:battery-outline";case"battery_charging":return i?"mdi:battery":"mdi:battery-charging";case"cold":return i?"mdi:thermometer":"mdi:snowflake";case"connectivity":return i?"mdi:server-network-off":"mdi:server-network";case"door":return i?"mdi:door-closed":"mdi:door-open";case"garage_door":return i?"mdi:garage":"mdi:garage-open";case"power":case"plug":return i?"mdi:power-plug-off":"mdi:power-plug";case"gas":case"problem":case"safety":case"tamper":return i?"mdi:check-circle":"mdi:alert-circle";case"smoke":return i?"mdi:check-circle":"mdi:smoke";case"heat":return i?"mdi:thermometer":"mdi:fire";case"light":return i?"mdi:brightness-5":"mdi:brightness-7";case"lock":return i?"mdi:lock":"mdi:lock-open";case"moisture":return i?"mdi:water-off":"mdi:water";case"motion":return i?"mdi:walk":"mdi:run";case"occupancy":case"presence":return i?"mdi:home-outline":"mdi:home";case"opening":return i?"mdi:square":"mdi:square-outline";case"running":return i?"mdi:stop":"mdi:play";case"sound":return i?"mdi:music-note-off":"mdi:music-note";case"update":return i?"mdi:package":"mdi:package-up";case"vibration":return i?"mdi:crop-portrait":"mdi:vibrate";case"window":return i?"mdi:window-closed":"mdi:window-open";default:return i?"mdi:radiobox-blank":"mdi:checkbox-marked-circle"}},cover:function(t){var e="closed"!==t.state;switch(t.attributes.device_class){case"garage":return e?"mdi:garage-open":"mdi:garage";case"door":return e?"mdi:door-open":"mdi:door-closed";case"shutter":return e?"mdi:window-shutter-open":"mdi:window-shutter";case"blind":return e?"mdi:blinds-open":"mdi:blinds";case"window":return e?"mdi:window-open":"mdi:window-closed";default:return pt("cover",t.state)}},sensor:function(t){var e=t.attributes.device_class;if(e&&e in Dt)return Dt[e];if("battery"===e){var i=Number(t.state);if(isNaN(i))return"mdi:battery-unknown";var n=10*Math.round(i/10);return n>=100?"mdi:battery":n<=0?"mdi:battery-alert":"hass:battery-"+n}var r=t.attributes.unit_of_measurement;return"°C"===r||"°F"===r?"mdi:thermometer":pt("sensor")},input_datetime:function(t){return t.attributes.has_date?t.attributes.has_time?pt("input_datetime"):"mdi:calendar":"mdi:clock"}},Rt=function(t){if(!t)return"mdi:bookmark";if(t.attributes.icon)return t.attributes.icon;var e=U(t.entity_id);return e in xt?xt[e](t):pt(e,t.state)}},694:function(t,e){var i=this&&this.__awaiter||function(t,e,i,n){return new(i||(i=Promise))((function(r,o){function s(t){try{l(n.next(t))}catch(t){o(t)}}function a(t){try{l(n.throw(t))}catch(t){o(t)}}function l(t){var e;t.done?r(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(s,a)}l((n=n.apply(t,e||[])).next())}))};Object.defineProperty(e,"__esModule",{value:!0}),e.ClientBase=void 0,e.ClientBase=class{GetData(t,e,n){return i(this,void 0,void 0,(function*(){const i=localStorage.getItem(t);if(i&&e){const t=JSON.parse(i),e=new Date;if(e.setHours(e.getHours()-n),new Date(t.created)>e)return JSON.parse(t.data)}const r=yield fetch(`${this.baseUrl}/${t}`,{headers:{Accept:"application/json"}});if(!r||!r.ok)return Promise.reject(r);const o=yield r.json(),s={data:JSON.stringify(o),created:new Date};return e&&localStorage.setItem(t,JSON.stringify(s)),o}))}}},470:function(t,e,i){var n=this&&this.__awaiter||function(t,e,i,n){return new(i||(i=Promise))((function(r,o){function s(t){try{l(n.next(t))}catch(t){o(t)}}function a(t){try{l(n.throw(t))}catch(t){o(t)}}function l(t){var e;t.done?r(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(s,a)}l((n=n.apply(t,e||[])).next())}))};Object.defineProperty(e,"__esModule",{value:!0});const r=i(438),o=i(694);class s extends o.ClientBase{constructor(){super(...arguments),this.baseUrl="https://ergast.com/api/f1"}GetSchedule(t){return n(this,void 0,void 0,(function*(){return(yield this.GetData(`${t}.json`,!0,72)).MRData.RaceTable.Races}))}GetLastResult(){return n(this,void 0,void 0,(function*(){const t=(0,r.getRefreshTime)("current/last/results.json");return(yield this.GetData("current/last/results.json",!0,t)).MRData.RaceTable.Races[0]}))}GetDriverStandings(){return n(this,void 0,void 0,(function*(){const t=(0,r.getRefreshTime)("current/driverStandings.json");return(yield this.GetData("current/driverStandings.json",!0,t)).MRData.StandingsTable.StandingsLists[0].DriverStandings}))}GetConstructorStandings(){return n(this,void 0,void 0,(function*(){const t=(0,r.getRefreshTime)("current/constructorStandings.json");return(yield this.GetData("current/constructorStandings.json",!0,t)).MRData.StandingsTable.StandingsLists[0].ConstructorStandings}))}GetSprintResults(t,e){return n(this,void 0,void 0,(function*(){return(yield this.GetData(`${t}/${e}/sprint.json`,!1,0)).MRData.RaceTable}))}GetQualifyingResults(t,e){return n(this,void 0,void 0,(function*(){return(yield this.GetData(`${t}/${e}/qualifying.json`,!1,0)).MRData.RaceTable}))}GetResults(t,e){return n(this,void 0,void 0,(function*(){return(yield this.GetData(`${t}/${e}/results.json`,!1,0)).MRData.RaceTable}))}GetSeasons(){return n(this,void 0,void 0,(function*(){return(yield this.GetData("seasons.json?limit=200",!0,72)).MRData.SeasonTable.Seasons}))}GetSeasonRaces(t){return n(this,void 0,void 0,(function*(){return(yield this.GetData(`${t}.json`,!0,72)).MRData.RaceTable.Races}))}GetLastYearsResults(t){return n(this,void 0,void 0,(function*(){const e=(new Date).getFullYear()-1,i=(yield this.GetData(`${e}.json`,!0,72)).MRData.RaceTable.Races.findIndex((e=>e.Circuit.circuitName===t))+1;return(yield this.GetData(`${e}/${i}/results.json`,!1,0)).MRData.RaceTable.Races[0]}))}}e.default=s},661:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.default=class{GetImage(t){const e=localStorage.getItem(t);if(e){const t=JSON.parse(e),i=new Date;if(i.setHours(i.getHours()-672),new Date(t.created)>i)return t.data}return fetch(t).then((t=>t.blob())).then((e=>{const i=new FileReader;i.readAsDataURL(e),i.onloadend=function(){const e={data:i.result,created:new Date};return localStorage.setItem(t,JSON.stringify(e)),e.data}})),t}}},959:function(t,e,i){var n=this&&this.__awaiter||function(t,e,i,n){return new(i||(i=Promise))((function(r,o){function s(t){try{l(n.next(t))}catch(t){o(t)}}function a(t){try{l(n.throw(t))}catch(t){o(t)}}function l(t){var e;t.done?r(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(s,a)}l((n=n.apply(t,e||[])).next())}))};Object.defineProperty(e,"__esModule",{value:!0});const r=i(694);class o extends r.ClientBase{constructor(){super(...arguments),this.baseUrl="https://restcountries.com/v2"}GetAll(){return n(this,void 0,void 0,(function*(){return yield this.GetData("all",!0,730)}))}GetCountriesFromLocalStorage(){const t=localStorage.getItem("all");if(t){const e=JSON.parse(t);return JSON.parse(e.data)}return[]}}e.default=o},267:function(t,e,i){var n=this&&this.__awaiter||function(t,e,i,n){return new(i||(i=Promise))((function(r,o){function s(t){try{l(n.next(t))}catch(t){o(t)}}function a(t){try{l(n.throw(t))}catch(t){o(t)}}function l(t){var e;t.done?r(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(s,a)}l((n=n.apply(t,e||[])).next())}))};Object.defineProperty(e,"__esModule",{value:!0});const r=i(694);class o extends r.ClientBase{constructor(t,e){super(),this.unitGroup="metric",this.baseUrl="https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline",this.apiKey=t,this.unitGroup=null!=e?e:this.unitGroup}getWeatherData(t,e,i){return n(this,void 0,void 0,(function*(){const n=`${t},${e}/${i}?unitGroup=${this.unitGroup}&key=${this.apiKey}&contentType=json`;return yield this.GetData(n,!0,1)}))}}e.default=o},366:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.BaseCard=void 0;const n=i(470),r=i(661),o=i(267);e.BaseCard=class{constructor(t){var e,i;this.config=t.config,this.client=new n.default,this.hass=t._hass,this.parent=t,this.weatherClient=new o.default(null!==(i=null===(e=this.config.weather_options)||void 0===e?void 0:e.api_key)&&void 0!==i?i:""),this.imageClient=new r.default}translation(t){return!this.config.translations||Object.keys(this.config.translations).indexOf(t)<0?this.defaultTranslations[t]:this.config.translations[t]}getProperties(){var t,e;const i=null===(t=this.parent.properties)||void 0===t?void 0:t.get("cardValues");return{races:null==i?void 0:i.races,selectedRace:null==i?void 0:i.selectedRace,selectedSeason:null==i?void 0:i.selectedSeason,selectedTabIndex:null!==(e=null==i?void 0:i.selectedTabIndex)&&void 0!==e?e:0}}getParentCardValues(){var t,e;const i=null!==(t=this.parent.properties)&&void 0!==t?t:new Map;return{properties:null!==(e=i.get("cardValues"))&&void 0!==e?e:{},cardValues:i}}}},169:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(639),r=i(557),o=i(438),s=i(366);class a extends s.BaseCard{constructor(t){super(t),this.defaultTranslations={constructor:"Constructor",points:"Pts",wins:"Wins"}}cardSize(){return 11}renderStandingRow(t){var e;return n.html`<tr><td class="width-50 text-center">${t.position}</td><td>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_teamlogo)?n.html`<img class="constructor-logo" height="20" width="20" src="${(0,o.getTeamImage)(this,t.Constructor.constructorId)}"> `:""}${t.Constructor.name}</td><td class="width-60 text-center">${t.points}</td><td class="text-center">${t.wins}</td></tr>`}render(){return n.html`${(0,r.until)(this.client.GetConstructorStandings().then((t=>n.html`<table><thead><tr><th class="width-50"> </th><th>${this.translation("constructor")}</th><th class="width-60 text-center">${this.translation("points")}</th><th class="text-center">${this.translation("wins")}</th></tr></thead><tbody>${(0,o.reduceArray)(t,this.config.row_limit).map((t=>this.renderStandingRow(t)))}</tbody></table>`)).catch((()=>n.html`${(0,o.getApiErrorMessage)("standings")}`)),n.html`${(0,o.getApiLoadingMessage)()}`)}`}}e.default=a},849:function(t,e,i){var n=this&&this.__await||function(t){return this instanceof n?(this.v=t,this):new n(t)},r=this&&this.__asyncGenerator||function(t,e,i){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var r,o=i.apply(t,e||[]),s=[];return r={},a("next"),a("throw"),a("return"),r[Symbol.asyncIterator]=function(){return this},r;function a(t){o[t]&&(r[t]=function(e){return new Promise((function(i,n){s.push([t,e,i,n])>1||l(t,e)}))})}function l(t,e){try{(i=o[t](e)).value instanceof n?Promise.resolve(i.value.v).then(c,d):u(s[0][2],i)}catch(t){u(s[0][3],t)}var i}function c(t){l("next",t)}function d(t){l("throw",t)}function u(t,e){t(e),s.shift(),s.length&&l(s[0][0],s[0][1])}};Object.defineProperty(e,"__esModule",{value:!0});const o=i(639),s=i(557),a=i(438),l=i(366),c=i(810),d=i(313),u=i(22),h=i(241);class m extends l.BaseCard{constructor(t){var e;super(t),this.defaultTranslations={days:"d",hours:"h",minutes:"m",seconds:"s",endofseason:"Season is over. See you next year!",racenow:"We are racing!",date:"Date",practice1:"Practice 1",practice2:"Practice 2",practice3:"Practice 3",race:"Race",racename:"Race name",circuitname:"Circuit name",location:"Location",city:"City",racetime:"Race",sprint:"Sprint",qualifying:"Qualifying",until:"Until"},this.config.countdown_type=null!==(e=this.config.countdown_type)&&void 0!==e?e:h.CountdownType.Race}cardSize(){return this.config.show_raceinfo?12:6}renderHeader(t,e){return this.config.show_raceinfo?o.html`<table><tr><td colspan="5">${(0,a.renderHeader)(this,t,!0)}</td></tr>${(0,a.renderRaceInfo)(this,t,e)}</table>`:null}countDownTillDate(t){return r(this,arguments,(function*(){for(;t>new Date;){const e=(new Date).getTime(),i=t.getTime()-e,r=Math.floor(i/864e5),o=Math.floor(i%864e5/36e5),s=Math.floor(i%36e5/6e4),a=Math.floor(i%6e4/1e3);yield yield n(`${r}${this.translation("days")} ${o}${this.translation("hours")} ${s}${this.translation("minutes")} ${a}${this.translation("seconds")} `),yield n(new Promise((t=>setTimeout(t,1e3))))}yield yield n(this.translation("racenow"))}))}render(){const t=t=>{this.hass&&this.config.actions&&t.detail.action&&(0,a.clickHandler)(this.parent,this.config,this.hass,t)};return o.html`${(0,s.until)(this.client.GetSchedule((new Date).getFullYear()).then((e=>{var i,n;const{nextRace:r,raceDateTime:s,countdownType:l}=this.getNextEvent(e);if(!r)return(0,a.getEndOfSeasonMessage)(this.translation("endofseason"));const h=this.countDownTillDate(s),m=void 0!==this.config.actions;return o.html`<table @action="${t}" .actionHandler="${(0,u.actionHandler)({hasHold:(0,d.hasAction)(null===(i=this.config.actions)||void 0===i?void 0:i.hold_action),hasDoubleClick:(0,d.hasAction)(null===(n=this.config.actions)||void 0===n?void 0:n.double_tap_action)})}" class="${m?"clickable":null}"><tr><td><h2 class="${this.config.f1_font?"formulaone-font":""}"><img height="25" src="${(0,a.getCountryFlagByName)(this,r.Circuit.Location.country)}">   ${r.round} : ${r.raceName}</h2></td></tr><tr><td class="text-center"><h1 class="${this.config.f1_font?"formulaone-font":""}">${(0,c.asyncReplace)(h)}</h1></td></tr>${Array.isArray(this.config.countdown_type)&&this.config.countdown_type.length>1?o.html`<tr><td class="text-center"><h1 class="${this.config.f1_font?"formulaone-font":""}">${this.translation("until")} ${this.translation(l.toLowerCase())}</h1></td></tr>`:null}</table>${this.renderHeader(r,s)}`})).catch((()=>o.html`${(0,a.getApiErrorMessage)("next race")}`)),o.html`${(0,a.getApiLoadingMessage)()}`)}`}getNextEvent(t){var e;const i=t.filter((t=>{const e=new Date(t.date+"T"+t.time);return e.setHours(e.getHours()+3),e>=new Date}))[0];let n=null,r=this.config.countdown_type;if(i){const t=this.config.countdown_type,o=[{Date:new Date(i.FirstPractice.date+"T"+i.FirstPractice.time),Type:h.CountdownType.Practice1},{Date:new Date(i.SecondPractice.date+"T"+i.SecondPractice.time),Type:h.CountdownType.Practice2},{Date:i.ThirdPractice?new Date(i.ThirdPractice.date+"T"+i.ThirdPractice.time):null,Type:h.CountdownType.Practice3},{Date:i.Sprint?new Date(i.Sprint.date+"T"+i.Sprint.time):null,Type:h.CountdownType.Sprint},{Date:new Date(i.Qualifying.date+"T"+i.Qualifying.time),Type:h.CountdownType.Qualifying},{Date:new Date(i.date+"T"+i.time),Type:h.CountdownType.Race}].filter((t=>t.Date)).filter((t=>t.Date>new Date)).sort(((t,e)=>t.Date.getTime()-e.Date.getTime())).filter((e=>null==t?void 0:t.includes(e.Type)))[0];n=null==o?void 0:o.Date,r=null!==(e=null==o?void 0:o.Type)&&void 0!==e?e:r}return{nextRace:i,raceDateTime:n,countdownType:r}}}e.default=m},138:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(639),r=i(557),o=i(438),s=i(366);class a extends s.BaseCard{constructor(t){super(t),this.defaultTranslations={driver:"Driver",team:"Team",points:"Pts",wins:"Wins"}}cardSize(){return 12}renderStandingRow(t){var e,i;return n.html`<tr><td class="width-40 text-center">${t.position}</td><td>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_flag)?n.html`<img height="10" width="20" src="${(0,o.getCountryFlagByNationality)(this,t.Driver.nationality)}"> `:""}${t.Driver.code}</td><td>${(0,o.getDriverName)(t.Driver,this.config)}</td>${(null===(i=this.config.standings)||void 0===i?void 0:i.show_team)?n.html`${(0,o.renderConstructorColumn)(this,t.Constructors[0])}`:""}<td class="width-60 text-center">${t.points}</td><td class="text-center">${t.wins}</td></tr>`}render(){return n.html`${(0,r.until)(this.client.GetDriverStandings().then((t=>{var e;return n.html`<table><thead><tr><th class="width-50" colspan="2"> </th><th>${this.translation("driver")}</th>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_team)?n.html`<th>${this.translation("team")}</th>`:""}<th class="width-60 text-center">${this.translation("points")}</th><th class="text-center">${this.translation("wins")}</th></tr></thead><tbody>${(0,o.reduceArray)(t,this.config.row_limit).map((t=>this.renderStandingRow(t)))}</tbody></table>`})).catch((()=>n.html`${(0,o.getApiErrorMessage)("standings")}`)),n.html`${(0,o.getApiLoadingMessage)()}`)}`}}e.default=a},507:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(639),r=i(557),o=i(438),s=i(366);class a extends s.BaseCard{constructor(t){super(t),this.defaultTranslations={driver:"Driver",grid:"Grid",points:"Points",status:"Status"}}cardSize(){return 11}renderResultRow(t){return n.html`<tr><td class="width-50 text-center">${t.position}</td><td>${(0,o.getDriverName)(t.Driver,this.config)}</td><td>${t.grid}</td><td class="width-60 text-center">${t.points}</td><td class="width-50 text-center">${t.status}</td></tr>`}render(){return n.html`${(0,r.until)(this.client.GetLastResult().then((t=>n.html`<table><tr><td>${(0,o.renderHeader)(this,t)}</td></tr></table><table><thead><tr><th> </th><th>${this.translation("driver")}</th><th class="text-center">${this.translation("grid")}</th><th class="text-center">${this.translation("points")}</th><th>${this.translation("status")}</th></tr></thead><tbody>${(0,o.reduceArray)(t.Results,this.config.row_limit).map((t=>this.renderResultRow(t)))}</tbody></table>`)).catch((()=>n.html`${(0,o.getApiErrorMessage)("last result")}`)),n.html`${(0,o.getApiLoadingMessage)()}`)}`}}e.default=a},840:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(639),r=i(557),o=i(438),s=i(366),a=i(300);class l extends s.BaseCard{constructor(){super(...arguments),this.defaultTranslations={date:"Date",practice1:"Practice 1",practice2:"Practice 2",practice3:"Practice 3",race:"Race",racename:"Race name",circuitname:"Circuit name",location:"Location",city:"City",racetime:"Race",sprint:"Sprint",qualifying:"Qualifying",endofseason:"Season is over. See you next year!"}}cardSize(){return 8}render(){return n.html`${(0,r.until)(this.client.GetSchedule((new Date).getFullYear()).then((t=>{const e=this.config.next_race_delay||0,i=t.filter((t=>{const i=new Date(t.date+"T"+t.time);return i.setHours(i.getHours()+e),i>=new Date}))[0];return i?n.html`<table><tbody><tr><td colspan="5">${(0,o.renderHeader)(this,i)}</td></tr>${this.config.show_raceinfo?(0,o.renderRaceInfo)(this,i):this.config.only_show_date?n.html`<tr><td class="text-center"><h1 class="${this.config.f1_font?"formulaone-font":""}">${(0,a.formatDateNumeric)(new Date(i.date+"T"+i.time),this.hass.locale,this.config.date_locale)}</h1></td></tr>`:null}</tbody></table>`:(0,o.getEndOfSeasonMessage)(this.translation("endofseason"))})).catch((()=>n.html`${(0,o.getApiErrorMessage)("next race")}`)),n.html`${(0,o.getApiLoadingMessage)()}`)}`}}e.default=l},74:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(639),r=i(557),o=i(438),s=i(366);class a extends s.BaseCard{constructor(t){super(t),this.defaultTranslations={driver:"Driver",grid:"Grid",team:"Team",points:"Points",status:"Status",raceheader:"Race",seasonheader:"Season",selectseason:"Select season",selectrace:"Select race",noresults:"Please select a race thats already been run.",q1:"Q1",q2:"Q2",q3:"Q3"},this.icons={sprint:"mdi:flag-checkered",qualifying:"mdi:timer-outline",results:"mdi:trophy"},this.renderTabsHtml=(t,e,i)=>i?n.html`<table><tr><td colspan="2">${this.renderHeader(i)}</td></tr>${t.filter((t=>t.content)).length>0?n.html`<tr class="transparent"><td colspan="2"><mwc-tab-bar @MDCTabBar:activated="${t=>this.setSelectedTabIndex(t.detail.index)}">${t.filter((t=>!t.hide)).map((t=>n.html`<mwc-tab ?hasImageIcon="${t.icon}"><ha-icon slot="icon" icon="${t.icon}"></ha-icon></mwc-tab>`))}</mwc-tab-bar><section><article>${t.filter((t=>!t.hide)).find(((t,i)=>i==e)).content}</article></section></td></tr>`:n.html`<tr><td colspan="2">${this.translation("noresults")}</td></tr>`}</table>`:n.html``}cardSize(){return 12}renderTabs(t){return[{title:"Results",icon:this.icon("results"),content:this.renderResults(t),order:this.tabOrder("results")},{title:"Qualifying",icon:this.icon("qualifying"),content:this.renderQualifying(t),order:this.tabOrder("qualifying")},{title:"Sprint",icon:this.icon("sprint"),content:this.renderSprint(t),hide:!(null==t?void 0:t.SprintResults),order:this.tabOrder("sprint")}].sort(((t,e)=>t.order-e.order))}renderSprint(t){var e;return(null==t?void 0:t.SprintResults)?n.html`<table class="nopadding"><thead><tr><th> </th><th>${this.translation("driver")}</th>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_team)?n.html`<th>${this.translation("team")}</th>`:""}<th class="text-center">${this.translation("grid")}</th><th class="text-center">${this.translation("points")}</th><th class="text-center">${this.translation("status")}</th></tr></thead><tbody>${(0,o.reduceArray)(t.SprintResults,this.config.row_limit).map((t=>this.renderResultRow(t,!1)))}</tbody></table>`:null}renderQualifying(t){var e;return(null==t?void 0:t.QualifyingResults)?n.html`<table class="nopadding"><thead><tr><th> </th><th>${this.translation("driver")}</th>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_team)?n.html`<th>${this.translation("team")}</th>`:""}<th class="text-center">${this.translation("q1")}</th><th class="text-center">${this.translation("q2")}</th><th class="text-center">${this.translation("q3")}</th></tr></thead><tbody>${(0,o.reduceArray)(t.QualifyingResults,this.config.row_limit).map((t=>this.renderQualifyingResultRow(t)))}</tbody></table>`:null}renderResults(t){var e,i;const r=null===(e=null==t?void 0:t.Results)||void 0===e?void 0:e.filter((t=>{var e;return"1"===(null===(e=t.FastestLap)||void 0===e?void 0:e.rank)}))[0];return(null==t?void 0:t.Results)?n.html`<table class="nopadding"><thead><tr><th> </th><th>${this.translation("driver")}</th>${(null===(i=this.config.standings)||void 0===i?void 0:i.show_team)?n.html`<th>${this.translation("team")}</th>`:""}<th class="text-center">${this.translation("grid")}</th><th class="text-center">${this.translation("points")}</th><th>${this.translation("status")}</th></tr></thead><tbody>${(0,o.reduceArray)(t.Results,this.config.row_limit).map((t=>this.renderResultRow(t,t.position===(null==r?void 0:r.position))))}</tbody>${r?n.html`<tfoot></tfoot><tfoot><tr><td colspan="6" class="text-right"><small>* Fastest lap: ${r.FastestLap.Time.time}</small></td></tr></tfoot>`:""}</table>`:null}renderResultRow(t,e){var i,r;return n.html`<tr><td class="width-50 text-center">${t.position}</td><td>${(null===(i=this.config.standings)||void 0===i?void 0:i.show_flag)?n.html`<img height="10" width="20" src="${(0,o.getCountryFlagByNationality)(this,t.Driver.nationality)}"> `:""}${(0,o.getDriverName)(t.Driver,this.config)}${e?" *":""}</td>${(null===(r=this.config.standings)||void 0===r?void 0:r.show_team)?n.html`${(0,o.renderConstructorColumn)(this,t.Constructor)}`:""}<td>${t.grid}</td><td class="width-60 text-center">${t.points}</td><td class="width-50 text-center">${t.status}</td></tr>`}renderQualifyingResultRow(t){var e,i;return n.html`<tr><td class="width-50 text-center">${t.position}</td><td>${(null===(e=this.config.standings)||void 0===e?void 0:e.show_flag)?n.html`<img height="10" width="20" src="${(0,o.getCountryFlagByNationality)(this,t.Driver.nationality)}"> `:""}${(0,o.getDriverName)(t.Driver,this.config)}</td>${(null===(i=this.config.standings)||void 0===i?void 0:i.show_team)?n.html`${(0,o.renderConstructorColumn)(this,t.Constructor)}`:""}<td>${t.Q1}</td><td>${t.Q2}</td><td>${t.Q3}</td></tr>`}renderHeader(t){return null==t||parseInt(t.season)<2018?null:(0,o.renderHeader)(this,t)}render(){const{races:t,selectedRace:e,selectedSeason:i,selectedTabIndex:s}=this.getProperties();void 0===i&&this.getLastResult();const a=t=>{this.setRaces(t)},l=this.renderTabs(e);return n.html`<table><tr><td>${this.translation("seasonheader")}<br>${(0,r.until)(this.client.GetSeasons().then((t=>{const e=t.reverse();return n.html`<select name="selectedSeason" @change="${a}"><option value="0">${this.translation("selectseason")}</option>${e.map((t=>n.html`<option value="${t.season}" ?selected="${i===t.season}">${t.season}</option>`))}</select>`})).catch((()=>n.html`${(0,o.getApiErrorMessage)("seasons")}`)),n.html`${(0,o.getApiLoadingMessage)()}`)}</td><td>${this.translation("raceheader")}<br><select name="selectedRace" @change="${t=>{this.setSelectedRace(t)}}"><option value="0" ?selected="${void 0===e}">${this.translation("selectrace")}</option>${null==t?void 0:t.map((t=>n.html`<option value="${t.round}" ?selected="${(null==e?void 0:e.round)==t.round}">${t.raceName}</option>`))}</select></td></tr></table>${this.renderTabsHtml(l,s,e)}`}setSelectedRace(t){const e=parseInt(t.target.value),{properties:i,cardValues:n}=this.getParentCardValues();i.selectedRound=e;const r=i.selectedSeason;Promise.all([this.client.GetResults(r,e),this.client.GetQualifyingResults(r,e),this.client.GetSprintResults(r,e),this.client.GetSchedule(r)]).then((([t,r,o,s])=>{var a;let l=t.Races[0];l?(l.QualifyingResults=r.Races[0].QualifyingResults,l.SprintResults=null===(a=null==o?void 0:o.Races[0])||void 0===a?void 0:a.SprintResults,i.selectedSeason=l.season):l=s.filter((t=>parseInt(t.round)==e))[0],i.selectedRace=l,n.set("cardValues",i),this.parent.properties=n}))}setRaces(t){const e=t.target.value,{properties:i,cardValues:n}=this.getParentCardValues();this.client.GetSeasonRaces(parseInt(e)).then((t=>{i.selectedSeason=e,i.selectedRace=void 0,i.races=t,n.set("cardValues",i),this.parent.properties=n}))}getUpcomingRace(t,e){const i=e.filter((e=>{const i=new Date(e.date+"T"+e.time),n=new Date(e.Qualifying.date+"T"+e.Qualifying.time),r=e.Sprint?new Date(e.Sprint.date+"T"+e.Sprint.time):null;return i>=t&&n<t&&(null===r||r<t)}));return i.length>0?i[0]:null}getLastResult(){const t=new Date;Promise.all([this.client.GetSchedule(t.getFullYear()),this.client.GetLastResult()]).then((([e,i])=>{const n=this.getUpcomingRace(t,e);let r=(new Date).getFullYear(),o=null!==n?parseInt(n.round):0,s={};null!==n?(s=n,o=parseInt(s.round),r=parseInt(s.season)):(s=i,o=parseInt(i.round),r=parseInt(i.season)),Promise.all([this.client.GetQualifyingResults(r,o),this.client.GetSprintResults(r,o),this.client.GetSeasonRaces(r)]).then((([t,e,i])=>{var n;const{properties:o,cardValues:a}=this.getParentCardValues();s.QualifyingResults=t.Races[0].QualifyingResults,s.SprintResults=null===(n=e.Races[0])||void 0===n?void 0:n.SprintResults,o.races=i,o.selectedRace=s,o.selectedSeason=r.toString(),a.set("cardValues",o),this.parent.properties=a}))}))}setSelectedTabIndex(t){const{properties:e,cardValues:i}=this.getParentCardValues();e.selectedTabIndex=t,i.set("cardValues",e),this.parent.properties=i}icon(t){return!this.config.icons||Object.keys(this.config.icons).indexOf(t)<0?this.icons[t]:this.config.icons[t]}tabOrder(t){var e,i;const n=null!==(i=null===(e=this.config.tabs_order)||void 0===e?void 0:e.map((t=>t.toLowerCase())))&&void 0!==i?i:["results","qualifying","sprint"];return n.indexOf(t)}}e.default=a},465:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0});const n=i(313),r=i(639),o=i(557),s=i(300),a=i(241),l=i(438),c=i(366);class d extends c.BaseCard{constructor(t){super(t),this.defaultTranslations={date:"Date",race:"Race",time:"Time",location:"Location",endofseason:"Season is over. See you next year!"}}cardSize(){return 12}renderLocation(t){var e;const i=r.html`${(null===(e=this.config.standings)||void 0===e?void 0:e.show_flag)?r.html`<img height="10" width="20" src="${(0,l.getCountryFlagByName)(this,t.Location.country)}"> `:""}${t.Location.locality}, ${t.Location.country}`;return this.config.location_clickable?r.html`<a href="${t.url}" target="_blank">${i}</a>`:i}renderScheduleRow(t){const e=new Date(t.date+"T"+t.time),i=this.config.previous_race&&e<new Date?this.config.previous_race:"";return r.html`<tr class="${i}"><td class="width-50 text-center">${t.round}</td><td>${t.Circuit.circuitName}</td><td>${this.renderLocation(t.Circuit)}</td><td class="width-60 text-center">${(0,s.formatDate)(e,this.hass.locale,this.config.date_locale)}</td><td class="width-50 text-center">${(0,n.formatTime)(e,this.hass.locale)}</td></tr>`}render(){return r.html`${(0,o.until)(this.client.GetSchedule((new Date).getFullYear()).then((t=>{const e=this.config.previous_race===a.PreviousRaceDisplay.Hide?t.filter((t=>new Date(t.date+"T"+t.time)>=new Date)):t;return e.filter((t=>new Date(t.date+"T"+t.time)>=new Date))[0]?r.html`<table><thead><tr><th> </th><th>${this.translation("race")}</th><th>${this.translation("location")}</th><th class="text-center">${this.translation("date")}</th><th class="text-center">${this.translation("time")}</th></tr></thead><tbody>${(0,l.reduceArray)(e,this.config.row_limit).map((t=>this.renderScheduleRow(t)))}</tbody></table>`:(0,l.getEndOfSeasonMessage)(this.translation("endofseason"))})).catch((()=>r.html`${(0,l.getApiErrorMessage)("schedule")}`)),r.html`${(0,l.getApiLoadingMessage)()}`)}`}}e.default=d},851:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.CARD_EDITOR_NAME=e.CARD_NAME=void 0,e.CARD_NAME="formulaone-card",e.CARD_EDITOR_NAME=`${e.CARD_NAME}-editor`},22:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.actionHandler=e.actionHandlerBind=void 0;const n=i(395),r=i(313),o=i(11),s="ontouchstart"in window||navigator.maxTouchPoints>0||navigator.maxTouchPoints>0;class a extends HTMLElement{constructor(){super(),this.holdTime=500,this.held=!1,this.ripple=document.createElement("mwc-ripple")}connectedCallback(){Object.assign(this.style,{position:"absolute",width:s?"100px":"50px",height:s?"100px":"50px",transform:"translate(-50%, -50%)",pointerEvents:"none",zIndex:"999"}),this.appendChild(this.ripple),this.ripple.primary=!0,["touchcancel","mouseout","mouseup","touchmove","mousewheel","wheel","scroll"].forEach((t=>{document.addEventListener(t,(()=>{clearTimeout(this.timer),this.stopAnimation(),this.timer=void 0}),{passive:!0})}))}bind(t,e){if(t.actionHandler)return;t.actionHandler=!0,t.addEventListener("contextmenu",(t=>{const e=t||window.event;return e.preventDefault&&e.preventDefault(),e.stopPropagation&&e.stopPropagation(),e.cancelBubble=!0,e.returnValue=!1,!1}));const i=t=>{let e,i;this.held=!1,t.touches?(e=t.touches[0].pageX,i=t.touches[0].pageY):(e=t.pageX,i=t.pageY),this.timer=window.setTimeout((()=>{this.startAnimation(e,i),this.held=!0}),this.holdTime)},n=i=>{i.preventDefault(),["touchend","touchcancel"].includes(i.type)&&void 0===this.timer||(clearTimeout(this.timer),this.stopAnimation(),this.timer=void 0,this.held?(0,r.fireEvent)(t,"action",{action:"hold"}):e.hasDoubleClick?"click"===i.type&&i.detail<2||!this.dblClickTimeout?this.dblClickTimeout=window.setTimeout((()=>{this.dblClickTimeout=void 0,(0,r.fireEvent)(t,"action",{action:"tap"})}),250):(clearTimeout(this.dblClickTimeout),this.dblClickTimeout=void 0,(0,r.fireEvent)(t,"action",{action:"double_tap"})):(0,r.fireEvent)(t,"action",{action:"tap"}))};t.addEventListener("touchstart",i,{passive:!0}),t.addEventListener("touchend",n),t.addEventListener("touchcancel",n),t.addEventListener("mousedown",i,{passive:!0}),t.addEventListener("click",n),t.addEventListener("keyup",(t=>{13===t.keyCode&&n(t)}))}startAnimation(t,e){Object.assign(this.style,{left:`${t}px`,top:`${e}px`,display:null}),this.ripple.disabled=!1,this.ripple.active=!0,this.ripple.unbounded=!0}stopAnimation(){this.ripple.active=!1,this.ripple.disabled=!0,this.style.display="none"}}customElements.define("action-handler-formulaonecard",a),e.actionHandlerBind=(t,e)=>{const i=(()=>{const t=document.body;if(t.querySelector("action-handler-formulaonecard"))return t.querySelector("action-handler-formulaonecard");const e=document.createElement("action-handler-formulaonecard");return t.appendChild(e),e})();i&&i.bind(t,e)},e.actionHandler=(0,n.directive)(class extends n.Directive{update(t,[i]){return(0,e.actionHandlerBind)(t.element,i),o.noChange}render(t){}})},750:function(t,e,i){var n=this&&this.__decorate||function(t,e,i,n){var r,o=arguments.length,s=o<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,i,n);else for(var a=t.length-1;a>=0;a--)(r=t[a])&&(s=(o<3?r(s):o>3?r(e,i,s):r(e,i))||s);return o>3&&s&&Object.defineProperty(e,i,s),s};Object.defineProperty(e,"__esModule",{value:!0}),e.FormulaOneCardEditor=void 0;const r=i(639),o=i(851),s=i(241),a=i(898),l=i(194),c=i(429),d=i(11);let u=class extends a.default{render(){return this._hass&&this._config?this.renderForm([{controls:[{label:"Card Type (Required)",configValue:"card_type",type:l.FormControlType.Dropdown,items:(0,c.getDropdownOptionsFromEnum)(s.FormulaOneCardType)}]},{controls:[{label:"Title",configValue:"title",type:l.FormControlType.Textbox}]},{label:"Basic configuration",cssClass:"side-by-side",controls:[{label:"Use F1 font",configValue:"f1_font",type:l.FormControlType.Switch},{label:"Image clickable",configValue:"image_clickable",type:l.FormControlType.Switch},{label:"Show carnumber",configValue:"show_carnumber",type:l.FormControlType.Switch},{label:"Location clickable",configValue:"location_clickable",type:l.FormControlType.Switch},{label:"Show race information",configValue:"show_raceinfo",type:l.FormControlType.Switch},{label:"Hide track layout",configValue:"hide_tracklayout",type:l.FormControlType.Switch},{label:"Hide race dates and times",configValue:"hide_racedatetimes",type:l.FormControlType.Switch},{label:"Show last years result",configValue:"show_lastyears_result",type:l.FormControlType.Switch},{label:"Only show date",configValue:"only_show_date",type:l.FormControlType.Switch},{type:l.FormControlType.Filler},{label:"Row limit",configValue:"row_limit",type:l.FormControlType.Textbox},{label:"Date locale",configValue:"date_locale",type:l.FormControlType.Textbox}]},{label:"Countdown Type",hidden:this._config.card_type!==s.FormulaOneCardType.Countdown,cssClass:"side-by-side",controls:[{configValue:"countdown_type",type:l.FormControlType.Checkboxes,items:(0,c.getDropdownOptionsFromEnum)(s.CountdownType)}]},{hidden:this._config.card_type!==s.FormulaOneCardType.NextRace,controls:[{label:"Next race delay",configValue:"next_race_delay",type:l.FormControlType.Textbox}]},{hidden:this._config.card_type!==s.FormulaOneCardType.Schedule,controls:[{label:"Previous race",configValue:"previous_race",type:l.FormControlType.Dropdown,items:(0,c.getDropdownOptionsFromEnum)(s.PreviousRaceDisplay)}]},{label:"Standings",hidden:this._config.card_type!==s.FormulaOneCardType.ConstructorStandings&&this._config.card_type!==s.FormulaOneCardType.DriverStandings,cssClass:"side-by-side",controls:[{label:"Show team",configValue:"standings.show_team",type:l.FormControlType.Switch},{label:"Show flag",configValue:"standings.show_flag",type:l.FormControlType.Switch},{label:"Show teamlogo",configValue:"standings.show_teamlogo",type:l.FormControlType.Switch}]},{label:"Weather",hidden:this._config.card_type!==s.FormulaOneCardType.NextRace&&this._config.card_type!==s.FormulaOneCardType.Countdown,controls:[{label:"Show weather",configValue:"show_weather",type:l.FormControlType.Switch}]},{cssClass:"side-by-side",hidden:this._config.card_type!==s.FormulaOneCardType.NextRace&&this._config.card_type!==s.FormulaOneCardType.Countdown||!this._config.show_weather,controls:[{label:"API key",configValue:"weather_options.api_key",type:l.FormControlType.Textbox},{label:"Unit",configValue:"weather_options.unit",type:l.FormControlType.Dropdown,items:(0,c.getDropdownOptionsFromEnum)(s.WeatherUnit)},{label:"Show icon",configValue:"weather_options.show_icon",type:l.FormControlType.Switch},{label:"Show precipitation",configValue:"weather_options.show_precipitation",type:l.FormControlType.Switch},{label:"Show wind",configValue:"weather_options.show_wind",type:l.FormControlType.Switch},{label:"Show temperature",configValue:"weather_options.show_temperature",type:l.FormControlType.Switch},{label:"Show cloud coverage",configValue:"weather_options.show_cloud_cover",type:l.FormControlType.Switch},{label:"Show visibility",configValue:"weather_options.show_visibility",type:l.FormControlType.Switch}]},{label:"Tabs",hidden:this._config.card_type!==s.FormulaOneCardType.Results,controls:[{label:"Tabs order",configValue:"tabs_order",type:l.FormControlType.Textbox}]}]):r.html``}static get styles(){return d.css`.form-row{margin-bottom:10px}.form-control{display:flex;align-items:center}ha-switch{padding:16px 6px}.side-by-side{display:flex;flex-flow:row wrap}.side-by-side>label{width:100%}.side-by-side>.form-control{width:49%;padding:2px}ha-textfield{width:100%}.hidden{display:none}@media (max-width:600px){.side-by-side>.form-control{width:48%}}`}};u=n([(0,d.customElement)(o.CARD_EDITOR_NAME)],u),e.FormulaOneCardEditor=u},657:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.loadCustomFonts=void 0,e.loadCustomFonts=()=>{if(window&&document.fonts){const t=new FontFace("F1Bold","url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Bold/Formula1-Bold.woff)");document.fonts.add(t),t.load()}}},148:function(t,e,i){var n=this&&this.__decorate||function(t,e,i,n){var r,o=arguments.length,s=o<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,i,n);else for(var a=t.length-1;a>=0;a--)(r=t[a])&&(s=(o<3?r(s):o>3?r(e,i,s):r(e,i))||s);return o>3&&s&&Object.defineProperty(e,i,s),s},r=this&&this.__awaiter||function(t,e,i,n){return new(i||(i=Promise))((function(r,o){function s(t){try{l(n.next(t))}catch(t){o(t)}}function a(t){try{l(n.throw(t))}catch(t){o(t)}}function l(t){var e;t.done?r(t.value):(e=t.value,e instanceof i?e:new i((function(t){t(e)}))).then(s,a)}l((n=n.apply(t,e||[])).next())}))};Object.defineProperty(e,"__esModule",{value:!0});const o=i(147),s=i(15),a=i(241),l=i(110),c=i(438),d=i(657),u=i(278),h=i(169),m=i(138),p=i(465),f=i(840),g=i(507),v=i(849),y=i(74),_=i(959),$=i(851);console.info(`%c ${$.CARD_NAME.toUpperCase()} %c ${o.version}`,"color: cyan; background: black; font-weight: bold;","color: darkblue; background: white; font-weight: bold;"),window.customCards=window.customCards||[],window.customCards.push({type:"formulaone-card",name:"FormulaOne card",preview:!1,description:"Present the data of Formula One in a pretty way"});let b=class extends l.LitElement{set properties(t){this._cardValues=t,this.update(t)}get properties(){return this._cardValues}constructor(){super(),this.setCountryCache()}static getConfigElement(){return r(this,void 0,void 0,(function*(){return yield Promise.resolve().then((()=>i(750))),document.createElement($.CARD_EDITOR_NAME)}))}setConfig(t){(0,c.checkConfig)(t),this.config=Object.assign({},t)}setCountryCache(){(new _.default).GetAll().catch((()=>{this.warning="Country API is down, so flags are not available at the moment!",this.update(this._cardValues)}))}shouldUpdate(t){return(0,c.hasConfigOrCardValuesChanged)(this,t)}set hass(t){switch(this._hass=t,this.config.hass=t,this.config.card_type){case a.FormulaOneCardType.ConstructorStandings:this.card=new h.default(this);break;case a.FormulaOneCardType.DriverStandings:this.card=new m.default(this);break;case a.FormulaOneCardType.Schedule:this.card=new p.default(this);break;case a.FormulaOneCardType.NextRace:this.card=new f.default(this);break;case a.FormulaOneCardType.LastResult:this.card=new g.default(this);break;case a.FormulaOneCardType.Countdown:this.card=new v.default(this);break;case a.FormulaOneCardType.Results:this.card=new y.default(this)}}static get styles(){return(0,d.loadCustomFonts)(),u.styles}render(){if(!this._hass||!this.config)return l.html``;try{return l.html`<ha-card elevation="2">${this.warning?l.html`<hui-warning>${this.warning}</hui-warning>`:""} ${this.config.title?l.html`<h1 class="card-header${this.config.f1_font?" formulaone-font":""}">${this.config.title}</h1>`:""} ${this.card.render()}</ha-card>`}catch(t){return l.html`<hui-warning>${t.toString()}</hui-warning>`}}getCardSize(){return this.card.cardSize()}};n([(0,s.property)()],b.prototype,"_hass",void 0),n([(0,s.property)()],b.prototype,"config",void 0),n([(0,s.property)()],b.prototype,"card",void 0),n([(0,s.property)()],b.prototype,"warning",void 0),n([(0,s.property)()],b.prototype,"properties",null),b=n([(0,s.customElement)($.CARD_NAME)],b),e.default=b},198:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.TimeFormat=e.NumberFormat=e.SECONDARY_INFO_VALUES=e.TIMESTAMP_FORMATS=e.ImageConstants=void 0,e.ImageConstants={FlagCDN:"https://flagcdn.com/w320/",TeamLogoCDN:"https://www.formula1.com/content/dam/fom-website/teams/",F1CDN:"https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/"},e.TIMESTAMP_FORMATS=["relative","total","date","time","datetime"],e.SECONDARY_INFO_VALUES=["entity-id","last-changed","last-updated","last-triggered","position","tilt-position","brightness"],e.NumberFormat={language:"language",system:"system",comma_decimal:"comma_decimal",decimal_comma:"decimal_comma",space_comma:"space_comma",none:"none"},e.TimeFormat={language:"language",system:"system",am_pm:"12",twenty_four:"24"}},300:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.formatDateNumeric=e.formatDate=void 0,e.formatDate=(t,e,i)=>new Intl.DateTimeFormat(null!=i?i:e.language,{month:"2-digit",day:"2-digit"}).format(t),e.formatDateNumeric=(t,e,i)=>new Intl.DateTimeFormat(null!=i?i:e.language,{year:"2-digit",month:"2-digit",day:"2-digit"}).format(t)},141:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.formatDateTimeRaceInfo=e.formatDateTime=void 0;const n=i(975);e.formatDateTime=(t,e)=>new Intl.DateTimeFormat(e.language,{year:"numeric",month:"long",day:"numeric",hour:(0,n.useAmPm)(e)?"numeric":"2-digit",minute:"2-digit",hour12:(0,n.useAmPm)(e)}).format(t),e.formatDateTimeRaceInfo=(t,e)=>new Intl.DateTimeFormat(e.language,{weekday:"short",hour:"2-digit",minute:"2-digit",hour12:(0,n.useAmPm)(e)}).format(t)},975:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.useAmPm=void 0;const n=i(198);e.useAmPm=t=>{if(t.time_format===n.TimeFormat.language||t.time_format===n.TimeFormat.system){const e=t.time_format===n.TimeFormat.language?t.language:void 0,i=(new Date).toLocaleString(e);return i.includes("AM")||i.includes("PM")}return t.time_format===n.TimeFormat.am_pm}},278:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.styles=void 0;const n=i(110);e.styles=n.css`table{width:100%;border-spacing:0;border-collapse:separate;padding:0 16px 16px}table.nopadding{padding:0;width:100%;border-spacing:0;border-collapse:separate}th{background-color:var(--table-row-alternative-background-color,#eee)}td,th{padding:5px;text-align:left}tr{color:var(--secondary-text-color)}tr:nth-child(even){background-color:var(--table-row-alternative-background-color,#eee)}.text-center{text-align:center}.width-40{width:40px}.width-50{width:50px}.width-60{width:60px}.hide{display:none}.strikethrough{text-decoration:line-through}.italic{font-style:italic}a{text-decoration:none;color:var(--secondary-text-color)}.constructor-logo{width:20px;margin:auto;display:block;float:left;background-color:#fff;border-radius:50%;margin-right:3px}.clickable{cursor:pointer}.formulaone-font{font-family:F1Bold}ha-icon{color:var(--secondary-text-color)}.transparent{background-color:transparent!important}.weather-info{padding:10px}.weather-info td{width:33%}`},241:(t,e)=>{var i,n,r,o;Object.defineProperty(e,"__esModule",{value:!0}),e.FormulaOneCardType=e.PreviousRaceDisplay=e.CountdownType=e.WeatherUnit=void 0,(o=e.WeatherUnit||(e.WeatherUnit={})).Metric="metric",o.MilesCelsius="uk",o.MilesFahrenheit="us",(r=e.CountdownType||(e.CountdownType={})).Race="race",r.Qualifying="qualifying",r.Practice1="practice1",r.Practice2="practice2",r.Practice3="practice3",r.Sprint="sprint",(n=e.PreviousRaceDisplay||(e.PreviousRaceDisplay={})).Strikethrough="strikethrough",n.Italic="italic",n.Hide="hide",(i=e.FormulaOneCardType||(e.FormulaOneCardType={})).DriverStandings="driver_standings",i.ConstructorStandings="constructor_standings",i.NextRace="next_race",i.Schedule="schedule",i.LastResult="last_result",i.Results="results",i.Countdown="countdown"},438:(t,e,i)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.renderConstructorColumn=e.reduceArray=e.getRefreshTime=e.calculateWindDirection=e.renderWeatherInfo=e.renderLastYearsResults=e.renderRaceInfo=e.renderHeader=e.clickHandler=e.getEndOfSeasonMessage=e.getApiLoadingMessage=e.getApiErrorMessage=e.getDriverName=e.getCircuitName=e.getTeamImage=e.checkConfig=e.getCountryFlagByName=e.getCountryFlagByNationality=e.getCountries=e.hasConfigOrCardValuesChanged=void 0;const n=i(110),r=i(241),o=i(141),s=i(313),a=i(300),l=i(198),c=i(22),d=i(959),u=i(557);e.hasConfigOrCardValuesChanged=(t,e)=>{if(e.has("config"))return!0;const i=e.get("card");if(i&&i.parent)return i.parent.properties!==t.properties;const n=e.get("cardValues");return!!n&&n!=t.properties},e.getCountries=()=>(new d.default).GetCountriesFromLocalStorage(),e.getCountryFlagByNationality=(t,i)=>{const n=(0,e.getCountries)().filter((t=>t.demonym==i));return n.length>1?t.imageClient.GetImage(n.sort(((t,e)=>t.population>e.population?-1:1))[0].flags.png):t.imageClient.GetImage(n[0].flags.png)},e.getCountryFlagByName=(t,i)=>{const n=(0,e.getCountries)().filter((t=>{var e;return t.name==i||t.nativeName==i||(null===(e=t.altSpellings)||void 0===e?void 0:e.includes(i))}))[0];return t.imageClient.GetImage(n.flags.png)},e.checkConfig=t=>{if(void 0===t.card_type)throw new Error("Please define FormulaOne card type (card_type).")},e.getTeamImage=(t,e)=>{e=e.toLocaleLowerCase().replace("_","-");const i=[{teamName:"red-bull",corrected:"red-bull-racing"},{teamName:"alfa",corrected:"alfa-romeo"},{teamName:"haas",corrected:"haas-f1-team"}].filter((t=>t.teamName==e));return i.length>0&&(e=i[0].corrected),t.imageClient.GetImage(`${l.ImageConstants.TeamLogoCDN}/2023/${e.toLowerCase()}-logo.png.transform/2col-retina/image.png`)},e.getCircuitName=t=>{let e=t.country.replace(" ","-");const i=[{countryDashed:"UAE",name:"Abu_Dhabi"},{countryDashed:"UK",name:"Great_Britain"},{countryDashed:"Monaco",name:"Monoco"},{countryDashed:"Azerbaijan",name:"Baku"},{countryDashed:"Saudi-Arabia",name:"Saudi_Arabia"}].filter((t=>t.countryDashed==e));return i.length>0&&(e=i[0].name),"USA"!=t.country&&"United States"!=t.country||"Austin"==t.locality||(e=t.locality.replace(" ","_")),"Italy"==t.country&&"Imola"==t.locality&&(e="Emilia_Romagna"),e},e.getDriverName=(t,e)=>{const i="VER"==t.code?1:t.permanentNumber;return`${t.givenName} ${t.familyName}${e.show_carnumber?` #${i}`:""}`},e.getApiErrorMessage=t=>n.html`<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon>Error getting ${t}<ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>`,e.getApiLoadingMessage=()=>n.html`<table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon>Loading...<ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table>`,e.getEndOfSeasonMessage=t=>n.html`<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${t}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`,e.clickHandler=(t,e,i,n)=>{(0,s.handleAction)(t,i,e.actions,n.detail.action)},e.renderHeader=(t,i,o=!1)=>{var a,d;const u=(0,e.getCircuitName)(i.Circuit.Location),h=t.config.image_clickable||void 0!==t.config.actions,m=i.Circuit.url;t.config.image_clickable&&!t.config.actions&&(t.config.actions={tap_action:{action:"url",url_path:m}});const p=n.html`<img width="100%" src="${t.imageClient.GetImage(`${l.ImageConstants.F1CDN}Circuit%20maps%2016x9/${u}_Circuit.png.transform/7col/image.png`)}" @action="${i=>{t.hass&&t.config.actions&&i.detail.action&&!o&&(0,e.clickHandler)(t.parent,t.config,t.hass,i)}}" .actionHandler="${(0,c.actionHandler)({hasHold:(0,s.hasAction)(null===(a=t.config.actions)||void 0===a?void 0:a.hold_action),hasDoubleClick:(0,s.hasAction)(null===(d=t.config.actions)||void 0===d?void 0:d.double_tap_action)})}" class="${h?" clickable":null}">`,f=n.html`<h2 class="${t.config.f1_font?"formulaone-font":""}"><img height="25" src="${(0,e.getCountryFlagByName)(t,i.Circuit.Location.country)}">  ${i.round} : ${i.raceName}</h2>`;return n.html`${t.config.card_type==r.FormulaOneCardType.Countdown?n.html``:f} ${t.config.hide_tracklayout?n.html``:p}<br>`},e.renderRaceInfo=(t,i,r)=>{var s;const l=t.config,c=t.hass;if(l.hide_racedatetimes)return n.html``;const d=l.show_weather&&void 0!==(null===(s=l.weather_options)||void 0===s?void 0:s.api_key)?t.weatherClient.getWeatherData(i.Circuit.Location.lat,i.Circuit.Location.long,`${i.date}T${i.time}`):Promise.resolve(null),h=l.show_lastyears_result?t.client.GetLastYearsResults(i.Circuit.circuitName):Promise.resolve(null),m=Promise.all([d,h]);return n.html`${(0,u.until)(m.then((([s,d])=>{const u=null==s?void 0:s.days[0],h=new Date(i.date+"T"+i.time),m=(0,e.renderWeatherInfo)(u,l,null!=r?r:h),p=(0,e.renderLastYearsResults)(l,d),f=(0,o.formatDateTimeRaceInfo)(new Date(i.FirstPractice.date+"T"+i.FirstPractice.time),c.locale),g=(0,o.formatDateTimeRaceInfo)(new Date(i.SecondPractice.date+"T"+i.SecondPractice.time),c.locale),v=void 0!==i.ThirdPractice?(0,o.formatDateTimeRaceInfo)(new Date(i.ThirdPractice.date+"T"+i.ThirdPractice.time),c.locale):"-",y=(0,o.formatDateTimeRaceInfo)(h,c.locale),_=(0,o.formatDateTimeRaceInfo)(new Date(i.Qualifying.date+"T"+i.Qualifying.time),c.locale),$=void 0!==i.Sprint?(0,o.formatDateTimeRaceInfo)(new Date(i.Sprint.date+"T"+i.Sprint.time),c.locale):"-";return n.html`${p}${m}<tr><td>${t.translation("date")}</td><td>${(0,a.formatDateNumeric)(h,c.locale,l.date_locale)}</td><td> </td><td>${t.translation("practice1")}</td><td align="right">${f}</td></tr><tr><td>${t.translation("race")}</td><td>${i.round}</td><td> </td><td>${t.translation("practice2")}</td><td align="right">${g}</td></tr><tr><td>${t.translation("racename")}</td><td>${i.raceName}</td><td> </td><td>${t.translation("practice3")}</td><td align="right">${v}</td></tr><tr><td>${t.translation("circuitname")}</td><td>${i.Circuit.circuitName}</td><td> </td><td>${t.translation("qualifying")}</td><td align="right">${_}</td></tr><tr><td>${t.translation("location")}</td><td>${i.Circuit.Location.country}</td><td> </td><td>${t.translation("sprint")}</td><td align="right">${$}</td></tr><tr><td>${t.translation("city")}</td><td>${i.Circuit.Location.locality}</td><td> </td><td>${t.translation("racetime")}</td><td align="right">${y}</td></tr>`})))}`},e.renderLastYearsResults=(t,e)=>{var i,r;if(!e)return n.html``;const o=e.Results?e.Results[0]:null,s=null===(i=e.Results)||void 0===i?void 0:i.filter((t=>{var e;return"1"===(null===(e=t.FastestLap)||void 0===e?void 0:e.rank)}))[0];return n.html`<tr><td colspan="5"><table class="weather-info"><tr><td class="text-center"><h1 class="${t.f1_font?"formulaone-font":""}">${new Date(e.date).getFullYear()}</h1><h2 class="${t.f1_font?"formulaone-font":""}"><ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon>${null==o?void 0:o.Driver.givenName} ${null==o?void 0:o.Driver.familyName} (${null==o?void 0:o.Constructor.name})</h2><h3 class="${t.f1_font?"formulaone-font":""}"><ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon>${null==s?void 0:s.Driver.givenName} ${null==s?void 0:s.Driver.familyName} (${null===(r=null==s?void 0:s.FastestLap)||void 0===r?void 0:r.Time.time})</h3></td></tr></table></td></tr><tr><td colspan="5"> </td></tr>`},e.renderWeatherInfo=(t,i,o)=>{var s,a;if(!t)return n.html``;const l=(null===(s=i.weather_options)||void 0===s?void 0:s.unit)===r.WeatherUnit.Metric?"km/h":"mph",c=(null===(a=i.weather_options)||void 0===a?void 0:a.unit)===r.WeatherUnit.MilesFahrenheit?"°F":"°C",d=t.hours?t.hours[o.getHours()]:t;return n.html`<tr><td colspan="5"><table class="weather-info"><tr><td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon>${(0,e.calculateWindDirection)(d.winddir)} ${d.windspeed} ${l}</td><td><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon>${d.precip} mm</td><td><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon>${d.precipprob}%</td></tr><tr><td><ha-icon slot="icon" icon="mdi:clouds"></ha-icon>${d.cloudcover} %</td><td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon>${d.temp} ${c}</td><td><ha-icon slot="icon" icon="mdi:sun-thermometer"></ha-icon>${d.feelslike} ${c}</td></tr></table></td></tr><tr><td colspan="5"> </td></tr>`},e.calculateWindDirection=t=>{const e=[{label:"N",range:[0,11.25]},{label:"NNE",range:[11.25,33.75]},{label:"NE",range:[33.75,56.25]},{label:"ENE",range:[56.25,78.75]},{label:"E",range:[78.75,101.25]},{label:"ESE",range:[101.25,123.75]},{label:"SE",range:[123.75,146.25]},{label:"SSE",range:[146.25,168.75]},{label:"S",range:[168.75,191.25]},{label:"SSW",range:[191.25,213.75]},{label:"SW",range:[213.75,236.25]},{label:"WSW",range:[236.25,258.75]},{label:"W",range:[258.75,281.25]},{label:"WNW",range:[281.25,303.75]},{label:"NW",range:[303.75,326.25]},{label:"NNW",range:[326.25,348.75]},{label:"N",range:[348.75,360]}];for(const{label:i,range:n}of e)if(t>=n[0]&&t<=n[1])return i},e.getRefreshTime=t=>{let e=24;const i=new Date,n=localStorage.getItem(`${i.getFullYear()}.json`);if(n){const r=JSON.parse(n),o=JSON.parse(r.data).MRData.RaceTable.Races.filter((t=>new Date(t.date).toLocaleDateString==i.toLocaleDateString));if(o.length>0){const i=o[0],n=new Date(i.date+"T"+i.time),r=localStorage.getItem(t);if(r){const t=JSON.parse(r);new Date(t.created)<n&&(e=1)}}}return e},e.reduceArray=(t,e)=>void 0===t?[]:e?t.slice(0,e):t,e.renderConstructorColumn=(t,i)=>n.html`<td>${t.config.standings.show_teamlogo?n.html`<img class="constructor-logo" height="20" width="20" src="${(0,e.getTeamImage)(t,i.constructorId)}"> `:""}${i.name}</td>`},11:(t,e,i)=>{i.r(e),i.d(e,{CSSResult:()=>a,LitElement:()=>S,ReactiveElement:()=>$,UpdatingElement:()=>A,_$LE:()=>E,_$LH:()=>C._$LH,adoptStyles:()=>d,css:()=>c,customElement:()=>k,decorateProperty:()=>R,defaultConverter:()=>v,eventOptions:()=>M,getCompatibleStyle:()=>u,html:()=>C.html,legacyPrototypeMethod:()=>D,noChange:()=>C.noChange,notEqual:()=>y,nothing:()=>C.nothing,property:()=>P,query:()=>F,queryAll:()=>I,queryAssignedElements:()=>j,queryAssignedNodes:()=>V,queryAsync:()=>L,render:()=>C.render,standardPrototypeMethod:()=>x,state:()=>N,supportsAdoptingStyleSheets:()=>r,svg:()=>C.svg,unsafeCSS:()=>l});const n=window,r=n.ShadowRoot&&(void 0===n.ShadyCSS||n.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,o=Symbol(),s=new WeakMap;class a{constructor(t,e,i){if(this._$cssResult$=!0,i!==o)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(r&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=s.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&s.set(e,t))}return t}toString(){return this.cssText}}const l=t=>new a("string"==typeof t?t:t+"",void 0,o),c=(t,...e)=>{const i=1===t.length?t[0]:e.reduce(((e,i,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[n+1]),t[0]);return new a(i,t,o)},d=(t,e)=>{r?t.adoptedStyleSheets=e.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):e.forEach((e=>{const i=document.createElement("style"),r=n.litNonce;void 0!==r&&i.setAttribute("nonce",r),i.textContent=e.cssText,t.appendChild(i)}))},u=r?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return l(e)})(t):t;var h;const m=window,p=m.trustedTypes,f=p?p.emptyScript:"",g=m.reactiveElementPolyfillSupport,v={toAttribute(t,e){switch(e){case Boolean:t=t?f:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},y=(t,e)=>e!==t&&(e==e||t==t),_={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:y};class $ extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u()}static addInitializer(t){var e;this.finalize(),(null!==(e=this.h)&&void 0!==e?e:this.h=[]).push(t)}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((e,i)=>{const n=this._$Ep(i,e);void 0!==n&&(this._$Ev.set(n,i),t.push(n))})),t}static createProperty(t,e=_){if(e.state&&(e.attribute=!1),this.finalize(),this.elementProperties.set(t,e),!e.noAccessor&&!this.prototype.hasOwnProperty(t)){const i="symbol"==typeof t?Symbol():"__"+t,n=this.getPropertyDescriptor(t,i,e);void 0!==n&&Object.defineProperty(this.prototype,t,n)}}static getPropertyDescriptor(t,e,i){return{get(){return this[e]},set(n){const r=this[t];this[e]=n,this.requestUpdate(t,r,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||_}static finalize(){if(this.hasOwnProperty("finalized"))return!1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,e=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const i of e)this.createProperty(i,t[i])}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(u(t))}else void 0!==t&&e.push(u(t));return e}static _$Ep(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)))}addController(t){var e,i;(null!==(e=this._$ES)&&void 0!==e?e:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(i=t.hostConnected)||void 0===i||i.call(t))}removeController(t){var e;null===(e=this._$ES)||void 0===e||e.splice(this._$ES.indexOf(t)>>>0,1)}_$Eg(){this.constructor.elementProperties.forEach(((t,e)=>{this.hasOwnProperty(e)&&(this._$Ei.set(e,this[e]),delete this[e])}))}createRenderRoot(){var t;const e=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return d(e,this.constructor.elementStyles),e}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var e;return null===(e=t.hostConnected)||void 0===e?void 0:e.call(t)}))}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var e;return null===(e=t.hostDisconnected)||void 0===e?void 0:e.call(t)}))}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$EO(t,e,i=_){var n;const r=this.constructor._$Ep(t,i);if(void 0!==r&&!0===i.reflect){const o=(void 0!==(null===(n=i.converter)||void 0===n?void 0:n.toAttribute)?i.converter:v).toAttribute(e,i.type);this._$El=t,null==o?this.removeAttribute(r):this.setAttribute(r,o),this._$El=null}}_$AK(t,e){var i;const n=this.constructor,r=n._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=n.getPropertyOptions(r),o="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(i=t.converter)||void 0===i?void 0:i.fromAttribute)?t.converter:v;this._$El=r,this[r]=o.fromAttribute(e,t.type),this._$El=null}}requestUpdate(t,e,i){let n=!0;void 0!==t&&(((i=i||this.constructor.getPropertyOptions(t)).hasChanged||y)(this[t],e)?(this._$AL.has(t)||this._$AL.set(t,e),!0===i.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,i))):n=!1),!this.isUpdatePending&&n&&(this._$E_=this._$Ej())}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,e)=>this[e]=t)),this._$Ei=void 0);let e=!1;const i=this._$AL;try{e=this.shouldUpdate(i),e?(this.willUpdate(i),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var e;return null===(e=t.hostUpdate)||void 0===e?void 0:e.call(t)})),this.update(i)):this._$Ek()}catch(t){throw e=!1,this._$Ek(),t}e&&this._$AE(i)}willUpdate(t){}_$AE(t){var e;null===(e=this._$ES)||void 0===e||e.forEach((t=>{var e;return null===(e=t.hostUpdated)||void 0===e?void 0:e.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return!0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,e)=>this._$EO(e,this[e],t))),this._$EC=void 0),this._$Ek()}updated(t){}firstUpdated(t){}}$.finalized=!0,$.elementProperties=new Map,$.elementStyles=[],$.shadowRootOptions={mode:"open"},null==g||g({ReactiveElement:$}),(null!==(h=m.reactiveElementVersions)&&void 0!==h?h:m.reactiveElementVersions=[]).push("1.6.1");var b,w,C=i(639);const A=$;class S extends ${constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=(0,C.render)(e,this.renderRoot,this.renderOptions)}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0)}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1)}render(){return C.noChange}}S.finalized=!0,S._$litElement$=!0,null===(b=globalThis.litElementHydrateSupport)||void 0===b||b.call(globalThis,{LitElement:S});const T=globalThis.litElementPolyfillSupport;null==T||T({LitElement:S});const E={_$AK:(t,e,i)=>{t._$AK(e,i)},_$AL:t=>t._$AL};(null!==(w=globalThis.litElementVersions)&&void 0!==w?w:globalThis.litElementVersions=[]).push("3.3.3");const D=(t,e,i)=>{Object.defineProperty(e,i,t)},x=(t,e)=>({kind:"method",placement:"prototype",key:e.key,descriptor:t}),R=({finisher:t,descriptor:e})=>(i,n)=>{var r;if(void 0===n){const n=null!==(r=i.originalKey)&&void 0!==r?r:i.key,o=null!=e?{kind:"method",placement:"prototype",key:n,descriptor:e(i.key)}:{...i,key:n};return null!=t&&(o.finisher=function(e){t(e,n)}),o}{const r=i.constructor;void 0!==e&&Object.defineProperty(i,n,e(n)),null==t||t(r,n)}},k=t=>e=>"function"==typeof e?((t,e)=>(customElements.define(t,e),e))(t,e):((t,e)=>{const{kind:i,elements:n}=e;return{kind:i,elements:n,finisher(e){customElements.define(t,e)}}})(t,e),O=(t,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(i){i.createProperty(e.key,t)}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this))},finisher(i){i.createProperty(e.key,t)}};function P(t){return(e,i)=>void 0!==i?((t,e,i)=>{e.constructor.createProperty(i,t)})(t,e,i):O(t,e)}function N(t){return P({...t,state:!0})}function M(t){return R({finisher:(e,i)=>{Object.assign(e.prototype[i],t)}})}function F(t,e){return R({descriptor:i=>{const n={get(){var e,i;return null!==(i=null===(e=this.renderRoot)||void 0===e?void 0:e.querySelector(t))&&void 0!==i?i:null},enumerable:!0,configurable:!0};if(e){const e="symbol"==typeof i?Symbol():"__"+i;n.get=function(){var i,n;return void 0===this[e]&&(this[e]=null!==(n=null===(i=this.renderRoot)||void 0===i?void 0:i.querySelector(t))&&void 0!==n?n:null),this[e]}}return n}})}function I(t){return R({descriptor:e=>({get(){var e,i;return null!==(i=null===(e=this.renderRoot)||void 0===e?void 0:e.querySelectorAll(t))&&void 0!==i?i:[]},enumerable:!0,configurable:!0})})}function L(t){return R({descriptor:e=>({async get(){var e;return await this.updateComplete,null===(e=this.renderRoot)||void 0===e?void 0:e.querySelector(t)},enumerable:!0,configurable:!0})})}var H;const U=null!=(null===(H=window.HTMLSlotElement)||void 0===H?void 0:H.prototype.assignedElements)?(t,e)=>t.assignedElements(e):(t,e)=>t.assignedNodes(e).filter((t=>t.nodeType===Node.ELEMENT_NODE));function j(t){const{slot:e,selector:i}=null!=t?t:{};return R({descriptor:n=>({get(){var n;const r="slot"+(e?`[name=${e}]`:":not([name])"),o=null===(n=this.renderRoot)||void 0===n?void 0:n.querySelector(r),s=null!=o?U(o,t):[];return i?s.filter((t=>t.matches(i))):s},enumerable:!0,configurable:!0})})}function V(t,e,i){let n,r=t;return"object"==typeof t?(r=t.slot,n=t):n={flatten:e},i?j({slot:r,flatten:e,selector:i}):R({descriptor:t=>({get(){var t,e;const i="slot"+(r?`[name=${r}]`:":not([name])"),o=null===(t=this.renderRoot)||void 0===t?void 0:t.querySelector(i);return null!==(e=null==o?void 0:o.assignedNodes(n))&&void 0!==e?e:[]},enumerable:!0,configurable:!0})})}console.warn("The main 'lit-element' module entrypoint is deprecated. Please update your imports to use the 'lit' package: 'lit' and 'lit/decorators.ts' or import from 'lit-element/lit-element.ts'. See https://lit.dev/msg/deprecated-import-path for more information.")},557:(t,e,i)=>{i.r(e),i.d(e,{UntilDirective:()=>v,until:()=>y});var n=i(639);const{I:r}=n._$LH;class o{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}const s=(t,e)=>{var i,n;const r=t._$AN;if(void 0===r)return!1;for(const t of r)null===(n=(i=t)._$AO)||void 0===n||n.call(i,e,!1),s(t,e);return!0},a=t=>{let e,i;do{if(void 0===(e=t._$AM))break;i=e._$AN,i.delete(t),t=e}while(0===(null==i?void 0:i.size))},l=t=>{for(let e;e=t._$AM;t=e){let i=e._$AN;if(void 0===i)e._$AN=i=new Set;else if(i.has(t))break;i.add(t),u(e)}};function c(t){void 0!==this._$AN?(a(this),this._$AM=t,l(this)):this._$AM=t}function d(t,e=!1,i=0){const n=this._$AH,r=this._$AN;if(void 0!==r&&0!==r.size)if(e)if(Array.isArray(n))for(let t=i;t<n.length;t++)s(n[t],!1),a(n[t]);else null!=n&&(s(n,!1),a(n));else s(this,t)}const u=t=>{var e,i,n,r;2==t.type&&(null!==(e=(n=t)._$AP)&&void 0!==e||(n._$AP=d),null!==(i=(r=t)._$AQ)&&void 0!==i||(r._$AQ=c))};class h extends o{constructor(){super(...arguments),this._$AN=void 0}_$AT(t,e,i){super._$AT(t,e,i),l(this),this.isConnected=t._$AU}_$AO(t,e=!0){var i,n;t!==this.isConnected&&(this.isConnected=t,t?null===(i=this.reconnected)||void 0===i||i.call(this):null===(n=this.disconnected)||void 0===n||n.call(this)),e&&(s(this,t),a(this))}setValue(t){if((t=>void 0===this._$Ct.strings)())this._$Ct._$AI(t,this);else{const e=[...this._$Ct._$AH];e[this._$Ci]=t,this._$Ct._$AI(e,this,0)}}disconnected(){}reconnected(){}}class m{constructor(t){this.G=t}disconnect(){this.G=void 0}reconnect(t){this.G=t}deref(){return this.G}}class p{constructor(){this.Y=void 0,this.Z=void 0}get(){return this.Y}pause(){var t;null!==(t=this.Y)&&void 0!==t||(this.Y=new Promise((t=>this.Z=t)))}resume(){var t;null===(t=this.Z)||void 0===t||t.call(this),this.Y=this.Z=void 0}}const f=t=>!(t=>null===t||"object"!=typeof t&&"function"!=typeof t)(t)&&"function"==typeof t.then,g=1073741823;class v extends h{constructor(){super(...arguments),this._$C_t=g,this._$Cwt=[],this._$Cq=new m(this),this._$CK=new p}render(...t){var e;return null!==(e=t.find((t=>!f(t))))&&void 0!==e?e:n.noChange}update(t,e){const i=this._$Cwt;let r=i.length;this._$Cwt=e;const o=this._$Cq,s=this._$CK;this.isConnected||this.disconnected();for(let t=0;t<e.length&&!(t>this._$C_t);t++){const n=e[t];if(!f(n))return this._$C_t=t,n;t<r&&n===i[t]||(this._$C_t=g,r=0,Promise.resolve(n).then((async t=>{for(;s.get();)await s.get();const e=o.deref();if(void 0!==e){const i=e._$Cwt.indexOf(n);i>-1&&i<e._$C_t&&(e._$C_t=i,e.setValue(t))}})))}return n.noChange}disconnected(){this._$Cq.disconnect(),this._$CK.pause()}reconnected(){this._$Cq.reconnect(this),this._$CK.resume()}}const y=(_=v,(...t)=>({_$litDirective$:_,values:t}));var _},639:(t,e,i)=>{var n;i.r(e),i.d(e,{_$LH:()=>B,html:()=>S,noChange:()=>E,nothing:()=>D,render:()=>q,svg:()=>T});const r=window,o=r.trustedTypes,s=o?o.createPolicy("lit-html",{createHTML:t=>t}):void 0,a="$lit$",l=`lit$${(Math.random()+"").slice(9)}$`,c="?"+l,d=`<${c}>`,u=document,h=()=>u.createComment(""),m=t=>null===t||"object"!=typeof t&&"function"!=typeof t,p=Array.isArray,f=t=>p(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),g="[ \t\n\f\r]",v=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,y=/-->/g,_=/>/g,$=RegExp(`>|${g}(?:([^\\s"'>=/]+)(${g}*=${g}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),b=/'/g,w=/"/g,C=/^(?:script|style|textarea|title)$/i,A=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),S=A(1),T=A(2),E=Symbol.for("lit-noChange"),D=Symbol.for("lit-nothing"),x=new WeakMap,R=u.createTreeWalker(u,129,null,!1);function k(t,e){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==s?s.createHTML(e):e}const O=(t,e)=>{const i=t.length-1,n=[];let r,o=2===e?"<svg>":"",s=v;for(let e=0;e<i;e++){const i=t[e];let c,u,h=-1,m=0;for(;m<i.length&&(s.lastIndex=m,u=s.exec(i),null!==u);)m=s.lastIndex,s===v?"!--"===u[1]?s=y:void 0!==u[1]?s=_:void 0!==u[2]?(C.test(u[2])&&(r=RegExp("</"+u[2],"g")),s=$):void 0!==u[3]&&(s=$):s===$?">"===u[0]?(s=null!=r?r:v,h=-1):void 0===u[1]?h=-2:(h=s.lastIndex-u[2].length,c=u[1],s=void 0===u[3]?$:'"'===u[3]?w:b):s===w||s===b?s=$:s===y||s===_?s=v:(s=$,r=void 0);const p=s===$&&t[e+1].startsWith("/>")?" ":"";o+=s===v?i+d:h>=0?(n.push(c),i.slice(0,h)+a+i.slice(h)+l+p):i+l+(-2===h?(n.push(void 0),e):p)}return[k(t,o+(t[i]||"<?>")+(2===e?"</svg>":"")),n]};class P{constructor({strings:t,_$litType$:e},i){let n;this.parts=[];let r=0,s=0;const d=t.length-1,u=this.parts,[m,p]=O(t,e);if(this.el=P.createElement(m,i),R.currentNode=this.el.content,2===e){const t=this.el.content,e=t.firstChild;e.remove(),t.append(...e.childNodes)}for(;null!==(n=R.nextNode())&&u.length<d;){if(1===n.nodeType){if(n.hasAttributes()){const t=[];for(const e of n.getAttributeNames())if(e.endsWith(a)||e.startsWith(l)){const i=p[s++];if(t.push(e),void 0!==i){const t=n.getAttribute(i.toLowerCase()+a).split(l),e=/([.?@])?(.*)/.exec(i);u.push({type:1,index:r,name:e[2],strings:t,ctor:"."===e[1]?L:"?"===e[1]?U:"@"===e[1]?j:I})}else u.push({type:6,index:r})}for(const e of t)n.removeAttribute(e)}if(C.test(n.tagName)){const t=n.textContent.split(l),e=t.length-1;if(e>0){n.textContent=o?o.emptyScript:"";for(let i=0;i<e;i++)n.append(t[i],h()),R.nextNode(),u.push({type:2,index:++r});n.append(t[e],h())}}}else if(8===n.nodeType)if(n.data===c)u.push({type:2,index:r});else{let t=-1;for(;-1!==(t=n.data.indexOf(l,t+1));)u.push({type:7,index:r}),t+=l.length-1}r++}}static createElement(t,e){const i=u.createElement("template");return i.innerHTML=t,i}}function N(t,e,i=t,n){var r,o,s,a;if(e===E)return e;let l=void 0!==n?null===(r=i._$Co)||void 0===r?void 0:r[n]:i._$Cl;const c=m(e)?void 0:e._$litDirective$;return(null==l?void 0:l.constructor)!==c&&(null===(o=null==l?void 0:l._$AO)||void 0===o||o.call(l,!1),void 0===c?l=void 0:(l=new c(t),l._$AT(t,i,n)),void 0!==n?(null!==(s=(a=i)._$Co)&&void 0!==s?s:a._$Co=[])[n]=l:i._$Cl=l),void 0!==l&&(e=N(t,l._$AS(t,e.values),l,n)),e}class M{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var e;const{el:{content:i},parts:n}=this._$AD,r=(null!==(e=null==t?void 0:t.creationScope)&&void 0!==e?e:u).importNode(i,!0);R.currentNode=r;let o=R.nextNode(),s=0,a=0,l=n[0];for(;void 0!==l;){if(s===l.index){let e;2===l.type?e=new F(o,o.nextSibling,this,t):1===l.type?e=new l.ctor(o,l.name,l.strings,this,t):6===l.type&&(e=new V(o,this,t)),this._$AV.push(e),l=n[++a]}s!==(null==l?void 0:l.index)&&(o=R.nextNode(),s++)}return R.currentNode=u,r}v(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class F{constructor(t,e,i,n){var r;this.type=2,this._$AH=D,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=n,this._$Cp=null===(r=null==n?void 0:n.isConnected)||void 0===r||r}get _$AU(){var t,e;return null!==(e=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==e?e:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===(null==t?void 0:t.nodeType)&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=N(this,t,e),m(t)?t===D||null==t||""===t?(this._$AH!==D&&this._$AR(),this._$AH=D):t!==this._$AH&&t!==E&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):f(t)?this.T(t):this._(t)}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t))}_(t){this._$AH!==D&&m(this._$AH)?this._$AA.nextSibling.data=t:this.$(u.createTextNode(t)),this._$AH=t}g(t){var e;const{values:i,_$litType$:n}=t,r="number"==typeof n?this._$AC(t):(void 0===n.el&&(n.el=P.createElement(k(n.h,n.h[0]),this.options)),n);if((null===(e=this._$AH)||void 0===e?void 0:e._$AD)===r)this._$AH.v(i);else{const t=new M(r,this),e=t.u(this.options);t.v(i),this.$(e),this._$AH=t}}_$AC(t){let e=x.get(t.strings);return void 0===e&&x.set(t.strings,e=new P(t)),e}T(t){p(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,n=0;for(const r of t)n===e.length?e.push(i=new F(this.k(h()),this.k(h()),this,this.options)):i=e[n],i._$AI(r),n++;n<e.length&&(this._$AR(i&&i._$AB.nextSibling,n),e.length=n)}_$AR(t=this._$AA.nextSibling,e){var i;for(null===(i=this._$AP)||void 0===i||i.call(this,!1,!0,e);t&&t!==this._$AB;){const e=t.nextSibling;t.remove(),t=e}}setConnected(t){var e;void 0===this._$AM&&(this._$Cp=t,null===(e=this._$AP)||void 0===e||e.call(this,t))}}class I{constructor(t,e,i,n,r){this.type=1,this._$AH=D,this._$AN=void 0,this.element=t,this.name=e,this._$AM=n,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=D}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,e=this,i,n){const r=this.strings;let o=!1;if(void 0===r)t=N(this,t,e,0),o=!m(t)||t!==this._$AH&&t!==E,o&&(this._$AH=t);else{const n=t;let s,a;for(t=r[0],s=0;s<r.length-1;s++)a=N(this,n[i+s],e,s),a===E&&(a=this._$AH[s]),o||(o=!m(a)||a!==this._$AH[s]),a===D?t=D:t!==D&&(t+=(null!=a?a:"")+r[s+1]),this._$AH[s]=a}o&&!n&&this.j(t)}j(t){t===D?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"")}}class L extends I{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===D?void 0:t}}const H=o?o.emptyScript:"";class U extends I{constructor(){super(...arguments),this.type=4}j(t){t&&t!==D?this.element.setAttribute(this.name,H):this.element.removeAttribute(this.name)}}class j extends I{constructor(t,e,i,n,r){super(t,e,i,n,r),this.type=5}_$AI(t,e=this){var i;if((t=null!==(i=N(this,t,e,0))&&void 0!==i?i:D)===E)return;const n=this._$AH,r=t===D&&n!==D||t.capture!==n.capture||t.once!==n.once||t.passive!==n.passive,o=t!==D&&(n===D||r);r&&this.element.removeEventListener(this.name,this,n),o&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){var e,i;"function"==typeof this._$AH?this._$AH.call(null!==(i=null===(e=this.options)||void 0===e?void 0:e.host)&&void 0!==i?i:this.element,t):this._$AH.handleEvent(t)}}class V{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){N(this,t)}}const B={O:a,P:l,A:c,C:1,M:O,L:M,R:f,D:N,I:F,V:I,H:U,N:j,U:L,F:V},G=r.litHtmlPolyfillSupport;null==G||G(P,F),(null!==(n=r.litHtmlVersions)&&void 0!==n?n:r.litHtmlVersions=[]).push("2.8.0");const q=(t,e,i)=>{var n,r;const o=null!==(n=null==i?void 0:i.renderBefore)&&void 0!==n?n:e;let s=o._$litPart$;if(void 0===s){const t=null!==(r=null==i?void 0:i.renderBefore)&&void 0!==r?r:null;o._$litPart$=s=new F(e.insertBefore(h(),t),t,void 0,null!=i?i:{})}return s._$AI(t),s}},15:(t,e,i)=>{i.r(e),i.d(e,{customElement:()=>n,eventOptions:()=>c,property:()=>a,query:()=>u,queryAll:()=>m,queryAssignedElements:()=>f,queryAssignedNodes:()=>g,queryAsync:()=>p,standardProperty:()=>s,state:()=>l});const n=t=>(e,i)=>{void 0!==i?i.addInitializer((()=>{customElements.define(t,e)})):customElements.define(t,e)};var r=i(548);const o={attribute:!0,type:String,converter:r.Ts,reflect:!1,hasChanged:r.Qu},s=(t=o,e,i)=>{const{kind:n,metadata:r}=i;let s=globalThis.litPropertyMetadata.get(r);if(void 0===s&&globalThis.litPropertyMetadata.set(r,s=new Map),s.set(i.name,t),"accessor"===n){const{name:n}=i;return{set(i){const r=e.get.call(this);e.set.call(this,i),this.requestUpdate(n,r,t)},init(e){return void 0!==e&&this.C(n,void 0,t),e}}}if("setter"===n){const{name:n}=i;return function(i){const r=this[n];e.call(this,i),this.requestUpdate(n,r,t)}}throw Error("Unsupported decorator location: "+n)};function a(t){return(e,i)=>"object"==typeof i?s(t,e,i):((t,e,i)=>{const n=e.hasOwnProperty(i);return e.constructor.createProperty(i,n?{...t,wrapped:!0}:t),n?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function l(t){return a({...t,state:!0,attribute:!1})}function c(t){return(e,i)=>{const n="function"==typeof e?e:e[i];Object.assign(n,t)}}const d=(t,e,i)=>(i.configurable=!0,i.enumerable=!0,Reflect.decorate&&"object"!=typeof e&&Object.defineProperty(t,e,i),i);function u(t,e){return(i,n,r)=>{const o=e=>e.renderRoot?.querySelector(t)??null;if(e){const{get:t,set:e}="object"==typeof n?i:r??(()=>{const t=Symbol();return{get(){return this[t]},set(e){this[t]=e}}})();return d(i,n,{get(){let i=t.call(this);return void 0===i&&(i=o(this),(null!==i||this.hasUpdated)&&e.call(this,i)),i}})}return d(i,n,{get(){return o(this)}})}}let h;function m(t){return(e,i)=>d(e,i,{get(){return(this.renderRoot??(h??=document.createDocumentFragment())).querySelectorAll(t)}})}function p(t){return(e,i)=>d(e,i,{async get(){return await this.updateComplete,this.renderRoot?.querySelector(t)??null}})}function f(t){return(e,i)=>{const{slot:n,selector:r}=t??{},o="slot"+(n?`[name=${n}]`:":not([name])");return d(e,i,{get(){const e=this.renderRoot?.querySelector(o),i=e?.assignedElements(t)??[];return void 0===r?i:i.filter((t=>t.matches(r)))}})}}function g(t){return(e,i)=>{const{slot:n}=t??{},r="slot"+(n?`[name=${n}]`:":not([name])");return d(e,i,{get(){const e=this.renderRoot?.querySelector(r);return e?.assignedNodes(t)??[]}})}}},395:(t,e,i)=>{i.r(e),i.d(e,{Directive:()=>n.Xe,PartType:()=>n.pX,directive:()=>n.XM});var n=i(126)},810:(t,e,i)=>{i.r(e),i.d(e,{AsyncReplaceDirective:()=>f,asyncReplace:()=>g});var n=i(605);const{D:r}=n._$LH;var o=i(126);const s=(t,e)=>{const i=t._$AN;if(void 0===i)return!1;for(const t of i)t._$AO?.(e,!1),s(t,e);return!0},a=t=>{let e,i;do{if(void 0===(e=t._$AM))break;i=e._$AN,i.delete(t),t=e}while(0===i?.size)},l=t=>{for(let e;e=t._$AM;t=e){let i=e._$AN;if(void 0===i)e._$AN=i=new Set;else if(i.has(t))break;i.add(t),u(e)}};function c(t){void 0!==this._$AN?(a(this),this._$AM=t,l(this)):this._$AM=t}function d(t,e=!1,i=0){const n=this._$AH,r=this._$AN;if(void 0!==r&&0!==r.size)if(e)if(Array.isArray(n))for(let t=i;t<n.length;t++)s(n[t],!1),a(n[t]);else null!=n&&(s(n,!1),a(n));else s(this,t)}const u=t=>{t.type==o.pX.CHILD&&(t._$AP??=d,t._$AQ??=c)};class h extends o.Xe{constructor(){super(...arguments),this._$AN=void 0}_$AT(t,e,i){super._$AT(t,e,i),l(this),this.isConnected=t._$AU}_$AO(t,e=!0){t!==this.isConnected&&(this.isConnected=t,t?this.reconnected?.():this.disconnected?.()),e&&(s(this,t),a(this))}setValue(t){if((t=>void 0===this._$Ct.strings)())this._$Ct._$AI(t,this);else{const e=[...this._$Ct._$AH];e[this._$Ci]=t,this._$Ct._$AI(e,this,0)}}disconnected(){}reconnected(){}}class m{constructor(t){this.G=t}disconnect(){this.G=void 0}reconnect(t){this.G=t}deref(){return this.G}}class p{constructor(){this.Y=void 0,this.Z=void 0}get(){return this.Y}pause(){this.Y??=new Promise((t=>this.Z=t))}resume(){this.Z?.(),this.Y=this.Z=void 0}}class f extends h{constructor(){super(...arguments),this._$Cq=new m(this),this._$CK=new p}render(t,e){return n.Jb}update(t,[e,i]){if(this.isConnected||this.disconnected(),e===this._$CX)return;this._$CX=e;let r=0;const{_$Cq:o,_$CK:s}=this;return(async(t,e)=>{for await(const i of t)if(!1===await e(i))return})(e,(async t=>{for(;s.get();)await s.get();const n=o.deref();if(void 0!==n){if(n._$CX!==e)return!1;void 0!==i&&(t=i(t,r)),n.commitValue(t,r),r++}return!0})),n.Jb}commitValue(t,e){this.setValue(t)}disconnected(){this._$Cq.disconnect(),this._$CK.pause()}reconnected(){this._$Cq.reconnect(this),this._$CK.resume()}}const g=(0,o.XM)(f)},110:(t,e,i)=>{i.r(e),i.d(e,{CSSResult:()=>n.c3,LitElement:()=>o,ReactiveElement:()=>n.fl,_$LE:()=>a,_$LH:()=>r._$LH,adoptStyles:()=>n.ec,css:()=>n.iv,defaultConverter:()=>n.Ts,getCompatibleStyle:()=>n.i1,html:()=>r.dy,isServer:()=>l,noChange:()=>r.Jb,notEqual:()=>n.Qu,nothing:()=>r.Ld,render:()=>r.sY,supportsAdoptingStyleSheets:()=>n.FV,svg:()=>r.YP,unsafeCSS:()=>n.$m});var n=i(548),r=i(605);class o extends n.fl{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=(0,r.sY)(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return r.Jb}}o._$litElement$=!0,o.finalized=!0,globalThis.litElementHydrateSupport?.({LitElement:o});const s=globalThis.litElementPolyfillSupport;s?.({LitElement:o});const a={_$AK:(t,e,i)=>{t._$AK(e,i)},_$AL:t=>t._$AL};(globalThis.litElementVersions??=[]).push("4.0.2");const l=!1},548:(t,e,i)=>{i.d(e,{c3:()=>a,fl:()=>T,ec:()=>d,iv:()=>c,Ts:()=>C,i1:()=>u,Qu:()=>A,FV:()=>r,$m:()=>l});const n=globalThis,r=n.ShadowRoot&&(void 0===n.ShadyCSS||n.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,o=Symbol(),s=new WeakMap;class a{constructor(t,e,i){if(this._$cssResult$=!0,i!==o)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(r&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=s.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&s.set(e,t))}return t}toString(){return this.cssText}}const l=t=>new a("string"==typeof t?t:t+"",void 0,o),c=(t,...e)=>{const i=1===t.length?t[0]:e.reduce(((e,i,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[n+1]),t[0]);return new a(i,t,o)},d=(t,e)=>{if(r)t.adoptedStyleSheets=e.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet));else for(const i of e){const e=document.createElement("style"),r=n.litNonce;void 0!==r&&e.setAttribute("nonce",r),e.textContent=i.cssText,t.appendChild(e)}},u=r?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return l(e)})(t):t,{is:h,defineProperty:m,getOwnPropertyDescriptor:p,getOwnPropertyNames:f,getOwnPropertySymbols:g,getPrototypeOf:v}=Object,y=globalThis,_=y.trustedTypes,$=_?_.emptyScript:"",b=y.reactiveElementPolyfillSupport,w=(t,e)=>t,C={toAttribute(t,e){switch(e){case Boolean:t=t?$:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},A=(t,e)=>!h(t,e),S={attribute:!0,type:String,converter:C,reflect:!1,hasChanged:A};Symbol.metadata??=Symbol("metadata"),y.litPropertyMetadata??=new WeakMap;class T extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=S){if(e.state&&(e.attribute=!1),this._$Ei(),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),n=this.getPropertyDescriptor(t,i,e);void 0!==n&&m(this.prototype,t,n)}}static getPropertyDescriptor(t,e,i){const{get:n,set:r}=p(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get(){return n?.call(this)},set(e){const o=n?.call(this);r.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??S}static _$Ei(){if(this.hasOwnProperty(w("elementProperties")))return;const t=v(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(w("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(w("properties"))){const t=this.properties,e=[...f(t),...g(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(u(t))}else void 0!==t&&e.push(u(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$Eg=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$ES(),this.requestUpdate(),this.constructor.l?.forEach((t=>t(this)))}addController(t){(this._$E_??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$E_?.delete(t)}_$ES(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return d(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$E_?.forEach((t=>t.hostConnected?.()))}enableUpdating(t){}disconnectedCallback(){this._$E_?.forEach((t=>t.hostDisconnected?.()))}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$EO(t,e){const i=this.constructor.elementProperties.get(t),n=this.constructor._$Eu(t,i);if(void 0!==n&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:C).toAttribute(e,i.type);this._$Em=t,null==r?this.removeAttribute(n):this.setAttribute(n,r),this._$Em=null}}_$AK(t,e){const i=this.constructor,n=i._$Eh.get(t);if(void 0!==n&&this._$Em!==n){const t=i.getPropertyOptions(n),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:C;this._$Em=n,this[n]=r.fromAttribute(e,t.type),this._$Em=null}}requestUpdate(t,e,i,n=!1,r){if(void 0!==t){if(i??=this.constructor.getPropertyOptions(t),!(i.hasChanged??A)(n?r:this[t],e))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$Eg=this._$EP())}C(t,e,i){this._$AL.has(t)||this._$AL.set(t,e),!0===i.reflect&&this._$Em!==t&&(this._$Ej??=new Set).add(t)}async _$EP(){this.isUpdatePending=!0;try{await this._$Eg}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t)!0!==i.wrapped||this._$AL.has(e)||void 0===this[e]||this.C(e,this[e],i)}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$E_?.forEach((t=>t.hostUpdate?.())),this.update(e)):this._$ET()}catch(e){throw t=!1,this._$ET(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$E_?.forEach((t=>t.hostUpdated?.())),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$ET(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$Eg}shouldUpdate(t){return!0}update(t){this._$Ej&&=this._$Ej.forEach((t=>this._$EO(t,this[t]))),this._$ET()}updated(t){}firstUpdated(t){}}T.elementStyles=[],T.shadowRootOptions={mode:"open"},T[w("elementProperties")]=new Map,T[w("finalized")]=new Map,b?.({ReactiveElement:T}),(y.reactiveElementVersions??=[]).push("2.0.2")},126:(t,e,i)=>{i.d(e,{XM:()=>r,Xe:()=>o,pX:()=>n});const n={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},r=t=>(...e)=>({_$litDirective$:t,values:e});class o{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}},605:(t,e,i)=>{i.d(e,{Jb:()=>T,Ld:()=>E,YP:()=>S,_$LH:()=>j,dy:()=>A,sY:()=>B});const n=globalThis,r=n.trustedTypes,o=r?r.createPolicy("lit-html",{createHTML:t=>t}):void 0,s="$lit$",a=`lit$${(Math.random()+"").slice(9)}$`,l="?"+a,c=`<${l}>`,d=document,u=()=>d.createComment(""),h=t=>null===t||"object"!=typeof t&&"function"!=typeof t,m=Array.isArray,p=t=>m(t)||"function"==typeof t?.[Symbol.iterator],f="[ \t\n\f\r]",g=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,v=/-->/g,y=/>/g,_=RegExp(`>|${f}(?:([^\\s"'>=/]+)(${f}*=${f}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),$=/'/g,b=/"/g,w=/^(?:script|style|textarea|title)$/i,C=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),A=C(1),S=C(2),T=Symbol.for("lit-noChange"),E=Symbol.for("lit-nothing"),D=new WeakMap,x=d.createTreeWalker(d,129);function R(t,e){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==o?o.createHTML(e):e}const k=(t,e)=>{const i=t.length-1,n=[];let r,o=2===e?"<svg>":"",l=g;for(let e=0;e<i;e++){const i=t[e];let d,u,h=-1,m=0;for(;m<i.length&&(l.lastIndex=m,u=l.exec(i),null!==u);)m=l.lastIndex,l===g?"!--"===u[1]?l=v:void 0!==u[1]?l=y:void 0!==u[2]?(w.test(u[2])&&(r=RegExp("</"+u[2],"g")),l=_):void 0!==u[3]&&(l=_):l===_?">"===u[0]?(l=r??g,h=-1):void 0===u[1]?h=-2:(h=l.lastIndex-u[2].length,d=u[1],l=void 0===u[3]?_:'"'===u[3]?b:$):l===b||l===$?l=_:l===v||l===y?l=g:(l=_,r=void 0);const p=l===_&&t[e+1].startsWith("/>")?" ":"";o+=l===g?i+c:h>=0?(n.push(d),i.slice(0,h)+s+i.slice(h)+a+p):i+a+(-2===h?e:p)}return[R(t,o+(t[i]||"<?>")+(2===e?"</svg>":"")),n]};class O{constructor({strings:t,_$litType$:e},i){let n;this.parts=[];let o=0,c=0;const d=t.length-1,h=this.parts,[m,p]=k(t,e);if(this.el=O.createElement(m,i),x.currentNode=this.el.content,2===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(n=x.nextNode())&&h.length<d;){if(1===n.nodeType){if(n.hasAttributes())for(const t of n.getAttributeNames())if(t.endsWith(s)){const e=p[c++],i=n.getAttribute(t).split(a),r=/([.?@])?(.*)/.exec(e);h.push({type:1,index:o,name:r[2],strings:i,ctor:"."===r[1]?I:"?"===r[1]?L:"@"===r[1]?H:F}),n.removeAttribute(t)}else t.startsWith(a)&&(h.push({type:6,index:o}),n.removeAttribute(t));if(w.test(n.tagName)){const t=n.textContent.split(a),e=t.length-1;if(e>0){n.textContent=r?r.emptyScript:"";for(let i=0;i<e;i++)n.append(t[i],u()),x.nextNode(),h.push({type:2,index:++o});n.append(t[e],u())}}}else if(8===n.nodeType)if(n.data===l)h.push({type:2,index:o});else{let t=-1;for(;-1!==(t=n.data.indexOf(a,t+1));)h.push({type:7,index:o}),t+=a.length-1}o++}}static createElement(t,e){const i=d.createElement("template");return i.innerHTML=t,i}}function P(t,e,i=t,n){if(e===T)return e;let r=void 0!==n?i._$Co?.[n]:i._$Cl;const o=h(e)?void 0:e._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(t),r._$AT(t,i,n)),void 0!==n?(i._$Co??=[])[n]=r:i._$Cl=r),void 0!==r&&(e=P(t,r._$AS(t,e.values),r,n)),e}class N{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,n=(t?.creationScope??d).importNode(e,!0);x.currentNode=n;let r=x.nextNode(),o=0,s=0,a=i[0];for(;void 0!==a;){if(o===a.index){let e;2===a.type?e=new M(r,r.nextSibling,this,t):1===a.type?e=new a.ctor(r,a.name,a.strings,this,t):6===a.type&&(e=new U(r,this,t)),this._$AV.push(e),a=i[++s]}o!==a?.index&&(r=x.nextNode(),o++)}return x.currentNode=d,n}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class M{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,n){this.type=2,this._$AH=E,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=n,this._$Cv=n?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=P(this,t,e),h(t)?t===E||null==t||""===t?(this._$AH!==E&&this._$AR(),this._$AH=E):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):p(t)?this.T(t):this._(t)}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t))}_(t){this._$AH!==E&&h(this._$AH)?this._$AA.nextSibling.data=t:this.$(d.createTextNode(t)),this._$AH=t}g(t){const{values:e,_$litType$:i}=t,n="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=O.createElement(R(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===n)this._$AH.p(e);else{const t=new N(n,this),i=t.u(this.options);t.p(e),this.$(i),this._$AH=t}}_$AC(t){let e=D.get(t.strings);return void 0===e&&D.set(t.strings,e=new O(t)),e}T(t){m(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,n=0;for(const r of t)n===e.length?e.push(i=new M(this.k(u()),this.k(u()),this,this.options)):i=e[n],i._$AI(r),n++;n<e.length&&(this._$AR(i&&i._$AB.nextSibling,n),e.length=n)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t&&t!==this._$AB;){const e=t.nextSibling;t.remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class F{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,n,r){this.type=1,this._$AH=E,this._$AN=void 0,this.element=t,this.name=e,this._$AM=n,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=E}_$AI(t,e=this,i,n){const r=this.strings;let o=!1;if(void 0===r)t=P(this,t,e,0),o=!h(t)||t!==this._$AH&&t!==T,o&&(this._$AH=t);else{const n=t;let s,a;for(t=r[0],s=0;s<r.length-1;s++)a=P(this,n[i+s],e,s),a===T&&(a=this._$AH[s]),o||=!h(a)||a!==this._$AH[s],a===E?t=E:t!==E&&(t+=(a??"")+r[s+1]),this._$AH[s]=a}o&&!n&&this.O(t)}O(t){t===E?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class I extends F{constructor(){super(...arguments),this.type=3}O(t){this.element[this.name]=t===E?void 0:t}}class L extends F{constructor(){super(...arguments),this.type=4}O(t){this.element.toggleAttribute(this.name,!!t&&t!==E)}}class H extends F{constructor(t,e,i,n,r){super(t,e,i,n,r),this.type=5}_$AI(t,e=this){if((t=P(this,t,e,0)??E)===T)return;const i=this._$AH,n=t===E&&i!==E||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,r=t!==E&&(i===E||n);n&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class U{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){P(this,t)}}const j={j:s,P:a,A:l,C:1,M:k,L:N,R:p,V:P,D:M,I:F,H:L,N:H,U:I,B:U},V=n.litHtmlPolyfillSupport;V?.(O,M),(n.litHtmlVersions??=[]).push("3.1.0");const B=(t,e,i)=>{const n=i?.renderBefore??e;let r=n._$litPart$;if(void 0===r){const t=i?.renderBefore??null;n._$litPart$=r=new M(e.insertBefore(u(),t),t,void 0,i??{})}return r._$AI(t),r}},147:t=>{t.exports=JSON.parse('{"name":"formulaone-card","version":"1.8.9","description":"Frontend card for Home Assistant to display Formula One data","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json","prebuild":"copy git-hooks\\\\pre-commit .git\\\\hooks\\\\ && echo \'hook copied\'"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.5.3","@typescript-eslint/eslint-plugin":"^5.59.8","@typescript-eslint/parser":"^5.62.0","codecov":"^3.8.3","eslint":"^8.52.0","home-assistant-js-websocket":"^9.1.0","lit":"^3.0.2","lit-element":"^3.3.3","minify-html-literals-loader":"^1.1.1","typescript":"^4.9.5","webpack":"^5.88.2","webpack-cli":"^5.1.4"},"dependencies":{"@babel/plugin-transform-runtime":"^7.22.5","@babel/preset-env":"^7.22.14","@lit-labs/scoped-registry-mixin":"^1.0.1","@marcokreeft/ha-editor-formbuilder":"^2023.10.9","babel-jest":"^29.7.0","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","isomorphic-fetch":"^3.0.0","jest-environment-jsdom":"^29.6.2","jest-fetch-mock":"^3.0.3","jest-ts-auto-mock":"^2.1.0","minify-html-literals-loader":"^1.1.1","ts-auto-mock":"^3.6.4","ts-jest":"^29.1.1","ts-loader":"^9.5.0","ttypescript":"^1.5.15","yarn":"^1.22.19"}}')}},e={};function i(n){var r=e[n];if(void 0!==r)return r.exports;var o=e[n]={exports:{}};return t[n].call(o.exports,o,o.exports,i),o.exports}i.d=(t,e)=>{for(var n in e)i.o(e,n)&&!i.o(t,n)&&Object.defineProperty(t,n,{enumerable:!0,get:e[n]})},i.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),i.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},i(148)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 898:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const custom_card_helpers_1 = __webpack_require__(313);
+const lit_element_1 = __webpack_require__(11);
+const interfaces_1 = __webpack_require__(194);
+const controls_1 = __webpack_require__(382);
+class EditorForm extends lit_element_1.LitElement {
+    constructor() {
+        super(...arguments);
+        this.controlRenderers = {
+            [interfaces_1.FormControlType.Dropdown]: controls_1.renderDropdown,
+            [interfaces_1.FormControlType.Radio]: controls_1.renderRadio,
+            [interfaces_1.FormControlType.Checkboxes]: controls_1.renderCheckboxes,
+            [interfaces_1.FormControlType.EntityDropdown]: controls_1.renderDropdown,
+            [interfaces_1.FormControlType.Switch]: controls_1.renderSwitch,
+            [interfaces_1.FormControlType.Textbox]: controls_1.renderTextbox,
+            [interfaces_1.FormControlType.Filler]: controls_1.renderFiller,
+        };
+    }
+    setConfig(config) {
+        this._config = config;
+    }
+    set hass(hass) {
+        this._hass = hass;
+    }
+    renderForm(formRows) {
+        return (0, lit_element_1.html) `<div class="card-config">${formRows.map(row => {
+            const cssClass = row.cssClass ? `form-row ${row.cssClass}` : "form-row";
+            return row.hidden ? '' : (0, lit_element_1.html) `<div class="${cssClass}"><label>${row.label}</label> ${row.controls.map(control => this.renderControl(control))}</div>`;
+        })}</div>`;
+    }
+    renderControl(control) {
+        const renderer = this.controlRenderers[control.type];
+        if (!renderer) {
+            throw new Error(`Unsupported control type: ${control.type}`);
+        }
+        return renderer(this, control);
+    }
+    _valueChanged(ev) {
+        if (!this._config || !this._hass) {
+            return;
+        }
+        const target = ev.target;
+        const detail = ev.detail;
+        if (target.tagName === "HA-CHECKBOX") {
+            // Add or remove the value from the array
+            const index = this._config[target.configValue].indexOf(target.value);
+            if (target.checked && index < 0) {
+                this._config[target.configValue] = [...this._config[target.configValue], target.value];
+            }
+            else if (!target.checked && index > -1) {
+                this._config[target.configValue] = [...this._config[target.configValue].slice(0, index), ...this._config[target.configValue].slice(index + 1)];
+            }
+        }
+        else if (target.configValue) {
+            if (target.configValue.indexOf(".") > -1) {
+                const [domain, configValue] = target.configValue.split(".");
+                this._config = {
+                    ...this._config,
+                    [domain]: {
+                        ...this._config[domain],
+                        [configValue]: target.checked
+                    }
+                };
+            }
+            else {
+                this._config = {
+                    ...this._config,
+                    [target.configValue]: target.checked !== undefined || !(detail === null || detail === void 0 ? void 0 : detail.value) ? target.value || target.checked : target.checked || detail.value,
+                };
+            }
+        }
+        (0, custom_card_helpers_1.fireEvent)(this, "config-changed", {
+            config: this._config,
+        }, {
+            bubbles: true,
+            composed: true,
+        });
+        this.requestUpdate("_config");
+    }
+    static get styles() {
+        return (0, lit_element_1.css) `.form-row{margin-bottom:10px}.form-control{display:flex;align-items:center}ha-switch{padding:16px 6px}.side-by-side{display:flex;flex-flow:row wrap}.side-by-side>label{width:100%}.side-by-side>.form-control{width:49%;padding:2px}ha-textfield{width:100%}`;
+    }
+}
+exports["default"] = EditorForm;
+
+
+/***/ }),
+
+/***/ 194:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FormControlType = void 0;
+var FormControlType;
+(function (FormControlType) {
+    FormControlType["Dropdown"] = "dropdown";
+    FormControlType["Checkbox"] = "checkbox";
+    FormControlType["Checkboxes"] = "checkboxes";
+    FormControlType["Radio"] = "radio";
+    FormControlType["Switch"] = "switch";
+    FormControlType["Textbox"] = "textbox";
+    FormControlType["Filler"] = "filler";
+    FormControlType["EntityDropdown"] = "entity-dropdown";
+})(FormControlType || (exports.FormControlType = FormControlType = {}));
+
+
+/***/ }),
+
+/***/ 382:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.renderCheckboxes = exports.renderRadio = exports.renderDropdown = exports.renderSwitch = exports.renderTextbox = exports.renderEntityDropdown = exports.renderFiller = void 0;
+const lit_element_1 = __webpack_require__(11);
+const entities_1 = __webpack_require__(429);
+const renderFiller = () => {
+    return (0, lit_element_1.html) `<div class="form-control"></div>`;
+};
+exports.renderFiller = renderFiller;
+const renderEntityDropdown = (card, control) => {
+    var _a;
+    return (0, lit_element_1.html) `<div class="form-control"><ha-entity-picker label="${control.label}" .value="${(_a = card._config[control.configValue]) !== null && _a !== void 0 ? _a : ''}" .configValue="${control.configValue}" .hass="${card._hass}" domain-filter="${control.domain}" @change="${card._valueChanged}"></ha-entity-picker></div>`;
+};
+exports.renderEntityDropdown = renderEntityDropdown;
+const renderTextbox = (card, control) => {
+    var _a;
+    return (0, lit_element_1.html) `<div class="form-control"><ha-textfield label="${control.label}" .value="${(_a = card._config[control.configValue]) !== null && _a !== void 0 ? _a : ''}" .configValue="${control.configValue}" @change="${card._valueChanged}"></ha-textfield></div>`;
+};
+exports.renderTextbox = renderTextbox;
+const renderSwitch = (card, control) => {
+    return (0, lit_element_1.html) `<div class="form-control"><ha-switch id="${control.configValue}" name="${control.configValue}" .checked="${card._config[control.configValue]}" .configValue="${control.configValue}" @change="${card._valueChanged}"></ha-switch><label for="${control.configValue}">${control.label}</label></div>`;
+};
+exports.renderSwitch = renderSwitch;
+const renderDropdown = (card, control) => {
+    var _a;
+    const items = (_a = control.items) !== null && _a !== void 0 ? _a : (0, entities_1.getEntitiesByDomain)(card._hass, control.domain);
+    return (0, lit_element_1.html) `<div class="form-control"><ha-combo-box label="${control.label}" .value="${card._config[control.configValue]}" .configValue="${control.configValue}" .items="${items}" @value-changed="${card._valueChanged}" @change="${card._valueChanged}"></ha-combo-box></div>`;
+};
+exports.renderDropdown = renderDropdown;
+const renderRadio = (card, control) => {
+    return (0, lit_element_1.html) `<div class="form-control"><label>${control.label}</label> ${control.items.map(item => {
+        return (0, lit_element_1.html) `<ha-radio id="${control.configValue}_${item.value}" name="${control.configValue}" .checked="${card._config[control.configValue] === item.value}" .configValue="${control.configValue}" .value="${item.value}" @change="${card._valueChanged}"></ha-radio><label for="${control.configValue}_${item.value}">${item.label}</label>`;
+    })}</div>`;
+};
+exports.renderRadio = renderRadio;
+const renderCheckboxes = (card, control) => {
+    return (0, lit_element_1.html) `<label>${control.label}</label> ${control.items.map(item => {
+        var _a;
+        return (0, lit_element_1.html) `<div class="form-control"><ha-checkbox id="${control.configValue}_${item.value}" name="${control.configValue}[]" .checked="${((_a = card._config[control.configValue]) === null || _a === void 0 ? void 0 : _a.indexOf(item.value)) > -1}" .configValue="${control.configValue}" .value="${item.value}" @change="${card._valueChanged}"></ha-checkbox><label for="${control.configValue}_${item.value}">${item.label}</label></div>`;
+    })}`;
+};
+exports.renderCheckboxes = renderCheckboxes;
+
+
+/***/ }),
+
+/***/ 429:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getDropdownOptionsFromEnum = exports.formatList = exports.getEntitiesByDeviceClass = exports.getEntitiesByDomain = void 0;
+const getEntitiesByDomain = (hass, domain) => {
+    return Object.keys(hass.states)
+        .filter((eid) => eid.substr(0, eid.indexOf(".")) === domain)
+        .map((item) => (0, exports.formatList)(item, hass));
+};
+exports.getEntitiesByDomain = getEntitiesByDomain;
+const getEntitiesByDeviceClass = (hass, domain, device_class) => {
+    return Object.keys(hass.states)
+        .filter((eid) => eid.substr(0, eid.indexOf(".")) === domain && hass.states[eid].attributes.device_class === device_class)
+        .map((item) => (0, exports.formatList)(item, hass));
+};
+exports.getEntitiesByDeviceClass = getEntitiesByDeviceClass;
+const formatList = (entity, hass) => ({
+    label: hass.states[entity].attributes.friendly_name,
+    value: entity
+});
+exports.formatList = formatList;
+const getDropdownOptionsFromEnum = (enumValues) => {
+    const options = [];
+    for (const [key, value] of Object.entries(enumValues)) {
+        options.push({ value: value, label: key });
+    }
+    return options;
+};
+exports.getDropdownOptionsFromEnum = getDropdownOptionsFromEnum;
+
+
+/***/ }),
+
+/***/ 313:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  DEFAULT_DOMAIN_ICON: () => (/* binding */ G),
+  DEFAULT_PANEL: () => (/* binding */ J),
+  DEFAULT_VIEW_ENTITY_ID: () => (/* binding */ re),
+  DOMAINS_HIDE_MORE_INFO: () => (/* binding */ X),
+  DOMAINS_MORE_INFO_NO_HISTORY: () => (/* binding */ Y),
+  DOMAINS_TOGGLE: () => (/* binding */ $),
+  DOMAINS_WITH_CARD: () => (/* binding */ K),
+  DOMAINS_WITH_MORE_INFO: () => (/* binding */ Q),
+  NumberFormat: () => (/* binding */ t),
+  STATES_OFF: () => (/* binding */ Z),
+  TimeFormat: () => (/* binding */ r),
+  UNIT_C: () => (/* binding */ ee),
+  UNIT_F: () => (/* binding */ te),
+  applyThemesOnElement: () => (/* binding */ q),
+  computeCardSize: () => (/* binding */ A),
+  computeDomain: () => (/* binding */ E),
+  computeEntity: () => (/* binding */ j),
+  computeRTL: () => (/* binding */ R),
+  computeRTLDirection: () => (/* binding */ z),
+  computeStateDisplay: () => (/* binding */ W),
+  computeStateDomain: () => (/* binding */ L),
+  createThing: () => (/* binding */ oe),
+  debounce: () => (/* binding */ ue),
+  domainIcon: () => (/* binding */ me),
+  evaluateFilter: () => (/* binding */ se),
+  fireEvent: () => (/* binding */ ne),
+  fixedIcons: () => (/* binding */ ce),
+  formatDate: () => (/* binding */ a),
+  formatDateMonth: () => (/* binding */ f),
+  formatDateMonthYear: () => (/* binding */ l),
+  formatDateNumeric: () => (/* binding */ u),
+  formatDateShort: () => (/* binding */ m),
+  formatDateTime: () => (/* binding */ v),
+  formatDateTimeNumeric: () => (/* binding */ k),
+  formatDateTimeWithSeconds: () => (/* binding */ y),
+  formatDateWeekday: () => (/* binding */ n),
+  formatDateYear: () => (/* binding */ p),
+  formatNumber: () => (/* binding */ H),
+  formatTime: () => (/* binding */ D),
+  formatTimeWeekday: () => (/* binding */ I),
+  formatTimeWithSeconds: () => (/* binding */ F),
+  forwardHaptic: () => (/* binding */ le),
+  getLovelace: () => (/* binding */ ke),
+  handleAction: () => (/* binding */ he),
+  handleActionConfig: () => (/* binding */ pe),
+  handleClick: () => (/* binding */ be),
+  hasAction: () => (/* binding */ ve),
+  hasConfigOrEntityChanged: () => (/* binding */ _e),
+  hasDoubleClick: () => (/* binding */ ye),
+  isNumericState: () => (/* binding */ P),
+  navigate: () => (/* binding */ de),
+  numberFormatToLocale: () => (/* binding */ U),
+  relativeTime: () => (/* binding */ M),
+  round: () => (/* binding */ B),
+  stateIcon: () => (/* binding */ Se),
+  timerTimeRemaining: () => (/* binding */ C),
+  toggleEntity: () => (/* binding */ ge),
+  turnOnOffEntities: () => (/* binding */ we),
+  turnOnOffEntity: () => (/* binding */ fe)
+});
+
+;// CONCATENATED MODULE: ./node_modules/@formatjs/intl-utils/lib/src/diff.js
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var MS_PER_SECOND = 1e3;
+var SECS_PER_MIN = 60;
+var SECS_PER_HOUR = SECS_PER_MIN * 60;
+var SECS_PER_DAY = SECS_PER_HOUR * 24;
+var SECS_PER_WEEK = SECS_PER_DAY * 7;
+function selectUnit(from, to, thresholds) {
+    if (to === void 0) { to = Date.now(); }
+    if (thresholds === void 0) { thresholds = {}; }
+    var resolvedThresholds = __assign(__assign({}, DEFAULT_THRESHOLDS), (thresholds || {}));
+    var secs = (+from - +to) / MS_PER_SECOND;
+    if (Math.abs(secs) < resolvedThresholds.second) {
+        return {
+            value: Math.round(secs),
+            unit: 'second',
+        };
+    }
+    var mins = secs / SECS_PER_MIN;
+    if (Math.abs(mins) < resolvedThresholds.minute) {
+        return {
+            value: Math.round(mins),
+            unit: 'minute',
+        };
+    }
+    var hours = secs / SECS_PER_HOUR;
+    if (Math.abs(hours) < resolvedThresholds.hour) {
+        return {
+            value: Math.round(hours),
+            unit: 'hour',
+        };
+    }
+    var days = secs / SECS_PER_DAY;
+    if (Math.abs(days) < resolvedThresholds.day) {
+        return {
+            value: Math.round(days),
+            unit: 'day',
+        };
+    }
+    var fromDate = new Date(from);
+    var toDate = new Date(to);
+    var years = fromDate.getFullYear() - toDate.getFullYear();
+    if (Math.round(Math.abs(years)) > 0) {
+        return {
+            value: Math.round(years),
+            unit: 'year',
+        };
+    }
+    var months = years * 12 + fromDate.getMonth() - toDate.getMonth();
+    if (Math.round(Math.abs(months)) > 0) {
+        return {
+            value: Math.round(months),
+            unit: 'month',
+        };
+    }
+    var weeks = secs / SECS_PER_WEEK;
+    return {
+        value: Math.round(weeks),
+        unit: 'week',
+    };
+}
+var DEFAULT_THRESHOLDS = {
+    second: 45,
+    minute: 45,
+    hour: 22,
+    day: 5,
+};
+
+;// CONCATENATED MODULE: ./node_modules/custom-card-helpers/dist/index.m.js
+var t,r,n=function(e,t){return i(t).format(e)},i=function(e){return new Intl.DateTimeFormat(e.language,{weekday:"long",month:"long",day:"numeric"})},a=function(e,t){return o(t).format(e)},o=function(e){return new Intl.DateTimeFormat(e.language,{year:"numeric",month:"long",day:"numeric"})},u=function(e,t){return c(t).format(e)},c=function(e){return new Intl.DateTimeFormat(e.language,{year:"numeric",month:"numeric",day:"numeric"})},m=function(e,t){return s(t).format(e)},s=function(e){return new Intl.DateTimeFormat(e.language,{day:"numeric",month:"short"})},l=function(e,t){return d(t).format(e)},d=function(e){return new Intl.DateTimeFormat(e.language,{month:"long",year:"numeric"})},f=function(e,t){return g(t).format(e)},g=function(e){return new Intl.DateTimeFormat(e.language,{month:"long"})},p=function(e,t){return h(t).format(e)},h=function(e){return new Intl.DateTimeFormat(e.language,{year:"numeric"})};!function(e){e.language="language",e.system="system",e.comma_decimal="comma_decimal",e.decimal_comma="decimal_comma",e.space_comma="space_comma",e.none="none"}(t||(t={})),function(e){e.language="language",e.system="system",e.am_pm="12",e.twenty_four="24"}(r||(r={}));var b=function(e){if(e.time_format===r.language||e.time_format===r.system){var t=e.time_format===r.language?e.language:void 0,n=(new Date).toLocaleString(t);return n.includes("AM")||n.includes("PM")}return e.time_format===r.am_pm},v=function(e,t){return _(t).format(e)},_=function(e){return new Intl.DateTimeFormat(e.language,{year:"numeric",month:"long",day:"numeric",hour:b(e)?"numeric":"2-digit",minute:"2-digit",hour12:b(e)})},y=function(e,t){return w(t).format(e)},w=function(e){return new Intl.DateTimeFormat(e.language,{year:"numeric",month:"long",day:"numeric",hour:b(e)?"numeric":"2-digit",minute:"2-digit",second:"2-digit",hour12:b(e)})},k=function(e,t){return x(t).format(e)},x=function(e){return new Intl.DateTimeFormat(e.language,{year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit",hour12:b(e)})},D=function(e,t){return S(t).format(e)},S=function(e){return new Intl.DateTimeFormat(e.language,{hour:"numeric",minute:"2-digit",hour12:b(e)})},F=function(e,t){return T(t).format(e)},T=function(e){return new Intl.DateTimeFormat(e.language,{hour:b(e)?"numeric":"2-digit",minute:"2-digit",second:"2-digit",hour12:b(e)})},I=function(e,t){return N(t).format(e)},N=function(e){return new Intl.DateTimeFormat(e.language,{hour:b(e)?"numeric":"2-digit",minute:"2-digit",second:"2-digit",hour12:b(e)})},M=function(t,r,n,i){void 0===i&&(i=!0);var a=selectUnit(t,n);return i?function(e){return new Intl.RelativeTimeFormat(e.language,{numeric:"auto"})}(r).format(a.value,a.unit):Intl.NumberFormat(r.language,{style:"unit",unit:a.unit,unitDisplay:"long"}).format(Math.abs(a.value))};function C(e){var t,r=3600*(t=e.attributes.remaining.split(":").map(Number))[0]+60*t[1]+t[2];if("active"===e.state){var n=(new Date).getTime(),i=new Date(e.last_changed).getTime();r=Math.max(r-(n-i)/1e3,0)}return r}function O(){return(O=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e}).apply(this,arguments)}var q=function(e,t,r,n){void 0===n&&(n=!1),e._themes||(e._themes={});var i=t.default_theme;("default"===r||r&&t.themes[r])&&(i=r);var a=O({},e._themes);if("default"!==i){var o=t.themes[i];Object.keys(o).forEach(function(t){var r="--"+t;e._themes[r]="",a[r]=o[t]})}if(e.updateStyles?e.updateStyles(a):window.ShadyCSS&&window.ShadyCSS.styleSubtree(e,a),n){var u=document.querySelector("meta[name=theme-color]");if(u){u.hasAttribute("default-content")||u.setAttribute("default-content",u.getAttribute("content"));var c=a["--primary-color"]||u.getAttribute("default-content");u.setAttribute("content",c)}}},A=function(e){return"function"==typeof e.getCardSize?e.getCardSize():4};function E(e){return e.substr(0,e.indexOf("."))}function j(e){return e.substr(e.indexOf(".")+1)}function R(e){var t,r=(null==e||null==(t=e.locale)?void 0:t.language)||"en";return e.translationMetadata.translations[r]&&e.translationMetadata.translations[r].isRTL||!1}function z(e){return R(e)?"rtl":"ltr"}function L(e){return E(e.entity_id)}var P=function(e){return!!e.attributes.unit_of_measurement||!!e.attributes.state_class},U=function(e){switch(e.number_format){case t.comma_decimal:return["en-US","en"];case t.decimal_comma:return["de","es","it"];case t.space_comma:return["fr","sv","cs"];case t.system:return;default:return e.language}},B=function(e,t){return void 0===t&&(t=2),Math.round(e*Math.pow(10,t))/Math.pow(10,t)},H=function(e,r,n){var i=r?U(r):void 0;if(Number.isNaN=Number.isNaN||function e(t){return"number"==typeof t&&e(t)},(null==r?void 0:r.number_format)!==t.none&&!Number.isNaN(Number(e))&&Intl)try{return new Intl.NumberFormat(i,V(e,n)).format(Number(e))}catch(t){return console.error(t),new Intl.NumberFormat(void 0,V(e,n)).format(Number(e))}return"string"==typeof e?e:B(e,null==n?void 0:n.maximumFractionDigits).toString()+("currency"===(null==n?void 0:n.style)?" "+n.currency:"")},V=function(e,t){var r=O({maximumFractionDigits:2},t);if("string"!=typeof e)return r;if(!t||!t.minimumFractionDigits&&!t.maximumFractionDigits){var n=e.indexOf(".")>-1?e.split(".")[1].length:0;r.minimumFractionDigits=n,r.maximumFractionDigits=n}return r},W=function(e,t,r,n){var i=void 0!==n?n:t.state;if("unknown"===i||"unavailable"===i)return e("state.default."+i);if(P(t)){if("monetary"===t.attributes.device_class)try{return H(i,r,{style:"currency",currency:t.attributes.unit_of_measurement})}catch(e){}return H(i,r)+(t.attributes.unit_of_measurement?" "+t.attributes.unit_of_measurement:"")}var o=L(t);if("input_datetime"===o){var u;if(void 0===n)return t.attributes.has_date&&t.attributes.has_time?(u=new Date(t.attributes.year,t.attributes.month-1,t.attributes.day,t.attributes.hour,t.attributes.minute),v(u,r)):t.attributes.has_date?(u=new Date(t.attributes.year,t.attributes.month-1,t.attributes.day),a(u,r)):t.attributes.has_time?((u=new Date).setHours(t.attributes.hour,t.attributes.minute),D(u,r)):t.state;try{var c=n.split(" ");if(2===c.length)return v(new Date(c.join("T")),r);if(1===c.length){if(n.includes("-"))return a(new Date(n+"T00:00"),r);if(n.includes(":")){var m=new Date;return D(new Date(m.toISOString().split("T")[0]+"T"+n),r)}}return n}catch(e){return n}}return"humidifier"===o&&"on"===i&&t.attributes.humidity?t.attributes.humidity+" %":"counter"===o||"number"===o||"input_number"===o?H(i,r):t.attributes.device_class&&e("component."+o+".state."+t.attributes.device_class+"."+i)||e("component."+o+".state._."+i)||i},G="mdi:bookmark",J="lovelace",K=["climate","cover","configurator","input_select","input_number","input_text","lock","media_player","scene","script","timer","vacuum","water_heater","weblink"],Q=["alarm_control_panel","automation","camera","climate","configurator","cover","fan","group","history_graph","input_datetime","light","lock","media_player","script","sun","updater","vacuum","water_heater","weather"],X=["input_number","input_select","input_text","scene","weblink"],Y=["camera","configurator","history_graph","scene"],Z=["closed","locked","off"],$=new Set(["fan","input_boolean","light","switch","group","automation"]),ee="°C",te="°F",re="group.default_view",ne=function(e,t,r,n){n=n||{},r=null==r?{}:r;var i=new Event(t,{bubbles:void 0===n.bubbles||n.bubbles,cancelable:Boolean(n.cancelable),composed:void 0===n.composed||n.composed});return i.detail=r,e.dispatchEvent(i),i},ie=new Set(["call-service","divider","section","weblink","cast","select"]),ae={alert:"toggle",automation:"toggle",climate:"climate",cover:"cover",fan:"toggle",group:"group",input_boolean:"toggle",input_number:"input-number",input_select:"input-select",input_text:"input-text",light:"toggle",lock:"lock",media_player:"media-player",remote:"toggle",scene:"scene",script:"script",sensor:"sensor",timer:"timer",switch:"toggle",vacuum:"toggle",water_heater:"climate",input_datetime:"input-datetime"},oe=function(e,t){void 0===t&&(t=!1);var r=function(e,t){return n("hui-error-card",{type:"error",error:e,config:t})},n=function(e,t){var n=window.document.createElement(e);try{if(!n.setConfig)return;n.setConfig(t)}catch(n){return console.error(e,n),r(n.message,t)}return n};if(!e||"object"!=typeof e||!t&&!e.type)return r("No type defined",e);var i=e.type;if(i&&i.startsWith("custom:"))i=i.substr("custom:".length);else if(t)if(ie.has(i))i="hui-"+i+"-row";else{if(!e.entity)return r("Invalid config given.",e);var a=e.entity.split(".",1)[0];i="hui-"+(ae[a]||"text")+"-entity-row"}else i="hui-"+i+"-card";if(customElements.get(i))return n(i,e);var o=r("Custom element doesn't exist: "+e.type+".",e);o.style.display="None";var u=setTimeout(function(){o.style.display=""},2e3);return customElements.whenDefined(e.type).then(function(){clearTimeout(u),ne(o,"ll-rebuild",{},o)}),o},ue=function(e,t,r){var n;return void 0===r&&(r=!1),function(){var i=[].slice.call(arguments),a=this,o=function(){n=null,r||e.apply(a,i)},u=r&&!n;clearTimeout(n),n=setTimeout(o,t),u&&e.apply(a,i)}},ce={alert:"mdi:alert",automation:"mdi:playlist-play",calendar:"mdi:calendar",camera:"mdi:video",climate:"mdi:thermostat",configurator:"mdi:settings",conversation:"mdi:text-to-speech",device_tracker:"mdi:account",fan:"mdi:fan",group:"mdi:google-circles-communities",history_graph:"mdi:chart-line",homeassistant:"mdi:home-assistant",homekit:"mdi:home-automation",image_processing:"mdi:image-filter-frames",input_boolean:"mdi:drawing",input_datetime:"mdi:calendar-clock",input_number:"mdi:ray-vertex",input_select:"mdi:format-list-bulleted",input_text:"mdi:textbox",light:"mdi:lightbulb",mailbox:"mdi:mailbox",notify:"mdi:comment-alert",person:"mdi:account",plant:"mdi:flower",proximity:"mdi:apple-safari",remote:"mdi:remote",scene:"mdi:google-pages",script:"mdi:file-document",sensor:"mdi:eye",simple_alarm:"mdi:bell",sun:"mdi:white-balance-sunny",switch:"mdi:flash",timer:"mdi:timer",updater:"mdi:cloud-upload",vacuum:"mdi:robot-vacuum",water_heater:"mdi:thermometer",weblink:"mdi:open-in-new"};function me(e,t){if(e in ce)return ce[e];switch(e){case"alarm_control_panel":switch(t){case"armed_home":return"mdi:bell-plus";case"armed_night":return"mdi:bell-sleep";case"disarmed":return"mdi:bell-outline";case"triggered":return"mdi:bell-ring";default:return"mdi:bell"}case"binary_sensor":return t&&"off"===t?"mdi:radiobox-blank":"mdi:checkbox-marked-circle";case"cover":return"closed"===t?"mdi:window-closed":"mdi:window-open";case"lock":return t&&"unlocked"===t?"mdi:lock-open":"mdi:lock";case"media_player":return t&&"off"!==t&&"idle"!==t?"mdi:cast-connected":"mdi:cast";case"zwave":switch(t){case"dead":return"mdi:emoticon-dead";case"sleeping":return"mdi:sleep";case"initializing":return"mdi:timer-sand";default:return"mdi:z-wave"}default:return console.warn("Unable to find icon for domain "+e+" ("+t+")"),"mdi:bookmark"}}var se=function(e,t){var r=t.value||t,n=t.attribute?e.attributes[t.attribute]:e.state;switch(t.operator||"=="){case"==":return n===r;case"<=":return n<=r;case"<":return n<r;case">=":return n>=r;case">":return n>r;case"!=":return n!==r;case"regex":return n.match(r);default:return!1}},le=function(e){ne(window,"haptic",e)},de=function(e,t,r){void 0===r&&(r=!1),r?history.replaceState(null,"",t):history.pushState(null,"",t),ne(window,"location-changed",{replace:r})},fe=function(e,t,r){void 0===r&&(r=!0);var n,i=E(t),a="group"===i?"homeassistant":i;switch(i){case"lock":n=r?"unlock":"lock";break;case"cover":n=r?"open_cover":"close_cover";break;default:n=r?"turn_on":"turn_off"}return e.callService(a,n,{entity_id:t})},ge=function(e,t){var r=Z.includes(e.states[t].state);return fe(e,t,r)},pe=function(e,t,r,n){if(n||(n={action:"more-info"}),!n.confirmation||n.confirmation.exemptions&&n.confirmation.exemptions.some(function(e){return e.user===t.user.id})||(le("warning"),confirm(n.confirmation.text||"Are you sure you want to "+n.action+"?")))switch(n.action){case"more-info":(r.entity||r.camera_image)&&ne(e,"hass-more-info",{entityId:r.entity?r.entity:r.camera_image});break;case"navigate":n.navigation_path&&de(0,n.navigation_path);break;case"url":n.url_path&&window.open(n.url_path);break;case"toggle":r.entity&&(ge(t,r.entity),le("success"));break;case"call-service":if(!n.service)return void le("failure");var i=n.service.split(".",2);t.callService(i[0],i[1],n.service_data,n.target),le("success");break;case"fire-dom-event":ne(e,"ll-custom",n)}},he=function(e,t,r,n){var i;"double_tap"===n&&r.double_tap_action?i=r.double_tap_action:"hold"===n&&r.hold_action?i=r.hold_action:"tap"===n&&r.tap_action&&(i=r.tap_action),pe(e,t,r,i)},be=function(e,t,r,n,i){var a;if(i&&r.double_tap_action?a=r.double_tap_action:n&&r.hold_action?a=r.hold_action:!n&&r.tap_action&&(a=r.tap_action),a||(a={action:"more-info"}),!a.confirmation||a.confirmation.exemptions&&a.confirmation.exemptions.some(function(e){return e.user===t.user.id})||confirm(a.confirmation.text||"Are you sure you want to "+a.action+"?"))switch(a.action){case"more-info":(a.entity||r.entity||r.camera_image)&&(ne(e,"hass-more-info",{entityId:a.entity?a.entity:r.entity?r.entity:r.camera_image}),a.haptic&&le(a.haptic));break;case"navigate":a.navigation_path&&(de(0,a.navigation_path),a.haptic&&le(a.haptic));break;case"url":a.url_path&&window.open(a.url_path),a.haptic&&le(a.haptic);break;case"toggle":r.entity&&(ge(t,r.entity),a.haptic&&le(a.haptic));break;case"call-service":if(!a.service)return;var o=a.service.split(".",2),u=o[0],c=o[1],m=O({},a.service_data);"entity"===m.entity_id&&(m.entity_id=r.entity),t.callService(u,c,m,a.target),a.haptic&&le(a.haptic);break;case"fire-dom-event":ne(e,"ll-custom",a),a.haptic&&le(a.haptic)}};function ve(e){return void 0!==e&&"none"!==e.action}function _e(e,t,r){if(t.has("config")||r)return!0;if(e.config.entity){var n=t.get("hass");return!n||n.states[e.config.entity]!==e.hass.states[e.config.entity]}return!1}function ye(e){return void 0!==e&&"none"!==e.action}var we=function(e,t,r){void 0===r&&(r=!0);var n={};t.forEach(function(t){if(Z.includes(e.states[t].state)===r){var i=E(t),a=["cover","lock"].includes(i)?i:"homeassistant";a in n||(n[a]=[]),n[a].push(t)}}),Object.keys(n).forEach(function(t){var i;switch(t){case"lock":i=r?"unlock":"lock";break;case"cover":i=r?"open_cover":"close_cover";break;default:i=r?"turn_on":"turn_off"}e.callService(t,i,{entity_id:n[t]})})},ke=function(){var e=document.querySelector("home-assistant");if(e=(e=(e=(e=(e=(e=(e=(e=e&&e.shadowRoot)&&e.querySelector("home-assistant-main"))&&e.shadowRoot)&&e.querySelector("app-drawer-layout partial-panel-resolver"))&&e.shadowRoot||e)&&e.querySelector("ha-panel-lovelace"))&&e.shadowRoot)&&e.querySelector("hui-root")){var t=e.lovelace;return t.current_view=e.___curView,t}return null},xe={humidity:"mdi:water-percent",illuminance:"mdi:brightness-5",temperature:"mdi:thermometer",pressure:"mdi:gauge",power:"mdi:flash",signal_strength:"mdi:wifi"},De={binary_sensor:function(e,t){var r="off"===e;switch(null==t?void 0:t.attributes.device_class){case"battery":return r?"mdi:battery":"mdi:battery-outline";case"battery_charging":return r?"mdi:battery":"mdi:battery-charging";case"cold":return r?"mdi:thermometer":"mdi:snowflake";case"connectivity":return r?"mdi:server-network-off":"mdi:server-network";case"door":return r?"mdi:door-closed":"mdi:door-open";case"garage_door":return r?"mdi:garage":"mdi:garage-open";case"power":return r?"mdi:power-plug-off":"mdi:power-plug";case"gas":case"problem":case"safety":case"tamper":return r?"mdi:check-circle":"mdi:alert-circle";case"smoke":return r?"mdi:check-circle":"mdi:smoke";case"heat":return r?"mdi:thermometer":"mdi:fire";case"light":return r?"mdi:brightness-5":"mdi:brightness-7";case"lock":return r?"mdi:lock":"mdi:lock-open";case"moisture":return r?"mdi:water-off":"mdi:water";case"motion":return r?"mdi:walk":"mdi:run";case"occupancy":return r?"mdi:home-outline":"mdi:home";case"opening":return r?"mdi:square":"mdi:square-outline";case"plug":return r?"mdi:power-plug-off":"mdi:power-plug";case"presence":return r?"mdi:home-outline":"mdi:home";case"running":return r?"mdi:stop":"mdi:play";case"sound":return r?"mdi:music-note-off":"mdi:music-note";case"update":return r?"mdi:package":"mdi:package-up";case"vibration":return r?"mdi:crop-portrait":"mdi:vibrate";case"window":return r?"mdi:window-closed":"mdi:window-open";default:return r?"mdi:radiobox-blank":"mdi:checkbox-marked-circle"}},cover:function(e){var t="closed"!==e.state;switch(e.attributes.device_class){case"garage":return t?"mdi:garage-open":"mdi:garage";case"door":return t?"mdi:door-open":"mdi:door-closed";case"shutter":return t?"mdi:window-shutter-open":"mdi:window-shutter";case"blind":return t?"mdi:blinds-open":"mdi:blinds";case"window":return t?"mdi:window-open":"mdi:window-closed";default:return me("cover",e.state)}},sensor:function(e){var t=e.attributes.device_class;if(t&&t in xe)return xe[t];if("battery"===t){var r=Number(e.state);if(isNaN(r))return"mdi:battery-unknown";var n=10*Math.round(r/10);return n>=100?"mdi:battery":n<=0?"mdi:battery-alert":"hass:battery-"+n}var i=e.attributes.unit_of_measurement;return"°C"===i||"°F"===i?"mdi:thermometer":me("sensor")},input_datetime:function(e){return e.attributes.has_date?e.attributes.has_time?me("input_datetime"):"mdi:calendar":"mdi:clock"}},Se=function(e){if(!e)return"mdi:bookmark";if(e.attributes.icon)return e.attributes.icon;var t=E(e.entity_id);return t in De?De[t](e):me(t,e.state)};
+//# sourceMappingURL=index.m.js.map
+
+
+/***/ }),
+
+/***/ 694:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ClientBase = void 0;
+class ClientBase {
+    GetData(endpoint, cacheResult, hoursBeforeInvalid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const localStorageData = localStorage.getItem(endpoint);
+            if (localStorageData && cacheResult) {
+                const item = JSON.parse(localStorageData);
+                const checkDate = new Date();
+                checkDate.setHours(checkDate.getHours() - hoursBeforeInvalid);
+                if (new Date(item.created) > checkDate) {
+                    return JSON.parse(item.data);
+                }
+            }
+            const response = yield fetch(`${this.baseUrl}/${endpoint}`, {
+                headers: {
+                    Accept: 'application/json',
+                }
+            });
+            if (!response || !response.ok) {
+                return Promise.reject(response);
+            }
+            const data = yield response.json();
+            const item = {
+                data: JSON.stringify(data),
+                created: new Date()
+            };
+            if (cacheResult) {
+                localStorage.setItem(endpoint, JSON.stringify(item));
+            }
+            return data;
+        });
+    }
+}
+exports.ClientBase = ClientBase;
+
+
+/***/ }),
+
+/***/ 470:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const utils_1 = __webpack_require__(438);
+const client_base_1 = __webpack_require__(694);
+class ErgastClient extends client_base_1.ClientBase {
+    constructor() {
+        super(...arguments);
+        this.baseUrl = 'https://ergast.com/api/f1';
+    }
+    GetSchedule(season) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData(`${season}.json`, true, 72);
+            return data.MRData.RaceTable.Races;
+        });
+    }
+    GetLastResult() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refreshCacheHours = (0, utils_1.getRefreshTime)('current/last/results.json');
+            const data = yield this.GetData('current/last/results.json', true, refreshCacheHours);
+            return data.MRData.RaceTable.Races[0];
+        });
+    }
+    GetDriverStandings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refreshCacheHours = (0, utils_1.getRefreshTime)('current/driverStandings.json');
+            const data = yield this.GetData('current/driverStandings.json', true, refreshCacheHours);
+            return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+        });
+    }
+    GetConstructorStandings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refreshCacheHours = (0, utils_1.getRefreshTime)('current/constructorStandings.json');
+            const data = yield this.GetData('current/constructorStandings.json', true, refreshCacheHours);
+            return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+        });
+    }
+    GetSprintResults(season, round) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData(`${season}/${round}/sprint.json`, false, 0);
+            return data.MRData.RaceTable;
+        });
+    }
+    GetQualifyingResults(season, round) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData(`${season}/${round}/qualifying.json`, false, 0);
+            return data.MRData.RaceTable;
+        });
+    }
+    GetResults(season, round) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData(`${season}/${round}/results.json`, false, 0);
+            return data.MRData.RaceTable;
+        });
+    }
+    GetSeasons() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData('seasons.json?limit=200', true, 72);
+            return data.MRData.SeasonTable.Seasons;
+        });
+    }
+    GetSeasonRaces(season) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData(`${season}.json`, true, 72);
+            return data.MRData.RaceTable.Races;
+        });
+    }
+    GetLastYearsResults(circuitName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const lastYear = new Date().getFullYear() - 1;
+            const data = yield this.GetData(`${lastYear}.json`, true, 72);
+            const raceRound = data.MRData.RaceTable.Races.findIndex((race) => {
+                return race.Circuit.circuitName === circuitName;
+            }) + 1;
+            const results = yield this.GetData(`${lastYear}/${raceRound}/results.json`, false, 0);
+            return results.MRData.RaceTable.Races[0];
+        });
+    }
+}
+exports["default"] = ErgastClient;
+
+
+/***/ }),
+
+/***/ 661:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class ImageClient {
+    GetImage(url) {
+        const localStorageData = localStorage.getItem(url);
+        if (localStorageData) {
+            const item = JSON.parse(localStorageData);
+            const checkDate = new Date();
+            checkDate.setHours(checkDate.getHours() - (24 * 7 * 4));
+            if (new Date(item.created) > checkDate) {
+                return item.data;
+            }
+        }
+        fetch(url)
+            .then(response => response.blob())
+            .then(imageBlob => {
+            const reader = new FileReader();
+            reader.readAsDataURL(imageBlob);
+            reader.onloadend = function () {
+                const base64data = reader.result;
+                const item = {
+                    data: base64data,
+                    created: new Date()
+                };
+                localStorage.setItem(url, JSON.stringify(item));
+                return item.data;
+            };
+        });
+        return url;
+    }
+}
+exports["default"] = ImageClient;
+
+
+/***/ }),
+
+/***/ 959:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const client_base_1 = __webpack_require__(694);
+class RestCountryClient extends client_base_1.ClientBase {
+    constructor() {
+        super(...arguments);
+        this.baseUrl = 'https://restcountries.com/v2';
+    }
+    GetAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.GetData('all', true, 730);
+        });
+    }
+    GetCountriesFromLocalStorage() {
+        const localStorageData = localStorage.getItem('all');
+        if (localStorageData) {
+            const item = JSON.parse(localStorageData);
+            return JSON.parse(item.data);
+        }
+        return [];
+    }
+}
+exports["default"] = RestCountryClient;
+
+
+/***/ }),
+
+/***/ 152:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SportsTimesClient = void 0;
+const client_base_1 = __webpack_require__(694);
+class SportsTimesClient extends client_base_1.ClientBase {
+    constructor() {
+        super(...arguments);
+        this.baseUrl = 'https://raw.githubusercontent.com/sportstimes';
+    }
+    GetSchedule(season) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.GetData(`f1/main/_db/f1/${season}.json`, true, 72);
+            console.log(data);
+            return data.races;
+        });
+    }
+}
+exports.SportsTimesClient = SportsTimesClient;
+
+
+/***/ }),
+
+/***/ 267:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const client_base_1 = __webpack_require__(694);
+class WeatherClient extends client_base_1.ClientBase {
+    constructor(apiKey, unitGroup) {
+        super();
+        this.unitGroup = 'metric';
+        this.baseUrl = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline';
+        this.apiKey = apiKey;
+        this.unitGroup = unitGroup !== null && unitGroup !== void 0 ? unitGroup : this.unitGroup;
+    }
+    getWeatherData(latitude, longitude, date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const endpoint = `${latitude},${longitude}/${date}`;
+            const contentType = 'json';
+            const url = `${endpoint}?unitGroup=${this.unitGroup}&key=${this.apiKey}&contentType=${contentType}`;
+            const data = yield this.GetData(url, true, 1);
+            return data;
+        });
+    }
+}
+exports["default"] = WeatherClient;
+
+
+/***/ }),
+
+/***/ 366:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BaseCard = void 0;
+const ergast_client_1 = __webpack_require__(470);
+const image_client_1 = __webpack_require__(661);
+const weather_client_1 = __webpack_require__(267);
+class BaseCard {
+    constructor(parent) {
+        var _a, _b;
+        this.config = parent.config;
+        this.client = new ergast_client_1.default();
+        this.hass = parent._hass;
+        this.parent = parent;
+        this.weatherClient = new weather_client_1.default((_b = (_a = this.config.weather_options) === null || _a === void 0 ? void 0 : _a.api_key) !== null && _b !== void 0 ? _b : '');
+        this.imageClient = new image_client_1.default();
+    }
+    translation(key) {
+        if (!this.config.translations || Object.keys(this.config.translations).indexOf(key) < 0) {
+            return this.defaultTranslations[key];
+        }
+        return this.config.translations[key];
+    }
+    getProperties() {
+        var _a, _b;
+        const cardProperties = (_a = this.parent.properties) === null || _a === void 0 ? void 0 : _a.get('cardValues');
+        const races = cardProperties === null || cardProperties === void 0 ? void 0 : cardProperties.races;
+        const selectedRace = cardProperties === null || cardProperties === void 0 ? void 0 : cardProperties.selectedRace;
+        const selectedSeason = cardProperties === null || cardProperties === void 0 ? void 0 : cardProperties.selectedSeason;
+        const selectedTabIndex = (_b = cardProperties === null || cardProperties === void 0 ? void 0 : cardProperties.selectedTabIndex) !== null && _b !== void 0 ? _b : 0;
+        return { races, selectedRace, selectedSeason, selectedTabIndex };
+    }
+    getParentCardValues() {
+        var _a, _b;
+        const cardValues = (_a = this.parent.properties) !== null && _a !== void 0 ? _a : new Map();
+        const properties = (_b = cardValues.get('cardValues')) !== null && _b !== void 0 ? _b : {};
+        return { properties, cardValues };
+    }
+}
+exports.BaseCard = BaseCard;
+
+
+/***/ }),
+
+/***/ 169:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+class ConstructorStandings extends base_card_1.BaseCard {
+    constructor(parent) {
+        super(parent);
+        this.defaultTranslations = {
+            'constructor': 'Constructor',
+            'points': 'Pts',
+            'wins': 'Wins'
+        };
+    }
+    cardSize() {
+        return 11;
+    }
+    renderStandingRow(standing) {
+        var _a;
+        return (0, lit_html_1.html) `<tr><td class="width-50 text-center">${standing.position}</td><td>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_teamlogo) ? (0, lit_html_1.html) `<img class="constructor-logo" height="20" width="20" src="${(0, utils_1.getTeamImage)(this, standing.Constructor.constructorId)}"> ` : '')}${standing.Constructor.name}</td><td class="width-60 text-center">${standing.points}</td><td class="text-center">${standing.wins}</td></tr>`;
+    }
+    render() {
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetConstructorStandings().then(response => (0, lit_html_1.html) `<table><thead><tr><th class="width-50"> </th><th>${this.translation('constructor')}</th><th class="width-60 text-center">${this.translation('points')}</th><th class="text-center">${this.translation('wins')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(response, this.config.row_limit).map(standing => this.renderStandingRow(standing))}</tbody></table>`)
+            .catch(() => (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('standings')}`), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
+    }
+}
+exports["default"] = ConstructorStandings;
+
+
+/***/ }),
+
+/***/ 849:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+const async_replace_js_1 = __webpack_require__(810);
+const custom_card_helpers_1 = __webpack_require__(313);
+const action_handler_directive_1 = __webpack_require__(22);
+const formulaone_card_types_1 = __webpack_require__(241);
+class Countdown extends base_card_1.BaseCard {
+    constructor(parent) {
+        var _a;
+        super(parent);
+        this.defaultTranslations = {
+            'days': 'd',
+            'hours': 'h',
+            'minutes': 'm',
+            'seconds': 's',
+            'endofseason': 'Season is over. See you next year!',
+            'racenow': 'We are racing!',
+            'date': 'Date',
+            'practice1': 'Practice 1',
+            'practice2': 'Practice 2',
+            'practice3': 'Practice 3',
+            'race': 'Race',
+            'racename': 'Race name',
+            'circuitname': 'Circuit name',
+            'location': 'Location',
+            'city': 'City',
+            'racetime': 'Race',
+            'sprint': 'Sprint',
+            'qualifying': 'Qualifying',
+            'until': 'Until'
+        };
+        this.config.countdown_type = (_a = this.config.countdown_type) !== null && _a !== void 0 ? _a : formulaone_card_types_1.CountdownType.Race;
+    }
+    cardSize() {
+        return this.config.show_raceinfo ? 12 : 6;
+    }
+    renderHeader(race, raceDateTime) {
+        return this.config.show_raceinfo ?
+            (0, lit_html_1.html) `<table><tr><td colspan="5">${(0, utils_1.renderHeader)(this, race, true)}</td></tr>${(0, utils_1.renderRaceInfo)(this, race, raceDateTime)}</table>`
+            : null;
+    }
+    countDownTillDate(raceDateTime) {
+        return __asyncGenerator(this, arguments, function* countDownTillDate_1() {
+            while (raceDateTime > new Date()) {
+                const now = new Date().getTime();
+                const distance = raceDateTime.getTime() - now;
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                yield yield __await(`${days}${this.translation('days')} ${hours}${this.translation('hours')} ${minutes}${this.translation('minutes')} ${seconds}${this.translation('seconds')} `);
+                yield __await(new Promise((r) => setTimeout(r, 1000)));
+            }
+            yield yield __await(this.translation('racenow'));
+        });
+    }
+    render() {
+        const _handleAction = (ev) => {
+            if (this.hass && this.config.actions && ev.detail.action) {
+                (0, utils_1.clickHandler)(this.parent, this.config, this.hass, ev);
+            }
+        };
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetSchedule(new Date().getFullYear()).then(response => {
+            var _a, _b;
+            const { nextRace, raceDateTime, countdownType } = this.getNextEvent(response);
+            if (!nextRace) {
+                return (0, utils_1.getEndOfSeasonMessage)(this.translation('endofseason'));
+            }
+            const timer = this.countDownTillDate(raceDateTime);
+            const hasConfigAction = this.config.actions !== undefined;
+            return (0, lit_html_1.html) `<table @action="${_handleAction}" .actionHandler="${(0, action_handler_directive_1.actionHandler)({
+                hasHold: (0, custom_card_helpers_1.hasAction)((_a = this.config.actions) === null || _a === void 0 ? void 0 : _a.hold_action),
+                hasDoubleClick: (0, custom_card_helpers_1.hasAction)((_b = this.config.actions) === null || _b === void 0 ? void 0 : _b.double_tap_action),
+            })}" class="${(hasConfigAction ? 'clickable' : null)}"><tr><td><h2 class="${(this.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${(0, utils_1.getCountryFlagByName)(this, nextRace.Circuit.Location.country)}">   ${nextRace.round} : ${nextRace.raceName}</h2></td></tr><tr><td class="text-center"><h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${(0, async_replace_js_1.asyncReplace)(timer)}</h1></td></tr>${(Array.isArray(this.config.countdown_type) && this.config.countdown_type.length > 1 ?
+                (0, lit_html_1.html) `<tr><td class="text-center"><h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${this.translation('until')} ${this.translation(countdownType.toLowerCase())}</h1></td></tr>`
+                : null)}</table>${this.renderHeader(nextRace, raceDateTime)}`;
+        }).catch(() => {
+            return (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('next race')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
+    }
+    getNextEvent(response) {
+        var _a;
+        const nextRace = response.filter(race => {
+            const raceDateTime = new Date(race.date + 'T' + race.time);
+            raceDateTime.setHours(raceDateTime.getHours() + 3);
+            return raceDateTime >= new Date();
+        })[0];
+        let raceDateTime = null;
+        let countdownType = this.config.countdown_type;
+        if (nextRace) {
+            const countdownTypes = this.config.countdown_type;
+            const raceEvents = [
+                { Date: new Date(nextRace.FirstPractice.date + 'T' + nextRace.FirstPractice.time), Type: formulaone_card_types_1.CountdownType.Practice1 },
+                { Date: new Date(nextRace.SecondPractice.date + 'T' + nextRace.SecondPractice.time), Type: formulaone_card_types_1.CountdownType.Practice2 },
+                { Date: nextRace.ThirdPractice ? new Date(nextRace.ThirdPractice.date + 'T' + nextRace.ThirdPractice.time) : null, Type: formulaone_card_types_1.CountdownType.Practice3 },
+                { Date: nextRace.Sprint ? new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time) : null, Type: formulaone_card_types_1.CountdownType.Sprint },
+                { Date: new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time), Type: formulaone_card_types_1.CountdownType.Qualifying },
+                { Date: new Date(nextRace.date + 'T' + nextRace.time), Type: formulaone_card_types_1.CountdownType.Race }
+            ].filter(x => x.Date).filter(x => x.Date > new Date()).sort((a, b) => a.Date.getTime() - b.Date.getTime());
+            const nextEvent = raceEvents.filter(x => countdownTypes === null || countdownTypes === void 0 ? void 0 : countdownTypes.includes(x.Type))[0];
+            raceDateTime = nextEvent === null || nextEvent === void 0 ? void 0 : nextEvent.Date;
+            countdownType = (_a = nextEvent === null || nextEvent === void 0 ? void 0 : nextEvent.Type) !== null && _a !== void 0 ? _a : countdownType;
+        }
+        return { nextRace, raceDateTime, countdownType };
+    }
+}
+exports["default"] = Countdown;
+
+
+/***/ }),
+
+/***/ 138:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+class DriverStandings extends base_card_1.BaseCard {
+    constructor(parent) {
+        super(parent);
+        this.defaultTranslations = {
+            'driver': 'Driver',
+            'team': 'Team',
+            'points': 'Pts',
+            'wins': 'Wins'
+        };
+    }
+    cardSize() {
+        return 12;
+    }
+    renderStandingRow(standing) {
+        var _a, _b;
+        return (0, lit_html_1.html) `<tr><td class="width-40 text-center">${standing.position}</td><td>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_flag) ? (0, lit_html_1.html) `<img height="10" width="20" src="${(0, utils_1.getCountryFlagByNationality)(this, standing.Driver.nationality)}"> ` : '')}${standing.Driver.code}</td><td>${(0, utils_1.getDriverName)(standing.Driver, this.config)}</td>${(((_b = this.config.standings) === null || _b === void 0 ? void 0 : _b.show_team) ? (0, lit_html_1.html) `${(0, utils_1.renderConstructorColumn)(this, standing.Constructors[0])}` : '')}<td class="width-60 text-center">${standing.points}</td><td class="text-center">${standing.wins}</td></tr>`;
+    }
+    render() {
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetDriverStandings().then(response => {
+            var _a;
+            return (0, lit_html_1.html) `<table><thead><tr><th class="width-50" colspan="2"> </th><th>${this.translation('driver')}</th>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_team) ? (0, lit_html_1.html) `<th>${this.translation('team')}</th>` : '')}<th class="width-60 text-center">${this.translation('points')}</th><th class="text-center">${this.translation('wins')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(response, this.config.row_limit).map(standing => this.renderStandingRow(standing))}</tbody></table>`;
+        })
+            .catch(() => (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('standings')}`), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
+    }
+}
+exports["default"] = DriverStandings;
+
+
+/***/ }),
+
+/***/ 507:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+class LastResult extends base_card_1.BaseCard {
+    constructor(parent) {
+        super(parent);
+        this.defaultTranslations = {
+            'driver': 'Driver',
+            'grid': 'Grid',
+            'points': 'Points',
+            'status': 'Status'
+        };
+    }
+    cardSize() {
+        return 11;
+    }
+    renderResultRow(result) {
+        return (0, lit_html_1.html) `<tr><td class="width-50 text-center">${result.position}</td><td>${(0, utils_1.getDriverName)(result.Driver, this.config)}</td><td>${result.grid}</td><td class="width-60 text-center">${result.points}</td><td class="width-50 text-center">${result.status}</td></tr>`;
+    }
+    render() {
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetLastResult().then(response => (0, lit_html_1.html) `<table><tr><td>${(0, utils_1.renderHeader)(this, response)}</td></tr></table><table><thead><tr><th> </th><th>${this.translation('driver')}</th><th class="text-center">${this.translation('grid')}</th><th class="text-center">${this.translation('points')}</th><th>${this.translation('status')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(response.Results, this.config.row_limit).map(result => this.renderResultRow(result))}</tbody></table>`)
+            .catch(() => (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('last result')}`), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
+    }
+}
+exports["default"] = LastResult;
+
+
+/***/ }),
+
+/***/ 840:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+const format_date_1 = __webpack_require__(300);
+class NextRace extends base_card_1.BaseCard {
+    constructor() {
+        super(...arguments);
+        this.defaultTranslations = {
+            'date': 'Date',
+            'practice1': 'Practice 1',
+            'practice2': 'Practice 2',
+            'practice3': 'Practice 3',
+            'race': 'Race',
+            'racename': 'Race name',
+            'circuitname': 'Circuit name',
+            'location': 'Location',
+            'city': 'City',
+            'racetime': 'Race',
+            'sprint': 'Sprint',
+            'qualifying': 'Qualifying',
+            'endofseason': 'Season is over. See you next year!',
+        };
+    }
+    cardSize() {
+        return 8;
+    }
+    render() {
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.client.GetSchedule(new Date().getFullYear()).then(response => {
+            const delay = this.config.next_race_delay || 0;
+            const nextRace = response.filter(race => {
+                const nextRaceDate = new Date(race.date + 'T' + race.time);
+                nextRaceDate.setHours(nextRaceDate.getHours() + delay);
+                return nextRaceDate >= new Date();
+            })[0];
+            if (!nextRace) {
+                return (0, utils_1.getEndOfSeasonMessage)(this.translation('endofseason'));
+            }
+            return (0, lit_html_1.html) `<table><tbody><tr><td colspan="5">${(0, utils_1.renderHeader)(this, nextRace)}</td></tr>${this.config.show_raceinfo ?
+                (0, utils_1.renderRaceInfo)(this, nextRace) :
+                this.config.only_show_date ?
+                    (0, lit_html_1.html) `<tr><td class="text-center"><h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${(0, format_date_1.formatDateNumeric)(new Date(nextRace.date + 'T' + nextRace.time), this.hass.locale, this.config.date_locale)}</h1></td></tr>` : null}</tbody></table>`;
+        }).catch(() => {
+            return (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('next race')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
+    }
+}
+exports["default"] = NextRace;
+
+
+/***/ }),
+
+/***/ 74:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+class Results extends base_card_1.BaseCard {
+    constructor(parent) {
+        super(parent);
+        this.defaultTranslations = {
+            'driver': 'Driver',
+            'grid': 'Grid',
+            'team': 'Team',
+            'points': 'Points',
+            'status': 'Status',
+            'raceheader': 'Race',
+            'seasonheader': 'Season',
+            'selectseason': 'Select season',
+            'selectrace': 'Select race',
+            'noresults': 'Please select a race thats already been run.',
+            'q1': 'Q1',
+            'q2': 'Q2',
+            'q3': 'Q3',
+        };
+        this.icons = {
+            'sprint': 'mdi:flag-checkered',
+            'qualifying': 'mdi:timer-outline',
+            'results': 'mdi:trophy',
+        };
+        this.renderTabsHtml = (tabs, selectedTabIndex, selectedRace) => {
+            return selectedRace
+                ? (0, lit_html_1.html) `<table><tr><td colspan="2">${this.renderHeader(selectedRace)}</td></tr>${tabs.filter(tab => tab.content).length > 0 ?
+                    (0, lit_html_1.html) `<tr class="transparent"><td colspan="2"><mwc-tab-bar @MDCTabBar:activated="${(ev) => (this.setSelectedTabIndex(ev.detail.index))}">${tabs.filter(tab => !tab.hide).map((tab) => (0, lit_html_1.html) `<mwc-tab ?hasImageIcon="${tab.icon}"><ha-icon slot="icon" icon="${tab.icon}"></ha-icon></mwc-tab>`)}</mwc-tab-bar><section><article>${tabs.filter(tab => !tab.hide).find((_, index) => index == selectedTabIndex).content}</article></section></td></tr>` : (0, lit_html_1.html) `<tr><td colspan="2">${this.translation('noresults')}</td></tr>`}</table>`
+                : (0, lit_html_1.html) ``;
+        };
+    }
+    cardSize() {
+        return 12;
+    }
+    renderTabs(selectedRace) {
+        const tabs = [{
+                title: 'Results',
+                icon: this.icon('results'),
+                content: this.renderResults(selectedRace),
+                order: this.tabOrder('results')
+            }, {
+                title: 'Qualifying',
+                icon: this.icon('qualifying'),
+                content: this.renderQualifying(selectedRace),
+                order: this.tabOrder('qualifying')
+            }, {
+                title: 'Sprint',
+                icon: this.icon('sprint'),
+                content: this.renderSprint(selectedRace),
+                hide: !(selectedRace === null || selectedRace === void 0 ? void 0 : selectedRace.SprintResults),
+                order: this.tabOrder('sprint')
+            }];
+        return tabs.sort((a, b) => a.order - b.order);
+    }
+    renderSprint(selectedRace) {
+        var _a;
+        return (selectedRace === null || selectedRace === void 0 ? void 0 : selectedRace.SprintResults) ?
+            (0, lit_html_1.html) `<table class="nopadding"><thead><tr><th> </th><th>${this.translation('driver')}</th>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_team) ? (0, lit_html_1.html) `<th>${this.translation('team')}</th>` : '')}<th class="text-center">${this.translation('grid')}</th><th class="text-center">${this.translation('points')}</th><th class="text-center">${this.translation('status')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result, false))}</tbody></table>`
+            : null;
+    }
+    renderQualifying(selectedRace) {
+        var _a;
+        return (selectedRace === null || selectedRace === void 0 ? void 0 : selectedRace.QualifyingResults) ?
+            (0, lit_html_1.html) `<table class="nopadding"><thead><tr><th> </th><th>${this.translation('driver')}</th>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_team) ? (0, lit_html_1.html) `<th>${this.translation('team')}</th>` : '')}<th class="text-center">${this.translation('q1')}</th><th class="text-center">${this.translation('q2')}</th><th class="text-center">${this.translation('q3')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(selectedRace.QualifyingResults, this.config.row_limit).map(result => this.renderQualifyingResultRow(result))}</tbody></table>`
+            : null;
+    }
+    renderResults(selectedRace) {
+        var _a, _b;
+        const fastest = (_a = selectedRace === null || selectedRace === void 0 ? void 0 : selectedRace.Results) === null || _a === void 0 ? void 0 : _a.filter((result) => { var _a; return ((_a = result.FastestLap) === null || _a === void 0 ? void 0 : _a.rank) === '1'; })[0];
+        return (selectedRace === null || selectedRace === void 0 ? void 0 : selectedRace.Results) ?
+            (0, lit_html_1.html) `<table class="nopadding"><thead><tr><th> </th><th>${this.translation('driver')}</th>${(((_b = this.config.standings) === null || _b === void 0 ? void 0 : _b.show_team) ? (0, lit_html_1.html) `<th>${this.translation('team')}</th>` : '')}<th class="text-center">${this.translation('grid')}</th><th class="text-center">${this.translation('points')}</th><th>${this.translation('status')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result, result.position === (fastest === null || fastest === void 0 ? void 0 : fastest.position)))}</tbody>${fastest ? (0, lit_html_1.html) `<tfoot></tfoot><tfoot><tr><td colspan="6" class="text-right"><small>* Fastest lap: ${fastest.FastestLap.Time.time}</small></td></tr></tfoot>` : ''}</table>`
+            : null;
+    }
+    renderResultRow(result, fastest) {
+        var _a, _b;
+        return (0, lit_html_1.html) `<tr><td class="width-50 text-center">${result.position}</td><td>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_flag) ? (0, lit_html_1.html) `<img height="10" width="20" src="${(0, utils_1.getCountryFlagByNationality)(this, result.Driver.nationality)}"> ` : '')}${(0, utils_1.getDriverName)(result.Driver, this.config)}${fastest ? ' *' : ''}</td>${(((_b = this.config.standings) === null || _b === void 0 ? void 0 : _b.show_team) ? (0, lit_html_1.html) `${(0, utils_1.renderConstructorColumn)(this, result.Constructor)}` : '')}<td>${result.grid}</td><td class="width-60 text-center">${result.points}</td><td class="width-50 text-center">${result.status}</td></tr>`;
+    }
+    renderQualifyingResultRow(result) {
+        var _a, _b;
+        return (0, lit_html_1.html) `<tr><td class="width-50 text-center">${result.position}</td><td>${(((_a = this.config.standings) === null || _a === void 0 ? void 0 : _a.show_flag) ? (0, lit_html_1.html) `<img height="10" width="20" src="${(0, utils_1.getCountryFlagByNationality)(this, result.Driver.nationality)}"> ` : '')}${(0, utils_1.getDriverName)(result.Driver, this.config)}</td>${(((_b = this.config.standings) === null || _b === void 0 ? void 0 : _b.show_team) ? (0, lit_html_1.html) `${(0, utils_1.renderConstructorColumn)(this, result.Constructor)}` : '')}<td>${result.Q1}</td><td>${result.Q2}</td><td>${result.Q3}</td></tr>`;
+    }
+    renderHeader(race) {
+        if (race === null || race === undefined || parseInt(race.season) < 2018) {
+            return null;
+        }
+        return (0, utils_1.renderHeader)(this, race);
+    }
+    render() {
+        const { races, selectedRace, selectedSeason, selectedTabIndex } = this.getProperties();
+        if (selectedSeason === undefined) {
+            this.getLastResult();
+        }
+        const selectedSeasonChanged = (ev) => {
+            this.setRaces(ev);
+        };
+        const selectedRaceChanged = (ev) => {
+            this.setSelectedRace(ev);
+        };
+        const tabs = this.renderTabs(selectedRace);
+        return (0, lit_html_1.html) `<table><tr><td>${this.translation('seasonheader')}<br>${(0, until_js_1.until)(this.client.GetSeasons().then(response => {
+            const seasons = response.reverse();
+            return (0, lit_html_1.html) `<select name="selectedSeason" @change="${selectedSeasonChanged}"><option value="0">${this.translation('selectseason')}</option>${seasons.map(season => {
+                return (0, lit_html_1.html) `<option value="${season.season}" ?selected="${selectedSeason === season.season}">${season.season}</option>`;
+            })}</select>`;
+        }).catch(() => {
+            return (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('seasons')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}</td><td>${this.translation('raceheader')}<br><select name="selectedRace" @change="${selectedRaceChanged}"><option value="0" ?selected="${selectedRace === undefined}">${this.translation('selectrace')}</option>${races === null || races === void 0 ? void 0 : races.map(race => {
+            return (0, lit_html_1.html) `<option value="${race.round}" ?selected="${(selectedRace === null || selectedRace === void 0 ? void 0 : selectedRace.round) == race.round}">${race.raceName}</option>`;
+        })}</select></td></tr></table>${this.renderTabsHtml(tabs, selectedTabIndex, selectedRace)}`;
+    }
+    setSelectedRace(ev) {
+        const round = parseInt(ev.target.value);
+        const { properties, cardValues } = this.getParentCardValues();
+        properties.selectedRound = round;
+        const selectedSeason = properties.selectedSeason;
+        Promise.all([this.client.GetResults(selectedSeason, round),
+            this.client.GetQualifyingResults(selectedSeason, round),
+            this.client.GetSprintResults(selectedSeason, round),
+            this.client.GetSchedule(selectedSeason)])
+            .then(([results, qualifyingResults, sprintResults, schedule]) => {
+            var _a;
+            let race = results.Races[0];
+            if (race) {
+                race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+                race.SprintResults = (_a = sprintResults === null || sprintResults === void 0 ? void 0 : sprintResults.Races[0]) === null || _a === void 0 ? void 0 : _a.SprintResults;
+                properties.selectedSeason = race.season;
+            }
+            else {
+                race = schedule.filter(item => parseInt(item.round) == round)[0];
+            }
+            properties.selectedRace = race;
+            cardValues.set('cardValues', properties);
+            this.parent.properties = cardValues;
+        });
+    }
+    setRaces(ev) {
+        const selectedSeason = ev.target.value;
+        const { properties, cardValues } = this.getParentCardValues();
+        this.client.GetSeasonRaces(parseInt(selectedSeason)).then(response => {
+            properties.selectedSeason = selectedSeason;
+            properties.selectedRace = undefined;
+            properties.races = response;
+            cardValues.set('cardValues', properties);
+            this.parent.properties = cardValues;
+        });
+    }
+    getUpcomingRace(now, races) {
+        const nextRaces = races.filter(race => {
+            const raceDateTime = new Date(race.date + 'T' + race.time);
+            const qualifyingDateTime = new Date(race.Qualifying.date + 'T' + race.Qualifying.time);
+            const sprintDateTime = race.Sprint ? new Date(race.Sprint.date + 'T' + race.Sprint.time) : null;
+            if (raceDateTime >= now && (qualifyingDateTime < now && (sprintDateTime === null || sprintDateTime < now))) {
+                return true;
+            }
+            return false;
+        });
+        return nextRaces.length > 0 ? nextRaces[0] : null;
+    }
+    getLastResult() {
+        const now = new Date();
+        Promise.all([this.client.GetSchedule(now.getFullYear()), this.client.GetLastResult()])
+            .then(([schedule, lastResult]) => {
+            const upcomingRace = this.getUpcomingRace(now, schedule);
+            let season = new Date().getFullYear();
+            let round = upcomingRace !== null ? parseInt(upcomingRace.round) : 0;
+            let race = {};
+            if (upcomingRace !== null) {
+                race = upcomingRace;
+                round = parseInt(race.round);
+                season = parseInt(race.season);
+            }
+            else {
+                race = lastResult;
+                round = parseInt(lastResult.round);
+                season = parseInt(lastResult.season);
+            }
+            Promise.all([this.client.GetQualifyingResults(season, round),
+                this.client.GetSprintResults(season, round),
+                this.client.GetSeasonRaces(season)])
+                .then(([qualifyingResults, sprintResults, seasonRaces]) => {
+                var _a;
+                const { properties, cardValues } = this.getParentCardValues();
+                race.QualifyingResults = qualifyingResults.Races[0].QualifyingResults;
+                race.SprintResults = (_a = sprintResults.Races[0]) === null || _a === void 0 ? void 0 : _a.SprintResults;
+                properties.races = seasonRaces;
+                properties.selectedRace = race;
+                properties.selectedSeason = season.toString();
+                cardValues.set('cardValues', properties);
+                this.parent.properties = cardValues;
+            });
+        });
+    }
+    setSelectedTabIndex(index) {
+        const { properties, cardValues } = this.getParentCardValues();
+        properties.selectedTabIndex = index;
+        cardValues.set('cardValues', properties);
+        this.parent.properties = cardValues;
+    }
+    icon(key) {
+        if (!this.config.icons || Object.keys(this.config.icons).indexOf(key) < 0) {
+            return this.icons[key];
+        }
+        return this.config.icons[key];
+    }
+    tabOrder(tab) {
+        var _a, _b;
+        const tabsOrder = (_b = (_a = this.config.tabs_order) === null || _a === void 0 ? void 0 : _a.map(tab => tab.toLowerCase())) !== null && _b !== void 0 ? _b : ['results', 'qualifying', 'sprint'];
+        return tabsOrder.indexOf(tab);
+    }
+}
+exports["default"] = Results;
+
+
+/***/ }),
+
+/***/ 465:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const custom_card_helpers_1 = __webpack_require__(313);
+const lit_html_1 = __webpack_require__(639);
+const until_js_1 = __webpack_require__(557);
+const format_date_1 = __webpack_require__(300);
+const formulaone_card_types_1 = __webpack_require__(241);
+const utils_1 = __webpack_require__(438);
+const base_card_1 = __webpack_require__(366);
+const sportstimes_client_1 = __webpack_require__(152);
+class Schedule extends base_card_1.BaseCard {
+    constructor(parent) {
+        super(parent);
+        this.defaultTranslations = {
+            'date': 'Date',
+            'race': 'Race',
+            'time': 'Time',
+            'location': 'Location',
+            'endofseason': 'Season is over. See you next year!'
+        };
+        this.sportsTimesClient = new sportstimes_client_1.SportsTimesClient();
+    }
+    cardSize() {
+        return 12;
+    }
+    renderLocation(race) {
+        return `${race.name}, ${race.location}`;
+    }
+    renderScheduleRow(race) {
+        const raceDate = new Date(race.sessions.gp);
+        const renderClass = this.config.previous_race && raceDate < new Date() ? this.config.previous_race : '';
+        return (0, lit_html_1.html) `<tr class="${renderClass}"><td class="width-50 text-center">${race.round}</td><td>${race.location}</td><td>${this.renderLocation(race)}</td><td class="width-60 text-center">${(0, format_date_1.formatDate)(raceDate, this.hass.locale, this.config.date_locale)}</td><td class="width-50 text-center">${(0, custom_card_helpers_1.formatTime)(raceDate, this.hass.locale)}</td></tr>`;
+    }
+    render() {
+        return (0, lit_html_1.html) `${(0, until_js_1.until)(this.sportsTimesClient.GetSchedule(new Date().getFullYear()).then(response => {
+            const schedule = this.config.previous_race === formulaone_card_types_1.PreviousRaceDisplay.Hide ? response.filter(race => {
+                return new Date(race.sessions.gp) >= new Date();
+            }) : response;
+            const next_race = schedule.filter(race => {
+                return new Date(race.sessions.gp) >= new Date();
+            })[0];
+            if (!next_race) {
+                return (0, utils_1.getEndOfSeasonMessage)(this.translation('endofseason'));
+            }
+            return (0, lit_html_1.html) `<table><thead><tr><th> </th><th>${this.translation('race')}</th><th>${this.translation('location')}</th><th class="text-center">${this.translation('date')}</th><th class="text-center">${this.translation('time')}</th></tr></thead><tbody>${(0, utils_1.reduceArray)(schedule, this.config.row_limit).map(race => this.renderScheduleRow(race))}</tbody></table>`;
+        }).catch(() => {
+            return (0, lit_html_1.html) `${(0, utils_1.getApiErrorMessage)('schedule')}`;
+        }), (0, lit_html_1.html) `${(0, utils_1.getApiLoadingMessage)()}`)}`;
+    }
+}
+exports["default"] = Schedule;
+
+
+/***/ }),
+
+/***/ 851:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CARD_EDITOR_NAME = exports.CARD_NAME = void 0;
+exports.CARD_NAME = 'formulaone-card';
+exports.CARD_EDITOR_NAME = `${exports.CARD_NAME}-editor`;
+
+
+/***/ }),
+
+/***/ 22:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.actionHandler = exports.actionHandlerBind = void 0;
+const directive_js_1 = __webpack_require__(395);
+const custom_card_helpers_1 = __webpack_require__(313);
+const lit_element_1 = __webpack_require__(11);
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.maxTouchPoints > 0;
+class ActionHandler extends HTMLElement {
+    constructor() {
+        super();
+        this.holdTime = 500;
+        this.held = false;
+        this.ripple = document.createElement('mwc-ripple');
+    }
+    connectedCallback() {
+        Object.assign(this.style, {
+            position: 'absolute',
+            width: isTouch ? '100px' : '50px',
+            height: isTouch ? '100px' : '50px',
+            transform: 'translate(-50%, -50%)',
+            pointerEvents: 'none',
+            zIndex: '999',
+        });
+        this.appendChild(this.ripple);
+        this.ripple.primary = true;
+        ['touchcancel', 'mouseout', 'mouseup', 'touchmove', 'mousewheel', 'wheel', 'scroll'].forEach((ev) => {
+            document.addEventListener(ev, () => {
+                clearTimeout(this.timer);
+                this.stopAnimation();
+                this.timer = undefined;
+            }, { passive: true });
+        });
+    }
+    bind(element, options) {
+        if (element.actionHandler) {
+            return;
+        }
+        element.actionHandler = true;
+        element.addEventListener('contextmenu', (ev) => {
+            const e = ev || window.event;
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            e.cancelBubble = true;
+            e.returnValue = false;
+            return false;
+        });
+        const start = (ev) => {
+            this.held = false;
+            let x;
+            let y;
+            if (ev.touches) {
+                x = ev.touches[0].pageX;
+                y = ev.touches[0].pageY;
+            }
+            else {
+                x = ev.pageX;
+                y = ev.pageY;
+            }
+            this.timer = window.setTimeout(() => {
+                this.startAnimation(x, y);
+                this.held = true;
+            }, this.holdTime);
+        };
+        const end = (ev) => {
+            ev.preventDefault();
+            if (['touchend', 'touchcancel'].includes(ev.type) && this.timer === undefined) {
+                return;
+            }
+            clearTimeout(this.timer);
+            this.stopAnimation();
+            this.timer = undefined;
+            if (this.held) {
+                (0, custom_card_helpers_1.fireEvent)(element, 'action', { action: 'hold' });
+            }
+            else if (options.hasDoubleClick) {
+                if ((ev.type === 'click' && ev.detail < 2) || !this.dblClickTimeout) {
+                    this.dblClickTimeout = window.setTimeout(() => {
+                        this.dblClickTimeout = undefined;
+                        (0, custom_card_helpers_1.fireEvent)(element, 'action', { action: 'tap' });
+                    }, 250);
+                }
+                else {
+                    clearTimeout(this.dblClickTimeout);
+                    this.dblClickTimeout = undefined;
+                    (0, custom_card_helpers_1.fireEvent)(element, 'action', { action: 'double_tap' });
+                }
+            }
+            else {
+                (0, custom_card_helpers_1.fireEvent)(element, 'action', { action: 'tap' });
+            }
+        };
+        const handleEnter = (ev) => {
+            if (ev.keyCode !== 13) {
+                return;
+            }
+            end(ev);
+        };
+        element.addEventListener('touchstart', start, { passive: true });
+        element.addEventListener('touchend', end);
+        element.addEventListener('touchcancel', end);
+        element.addEventListener('mousedown', start, { passive: true });
+        element.addEventListener('click', end);
+        element.addEventListener('keyup', handleEnter);
+    }
+    startAnimation(x, y) {
+        Object.assign(this.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+            display: null,
+        });
+        this.ripple.disabled = false;
+        this.ripple.active = true;
+        this.ripple.unbounded = true;
+    }
+    stopAnimation() {
+        this.ripple.active = false;
+        this.ripple.disabled = true;
+        this.style.display = 'none';
+    }
+}
+customElements.define('action-handler-formulaonecard', ActionHandler);
+const getActionHandler = () => {
+    const body = document.body;
+    if (body.querySelector('action-handler-formulaonecard')) {
+        return body.querySelector('action-handler-formulaonecard');
+    }
+    const actionhandler = document.createElement('action-handler-formulaonecard');
+    body.appendChild(actionhandler);
+    return actionhandler;
+};
+const actionHandlerBind = (element, options) => {
+    const actionhandler = getActionHandler();
+    if (!actionhandler) {
+        return;
+    }
+    actionhandler.bind(element, options);
+};
+exports.actionHandlerBind = actionHandlerBind;
+exports.actionHandler = (0, directive_js_1.directive)(class extends directive_js_1.Directive {
+    update(part, [options]) {
+        (0, exports.actionHandlerBind)(part.element, options);
+        return lit_element_1.noChange;
+    }
+    render(_options) { }
+});
+
+
+/***/ }),
+
+/***/ 750:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FormulaOneCardEditor = void 0;
+const lit_html_1 = __webpack_require__(639);
+const consts_1 = __webpack_require__(851);
+const formulaone_card_types_1 = __webpack_require__(241);
+const ha_editor_formbuilder_1 = __webpack_require__(898);
+const interfaces_1 = __webpack_require__(194);
+const entities_1 = __webpack_require__(429);
+const lit_element_1 = __webpack_require__(11);
+let FormulaOneCardEditor = class FormulaOneCardEditor extends ha_editor_formbuilder_1.default {
+    render() {
+        if (!this._hass || !this._config) {
+            return (0, lit_html_1.html) ``;
+        }
+        return this.renderForm([
+            { controls: [{ label: "Card Type (Required)", configValue: "card_type", type: interfaces_1.FormControlType.Dropdown, items: (0, entities_1.getDropdownOptionsFromEnum)(formulaone_card_types_1.FormulaOneCardType) }] },
+            { controls: [{ label: "Title", configValue: "title", type: interfaces_1.FormControlType.Textbox }] },
+            {
+                label: "Basic configuration",
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Use F1 font", configValue: "f1_font", type: interfaces_1.FormControlType.Switch },
+                    { label: "Image clickable", configValue: "image_clickable", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show carnumber", configValue: "show_carnumber", type: interfaces_1.FormControlType.Switch },
+                    { label: "Location clickable", configValue: "location_clickable", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show race information", configValue: "show_raceinfo", type: interfaces_1.FormControlType.Switch },
+                    { label: "Hide track layout", configValue: "hide_tracklayout", type: interfaces_1.FormControlType.Switch },
+                    { label: "Hide race dates and times", configValue: "hide_racedatetimes", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show last years result", configValue: "show_lastyears_result", type: interfaces_1.FormControlType.Switch },
+                    { label: "Only show date", configValue: "only_show_date", type: interfaces_1.FormControlType.Switch },
+                    { type: interfaces_1.FormControlType.Filler },
+                    { label: "Row limit", configValue: "row_limit", type: interfaces_1.FormControlType.Textbox },
+                    { label: "Date locale", configValue: "date_locale", type: interfaces_1.FormControlType.Textbox }
+                ]
+            },
+            {
+                label: "Countdown Type",
+                hidden: this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.Countdown,
+                cssClass: 'side-by-side',
+                controls: [{ configValue: "countdown_type", type: interfaces_1.FormControlType.Checkboxes, items: (0, entities_1.getDropdownOptionsFromEnum)(formulaone_card_types_1.CountdownType) }]
+            },
+            {
+                hidden: this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.NextRace,
+                controls: [
+                    { label: "Next race delay", configValue: "next_race_delay", type: interfaces_1.FormControlType.Textbox },
+                ]
+            },
+            {
+                hidden: this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.Schedule,
+                controls: [{ label: "Previous race", configValue: "previous_race", type: interfaces_1.FormControlType.Dropdown, items: (0, entities_1.getDropdownOptionsFromEnum)(formulaone_card_types_1.PreviousRaceDisplay) }]
+            },
+            {
+                label: "Standings",
+                hidden: this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.ConstructorStandings && this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.DriverStandings,
+                cssClass: 'side-by-side',
+                controls: [
+                    { label: "Show team", configValue: "standings.show_team", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show flag", configValue: "standings.show_flag", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show teamlogo", configValue: "standings.show_teamlogo", type: interfaces_1.FormControlType.Switch }
+                ]
+            },
+            {
+                label: "Weather",
+                hidden: this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.NextRace && this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.Countdown,
+                controls: [
+                    { label: "Show weather", configValue: "show_weather", type: interfaces_1.FormControlType.Switch }
+                ]
+            },
+            {
+                cssClass: 'side-by-side',
+                hidden: (this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.NextRace && this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.Countdown) || !this._config.show_weather,
+                controls: [
+                    { label: "API key", configValue: "weather_options.api_key", type: interfaces_1.FormControlType.Textbox },
+                    { label: "Unit", configValue: "weather_options.unit", type: interfaces_1.FormControlType.Dropdown, items: (0, entities_1.getDropdownOptionsFromEnum)(formulaone_card_types_1.WeatherUnit) },
+                    { label: "Show icon", configValue: "weather_options.show_icon", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show precipitation", configValue: "weather_options.show_precipitation", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show wind", configValue: "weather_options.show_wind", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show temperature", configValue: "weather_options.show_temperature", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show cloud coverage", configValue: "weather_options.show_cloud_cover", type: interfaces_1.FormControlType.Switch },
+                    { label: "Show visibility", configValue: "weather_options.show_visibility", type: interfaces_1.FormControlType.Switch }
+                ]
+            },
+            {
+                label: "Tabs",
+                hidden: this._config.card_type !== formulaone_card_types_1.FormulaOneCardType.Results,
+                controls: [
+                    { label: "Tabs order", configValue: "tabs_order", type: interfaces_1.FormControlType.Textbox }
+                ]
+            },
+        ]);
+    }
+    static get styles() {
+        return (0, lit_element_1.css) `.form-row{margin-bottom:10px}.form-control{display:flex;align-items:center}ha-switch{padding:16px 6px}.side-by-side{display:flex;flex-flow:row wrap}.side-by-side>label{width:100%}.side-by-side>.form-control{width:49%;padding:2px}ha-textfield{width:100%}.hidden{display:none}@media (max-width:600px){.side-by-side>.form-control{width:48%}}`;
+    }
+};
+FormulaOneCardEditor = __decorate([
+    (0, lit_element_1.customElement)(consts_1.CARD_EDITOR_NAME)
+], FormulaOneCardEditor);
+exports.FormulaOneCardEditor = FormulaOneCardEditor;
+
+
+/***/ }),
+
+/***/ 657:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.loadCustomFonts = void 0;
+const loadCustomFonts = () => {
+    if (window && document.fonts) {
+        const font = new FontFace("F1Bold", "url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Bold/Formula1-Bold.woff)");
+        document.fonts.add(font);
+        font.load();
+    }
+};
+exports.loadCustomFonts = loadCustomFonts;
+
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const packageJson = __webpack_require__(147);
+const decorators_js_1 = __webpack_require__(15);
+const formulaone_card_types_1 = __webpack_require__(241);
+const lit_1 = __webpack_require__(110);
+const utils_1 = __webpack_require__(438);
+const fonts_1 = __webpack_require__(657);
+const styles_1 = __webpack_require__(278);
+const constructor_standings_1 = __webpack_require__(169);
+const driver_standings_1 = __webpack_require__(138);
+const schedule_1 = __webpack_require__(465);
+const next_race_1 = __webpack_require__(840);
+const last_result_1 = __webpack_require__(507);
+const countdown_1 = __webpack_require__(849);
+const results_1 = __webpack_require__(74);
+const restcountry_client_1 = __webpack_require__(959);
+const consts_1 = __webpack_require__(851);
+console.info(`%c ${consts_1.CARD_NAME.toUpperCase()} %c ${packageJson.version}`, 'color: cyan; background: black; font-weight: bold;', 'color: darkblue; background: white; font-weight: bold;');
+window.customCards = window.customCards || [];
+window.customCards.push({
+    type: 'formulaone-card',
+    name: 'FormulaOne card',
+    preview: false,
+    description: 'Present the data of Formula One in a pretty way',
+});
+let FormulaOneCard = class FormulaOneCard extends lit_1.LitElement {
+    set properties(values) {
+        this._cardValues = values;
+        this.update(values);
+    }
+    get properties() {
+        return this._cardValues;
+    }
+    constructor() {
+        super();
+        this.setCountryCache();
+    }
+    static getConfigElement() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield Promise.resolve().then(() => __webpack_require__(750));
+            return document.createElement(consts_1.CARD_EDITOR_NAME);
+        });
+    }
+    setConfig(config) {
+        (0, utils_1.checkConfig)(config);
+        this.config = Object.assign({}, config);
+    }
+    setCountryCache() {
+        new restcountry_client_1.default().GetAll().catch(() => {
+            this.warning = 'Country API is down, so flags are not available at the moment!';
+            this.update(this._cardValues);
+        });
+    }
+    shouldUpdate(changedProps) {
+        return (0, utils_1.hasConfigOrCardValuesChanged)(this, changedProps);
+    }
+    set hass(hass) {
+        this._hass = hass;
+        this.config.hass = hass;
+        switch (this.config.card_type) {
+            case formulaone_card_types_1.FormulaOneCardType.ConstructorStandings:
+                this.card = new constructor_standings_1.default(this);
+                break;
+            case formulaone_card_types_1.FormulaOneCardType.DriverStandings:
+                this.card = new driver_standings_1.default(this);
+                break;
+            case formulaone_card_types_1.FormulaOneCardType.Schedule:
+                this.card = new schedule_1.default(this);
+                break;
+            case formulaone_card_types_1.FormulaOneCardType.NextRace:
+                this.card = new next_race_1.default(this);
+                break;
+            case formulaone_card_types_1.FormulaOneCardType.LastResult:
+                this.card = new last_result_1.default(this);
+                break;
+            case formulaone_card_types_1.FormulaOneCardType.Countdown:
+                this.card = new countdown_1.default(this);
+                break;
+            case formulaone_card_types_1.FormulaOneCardType.Results:
+                this.card = new results_1.default(this);
+                break;
+        }
+    }
+    static get styles() {
+        (0, fonts_1.loadCustomFonts)();
+        return styles_1.styles;
+    }
+    render() {
+        if (!this._hass || !this.config)
+            return (0, lit_1.html) ``;
+        try {
+            return (0, lit_1.html) `<ha-card elevation="2">${this.warning ? (0, lit_1.html) `<hui-warning>${this.warning}</hui-warning>` : ''} ${this.config.title ? (0, lit_1.html) `<h1 class="card-header${(this.config.f1_font ? ' formulaone-font' : '')}">${this.config.title}</h1>` : ''} ${this.card.render()}</ha-card>`;
+        }
+        catch (error) {
+            return (0, lit_1.html) `<hui-warning>${error.toString()}</hui-warning>`;
+        }
+    }
+    getCardSize() {
+        return this.card.cardSize();
+    }
+};
+__decorate([
+    (0, decorators_js_1.property)()
+], FormulaOneCard.prototype, "_hass", void 0);
+__decorate([
+    (0, decorators_js_1.property)()
+], FormulaOneCard.prototype, "config", void 0);
+__decorate([
+    (0, decorators_js_1.property)()
+], FormulaOneCard.prototype, "card", void 0);
+__decorate([
+    (0, decorators_js_1.property)()
+], FormulaOneCard.prototype, "warning", void 0);
+__decorate([
+    (0, decorators_js_1.property)()
+], FormulaOneCard.prototype, "properties", null);
+FormulaOneCard = __decorate([
+    (0, decorators_js_1.customElement)(consts_1.CARD_NAME)
+], FormulaOneCard);
+exports["default"] = FormulaOneCard;
+
+
+/***/ }),
+
+/***/ 198:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TimeFormat = exports.NumberFormat = exports.SECONDARY_INFO_VALUES = exports.TIMESTAMP_FORMATS = exports.ImageConstants = void 0;
+exports.ImageConstants = {
+    FlagCDN: 'https://flagcdn.com/w320/',
+    TeamLogoCDN: 'https://www.formula1.com/content/dam/fom-website/teams/',
+    F1CDN: 'https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/',
+};
+exports.TIMESTAMP_FORMATS = ['relative', 'total', 'date', 'time', 'datetime'];
+exports.SECONDARY_INFO_VALUES = [
+    'entity-id',
+    'last-changed',
+    'last-updated',
+    'last-triggered',
+    'position',
+    'tilt-position',
+    'brightness',
+];
+exports.NumberFormat = {
+    language: 'language',
+    system: 'system',
+    comma_decimal: 'comma_decimal',
+    decimal_comma: 'decimal_comma',
+    space_comma: 'space_comma',
+    none: 'none',
+};
+exports.TimeFormat = {
+    language: 'language',
+    system: 'system',
+    am_pm: '12',
+    twenty_four: '24',
+};
+
+
+/***/ }),
+
+/***/ 300:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.formatDateNumeric = exports.formatDate = void 0;
+const formatDate = (dateObj, locale, overrideLanguage) => new Intl.DateTimeFormat(overrideLanguage !== null && overrideLanguage !== void 0 ? overrideLanguage : locale.language, {
+    month: '2-digit',
+    day: '2-digit',
+}).format(dateObj);
+exports.formatDate = formatDate;
+const formatDateNumeric = (dateObj, locale, overrideLanguage) => new Intl.DateTimeFormat(overrideLanguage !== null && overrideLanguage !== void 0 ? overrideLanguage : locale.language, {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+}).format(dateObj);
+exports.formatDateNumeric = formatDateNumeric;
+
+
+/***/ }),
+
+/***/ 141:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.formatDateTimeRaceInfo = exports.formatDateTime = void 0;
+const use_am_pm_1 = __webpack_require__(975);
+const formatDateTime = (dateObj, locale) => new Intl.DateTimeFormat(locale.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: (0, use_am_pm_1.useAmPm)(locale) ? 'numeric' : '2-digit',
+    minute: '2-digit',
+    hour12: (0, use_am_pm_1.useAmPm)(locale),
+}).format(dateObj);
+exports.formatDateTime = formatDateTime;
+const formatDateTimeRaceInfo = (dateObj, locale) => new Intl.DateTimeFormat(locale.language, {
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: (0, use_am_pm_1.useAmPm)(locale),
+}).format(dateObj);
+exports.formatDateTimeRaceInfo = formatDateTimeRaceInfo;
+
+
+/***/ }),
+
+/***/ 975:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.useAmPm = void 0;
+const constants_1 = __webpack_require__(198);
+const useAmPm = (locale) => {
+    if (locale.time_format === constants_1.TimeFormat.language || locale.time_format === constants_1.TimeFormat.system) {
+        const testLanguage = locale.time_format === constants_1.TimeFormat.language ? locale.language : undefined;
+        const test = new Date().toLocaleString(testLanguage);
+        return test.includes('AM') || test.includes('PM');
+    }
+    return locale.time_format === constants_1.TimeFormat.am_pm;
+};
+exports.useAmPm = useAmPm;
+
+
+/***/ }),
+
+/***/ 278:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.styles = void 0;
+const lit_1 = __webpack_require__(110);
+exports.styles = (0, lit_1.css) `table{width:100%;border-spacing:0;border-collapse:separate;padding:0 16px 16px}table.nopadding{padding:0;width:100%;border-spacing:0;border-collapse:separate}th{background-color:var(--table-row-alternative-background-color,#eee)}td,th{padding:5px;text-align:left}tr{color:var(--secondary-text-color)}tr:nth-child(even){background-color:var(--table-row-alternative-background-color,#eee)}.text-center{text-align:center}.width-40{width:40px}.width-50{width:50px}.width-60{width:60px}.hide{display:none}.strikethrough{text-decoration:line-through}.italic{font-style:italic}a{text-decoration:none;color:var(--secondary-text-color)}.constructor-logo{width:20px;margin:auto;display:block;float:left;background-color:#fff;border-radius:50%;margin-right:3px}.clickable{cursor:pointer}.formulaone-font{font-family:F1Bold}ha-icon{color:var(--secondary-text-color)}.transparent{background-color:transparent!important}.weather-info{padding:10px}.weather-info td{width:33%}`;
+
+
+/***/ }),
+
+/***/ 241:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FormulaOneCardType = exports.PreviousRaceDisplay = exports.CountdownType = exports.WeatherUnit = void 0;
+var WeatherUnit;
+(function (WeatherUnit) {
+    WeatherUnit["Metric"] = "metric";
+    WeatherUnit["MilesCelsius"] = "uk";
+    WeatherUnit["MilesFahrenheit"] = "us";
+})(WeatherUnit = exports.WeatherUnit || (exports.WeatherUnit = {}));
+var CountdownType;
+(function (CountdownType) {
+    CountdownType["Race"] = "race";
+    CountdownType["Qualifying"] = "qualifying";
+    CountdownType["Practice1"] = "practice1";
+    CountdownType["Practice2"] = "practice2";
+    CountdownType["Practice3"] = "practice3";
+    CountdownType["Sprint"] = "sprint";
+})(CountdownType = exports.CountdownType || (exports.CountdownType = {}));
+var PreviousRaceDisplay;
+(function (PreviousRaceDisplay) {
+    PreviousRaceDisplay["Strikethrough"] = "strikethrough";
+    PreviousRaceDisplay["Italic"] = "italic";
+    PreviousRaceDisplay["Hide"] = "hide";
+})(PreviousRaceDisplay = exports.PreviousRaceDisplay || (exports.PreviousRaceDisplay = {}));
+var FormulaOneCardType;
+(function (FormulaOneCardType) {
+    FormulaOneCardType["DriverStandings"] = "driver_standings";
+    FormulaOneCardType["ConstructorStandings"] = "constructor_standings";
+    FormulaOneCardType["NextRace"] = "next_race";
+    FormulaOneCardType["Schedule"] = "schedule";
+    FormulaOneCardType["LastResult"] = "last_result";
+    FormulaOneCardType["Results"] = "results";
+    FormulaOneCardType["Countdown"] = "countdown";
+})(FormulaOneCardType = exports.FormulaOneCardType || (exports.FormulaOneCardType = {}));
+
+
+/***/ }),
+
+/***/ 438:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.renderConstructorColumn = exports.reduceArray = exports.getRefreshTime = exports.calculateWindDirection = exports.renderWeatherInfo = exports.renderLastYearsResults = exports.renderRaceInfo = exports.renderHeader = exports.clickHandler = exports.getEndOfSeasonMessage = exports.getApiLoadingMessage = exports.getApiErrorMessage = exports.getDriverName = exports.getCircuitName = exports.getTeamImage = exports.checkConfig = exports.getCountryFlagByName = exports.getCountryFlagByNationality = exports.getCountries = exports.hasConfigOrCardValuesChanged = void 0;
+const lit_1 = __webpack_require__(110);
+const formulaone_card_types_1 = __webpack_require__(241);
+const format_date_time_1 = __webpack_require__(141);
+const custom_card_helpers_1 = __webpack_require__(313);
+const format_date_1 = __webpack_require__(300);
+const constants_1 = __webpack_require__(198);
+const action_handler_directive_1 = __webpack_require__(22);
+const restcountry_client_1 = __webpack_require__(959);
+const until_js_1 = __webpack_require__(557);
+const hasConfigOrCardValuesChanged = (node, changedProps) => {
+    if (changedProps.has('config')) {
+        return true;
+    }
+    const card = changedProps.get('card');
+    if (card && card.parent) {
+        return card.parent.properties !== node.properties;
+    }
+    const cardValues = changedProps.get('cardValues');
+    if (cardValues) {
+        return cardValues != node.properties;
+    }
+    return false;
+};
+exports.hasConfigOrCardValuesChanged = hasConfigOrCardValuesChanged;
+const getCountries = () => {
+    const countryClient = new restcountry_client_1.default();
+    return countryClient.GetCountriesFromLocalStorage();
+};
+exports.getCountries = getCountries;
+const getCountryFlagByNationality = (card, nationality) => {
+    const countries = (0, exports.getCountries)();
+    const country = countries.filter(x => x.demonym == nationality);
+    if (country.length > 1) {
+        return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png);
+    }
+    return card.imageClient.GetImage(country[0].flags.png);
+};
+exports.getCountryFlagByNationality = getCountryFlagByNationality;
+const getCountryFlagByName = (card, countryName) => {
+    const countries = (0, exports.getCountries)();
+    const country = countries.filter(x => {
+        var _a;
+        return x.name == countryName || x.nativeName == countryName ||
+            ((_a = x.altSpellings) === null || _a === void 0 ? void 0 : _a.includes(countryName));
+    })[0];
+    return card.imageClient.GetImage(country.flags.png);
+};
+exports.getCountryFlagByName = getCountryFlagByName;
+const checkConfig = (config) => {
+    if (config.card_type === undefined) {
+        throw new Error('Please define FormulaOne card type (card_type).');
+    }
+};
+exports.checkConfig = checkConfig;
+const getTeamImage = (card, teamName) => {
+    teamName = teamName.toLocaleLowerCase().replace('_', '-');
+    const exceptions = [{ teamName: 'red-bull', corrected: 'red-bull-racing' }, { teamName: 'alfa', corrected: 'alfa-romeo' }, { teamName: 'haas', corrected: 'haas-f1-team' }];
+    const exception = exceptions.filter(exception => exception.teamName == teamName);
+    if (exception.length > 0) {
+        teamName = exception[0].corrected;
+    }
+    return card.imageClient.GetImage(`${constants_1.ImageConstants.TeamLogoCDN}/2023/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`);
+};
+exports.getTeamImage = getTeamImage;
+const getCircuitName = (location) => {
+    let circuitName = location.country.replace(" ", "-");
+    const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi' }, { countryDashed: 'UK', name: 'Great_Britain' },
+        { countryDashed: 'Monaco', name: 'Monoco' }, { countryDashed: 'Azerbaijan', name: 'Baku' }, { countryDashed: 'Saudi-Arabia', name: 'Saudi_Arabia' }];
+    const exception = exceptions.filter(exception => exception.countryDashed == circuitName);
+    if (exception.length > 0) {
+        circuitName = exception[0].name;
+    }
+    if ((location.country == 'USA' || location.country == 'United States') && location.locality != 'Austin') {
+        circuitName = location.locality.replace(" ", "_");
+    }
+    if (location.country == 'Italy' && location.locality == 'Imola') {
+        circuitName = "Emilia_Romagna";
+    }
+    return circuitName;
+};
+exports.getCircuitName = getCircuitName;
+const getDriverName = (driver, config) => {
+    const permanentNumber = driver.code == 'VER' ? 1 : driver.permanentNumber;
+    return `${driver.givenName} ${driver.familyName}${(config.show_carnumber ? ` #${permanentNumber}` : '')}`;
+};
+exports.getDriverName = getDriverName;
+const getApiErrorMessage = (dataType) => {
+    return (0, lit_1.html) `<table><tr><td class="text-center"><ha-icon icon="mdi:alert-circle"></ha-icon>Error getting ${dataType}<ha-icon icon="mdi:alert-circle"></ha-icon></td></tr></table>`;
+};
+exports.getApiErrorMessage = getApiErrorMessage;
+const getApiLoadingMessage = () => {
+    return (0, lit_1.html) `<table><tr><td class="text-center"><ha-icon icon="mdi:car-speed-limiter"></ha-icon>Loading...<ha-icon icon="mdi:car-speed-limiter"></ha-icon></td></tr></table>`;
+};
+exports.getApiLoadingMessage = getApiLoadingMessage;
+const getEndOfSeasonMessage = (message) => {
+    return (0, lit_1.html) `<table><tr><td class="text-center"><ha-icon icon="mdi:flag-checkered"></ha-icon><strong>${message}</strong><ha-icon icon="mdi:flag-checkered"></ha-icon></td></tr></table>`;
+};
+exports.getEndOfSeasonMessage = getEndOfSeasonMessage;
+const clickHandler = (node, config, hass, ev) => {
+    (0, custom_card_helpers_1.handleAction)(node, hass, config.actions, ev.detail.action);
+};
+exports.clickHandler = clickHandler;
+const renderHeader = (card, race, preventClick = false) => {
+    var _a, _b;
+    const circuitName = (0, exports.getCircuitName)(race.Circuit.Location);
+    const _handleAction = (ev) => {
+        if (card.hass && card.config.actions && ev.detail.action && !preventClick) {
+            (0, exports.clickHandler)(card.parent, card.config, card.hass, ev);
+        }
+    };
+    const hasConfigAction = card.config.image_clickable || card.config.actions !== undefined;
+    const circuitUrl = race.Circuit.url;
+    if (card.config.image_clickable && !card.config.actions) {
+        card.config.actions = {
+            tap_action: {
+                action: 'url',
+                url_path: circuitUrl
+            }
+        };
+    }
+    const imageHtml = (0, lit_1.html) `<img width="100%" src="${card.imageClient.GetImage(`${constants_1.ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png`)}" @action="${_handleAction}" .actionHandler="${(0, action_handler_directive_1.actionHandler)({
+        hasHold: (0, custom_card_helpers_1.hasAction)((_a = card.config.actions) === null || _a === void 0 ? void 0 : _a.hold_action),
+        hasDoubleClick: (0, custom_card_helpers_1.hasAction)((_b = card.config.actions) === null || _b === void 0 ? void 0 : _b.double_tap_action),
+    })}" class="${(hasConfigAction ? ' clickable' : null)}">`;
+    const raceName = (0, lit_1.html) `<h2 class="${(card.config.f1_font ? 'formulaone-font' : '')}"><img height="25" src="${(0, exports.getCountryFlagByName)(card, race.Circuit.Location.country)}">  ${race.round} : ${race.raceName}</h2>`;
+    return (0, lit_1.html) `${(card.config.card_type == formulaone_card_types_1.FormulaOneCardType.Countdown ? (0, lit_1.html) `` : raceName)} ${(card.config.hide_tracklayout ? (0, lit_1.html) `` : imageHtml)}<br>`;
+};
+exports.renderHeader = renderHeader;
+const renderRaceInfo = (card, race, raceDateTime) => {
+    var _a;
+    const config = card.config;
+    const hass = card.hass;
+    if (config.hide_racedatetimes) {
+        return (0, lit_1.html) ``;
+    }
+    const configWeatherApi = config.show_weather && ((_a = config.weather_options) === null || _a === void 0 ? void 0 : _a.api_key) !== undefined;
+    const weatherPromise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
+    const lastYearPromise = config.show_lastyears_result ? card.client.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
+    const promises = Promise.all([weatherPromise, lastYearPromise]);
+    return (0, lit_1.html) `${(0, until_js_1.until)(promises.then(([weather, lastYearData]) => {
+        const weatherData = weather === null || weather === void 0 ? void 0 : weather.days[0];
+        const raceDate = new Date(race.date + 'T' + race.time);
+        const weatherInfo = (0, exports.renderWeatherInfo)(weatherData, config, raceDateTime !== null && raceDateTime !== void 0 ? raceDateTime : raceDate);
+        const lastYearsResult = (0, exports.renderLastYearsResults)(config, lastYearData);
+        const freePractice1 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
+        const freePractice2 = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
+        const freePractice3 = race.ThirdPractice !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
+        const raceDateFormatted = (0, format_date_time_1.formatDateTimeRaceInfo)(raceDate, hass.locale);
+        const qualifyingDate = (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
+        const sprintDate = race.Sprint !== undefined ? (0, format_date_time_1.formatDateTimeRaceInfo)(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
+        return (0, lit_1.html) `${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${(0, format_date_1.formatDateNumeric)(raceDate, hass.locale, config.date_locale)}</td><td> </td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr><tr><td>${card.translation('race')}</td><td>${race.round}</td><td> </td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr><tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td> </td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr><tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td> </td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr><tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td> </td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr><tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td> </td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
+    }))}`;
+};
+exports.renderRaceInfo = renderRaceInfo;
+const renderLastYearsResults = (config, raceData) => {
+    var _a, _b;
+    if (!raceData) {
+        return (0, lit_1.html) ``;
+    }
+    const result = raceData.Results ? raceData.Results[0] : null;
+    const fastest = (_a = raceData.Results) === null || _a === void 0 ? void 0 : _a.filter((result) => { var _a; return ((_a = result.FastestLap) === null || _a === void 0 ? void 0 : _a.rank) === '1'; })[0];
+    return (0, lit_1.html) `<tr><td colspan="5"><table class="weather-info"><tr><td class="text-center"><h1 class="${(config.f1_font ? 'formulaone-font' : '')}">${new Date(raceData.date).getFullYear()}</h1><h2 class="${(config.f1_font ? 'formulaone-font' : '')}"><ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon>${result === null || result === void 0 ? void 0 : result.Driver.givenName} ${result === null || result === void 0 ? void 0 : result.Driver.familyName} (${result === null || result === void 0 ? void 0 : result.Constructor.name})</h2><h3 class="${(config.f1_font ? 'formulaone-font' : '')}"><ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon>${fastest === null || fastest === void 0 ? void 0 : fastest.Driver.givenName} ${fastest === null || fastest === void 0 ? void 0 : fastest.Driver.familyName} (${(_b = fastest === null || fastest === void 0 ? void 0 : fastest.FastestLap) === null || _b === void 0 ? void 0 : _b.Time.time})</h3></td></tr></table></td></tr><tr><td colspan="5"> </td></tr>`;
+};
+exports.renderLastYearsResults = renderLastYearsResults;
+const renderWeatherInfo = (weatherData, config, raceDate) => {
+    var _a, _b;
+    if (!weatherData) {
+        return (0, lit_1.html) ``;
+    }
+    const windUnit = ((_a = config.weather_options) === null || _a === void 0 ? void 0 : _a.unit) === formulaone_card_types_1.WeatherUnit.Metric ? 'km/h' : 'mph';
+    const tempUnit = ((_b = config.weather_options) === null || _b === void 0 ? void 0 : _b.unit) === formulaone_card_types_1.WeatherUnit.MilesFahrenheit ? '°F' : '°C';
+    const hourData = weatherData.hours ? weatherData.hours[raceDate.getHours()] : weatherData;
+    return (0, lit_1.html) `<tr><td colspan="5"><table class="weather-info"><tr><td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon>${(0, exports.calculateWindDirection)(hourData.winddir)} ${hourData.windspeed} ${windUnit}</td><td><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon>${hourData.precip} mm</td><td><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon>${hourData.precipprob}%</td></tr><tr><td><ha-icon slot="icon" icon="mdi:clouds"></ha-icon>${hourData.cloudcover} %</td><td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon>${hourData.temp} ${tempUnit}</td><td><ha-icon slot="icon" icon="mdi:sun-thermometer"></ha-icon>${hourData.feelslike} ${tempUnit}</td></tr></table></td></tr><tr><td colspan="5"> </td></tr>`;
+};
+exports.renderWeatherInfo = renderWeatherInfo;
+const calculateWindDirection = (windDirection) => {
+    const directions = [
+        { label: 'N', range: [0, 11.25] },
+        { label: 'NNE', range: [11.25, 33.75] },
+        { label: 'NE', range: [33.75, 56.25] },
+        { label: 'ENE', range: [56.25, 78.75] },
+        { label: 'E', range: [78.75, 101.25] },
+        { label: 'ESE', range: [101.25, 123.75] },
+        { label: 'SE', range: [123.75, 146.25] },
+        { label: 'SSE', range: [146.25, 168.75] },
+        { label: 'S', range: [168.75, 191.25] },
+        { label: 'SSW', range: [191.25, 213.75] },
+        { label: 'SW', range: [213.75, 236.25] },
+        { label: 'WSW', range: [236.25, 258.75] },
+        { label: 'W', range: [258.75, 281.25] },
+        { label: 'WNW', range: [281.25, 303.75] },
+        { label: 'NW', range: [303.75, 326.25] },
+        { label: 'NNW', range: [326.25, 348.75] },
+        { label: 'N', range: [348.75, 360] }
+    ];
+    for (const { label, range } of directions) {
+        if (windDirection >= range[0] && windDirection <= range[1]) {
+            return label;
+        }
+    }
+};
+exports.calculateWindDirection = calculateWindDirection;
+const getRefreshTime = (endpoint) => {
+    let refreshCacheHours = 24;
+    const now = new Date();
+    const scheduleLocalStorage = localStorage.getItem(`${now.getFullYear()}.json`);
+    if (scheduleLocalStorage) {
+        const item = JSON.parse(scheduleLocalStorage);
+        const schedule = JSON.parse(item.data);
+        const filteredRaces = schedule.MRData.RaceTable.Races.filter(race => new Date(race.date).toLocaleDateString == now.toLocaleDateString);
+        if (filteredRaces.length > 0) {
+            const todaysRace = filteredRaces[0];
+            const raceTime = new Date(todaysRace.date + 'T' + todaysRace.time);
+            const lastResultLocalStorage = localStorage.getItem(endpoint);
+            if (lastResultLocalStorage) {
+                const resultItem = JSON.parse(lastResultLocalStorage);
+                if (new Date(resultItem.created) < raceTime) {
+                    refreshCacheHours = 1;
+                }
+            }
+        }
+    }
+    return refreshCacheHours;
+};
+exports.getRefreshTime = getRefreshTime;
+const reduceArray = (array, number) => {
+    if (array === undefined) {
+        return [];
+    }
+    return number ? array.slice(0, number) : array;
+};
+exports.reduceArray = reduceArray;
+const renderConstructorColumn = (card, constructor) => {
+    return (0, lit_1.html) `<td>${(card.config.standings.show_teamlogo ? (0, lit_1.html) `<img class="constructor-logo" height="20" width="20" src="${(0, exports.getTeamImage)(card, constructor.constructorId)}"> ` : '')}${constructor.name}</td>`;
+};
+exports.renderConstructorColumn = renderConstructorColumn;
+
+
+/***/ }),
+
+/***/ 11:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  CSSResult: () => (/* reexport */ o),
+  LitElement: () => (/* reexport */ lit_element_s),
+  ReactiveElement: () => (/* reexport */ d),
+  UpdatingElement: () => (/* reexport */ lit_element_r),
+  _$LE: () => (/* reexport */ lit_element_h),
+  _$LH: () => (/* reexport */ lit_html._$LH),
+  adoptStyles: () => (/* reexport */ S),
+  css: () => (/* reexport */ i),
+  customElement: () => (/* reexport */ custom_element_e),
+  decorateProperty: () => (/* reexport */ base_o),
+  defaultConverter: () => (/* reexport */ reactive_element_n),
+  eventOptions: () => (/* reexport */ event_options_e),
+  getCompatibleStyle: () => (/* reexport */ c),
+  html: () => (/* reexport */ lit_html.html),
+  legacyPrototypeMethod: () => (/* reexport */ base_e),
+  noChange: () => (/* reexport */ lit_html.noChange),
+  notEqual: () => (/* reexport */ a),
+  nothing: () => (/* reexport */ lit_html.nothing),
+  property: () => (/* reexport */ property_e),
+  query: () => (/* reexport */ query_i),
+  queryAll: () => (/* reexport */ query_all_e),
+  queryAssignedElements: () => (/* reexport */ query_assigned_elements_l),
+  queryAssignedNodes: () => (/* reexport */ query_assigned_nodes_o),
+  queryAsync: () => (/* reexport */ query_async_e),
+  render: () => (/* reexport */ lit_html.render),
+  standardPrototypeMethod: () => (/* reexport */ base_t),
+  state: () => (/* reexport */ state_t),
+  supportsAdoptingStyleSheets: () => (/* reexport */ e),
+  svg: () => (/* reexport */ lit_html.svg),
+  unsafeCSS: () => (/* reexport */ r)
+});
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/css-tag.js
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t=window,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),n=new WeakMap;class o{constructor(t,e,n){if(this._$cssResult$=!0,n!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const s=this.t;if(e&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n.set(s,t))}return t}toString(){return this.cssText}}const r=t=>new o("string"==typeof t?t:t+"",void 0,s),i=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o(n,t,s)},S=(s,n)=>{e?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n)}))},c=e?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r(e)})(t):t;
+//# sourceMappingURL=css-tag.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/reactive-element.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */var reactive_element_s;const reactive_element_e=window,reactive_element_r=reactive_element_e.trustedTypes,h=reactive_element_r?reactive_element_r.emptyScript:"",reactive_element_o=reactive_element_e.reactiveElementPolyfillSupport,reactive_element_n={toAttribute(t,i){switch(i){case Boolean:t=t?h:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t)}catch(t){s=null}}return s}},a=(t,i)=>i!==t&&(i==i||t==t),l={attribute:!0,type:String,converter:reactive_element_n,reflect:!1,hasChanged:a};class d extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u()}static addInitializer(t){var i;this.finalize(),(null!==(i=this.h)&&void 0!==i?i:this.h=[]).push(t)}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Ep(s,i);void 0!==e&&(this._$Ev.set(e,s),t.push(e))})),t}static createProperty(t,i=l){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e)}}static getPropertyDescriptor(t,i,s){return{get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l}static finalize(){if(this.hasOwnProperty("finalized"))return!1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),void 0!==t.h&&(this.h=[...t.h]),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s])}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(c(i))}else void 0!==i&&s.push(c(i));return s}static _$Ep(t,i){const s=i.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)))}addController(t){var i,s;(null!==(i=this._$ES)&&void 0!==i?i:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t))}removeController(t){var i;null===(i=this._$ES)||void 0===i||i.splice(this._$ES.indexOf(t)>>>0,1)}_$Eg(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Ei.set(i,this[i]),delete this[i])}))}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return S(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}))}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}))}attributeChangedCallback(t,i,s){this._$AK(t,s)}_$EO(t,i,s=l){var e;const r=this.constructor._$Ep(t,s);if(void 0!==r&&!0===s.reflect){const h=(void 0!==(null===(e=s.converter)||void 0===e?void 0:e.toAttribute)?s.converter:reactive_element_n).toAttribute(i,s.type);this._$El=t,null==h?this.removeAttribute(r):this.setAttribute(r,h),this._$El=null}}_$AK(t,i){var s;const e=this.constructor,r=e._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=e.getPropertyOptions(r),h="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(s=t.converter)||void 0===s?void 0:s.fromAttribute)?t.converter:reactive_element_n;this._$El=r,this[r]=h.fromAttribute(i,t.type),this._$El=null}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||a)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$E_=this._$Ej())}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,i)=>this[i]=t)),this._$Ei=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$Ek()}catch(t){throw i=!1,this._$Ek(),t}i&&this._$AE(s)}willUpdate(t){}_$AE(t){var i;null===(i=this._$ES)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return!0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,i)=>this._$EO(i,this[i],t))),this._$EC=void 0),this._$Ek()}updated(t){}firstUpdated(t){}}d.finalized=!0,d.elementProperties=new Map,d.elementStyles=[],d.shadowRootOptions={mode:"open"},null==reactive_element_o||reactive_element_o({ReactiveElement:d}),(null!==(reactive_element_s=reactive_element_e.reactiveElementVersions)&&void 0!==reactive_element_s?reactive_element_s:reactive_element_e.reactiveElementVersions=[]).push("1.6.1");
+//# sourceMappingURL=reactive-element.js.map
+
+// EXTERNAL MODULE: ./node_modules/lit-html/lit-html.js
+var lit_html = __webpack_require__(639);
+;// CONCATENATED MODULE: ./node_modules/lit-element/lit-element.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */var lit_element_l,lit_element_o;const lit_element_r=d;class lit_element_s extends d{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=(0,lit_html.render)(i,this.renderRoot,this.renderOptions)}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0)}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1)}render(){return lit_html.noChange}}lit_element_s.finalized=!0,lit_element_s._$litElement$=!0,null===(lit_element_l=globalThis.litElementHydrateSupport)||void 0===lit_element_l||lit_element_l.call(globalThis,{LitElement:lit_element_s});const lit_element_n=globalThis.litElementPolyfillSupport;null==lit_element_n||lit_element_n({LitElement:lit_element_s});const lit_element_h={_$AK:(t,e,i)=>{t._$AK(e,i)},_$AL:t=>t._$AL};(null!==(lit_element_o=globalThis.litElementVersions)&&void 0!==lit_element_o?lit_element_o:globalThis.litElementVersions=[]).push("3.3.3");
+//# sourceMappingURL=lit-element.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/base.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const base_e=(e,t,o)=>{Object.defineProperty(t,o,e)},base_t=(e,t)=>({kind:"method",placement:"prototype",key:t.key,descriptor:e}),base_o=({finisher:e,descriptor:t})=>(o,n)=>{var r;if(void 0===n){const n=null!==(r=o.originalKey)&&void 0!==r?r:o.key,i=null!=t?{kind:"method",placement:"prototype",key:n,descriptor:t(o.key)}:{...o,key:n};return null!=e&&(i.finisher=function(t){e(t,n)}),i}{const r=o.constructor;void 0!==t&&Object.defineProperty(o,n,t(n)),null==e||e(r,n)}};
+//# sourceMappingURL=base.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/custom-element.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const custom_element_e=e=>n=>"function"==typeof n?((e,n)=>(customElements.define(e,n),n))(e,n):((e,n)=>{const{kind:t,elements:s}=n;return{kind:t,elements:s,finisher(n){customElements.define(e,n)}}})(e,n);
+//# sourceMappingURL=custom-element.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/property.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const property_i=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,finisher(n){n.createProperty(e.key,i)}}:{kind:"field",key:Symbol(),placement:"own",descriptor:{},originalKey:e.key,initializer(){"function"==typeof e.initializer&&(this[e.key]=e.initializer.call(this))},finisher(n){n.createProperty(e.key,i)}};function property_e(e){return(n,t)=>void 0!==t?((i,e,n)=>{e.constructor.createProperty(n,i)})(e,n,t):property_i(e,n)}
+//# sourceMappingURL=property.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/state.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function state_t(t){return property_e({...t,state:!0})}
+//# sourceMappingURL=state.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/event-options.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function event_options_e(e){return base_o({finisher:(r,t)=>{Object.assign(r.prototype[t],e)}})}
+//# sourceMappingURL=event-options.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/query.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function query_i(i,n){return base_o({descriptor:o=>{const t={get(){var o,n;return null!==(n=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==n?n:null},enumerable:!0,configurable:!0};if(n){const n="symbol"==typeof o?Symbol():"__"+o;t.get=function(){var o,t;return void 0===this[n]&&(this[n]=null!==(t=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(i))&&void 0!==t?t:null),this[n]}}return t}})}
+//# sourceMappingURL=query.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/query-all.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function query_all_e(e){return base_o({descriptor:r=>({get(){var r,o;return null!==(o=null===(r=this.renderRoot)||void 0===r?void 0:r.querySelectorAll(e))&&void 0!==o?o:[]},enumerable:!0,configurable:!0})})}
+//# sourceMappingURL=query-all.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/query-async.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+function query_async_e(e){return base_o({descriptor:r=>({async get(){var r;return await this.updateComplete,null===(r=this.renderRoot)||void 0===r?void 0:r.querySelector(e)},enumerable:!0,configurable:!0})})}
+//# sourceMappingURL=query-async.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/query-assigned-elements.js
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */var query_assigned_elements_n;const query_assigned_elements_e=null!=(null===(query_assigned_elements_n=window.HTMLSlotElement)||void 0===query_assigned_elements_n?void 0:query_assigned_elements_n.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));function query_assigned_elements_l(n){const{slot:l,selector:t}=null!=n?n:{};return base_o({descriptor:o=>({get(){var o;const r="slot"+(l?`[name=${l}]`:":not([name])"),i=null===(o=this.renderRoot)||void 0===o?void 0:o.querySelector(r),s=null!=i?query_assigned_elements_e(i,n):[];return t?s.filter((o=>o.matches(t))):s},enumerable:!0,configurable:!0})})}
+//# sourceMappingURL=query-assigned-elements.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@lit/reactive-element/decorators/query-assigned-nodes.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function query_assigned_nodes_o(o,n,r){let l,s=o;return"object"==typeof o?(s=o.slot,l=o):l={flatten:n},r?query_assigned_elements_l({slot:s,flatten:n,selector:r}):base_o({descriptor:e=>({get(){var e,t;const o="slot"+(s?`[name=${s}]`:":not([name])"),n=null===(e=this.renderRoot)||void 0===e?void 0:e.querySelector(o);return null!==(t=null==n?void 0:n.assignedNodes(l))&&void 0!==t?t:[]},enumerable:!0,configurable:!0})})}
+//# sourceMappingURL=query-assigned-nodes.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-element/index.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */console.warn("The main 'lit-element' module entrypoint is deprecated. Please update your imports to use the 'lit' package: 'lit' and 'lit/decorators.ts' or import from 'lit-element/lit-element.ts'. See https://lit.dev/msg/deprecated-import-path for more information.");
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 557:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  UntilDirective: () => (/* binding */ until_c),
+  until: () => (/* binding */ until_m)
+});
+
+// EXTERNAL MODULE: ./node_modules/lit-html/lit-html.js
+var lit_html = __webpack_require__(639);
+;// CONCATENATED MODULE: ./node_modules/lit-html/directive-helpers.js
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const{I:l}=lit_html._$LH,i=o=>null===o||"object"!=typeof o&&"function"!=typeof o,n={HTML:1,SVG:2},t=(o,l)=>void 0===l?void 0!==(null==o?void 0:o._$litType$):(null==o?void 0:o._$litType$)===l,v=o=>{var l;return null!=(null===(l=null==o?void 0:o._$litType$)||void 0===l?void 0:l.h)},d=o=>void 0!==(null==o?void 0:o._$litDirective$),u=o=>null==o?void 0:o._$litDirective$,e=o=>void 0===o.strings,r=()=>document.createComment(""),c=(o,i,n)=>{var t;const v=o._$AA.parentNode,d=void 0===i?o._$AB:i._$AA;if(void 0===n){const i=v.insertBefore(r(),d),t=v.insertBefore(r(),d);n=new l(i,t,o,o.options)}else{const l=n._$AB.nextSibling,i=n._$AM,u=i!==o;if(u){let l;null===(t=n._$AQ)||void 0===t||t.call(n,o),n._$AM=o,void 0!==n._$AP&&(l=o._$AU)!==i._$AU&&n._$AP(l)}if(l!==d||u){let o=n._$AA;for(;o!==l;){const l=o.nextSibling;v.insertBefore(o,d),o=l}}}return n},f=(o,l,i=o)=>(o._$AI(l,i),o),s={},a=(o,l=s)=>o._$AH=l,m=o=>o._$AH,p=o=>{var l;null===(l=o._$AP)||void 0===l||l.call(o,!1,!0);let i=o._$AA;const n=o._$AB.nextSibling;for(;i!==n;){const o=i.nextSibling;i.remove(),i=o}},h=o=>{o._$AR()};
+//# sourceMappingURL=directive-helpers.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/directive.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const directive_t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},directive_e=t=>(...e)=>({_$litDirective$:t,values:e});class directive_i{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}
+//# sourceMappingURL=directive.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/async-directive.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const async_directive_s=(i,t)=>{var e,o;const r=i._$AN;if(void 0===r)return!1;for(const i of r)null===(o=(e=i)._$AO)||void 0===o||o.call(e,t,!1),async_directive_s(i,t);return!0},o=i=>{let t,e;do{if(void 0===(t=i._$AM))break;e=t._$AN,e.delete(i),i=t}while(0===(null==e?void 0:e.size))},async_directive_r=i=>{for(let t;t=i._$AM;i=t){let e=t._$AN;if(void 0===e)t._$AN=e=new Set;else if(e.has(i))break;e.add(i),async_directive_l(t)}};function async_directive_n(i){void 0!==this._$AN?(o(this),this._$AM=i,async_directive_r(this)):this._$AM=i}function async_directive_h(i,t=!1,e=0){const r=this._$AH,n=this._$AN;if(void 0!==n&&0!==n.size)if(t)if(Array.isArray(r))for(let i=e;i<r.length;i++)async_directive_s(r[i],!1),o(r[i]);else null!=r&&(async_directive_s(r,!1),o(r));else async_directive_s(this,i)}const async_directive_l=i=>{var t,s,o,r;i.type==directive_t.CHILD&&(null!==(t=(o=i)._$AP)&&void 0!==t||(o._$AP=async_directive_h),null!==(s=(r=i)._$AQ)&&void 0!==s||(r._$AQ=async_directive_n))};class async_directive_c extends directive_i{constructor(){super(...arguments),this._$AN=void 0}_$AT(i,t,e){super._$AT(i,t,e),async_directive_r(this),this.isConnected=i._$AU}_$AO(i,t=!0){var e,r;i!==this.isConnected&&(this.isConnected=i,i?null===(e=this.reconnected)||void 0===e||e.call(this):null===(r=this.disconnected)||void 0===r||r.call(this)),t&&(async_directive_s(this,i),o(this))}setValue(t){if(e(this._$Ct))this._$Ct._$AI(t,this);else{const i=[...this._$Ct._$AH];i[this._$Ci]=t,this._$Ct._$AI(i,this,0)}}disconnected(){}reconnected(){}}
+//# sourceMappingURL=async-directive.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/directives/private-async-helpers.js
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const private_async_helpers_t=async(t,s)=>{for await(const i of t)if(!1===await s(i))return};class private_async_helpers_s{constructor(t){this.G=t}disconnect(){this.G=void 0}reconnect(t){this.G=t}deref(){return this.G}}class private_async_helpers_i{constructor(){this.Y=void 0,this.Z=void 0}get(){return this.Y}pause(){var t;null!==(t=this.Y)&&void 0!==t||(this.Y=new Promise((t=>this.Z=t)))}resume(){var t;null===(t=this.Z)||void 0===t||t.call(this),this.Y=this.Z=void 0}}
+//# sourceMappingURL=private-async-helpers.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit-html/directives/until.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const until_n=t=>!i(t)&&"function"==typeof t.then,until_h=1073741823;class until_c extends async_directive_c{constructor(){super(...arguments),this._$C_t=until_h,this._$Cwt=[],this._$Cq=new private_async_helpers_s(this),this._$CK=new private_async_helpers_i}render(...s){var i;return null!==(i=s.find((t=>!until_n(t))))&&void 0!==i?i:lit_html.noChange}update(s,i){const r=this._$Cwt;let e=r.length;this._$Cwt=i;const o=this._$Cq,c=this._$CK;this.isConnected||this.disconnected();for(let t=0;t<i.length&&!(t>this._$C_t);t++){const s=i[t];if(!until_n(s))return this._$C_t=t,s;t<e&&s===r[t]||(this._$C_t=until_h,e=0,Promise.resolve(s).then((async t=>{for(;c.get();)await c.get();const i=o.deref();if(void 0!==i){const r=i._$Cwt.indexOf(s);r>-1&&r<i._$C_t&&(i._$C_t=r,i.setValue(t))}})))}return lit_html.noChange}disconnected(){this._$Cq.disconnect(),this._$CK.pause()}reconnected(){this._$Cq.reconnect(this),this._$CK.resume()}}const until_m=directive_e(until_c);
+//# sourceMappingURL=until.js.map
+
+
+/***/ }),
+
+/***/ 639:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   _$LH: () => (/* binding */ j),
+/* harmony export */   html: () => (/* binding */ x),
+/* harmony export */   noChange: () => (/* binding */ T),
+/* harmony export */   nothing: () => (/* binding */ A),
+/* harmony export */   render: () => (/* binding */ D),
+/* harmony export */   svg: () => (/* binding */ b)
+/* harmony export */ });
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+var t;const i=window,s=i.trustedTypes,e=s?s.createPolicy("lit-html",{createHTML:t=>t}):void 0,o="$lit$",n=`lit$${(Math.random()+"").slice(9)}$`,l="?"+n,h=`<${l}>`,r=document,u=()=>r.createComment(""),d=t=>null===t||"object"!=typeof t&&"function"!=typeof t,c=Array.isArray,v=t=>c(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),a="[ \t\n\f\r]",f=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,_=/-->/g,m=/>/g,p=RegExp(`>|${a}(?:([^\\s"'>=/]+)(${a}*=${a}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),g=/'/g,$=/"/g,y=/^(?:script|style|textarea|title)$/i,w=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x=w(1),b=w(2),T=Symbol.for("lit-noChange"),A=Symbol.for("lit-nothing"),E=new WeakMap,C=r.createTreeWalker(r,129,null,!1);function P(t,i){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==e?e.createHTML(i):i}const V=(t,i)=>{const s=t.length-1,e=[];let l,r=2===i?"<svg>":"",u=f;for(let i=0;i<s;i++){const s=t[i];let d,c,v=-1,a=0;for(;a<s.length&&(u.lastIndex=a,c=u.exec(s),null!==c);)a=u.lastIndex,u===f?"!--"===c[1]?u=_:void 0!==c[1]?u=m:void 0!==c[2]?(y.test(c[2])&&(l=RegExp("</"+c[2],"g")),u=p):void 0!==c[3]&&(u=p):u===p?">"===c[0]?(u=null!=l?l:f,v=-1):void 0===c[1]?v=-2:(v=u.lastIndex-c[2].length,d=c[1],u=void 0===c[3]?p:'"'===c[3]?$:g):u===$||u===g?u=p:u===_||u===m?u=f:(u=p,l=void 0);const w=u===p&&t[i+1].startsWith("/>")?" ":"";r+=u===f?s+h:v>=0?(e.push(d),s.slice(0,v)+o+s.slice(v)+n+w):s+n+(-2===v?(e.push(void 0),i):w)}return[P(t,r+(t[s]||"<?>")+(2===i?"</svg>":"")),e]};class N{constructor({strings:t,_$litType$:i},e){let h;this.parts=[];let r=0,d=0;const c=t.length-1,v=this.parts,[a,f]=V(t,i);if(this.el=N.createElement(a,e),C.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes)}for(;null!==(h=C.nextNode())&&v.length<c;){if(1===h.nodeType){if(h.hasAttributes()){const t=[];for(const i of h.getAttributeNames())if(i.endsWith(o)||i.startsWith(n)){const s=f[d++];if(t.push(i),void 0!==s){const t=h.getAttribute(s.toLowerCase()+o).split(n),i=/([.?@])?(.*)/.exec(s);v.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?H:"?"===i[1]?L:"@"===i[1]?z:k})}else v.push({type:6,index:r})}for(const i of t)h.removeAttribute(i)}if(y.test(h.tagName)){const t=h.textContent.split(n),i=t.length-1;if(i>0){h.textContent=s?s.emptyScript:"";for(let s=0;s<i;s++)h.append(t[s],u()),C.nextNode(),v.push({type:2,index:++r});h.append(t[i],u())}}}else if(8===h.nodeType)if(h.data===l)v.push({type:2,index:r});else{let t=-1;for(;-1!==(t=h.data.indexOf(n,t+1));)v.push({type:7,index:r}),t+=n.length-1}r++}}static createElement(t,i){const s=r.createElement("template");return s.innerHTML=t,s}}function S(t,i,s=t,e){var o,n,l,h;if(i===T)return i;let r=void 0!==e?null===(o=s._$Co)||void 0===o?void 0:o[e]:s._$Cl;const u=d(i)?void 0:i._$litDirective$;return(null==r?void 0:r.constructor)!==u&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===u?r=void 0:(r=new u(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Co)&&void 0!==l?l:h._$Co=[])[e]=r:s._$Cl=r),void 0!==r&&(i=S(t,r._$AS(t,i.values),r,e)),i}class M{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:r).importNode(s,!0);C.currentNode=o;let n=C.nextNode(),l=0,h=0,u=e[0];for(;void 0!==u;){if(l===u.index){let i;2===u.type?i=new R(n,n.nextSibling,this,t):1===u.type?i=new u.ctor(n,u.name,u.strings,this,t):6===u.type&&(i=new Z(n,this,t)),this._$AV.push(i),u=e[++h]}l!==(null==u?void 0:u.index)&&(n=C.nextNode(),l++)}return C.currentNode=r,o}v(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++}}class R{constructor(t,i,s,e){var o;this.type=2,this._$AH=A,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cp=null===(o=null==e?void 0:e.isConnected)||void 0===o||o}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cp}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===(null==t?void 0:t.nodeType)&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=S(this,t,i),d(t)?t===A||null==t||""===t?(this._$AH!==A&&this._$AR(),this._$AH=A):t!==this._$AH&&t!==T&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):v(t)?this.T(t):this._(t)}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t))}_(t){this._$AH!==A&&d(this._$AH)?this._$AA.nextSibling.data=t:this.$(r.createTextNode(t)),this._$AH=t}g(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=N.createElement(P(e.h,e.h[0]),this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.v(s);else{const t=new M(o,this),i=t.u(this.options);t.v(s),this.$(i),this._$AH=t}}_$AC(t){let i=E.get(t.strings);return void 0===i&&E.set(t.strings,i=new N(t)),i}T(t){c(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new R(this.k(u()),this.k(u()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e)}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i}}setConnected(t){var i;void 0===this._$AM&&(this._$Cp=t,null===(i=this._$AP)||void 0===i||i.call(this,t))}}class k{constructor(t,i,s,e,o){this.type=1,this._$AH=A,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=A}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=S(this,t,i,0),n=!d(t)||t!==this._$AH&&t!==T,n&&(this._$AH=t);else{const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=S(this,e[s+l],i,l),h===T&&(h=this._$AH[l]),n||(n=!d(h)||h!==this._$AH[l]),h===A?t=A:t!==A&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h}n&&!e&&this.j(t)}j(t){t===A?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"")}}class H extends k{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===A?void 0:t}}const I=s?s.emptyScript:"";class L extends k{constructor(){super(...arguments),this.type=4}j(t){t&&t!==A?this.element.setAttribute(this.name,I):this.element.removeAttribute(this.name)}}class z extends k{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5}_$AI(t,i=this){var s;if((t=null!==(s=S(this,t,i,0))&&void 0!==s?s:A)===T)return;const e=this._$AH,o=t===A&&e!==A||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==A&&(e===A||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t)}}class Z{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){S(this,t)}}const j={O:o,P:n,A:l,C:1,M:V,L:M,R:v,D:S,I:R,V:k,H:L,N:z,U:H,F:Z},B=i.litHtmlPolyfillSupport;null==B||B(N,R),(null!==(t=i.litHtmlVersions)&&void 0!==t?t:i.litHtmlVersions=[]).push("2.8.0");const D=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new R(i.insertBefore(u(),t),t,void 0,null!=s?s:{})}return l._$AI(t),l};
+//# sourceMappingURL=lit-html.js.map
+
+
+/***/ }),
+
+/***/ 15:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  customElement: () => (/* reexport */ t),
+  eventOptions: () => (/* reexport */ event_options_t),
+  property: () => (/* reexport */ n),
+  query: () => (/* reexport */ e),
+  queryAll: () => (/* reexport */ query_all_r),
+  queryAssignedElements: () => (/* reexport */ query_assigned_elements_o),
+  queryAssignedNodes: () => (/* reexport */ query_assigned_nodes_n),
+  queryAsync: () => (/* reexport */ query_async_r),
+  standardProperty: () => (/* reexport */ r),
+  state: () => (/* reexport */ state_r)
+});
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/custom-element.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t=t=>(e,o)=>{void 0!==o?o.addInitializer((()=>{customElements.define(t,e)})):customElements.define(t,e)};
+//# sourceMappingURL=custom-element.js.map
+
+// EXTERNAL MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/reactive-element.js + 1 modules
+var reactive_element = __webpack_require__(548);
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/property.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const o={attribute:!0,type:String,converter:reactive_element/* defaultConverter */.Ts,reflect:!1,hasChanged:reactive_element/* notEqual */.Qu},r=(t=o,e,r)=>{const{kind:n,metadata:i}=r;let s=globalThis.litPropertyMetadata.get(i);if(void 0===s&&globalThis.litPropertyMetadata.set(i,s=new Map),s.set(r.name,t),"accessor"===n){const{name:o}=r;return{set(r){const n=e.get.call(this);e.set.call(this,r),this.requestUpdate(o,n,t)},init(e){return void 0!==e&&this.C(o,void 0,t),e}}}if("setter"===n){const{name:o}=r;return function(r){const n=this[o];e.call(this,r),this.requestUpdate(o,n,t)}}throw Error("Unsupported decorator location: "+n)};function n(t){return(e,o)=>"object"==typeof o?r(t,e,o):((t,e,o)=>{const r=e.hasOwnProperty(o);return e.constructor.createProperty(o,r?{...t,wrapped:!0}:t),r?Object.getOwnPropertyDescriptor(e,o):void 0})(t,e,o)}
+//# sourceMappingURL=property.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/state.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function state_r(r){return n({...r,state:!0,attribute:!1})}
+//# sourceMappingURL=state.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/event-options.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+function event_options_t(t){return(n,o)=>{const c="function"==typeof n?n:n[o];Object.assign(c,t)}}
+//# sourceMappingURL=event-options.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/base.js
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const base_e=(e,t,c)=>(c.configurable=!0,c.enumerable=!0,Reflect.decorate&&"object"!=typeof t&&Object.defineProperty(e,t,c),c);
+//# sourceMappingURL=base.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/query.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function e(e,r){return(n,s,i)=>{const o=t=>t.renderRoot?.querySelector(e)??null;if(r){const{get:e,set:r}="object"==typeof s?n:i??(()=>{const t=Symbol();return{get(){return this[t]},set(e){this[t]=e}}})();return base_e(n,s,{get(){let t=e.call(this);return void 0===t&&(t=o(this),(null!==t||this.hasUpdated)&&r.call(this,t)),t}})}return base_e(n,s,{get(){return o(this)}})}}
+//# sourceMappingURL=query.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/query-all.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+let query_all_e;function query_all_r(r){return(n,o)=>base_e(n,o,{get(){return(this.renderRoot??(query_all_e??=document.createDocumentFragment())).querySelectorAll(r)}})}
+//# sourceMappingURL=query-all.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/query-async.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+function query_async_r(r){return(n,e)=>base_e(n,e,{async get(){return await this.updateComplete,this.renderRoot?.querySelector(r)??null}})}
+//# sourceMappingURL=query-async.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/query-assigned-elements.js
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function query_assigned_elements_o(o){return(e,n)=>{const{slot:r,selector:s}=o??{},c="slot"+(r?`[name=${r}]`:":not([name])");return base_e(e,n,{get(){const t=this.renderRoot?.querySelector(c),e=t?.assignedElements(o)??[];return void 0===s?e:e.filter((t=>t.matches(s)))}})}}
+//# sourceMappingURL=query-assigned-elements.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/decorators/query-assigned-nodes.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */function query_assigned_nodes_n(n){return(o,r)=>{const{slot:e}=n??{},s="slot"+(e?`[name=${e}]`:":not([name])");return base_e(o,r,{get(){const t=this.renderRoot?.querySelector(s);return t?.assignedNodes(n)??[]}})}}
+//# sourceMappingURL=query-assigned-nodes.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/decorators.js
+
+//# sourceMappingURL=decorators.js.map
+
+
+/***/ }),
+
+/***/ 395:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Directive: () => (/* reexport safe */ lit_html_directive_js__WEBPACK_IMPORTED_MODULE_0__.Xe),
+/* harmony export */   PartType: () => (/* reexport safe */ lit_html_directive_js__WEBPACK_IMPORTED_MODULE_0__.pX),
+/* harmony export */   directive: () => (/* reexport safe */ lit_html_directive_js__WEBPACK_IMPORTED_MODULE_0__.XM)
+/* harmony export */ });
+/* harmony import */ var lit_html_directive_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
+
+//# sourceMappingURL=directive.js.map
+
+
+/***/ }),
+
+/***/ 810:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  AsyncReplaceDirective: () => (/* reexport */ async_replace_o),
+  asyncReplace: () => (/* reexport */ async_replace_h)
+});
+
+// EXTERNAL MODULE: ./node_modules/lit/node_modules/lit-html/lit-html.js
+var lit_html = __webpack_require__(605);
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/lit-html/directive-helpers.js
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const{D:t}=lit_html._$LH,i=o=>null===o||"object"!=typeof o&&"function"!=typeof o,n={HTML:1,SVG:2},e=(o,t)=>void 0===t?void 0!==o?._$litType$:o?._$litType$===t,l=o=>null!=o?._$litType$?.h,c=o=>void 0!==o?._$litDirective$,d=o=>o?._$litDirective$,directive_helpers_f=o=>void 0===o.strings,s=()=>document.createComment(""),r=(o,i,n)=>{const e=o._$AA.parentNode,l=void 0===i?o._$AB:i._$AA;if(void 0===n){const i=e.insertBefore(s(),l),c=e.insertBefore(s(),l);n=new t(i,c,o,o.options)}else{const t=n._$AB.nextSibling,i=n._$AM,c=i!==o;if(c){let t;n._$AQ?.(o),n._$AM=o,void 0!==n._$AP&&(t=o._$AU)!==i._$AU&&n._$AP(t)}if(t!==l||c){let o=n._$AA;for(;o!==t;){const t=o.nextSibling;e.insertBefore(o,l),o=t}}}return n},v=(o,t,i=o)=>(o._$AI(t,i),o),u={},m=(o,t=u)=>o._$AH=t,p=o=>o._$AH,h=o=>{o._$AP?.(!1,!0);let t=o._$AA;const i=o._$AB.nextSibling;for(;t!==i;){const o=t.nextSibling;t.remove(),t=o}},j=o=>{o._$AR()};
+//# sourceMappingURL=directive-helpers.js.map
+
+// EXTERNAL MODULE: ./node_modules/lit/node_modules/lit-html/directive.js
+var directive = __webpack_require__(126);
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/lit-html/async-directive.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const async_directive_s=(i,t)=>{const e=i._$AN;if(void 0===e)return!1;for(const i of e)i._$AO?.(t,!1),async_directive_s(i,t);return!0},o=i=>{let t,e;do{if(void 0===(t=i._$AM))break;e=t._$AN,e.delete(i),i=t}while(0===e?.size)},async_directive_r=i=>{for(let t;t=i._$AM;i=t){let e=t._$AN;if(void 0===e)t._$AN=e=new Set;else if(e.has(i))break;e.add(i),async_directive_c(t)}};function async_directive_h(i){void 0!==this._$AN?(o(this),this._$AM=i,async_directive_r(this)):this._$AM=i}function async_directive_n(i,t=!1,e=0){const r=this._$AH,h=this._$AN;if(void 0!==h&&0!==h.size)if(t)if(Array.isArray(r))for(let i=e;i<r.length;i++)async_directive_s(r[i],!1),o(r[i]);else null!=r&&(async_directive_s(r,!1),o(r));else async_directive_s(this,i)}const async_directive_c=i=>{i.type==directive/* PartType */.pX.CHILD&&(i._$AP??=async_directive_n,i._$AQ??=async_directive_h)};class f extends directive/* Directive */.Xe{constructor(){super(...arguments),this._$AN=void 0}_$AT(i,t,e){super._$AT(i,t,e),async_directive_r(this),this.isConnected=i._$AU}_$AO(i,t=!0){i!==this.isConnected&&(this.isConnected=i,i?this.reconnected?.():this.disconnected?.()),t&&(async_directive_s(this,i),o(this))}setValue(t){if(directive_helpers_f(this._$Ct))this._$Ct._$AI(t,this);else{const i=[...this._$Ct._$AH];i[this._$Ci]=t,this._$Ct._$AI(i,this,0)}}disconnected(){}reconnected(){}}
+//# sourceMappingURL=async-directive.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/lit-html/directives/private-async-helpers.js
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const private_async_helpers_t=async(t,s)=>{for await(const i of t)if(!1===await s(i))return};class private_async_helpers_s{constructor(t){this.G=t}disconnect(){this.G=void 0}reconnect(t){this.G=t}deref(){return this.G}}class private_async_helpers_i{constructor(){this.Y=void 0,this.Z=void 0}get(){return this.Y}pause(){this.Y??=new Promise((t=>this.Z=t))}resume(){this.Z?.(),this.Y=this.Z=void 0}}
+//# sourceMappingURL=private-async-helpers.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/lit-html/directives/async-replace.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */class async_replace_o extends f{constructor(){super(...arguments),this._$Cq=new private_async_helpers_s(this),this._$CK=new private_async_helpers_i}render(i,s){return lit_html/* noChange */.Jb}update(i,[s,r]){if(this.isConnected||this.disconnected(),s===this._$CX)return;this._$CX=s;let n=0;const{_$Cq:o,_$CK:h}=this;return private_async_helpers_t(s,(async t=>{for(;h.get();)await h.get();const i=o.deref();if(void 0!==i){if(i._$CX!==s)return!1;void 0!==r&&(t=r(t,n)),i.commitValue(t,n),n++}return!0})),lit_html/* noChange */.Jb}commitValue(t,i){this.setValue(t)}disconnected(){this._$Cq.disconnect(),this._$CK.pause()}reconnected(){this._$Cq.reconnect(this),this._$CK.resume()}}const async_replace_h=(0,directive/* directive */.XM)(async_replace_o);
+//# sourceMappingURL=async-replace.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/directives/async-replace.js
+
+//# sourceMappingURL=async-replace.js.map
+
+
+/***/ }),
+
+/***/ 110:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  CSSResult: () => (/* reexport */ reactive_element/* CSSResult */.c3),
+  LitElement: () => (/* reexport */ s),
+  ReactiveElement: () => (/* reexport */ reactive_element/* ReactiveElement */.fl),
+  _$LE: () => (/* reexport */ o),
+  _$LH: () => (/* reexport */ lit_html._$LH),
+  adoptStyles: () => (/* reexport */ reactive_element/* adoptStyles */.ec),
+  css: () => (/* reexport */ reactive_element/* css */.iv),
+  defaultConverter: () => (/* reexport */ reactive_element/* defaultConverter */.Ts),
+  getCompatibleStyle: () => (/* reexport */ reactive_element/* getCompatibleStyle */.i1),
+  html: () => (/* reexport */ lit_html/* html */.dy),
+  isServer: () => (/* reexport */ is_server_o),
+  noChange: () => (/* reexport */ lit_html/* noChange */.Jb),
+  notEqual: () => (/* reexport */ reactive_element/* notEqual */.Qu),
+  nothing: () => (/* reexport */ lit_html/* nothing */.Ld),
+  render: () => (/* reexport */ lit_html/* render */.sY),
+  supportsAdoptingStyleSheets: () => (/* reexport */ reactive_element/* supportsAdoptingStyleSheets */.FV),
+  svg: () => (/* reexport */ lit_html/* svg */.YP),
+  unsafeCSS: () => (/* reexport */ reactive_element/* unsafeCSS */.$m)
+});
+
+// EXTERNAL MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/reactive-element.js + 1 modules
+var reactive_element = __webpack_require__(548);
+// EXTERNAL MODULE: ./node_modules/lit/node_modules/lit-html/lit-html.js
+var lit_html = __webpack_require__(605);
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/lit-element/lit-element.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */class s extends reactive_element/* ReactiveElement */.fl{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=(0,lit_html/* render */.sY)(i,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return lit_html/* noChange */.Jb}}s._$litElement$=!0,s[("finalized","finalized")]=!0,globalThis.litElementHydrateSupport?.({LitElement:s});const r=globalThis.litElementPolyfillSupport;r?.({LitElement:s});const o={_$AK:(t,e,i)=>{t._$AK(e,i)},_$AL:t=>t._$AL};(globalThis.litElementVersions??=[]).push("4.0.2");
+//# sourceMappingURL=lit-element.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/lit-html/is-server.js
+/**
+ * @license
+ * Copyright 2022 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const is_server_o=!1;
+//# sourceMappingURL=is-server.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/index.js
+
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 548:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  c3: () => (/* reexport */ n),
+  fl: () => (/* binding */ b),
+  ec: () => (/* reexport */ S),
+  iv: () => (/* reexport */ i),
+  Ts: () => (/* binding */ u),
+  i1: () => (/* reexport */ c),
+  Qu: () => (/* binding */ f),
+  FV: () => (/* reexport */ e),
+  $m: () => (/* reexport */ r)
+});
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/css-tag.js
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t=globalThis,e=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),o=new WeakMap;class n{constructor(t,e,o){if(this._$cssResult$=!0,o!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const s=this.t;if(e&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=o.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&o.set(s,t))}return t}toString(){return this.cssText}}const r=t=>new n("string"==typeof t?t:t+"",void 0,s),i=(t,...e)=>{const o=1===t.length?t[0]:e.reduce(((e,s,o)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[o+1]),t[0]);return new n(o,t,s)},S=(s,o)=>{if(e)s.adoptedStyleSheets=o.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet));else for(const e of o){const o=document.createElement("style"),n=t.litNonce;void 0!==n&&o.setAttribute("nonce",n),o.textContent=e.cssText,s.appendChild(o)}},c=e?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r(e)})(t):t;
+//# sourceMappingURL=css-tag.js.map
+
+;// CONCATENATED MODULE: ./node_modules/lit/node_modules/@lit/reactive-element/reactive-element.js
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const{is:reactive_element_i,defineProperty:reactive_element_e,getOwnPropertyDescriptor:reactive_element_r,getOwnPropertyNames:h,getOwnPropertySymbols:reactive_element_o,getPrototypeOf:reactive_element_n}=Object,a=globalThis,reactive_element_c=a.trustedTypes,l=reactive_element_c?reactive_element_c.emptyScript:"",p=a.reactiveElementPolyfillSupport,d=(t,s)=>t,u={toAttribute(t,s){switch(s){case Boolean:t=t?l:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,s){let i=t;switch(s){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},f=(t,s)=>!reactive_element_i(t,s),y={attribute:!0,type:String,converter:u,reflect:!1,hasChanged:f};Symbol.metadata??=Symbol("metadata"),a.litPropertyMetadata??=new WeakMap;class b extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,s=y){if(s.state&&(s.attribute=!1),this._$Ei(),this.elementProperties.set(t,s),!s.noAccessor){const i=Symbol(),r=this.getPropertyDescriptor(t,i,s);void 0!==r&&reactive_element_e(this.prototype,t,r)}}static getPropertyDescriptor(t,s,i){const{get:e,set:h}=reactive_element_r(this.prototype,t)??{get(){return this[s]},set(t){this[s]=t}};return{get(){return e?.call(this)},set(s){const r=e?.call(this);h.call(this,s),this.requestUpdate(t,r,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??y}static _$Ei(){if(this.hasOwnProperty(d("elementProperties")))return;const t=reactive_element_n(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(d("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(d("properties"))){const t=this.properties,s=[...h(t),...reactive_element_o(t)];for(const i of s)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const s=litPropertyMetadata.get(t);if(void 0!==s)for(const[t,i]of s)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,s]of this.elementProperties){const i=this._$Eu(t,s);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(s){const i=[];if(Array.isArray(s)){const e=new Set(s.flat(1/0).reverse());for(const s of e)i.unshift(c(s))}else void 0!==s&&i.push(c(s));return i}static _$Eu(t,s){const i=s.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$Eg=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$ES(),this.requestUpdate(),this.constructor.l?.forEach((t=>t(this)))}addController(t){(this._$E_??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$E_?.delete(t)}_$ES(){const t=new Map,s=this.constructor.elementProperties;for(const i of s.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return S(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$E_?.forEach((t=>t.hostConnected?.()))}enableUpdating(t){}disconnectedCallback(){this._$E_?.forEach((t=>t.hostDisconnected?.()))}attributeChangedCallback(t,s,i){this._$AK(t,i)}_$EO(t,s){const i=this.constructor.elementProperties.get(t),e=this.constructor._$Eu(t,i);if(void 0!==e&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:u).toAttribute(s,i.type);this._$Em=t,null==r?this.removeAttribute(e):this.setAttribute(e,r),this._$Em=null}}_$AK(t,s){const i=this.constructor,e=i._$Eh.get(t);if(void 0!==e&&this._$Em!==e){const t=i.getPropertyOptions(e),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:u;this._$Em=e,this[e]=r.fromAttribute(s,t.type),this._$Em=null}}requestUpdate(t,s,i,e=!1,r){if(void 0!==t){if(i??=this.constructor.getPropertyOptions(t),!(i.hasChanged??f)(e?r:this[t],s))return;this.C(t,s,i)}!1===this.isUpdatePending&&(this._$Eg=this._$EP())}C(t,s,i){this._$AL.has(t)||this._$AL.set(t,s),!0===i.reflect&&this._$Em!==t&&(this._$Ej??=new Set).add(t)}async _$EP(){this.isUpdatePending=!0;try{await this._$Eg}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,s]of this._$Ep)this[t]=s;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[s,i]of t)!0!==i.wrapped||this._$AL.has(s)||void 0===this[s]||this.C(s,this[s],i)}let t=!1;const s=this._$AL;try{t=this.shouldUpdate(s),t?(this.willUpdate(s),this._$E_?.forEach((t=>t.hostUpdate?.())),this.update(s)):this._$ET()}catch(s){throw t=!1,this._$ET(),s}t&&this._$AE(s)}willUpdate(t){}_$AE(t){this._$E_?.forEach((t=>t.hostUpdated?.())),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$ET(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$Eg}shouldUpdate(t){return!0}update(t){this._$Ej&&=this._$Ej.forEach((t=>this._$EO(t,this[t]))),this._$ET()}updated(t){}firstUpdated(t){}}b.elementStyles=[],b.shadowRootOptions={mode:"open"},b[d("elementProperties")]=new Map,b[d("finalized")]=new Map,p?.({ReactiveElement:b}),(a.reactiveElementVersions??=[]).push("2.0.2");
+//# sourceMappingURL=reactive-element.js.map
+
+
+/***/ }),
+
+/***/ 126:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   XM: () => (/* binding */ e),
+/* harmony export */   Xe: () => (/* binding */ i),
+/* harmony export */   pX: () => (/* binding */ t)
+/* harmony export */ });
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},e=t=>(...e)=>({_$litDirective$:t,values:e});class i{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}
+//# sourceMappingURL=directive.js.map
+
+
+/***/ }),
+
+/***/ 605:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Jb: () => (/* binding */ w),
+/* harmony export */   Ld: () => (/* binding */ T),
+/* harmony export */   YP: () => (/* binding */ b),
+/* harmony export */   _$LH: () => (/* binding */ z),
+/* harmony export */   dy: () => (/* binding */ x),
+/* harmony export */   sY: () => (/* binding */ j)
+/* harmony export */ });
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const t=globalThis,i=t.trustedTypes,s=i?i.createPolicy("lit-html",{createHTML:t=>t}):void 0,e="$lit$",h=`lit$${(Math.random()+"").slice(9)}$`,o="?"+h,n=`<${o}>`,r=document,l=()=>r.createComment(""),c=t=>null===t||"object"!=typeof t&&"function"!=typeof t,a=Array.isArray,u=t=>a(t)||"function"==typeof t?.[Symbol.iterator],d="[ \t\n\f\r]",f=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,v=/-->/g,_=/>/g,m=RegExp(`>|${d}(?:([^\\s"'>=/]+)(${d}*=${d}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),p=/'/g,g=/"/g,$=/^(?:script|style|textarea|title)$/i,y=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),x=y(1),b=y(2),w=Symbol.for("lit-noChange"),T=Symbol.for("lit-nothing"),A=new WeakMap,E=r.createTreeWalker(r,129);function C(t,i){if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==s?s.createHTML(i):i}const P=(t,i)=>{const s=t.length-1,o=[];let r,l=2===i?"<svg>":"",c=f;for(let i=0;i<s;i++){const s=t[i];let a,u,d=-1,y=0;for(;y<s.length&&(c.lastIndex=y,u=c.exec(s),null!==u);)y=c.lastIndex,c===f?"!--"===u[1]?c=v:void 0!==u[1]?c=_:void 0!==u[2]?($.test(u[2])&&(r=RegExp("</"+u[2],"g")),c=m):void 0!==u[3]&&(c=m):c===m?">"===u[0]?(c=r??f,d=-1):void 0===u[1]?d=-2:(d=c.lastIndex-u[2].length,a=u[1],c=void 0===u[3]?m:'"'===u[3]?g:p):c===g||c===p?c=m:c===v||c===_?c=f:(c=m,r=void 0);const x=c===m&&t[i+1].startsWith("/>")?" ":"";l+=c===f?s+n:d>=0?(o.push(a),s.slice(0,d)+e+s.slice(d)+h+x):s+h+(-2===d?i:x)}return[C(t,l+(t[s]||"<?>")+(2===i?"</svg>":"")),o]};class V{constructor({strings:t,_$litType$:s},n){let r;this.parts=[];let c=0,a=0;const u=t.length-1,d=this.parts,[f,v]=P(t,s);if(this.el=V.createElement(f,n),E.currentNode=this.el.content,2===s){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(r=E.nextNode())&&d.length<u;){if(1===r.nodeType){if(r.hasAttributes())for(const t of r.getAttributeNames())if(t.endsWith(e)){const i=v[a++],s=r.getAttribute(t).split(h),e=/([.?@])?(.*)/.exec(i);d.push({type:1,index:c,name:e[2],strings:s,ctor:"."===e[1]?k:"?"===e[1]?H:"@"===e[1]?I:R}),r.removeAttribute(t)}else t.startsWith(h)&&(d.push({type:6,index:c}),r.removeAttribute(t));if($.test(r.tagName)){const t=r.textContent.split(h),s=t.length-1;if(s>0){r.textContent=i?i.emptyScript:"";for(let i=0;i<s;i++)r.append(t[i],l()),E.nextNode(),d.push({type:2,index:++c});r.append(t[s],l())}}}else if(8===r.nodeType)if(r.data===o)d.push({type:2,index:c});else{let t=-1;for(;-1!==(t=r.data.indexOf(h,t+1));)d.push({type:7,index:c}),t+=h.length-1}c++}}static createElement(t,i){const s=r.createElement("template");return s.innerHTML=t,s}}function N(t,i,s=t,e){if(i===w)return i;let h=void 0!==e?s._$Co?.[e]:s._$Cl;const o=c(i)?void 0:i._$litDirective$;return h?.constructor!==o&&(h?._$AO?.(!1),void 0===o?h=void 0:(h=new o(t),h._$AT(t,s,e)),void 0!==e?(s._$Co??=[])[e]=h:s._$Cl=h),void 0!==h&&(i=N(t,h._$AS(t,i.values),h,e)),i}class S{constructor(t,i){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=i}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:i},parts:s}=this._$AD,e=(t?.creationScope??r).importNode(i,!0);E.currentNode=e;let h=E.nextNode(),o=0,n=0,l=s[0];for(;void 0!==l;){if(o===l.index){let i;2===l.type?i=new M(h,h.nextSibling,this,t):1===l.type?i=new l.ctor(h,l.name,l.strings,this,t):6===l.type&&(i=new L(h,this,t)),this._$AV.push(i),l=s[++n]}o!==l?.index&&(h=E.nextNode(),o++)}return E.currentNode=r,e}p(t){let i=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++}}class M{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,i,s,e){this.type=2,this._$AH=T,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cv=e?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===t?.nodeType&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=N(this,t,i),c(t)?t===T||null==t||""===t?(this._$AH!==T&&this._$AR(),this._$AH=T):t!==this._$AH&&t!==w&&this._(t):void 0!==t._$litType$?this.g(t):void 0!==t.nodeType?this.$(t):u(t)?this.T(t):this._(t)}k(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}$(t){this._$AH!==t&&(this._$AR(),this._$AH=this.k(t))}_(t){this._$AH!==T&&c(this._$AH)?this._$AA.nextSibling.data=t:this.$(r.createTextNode(t)),this._$AH=t}g(t){const{values:i,_$litType$:s}=t,e="number"==typeof s?this._$AC(t):(void 0===s.el&&(s.el=V.createElement(C(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===e)this._$AH.p(i);else{const t=new S(e,this),s=t.u(this.options);t.p(i),this.$(s),this._$AH=t}}_$AC(t){let i=A.get(t.strings);return void 0===i&&A.set(t.strings,i=new V(t)),i}T(t){a(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const h of t)e===i.length?i.push(s=new M(this.k(l()),this.k(l()),this,this.options)):s=i[e],s._$AI(h),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e)}_$AR(t=this._$AA.nextSibling,i){for(this._$AP?.(!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class R{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,i,s,e,h){this.type=1,this._$AH=T,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=h,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=T}_$AI(t,i=this,s,e){const h=this.strings;let o=!1;if(void 0===h)t=N(this,t,i,0),o=!c(t)||t!==this._$AH&&t!==w,o&&(this._$AH=t);else{const e=t;let n,r;for(t=h[0],n=0;n<h.length-1;n++)r=N(this,e[s+n],i,n),r===w&&(r=this._$AH[n]),o||=!c(r)||r!==this._$AH[n],r===T?t=T:t!==T&&(t+=(r??"")+h[n+1]),this._$AH[n]=r}o&&!e&&this.O(t)}O(t){t===T?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class k extends R{constructor(){super(...arguments),this.type=3}O(t){this.element[this.name]=t===T?void 0:t}}class H extends R{constructor(){super(...arguments),this.type=4}O(t){this.element.toggleAttribute(this.name,!!t&&t!==T)}}class I extends R{constructor(t,i,s,e,h){super(t,i,s,e,h),this.type=5}_$AI(t,i=this){if((t=N(this,t,i,0)??T)===w)return;const s=this._$AH,e=t===T&&s!==T||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,h=t!==T&&(s===T||e);e&&this.element.removeEventListener(this.name,this,s),h&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class L{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){N(this,t)}}const z={j:e,P:h,A:o,C:1,M:P,L:S,R:u,V:N,D:M,I:R,H,N:I,U:k,B:L},Z=t.litHtmlPolyfillSupport;Z?.(V,M),(t.litHtmlVersions??=[]).push("3.1.0");const j=(t,i,s)=>{const e=s?.renderBefore??i;let h=e._$litPart$;if(void 0===h){const t=s?.renderBefore??null;e._$litPart$=h=new M(i.insertBefore(l(),t),t,void 0,s??{})}return h._$AI(t),h};
+//# sourceMappingURL=lit-html.js.map
+
+
+/***/ }),
+
+/***/ 147:
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"name":"formulaone-card","version":"1.8.10","description":"Frontend card for Home Assistant to display Formula One data","main":"index.js","scripts":{"lint":"eslint src/**/*.ts","dev":"webpack -c webpack.config.js","build":"yarn lint && webpack -c webpack.config.js","test":"jest","coverage":"jest --coverage","workflow":"jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json","prebuild":"copy git-hooks\\\\pre-commit .git\\\\hooks\\\\ && echo \'hook copied\'"},"repository":{"type":"git","url":"git+https://github.com/marcokreeft87/formulaone-card.git"},"keywords":[],"author":"","license":"ISC","bugs":{"url":"https://github.com/marcokreeft87/formulaone-card/issues"},"homepage":"https://github.com/marcokreeft87/formulaone-card#readme","devDependencies":{"@types/jest":"^29.5.3","@typescript-eslint/eslint-plugin":"^5.59.8","@typescript-eslint/parser":"^5.62.0","codecov":"^3.8.3","eslint":"^8.52.0","home-assistant-js-websocket":"^9.1.0","lit":"^3.0.2","lit-element":"^3.3.3","minify-html-literals-loader":"^1.1.1","typescript":"^4.9.5","webpack":"^5.89.0","webpack-cli":"^5.1.4"},"dependencies":{"@babel/plugin-transform-runtime":"^7.22.5","@babel/preset-env":"^7.23.8","@lit-labs/scoped-registry-mixin":"^1.0.1","@marcokreeft/ha-editor-formbuilder":"^2023.10.9","babel-jest":"^29.7.0","compression-webpack-plugin":"^10.0.0","custom-card-helpers":"^1.9.0","isomorphic-fetch":"^3.0.0","jest-environment-jsdom":"^29.6.2","jest-fetch-mock":"^3.0.3","jest-ts-auto-mock":"^2.1.0","minify-html-literals-loader":"^1.1.1","ts-auto-mock":"^3.6.4","ts-jest":"^29.1.1","ts-loader":"^9.5.1","ttypescript":"^1.5.15","yarn":"^1.22.21"}}');
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(148);
+/******/ 	
+/******/ })()
+;
