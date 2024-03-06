@@ -135,6 +135,7 @@ export default class FormulaOneCard extends LitElement {
         return this.card.cardSize();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     refreshCache(event: Event) {
         console.log('Refreshing cache...');
 
