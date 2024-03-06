@@ -259,7 +259,6 @@ The following texts can be translated or altered.
 | next_race, countdown | circuitname | 'Circuit name' |
 | next_race, countdown, schedule | location' | 'Location' |
 | next_race, countdown | city | 'City' |
-| next_race, countdown | racetime | 'Race' |
 | next_race, countdown | sprint | 'Sprint' |
 | next_race, countdown | qualifying | 'Qualifying' |
 | next_race, countdown, schedule | endofseason | 'Season is over. See you next year!' |
@@ -299,7 +298,7 @@ translations:
   'racename' : 'Race name'
   'circuitname' : 'Circuit name'
   'location' : 'Location'
-  'racetime' : 'Race'
+  'racet' : 'Race'
   'sprint' : 'Sprint'
   'qualifying' : 'Qualifying'
   'endofseason' : 'Season is over. See you next year!!'
