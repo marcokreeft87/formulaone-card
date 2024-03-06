@@ -117,10 +117,11 @@ export default class Results extends BaseCard {
                     <tbody>
                         ${reduceArray(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result, result.position === fastest?.position))}
                     </tbody>
-                    ${fastest ? html`<tfoot>
+                    ${fastest ? html`
                     <tfoot>
                         <tr>
                             <td colspan="6" class="text-right"><small>* Fastest lap: ${fastest.FastestLap.Time.time}</small></td>
+                        </tr>
                     </tfoot>` : ''}
                 </table>` 
         : null;

@@ -3,31 +3,32 @@ import { HTMLTemplateResult } from 'lit-element';
 
 export interface FormulaOneCardConfig extends LovelaceCardConfig {
     show_icon?: boolean;
-    title?: string;//x
-    name?: string;//x
-    hass?: HomeAssistant;//x
-    card_type?: FormulaOneCardType;//x
-    date_locale?: string;//x
-    image_clickable?: boolean;//x
-    show_carnumber?: boolean;//x
-    location_clickable?: boolean;//x
-    previous_race?: PreviousRaceDisplay;//x
-    standings?: StandingDisplayOptions;//x
+    title?: string;
+    name?: string;
+    hass?: HomeAssistant;
+    card_type?: FormulaOneCardType;
+    date_locale?: string;
+    image_clickable?: boolean;
+    show_carnumber?: boolean;
+    location_clickable?: boolean;
+    previous_race?: PreviousRaceDisplay;
+    standings?: StandingDisplayOptions;
     translations?: Translation;
-    show_raceinfo?: boolean;//x
-    hide_tracklayout?: boolean;//x
-    hide_racedatetimes?: boolean;//x
+    show_raceinfo?: boolean;
+    hide_tracklayout?: boolean;
+    hide_racedatetimes?: boolean;
     actions?: ActionOptions;
-    f1_font?: boolean; //x
-    row_limit?: number;//x
+    f1_font?: boolean; 
+    row_limit?: number;
     icons?: CustomIcons;
-    countdown_type?: CountdownType | CountdownType[] | undefined;//x
-    show_weather?: boolean;//x
-    weather_options?: WeatherOptions;//x
-    next_race_delay?: number;//x
-    show_lastyears_result?: boolean;//x
-    only_show_date?: boolean;//x
-    tabs_order?: string[];//x
+    countdown_type?: CountdownType | CountdownType[] | undefined;
+    show_weather?: boolean;
+    weather_options?: WeatherOptions;
+    next_race_delay?: number;
+    show_lastyears_result?: boolean;
+    only_show_date?: boolean;
+    tabs_order?: string[];
+    show_refresh?: boolean;
 }
 
 export interface ValueChangedEvent {
