@@ -120,6 +120,7 @@ export default class FormulaOneCard extends LitElement {
         try {
             return html`
                 <ha-card elevation="2">
+                    ${this.renderRefreshButton()}
                     ${this.warning ? html`<hui-warning>${this.warning}</hui-warning>` : ''}
                     ${this.config.title ? html`<h1 class="card-header${(this.config.f1_font ? ' formulaone-font' : '')}">${this.config.title}</h1>` : ''}
                     ${this.card.render()}
@@ -132,5 +133,17 @@ export default class FormulaOneCard extends LitElement {
 
     getCardSize() {
         return this.card.cardSize();
+    }
+
+    /* istanbul ignore next */
+    renderRefreshButton() {
+        return this.config.show_refresh ? html`<div class="refresh-cache" @click=${(e: Event) => this.refreshCache(e)}><ha-icon slot="icon" icon="mdi:refresh"></ha-icon></div>` : null;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    refreshCache(event: Event) {
+        console.log('Refreshing cache...');
+
+        this.card.client.RefreshCache();
     }
 }

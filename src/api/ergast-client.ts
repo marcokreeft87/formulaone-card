@@ -79,4 +79,11 @@ export default class ErgastClient extends ClientBase {
 
       return results.MRData.RaceTable.Races[0];
     }
+
+    async RefreshCache() {
+      await this.GetData<Root>('current.json', true, 0);
+      await this.GetData<Root>('current/last/results.json', true, 0);
+      await this.GetData<Root>('current/driverStandings.json', true, 0);
+      await this.GetData<Root>('current/constructorStandings.json', true, 0);
+    }
 }

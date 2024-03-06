@@ -79,4 +79,9 @@ export const styles = css`
     .weather-info td {
         width: 33%;
     }
+    .refresh-cache {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
 `;

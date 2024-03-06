@@ -303,6 +303,22 @@ describe('Testing index file function setConfig', () => {
         // Assert
         const htmlResult = getRenderString(result);
         expect(htmlResult).toMatch('<ha-card elevation="2"> <hui-warning>Error for warning</hui-warning> <h1 class="card-header">Test</h1> </ha-card>');
+    }),
+    test('Calling refresh cache should set cache', async () => {
+        // Arrange
+        const event = new Event('refresh-cache');
+        const config: FormulaOneCardConfig = {
+            type: '',
+            title: 'Test',
+            card_type: FormulaOneCardType.Countdown,
+            show_refresh: true
+        }
+        card.setConfig(config);
+
+        // Act
+        card.refreshCache(event);
+
+        // Assert
     })
 })
 
