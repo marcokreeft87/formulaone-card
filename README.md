@@ -298,7 +298,7 @@ translations:
   'racename' : 'Race name'
   'circuitname' : 'Circuit name'
   'location' : 'Location'
-  'racet' : 'Race'
+  'racetime' : 'Race'
   'sprint' : 'Sprint'
   'qualifying' : 'Qualifying'
   'endofseason' : 'Season is over. See you next year!!'
