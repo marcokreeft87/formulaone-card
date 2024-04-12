@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card Dev",
-  "image": "thomasloven/hass-custom-devcontainer",
+  "image": "marcokreeft/hass-custom-devcontainer",
   "postCreateCommand": "sudo -E container setup-dev && npm add && sudo hass -c /config -v",
   "containerEnv": {
     "DEVCONTAINER": "1"
