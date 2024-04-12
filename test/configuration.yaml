@@ -1,0 +1,14 @@
+homeassistant:
+  time_zone: Europe/Amsterdam
+  temperature_unit: C
+  unit_system: metric
+
+default_config:
+
+lovelace:
+  mode: storage
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: yaml
+      filename: test/lovelace.yaml

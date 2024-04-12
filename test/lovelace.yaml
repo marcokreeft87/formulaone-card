@@ -1,0 +1,40 @@
+views:
+  - theme: Backend-selected
+    title: f1
+    path: f1
+    icon: mdi:car-sports
+    subview: false
+    badges: []
+    cards:
+      - type: custom:formulaone-card
+        card_type: countdown
+        show_raceinfo: true
+        f1_font: true
+        date_locale: en-US
+        show_weather: true
+        weather_options:
+          api_key: R69TG493HYLZWLP3UKKJDTPB2
+        title: null
+        show_lastyears_result: true
+        hide_tracklayout: false
+        show_refresh: false
+      - type: custom:formulaone-card
+        card_type: results
+        date_locale: nl
+        location_clickable: true
+        f1_font: true
+      - type: custom:formulaone-card
+        card_type: schedule
+        date_locale: nl
+        previous_race: hide
+        location_clickable: true
+      - type: custom:formulaone-card
+        card_type: constructor_standings
+        standings:
+          show_teamlogo: true
+      - type: custom:formulaone-card
+        card_type: driver_standings
+        standings:
+          show_flag: true
+          show_team: true
+          show_teamlogo: true
