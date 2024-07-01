@@ -29,7 +29,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "codecov": "^3.8.3",
     "eslint": "^8.52.0",
-    "home-assistant-js-websocket": "^9.1.0",
+    "home-assistant-js-websocket": "^9.4.0",
     "lit": "^3.0.2",
     "lit-element": "^3.3.3",
     "minify-html-literals-loader": "^1.1.1",
