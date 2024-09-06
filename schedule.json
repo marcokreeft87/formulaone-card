@@ -1,0 +1,1195 @@
+{
+  "VCALENDAR": [
+    {
+      "VERSION": "2.0",
+      "PRODID": "RacingNews365 2024",
+      "X-APPLE-CALENDAR-COLOR": "#DC0E0E",
+      "X-OUTLOOK-COLOR": "#DC0E0E",
+      "X-FUNAMBOL-COLOR": "#DC0E0E",
+      "X-WR-CALNAME": "RacingNews365 2024",
+      "X-WR-TIMEZONE": "Europe/Amsterdam",
+      "X-PUBLISHED-TTL": "P1D",
+      "VTIMEZONE": [
+        {
+          "TZID": "Europe/Amsterdam",
+          "X-LIC-LOCATION": "Europe/Amsterdam",
+          "DAYLIGHT": [
+            {
+              "TZNAME": "CEST",
+              "TZOFFSETFROM": "+0100",
+              "TZOFFSETTO": "+0200",
+              "DTSTART": "19810329T030000",
+              "RRULE": "FREQ=YEARLY;INTERVAL=1;BYMONTH=3;BYDAY=-1SU"
+            }
+          ],
+          "STANDARD": [
+            {
+              "TZNAME": "CET",
+              "TZOFFSETFROM": "+0200",
+              "TZOFFSETTO": "+0100",
+              "DTSTART": "19961027T030000",
+              "RRULE": "FREQ=YEARLY;INTERVAL=1;BYMONTH=10;BYDAY=-1SU"
+            }
+          ]
+        }
+      ],
+      "VEVENT": [
+        {
+          "UID": "0376a9a2b251fc89d88e0d9d48ca634c",
+          "DTSTART;TZID=Europe/Amsterdam": "20240301T170000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240301T180000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Bahrain International Circuit\\, sakhir",
+          "SUMMARY": "RN365 Bahrain - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132552Z",
+          "LAST-MODIFIED": "20240301T160347Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "b81592dbb610a51bad6d4a69970703a5",
+          "DTSTART;TZID=Europe/Amsterdam": "20240302T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240302T180000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Bahrain International Circuit\\, sakhir",
+          "SUMMARY": "RN365 Bahrain - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132552Z",
+          "LAST-MODIFIED": "20240302T154003Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "0ee305e56db901e7b4e774a075f5a8b9",
+          "DTSTART;TZID=Europe/Amsterdam": "20240308T180000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240308T190000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Jeddah Street Circuit\\, jeddah",
+          "SUMMARY": "RN365 Saudi Arabian - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132552Z",
+          "LAST-MODIFIED": "20240308T172017Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "c7b93cee5f631dd86d9cdebc8f2db560",
+          "DTSTART;TZID=Europe/Amsterdam": "20240309T180000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240309T200000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Jeddah Street Circuit\\, jeddah",
+          "SUMMARY": "RN365 Saudi Arabian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132552Z",
+          "LAST-MODIFIED": "20240311T105542Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "0a3f03c252786a325dc1850d3ab9d43d",
+          "DTSTART;TZID=Europe/Amsterdam": "20240323T060000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240323T070000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Albert Park\\, melbourne",
+          "SUMMARY": "RN365 Australian - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132552Z",
+          "LAST-MODIFIED": "20240323T050331Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "a512701a30497e180657e51777c743d0",
+          "DTSTART;TZID=Europe/Amsterdam": "20240324T050000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240324T070000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Albert Park\\, melbourne",
+          "SUMMARY": "RN365 Australian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132552Z",
+          "LAST-MODIFIED": "20240324T042817Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "2ad21123b18789fe94e4318d39654254",
+          "DTSTART;TZID=Europe/Amsterdam": "20240406T080000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240406T090000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Suzuka Circuit\\, suzuka",
+          "SUMMARY": "RN365 Japanese - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240406T050403Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "8b1eb424cf602554e99b029e00898743",
+          "DTSTART;TZID=Europe/Amsterdam": "20240407T070000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240407T090000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Suzuka Circuit\\, suzuka",
+          "SUMMARY": "RN365 Japanese - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240407T050231Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "210d204216ef055c6e1e735414788d67",
+          "DTSTART;TZID=Europe/Amsterdam": "20240419T093000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240419T101500",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Shanghai International Circuit\\, shanghai",
+          "SUMMARY": "RN365 Chinese - Sprint shootout",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240419T062602Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "7e16422243b3fffa7f20fa9eed4730fe",
+          "DTSTART;TZID=Europe/Amsterdam": "20240420T050000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240420T060000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Shanghai International Circuit\\, shanghai",
+          "SUMMARY": "RN365 Chinese - Sprintrace",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240420T013903Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "7a84864612ee506964de321d56ec09d2",
+          "DTSTART;TZID=Europe/Amsterdam": "20240421T090000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240421T110000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Shanghai International Circuit\\, shanghai",
+          "SUMMARY": "RN365 Chinese - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240421T065402Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "74d21b9e88f039a0624ea924334f57d7",
+          "DTSTART;TZID=Europe/Amsterdam": "20240503T223000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240503T231500",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Miami International Autodrome\\, miami",
+          "SUMMARY": "RN365 Miami - Sprint shootout",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240503T191817Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "869cf595e6d89c1d9860f16c26922587",
+          "DTSTART;TZID=Europe/Amsterdam": "20240504T180000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240504T190000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Miami International Autodrome\\, miami",
+          "SUMMARY": "RN365 Miami - Sprintrace",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240504T144131Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "d791a9991db7405640be699cfadf3af0",
+          "DTSTART;TZID=Europe/Amsterdam": "20240504T220000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240504T230000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Miami International Autodrome\\, miami",
+          "SUMMARY": "RN365 Miami - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240504T190416Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "34831bff1f8f69b2cde8c502cb4ad5dd",
+          "DTSTART;TZID=Europe/Amsterdam": "20240505T220000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240505T235959",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Miami International Autodrome\\, miami",
+          "SUMMARY": "RN365 Miami - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240505T193731Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "9f7726098e033ec5ccc7255a0622dc10",
+          "DTSTART;TZID=Europe/Amsterdam": "20240518T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240518T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Enzo e Dino Ferrari\\, imola",
+          "SUMMARY": "RN365 Emilia Romagna - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240518T130317Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "6fc982f0e88bc7b48002bede5573bec2",
+          "DTSTART;TZID=Europe/Amsterdam": "20240519T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240519T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Enzo e Dino Ferrari\\, imola",
+          "SUMMARY": "RN365 Emilia Romagna - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240519T123117Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "6ea93a62563b8214a8717bf033e42d7c",
+          "DTSTART;TZID=Europe/Amsterdam": "20240525T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240525T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit de Monaco\\, monte-carlo",
+          "SUMMARY": "RN365 Monaco - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240525T130331Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "56bcd46b4465c85b9f45b455ac6eb7b0",
+          "DTSTART;TZID=Europe/Amsterdam": "20240526T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240526T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit de Monaco\\, monte-carlo",
+          "SUMMARY": "RN365 Monaco - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240526T132831Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "f3f8517cd5ed934143c43fa7f5b87740",
+          "DTSTART;TZID=Europe/Amsterdam": "20240608T220000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240608T230000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit Gilles Villeneuve\\, montreal",
+          "SUMMARY": "RN365 Canadian - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240608T190517Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "0be33e780e2e1b4ddc571232b85a28a0",
+          "DTSTART;TZID=Europe/Amsterdam": "20240609T200000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240609T220000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit Gilles Villeneuve\\, montreal",
+          "SUMMARY": "RN365 Canadian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240609T175131Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "7b6044ac9c6b9439a2f82f6c24117725",
+          "DTSTART;TZID=Europe/Amsterdam": "20240622T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240622T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit de Catalunya\\, barcelona",
+          "SUMMARY": "RN365 Spanish - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240622T130331Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "42968d98f1586b9dbf470cf1d0c21531",
+          "DTSTART;TZID=Europe/Amsterdam": "20240623T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240623T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit de Catalunya\\, barcelona",
+          "SUMMARY": "RN365 Spanish - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240623T124003Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "4c3cfb0fcb67918713b91d86592e5575",
+          "DTSTART;TZID=Europe/Amsterdam": "20240628T163000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240628T171400",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Red Bull Ring\\, spielberg",
+          "SUMMARY": "RN365 Austrian - Sprint shootout",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240628T131803Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "7010a5a7288a9a003c916e9108bcb3f3",
+          "DTSTART;TZID=Europe/Amsterdam": "20240629T120000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240629T130000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Red Bull Ring\\, spielberg",
+          "SUMMARY": "RN365 Austrian - Sprintrace",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240629T083602Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "c24a63229e2f89a9f0a3b2253a359905",
+          "DTSTART;TZID=Europe/Amsterdam": "20240630T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240630T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Red Bull Ring\\, spielberg",
+          "SUMMARY": "RN365 Austrian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240630T123132Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "a29e6e791bbbc32c7da4b938a601a8bb",
+          "DTSTART;TZID=Europe/Amsterdam": "20240706T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240706T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit Silverstone\\, silverstone",
+          "SUMMARY": "RN365 British - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240706T131246Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "143ffb6fb9a03518698201aea7478cf4",
+          "DTSTART;TZID=Europe/Amsterdam": "20240707T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240707T180000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit Silverstone\\, silverstone",
+          "SUMMARY": "RN365 British - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240707T133147Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "e08afc0ba8d51456912d8982c64e9f76",
+          "DTSTART;TZID=Europe/Amsterdam": "20240720T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240720T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Hungaroring\\, budapest",
+          "SUMMARY": "RN365 Hungarian - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240720T133017Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "7ddf838bdd6365f079dcd7d78e7a6464",
+          "DTSTART;TZID=Europe/Amsterdam": "20240721T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240721T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Hungaroring\\, budapest",
+          "SUMMARY": "RN365 Hungarian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240721T124347Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "ce4014890a9dfc80f6b7757ef471a7ff",
+          "DTSTART;TZID=Europe/Amsterdam": "20240727T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240727T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Spa-Francorchamps\\, francochamps",
+          "SUMMARY": "RN365 Belgian - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240727T130432Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "badf3b6a3ab4cf2cc69367cb38f40797",
+          "DTSTART;TZID=Europe/Amsterdam": "20240728T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240728T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Spa-Francorchamps\\, francochamps",
+          "SUMMARY": "RN365 Belgian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132553Z",
+          "LAST-MODIFIED": "20240728T145741Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "ef8d00424d87990b4f72e8fb78b4099f",
+          "DTSTART;TZID=Europe/Amsterdam": "20240824T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240824T160000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit Zandvoort\\, zandvoort",
+          "SUMMARY": "RN365 Dutch - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240824T120346Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "a7e60a135a6cde32e8708e69b6348248",
+          "DTSTART;TZID=Europe/Amsterdam": "20240825T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240825T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit Zandvoort\\, zandvoort",
+          "SUMMARY": "RN365 Dutch - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240825T123831Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "a485c0d4e310737d8218023dbfcd3fa4",
+          "DTSTART;TZID=Europe/Amsterdam": "20240831T160000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240831T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Nazionale Monza\\, monza",
+          "SUMMARY": "RN365 Italian - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240831T130747Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "f6212bd5e6999c27686cbdcca4f608ed",
+          "DTSTART;TZID=Europe/Amsterdam": "20240901T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240901T170000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Nazionale Monza\\, monza",
+          "SUMMARY": "RN365 Italian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240901T122047Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "133a677753d4d39436f765809e4b9e62",
+          "DTSTART;TZID=Europe/Amsterdam": "20240914T140000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240914T150000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Baku City Circuit\\, baku",
+          "SUMMARY": "RN365 Azerbaijan - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "b9a3da55884bd21c48b8c22b02bbc4f4",
+          "DTSTART;TZID=Europe/Amsterdam": "20240915T130000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240915T150000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Baku City Circuit\\, baku",
+          "SUMMARY": "RN365 Azerbaijan - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "7e759b79a3292d889fdb43f825ea72df",
+          "DTSTART;TZID=Europe/Amsterdam": "20240921T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240921T160000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Marina Bay Street Circuit\\, singapore",
+          "SUMMARY": "RN365 Singapore - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "e73a17a2b149eac51b041bd6f8d6c5cb",
+          "DTSTART;TZID=Europe/Amsterdam": "20240922T140000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20240922T160000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Marina Bay Street Circuit\\, singapore",
+          "SUMMARY": "RN365 Singapore - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "9efcfe213c5526f0b3e2ccf58562e5a3",
+          "DTSTART;TZID=Europe/Amsterdam": "20241018T233000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241019T001400",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit of the Americas\\, austin",
+          "SUMMARY": "RN365 United States - Sprint shootout",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240624T083130Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "68a2417ad08c7908b40344ca87b1f228",
+          "DTSTART;TZID=Europe/Amsterdam": "20241019T200000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241019T210000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit of the Americas\\, austin",
+          "SUMMARY": "RN365 United States - Sprintrace",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "39155e18d2d711c405b244d83e6e27e8",
+          "DTSTART;TZID=Europe/Amsterdam": "20241020T210000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241020T230000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Circuit of the Americas\\, austin",
+          "SUMMARY": "RN365 United States - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "ffaf6fac0978575636c34710c3334519",
+          "DTSTART;TZID=Europe/Amsterdam": "20241026T220000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241026T230000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Hermanos Rodriguez\\, mexico-city",
+          "SUMMARY": "RN365 Mexican - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "b1f5140ce52f6000b20fb405f1f31463",
+          "DTSTART;TZID=Europe/Amsterdam": "20241027T210000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241027T230000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Hermanos Rodriguez\\, mexico-city",
+          "SUMMARY": "RN365 Mexican - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "5783e5ce67ef99663158b482aa9e0296",
+          "DTSTART;TZID=Europe/Amsterdam": "20241101T193000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241101T201400",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Jose Carlos Pace Interlagos\\, sao-paulo",
+          "SUMMARY": "RN365 Brazilian - Sprint shootout",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240624T083353Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "a51d89d4a6cc5f011f781a99ddfa9bbd",
+          "DTSTART;TZID=Europe/Amsterdam": "20241102T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241102T160000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Jose Carlos Pace Interlagos\\, sao-paulo",
+          "SUMMARY": "RN365 Brazilian - Sprintrace",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "47ff8e486dfd37dea8128dab283d1ea8",
+          "DTSTART;TZID=Europe/Amsterdam": "20241103T180000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241103T200000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Autodromo Jose Carlos Pace Interlagos\\, sao-paulo",
+          "SUMMARY": "RN365 Brazilian - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "1d3ca8a2fc065500c4cb6c89919af8bc",
+          "DTSTART;TZID=Europe/Amsterdam": "20241123T070000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241123T080000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Las Vegas Street Circuit\\, las-vegas",
+          "SUMMARY": "RN365 Las Vegas - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240711T124836Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "cd78756f73f87fd5fd17907845f2cb55",
+          "DTSTART;TZID=Europe/Amsterdam": "20241124T070000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241124T090000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Las Vegas Street Circuit\\, las-vegas",
+          "SUMMARY": "RN365 Las Vegas - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "39147e8fe2573f8bd9e0a7f4ce59cc34",
+          "DTSTART;TZID=Europe/Amsterdam": "20241129T183000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241129T191400",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Losail International Circuit\\, lusail",
+          "SUMMARY": "RN365 Lusail - Sprint shootout",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240624T083454Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "4261f6061b7a70a303b3fc06b66016ec",
+          "DTSTART;TZID=Europe/Amsterdam": "20241130T140000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241130T150000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Losail International Circuit\\, lusail",
+          "SUMMARY": "RN365 Lusail - Sprintrace",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132554Z",
+          "LAST-MODIFIED": "20240117T132554Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "e0949fd7fe91a56357f38abdcde853c4",
+          "DTSTART;TZID=Europe/Amsterdam": "20241201T170000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241201T190000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Losail International Circuit\\, lusail",
+          "SUMMARY": "RN365 Lusail - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132555Z",
+          "LAST-MODIFIED": "20240117T132555Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "26a947da279b3ea19be9f4a108c5d3b9",
+          "DTSTART;TZID=Europe/Amsterdam": "20241207T150000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241207T160000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Yas Marina Circuit\\, abu-dhabi",
+          "SUMMARY": "RN365 Abu Dhabi - Qualification",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132555Z",
+          "LAST-MODIFIED": "20240117T132555Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        },
+        {
+          "UID": "d2697bc50d5ee9d16f721f410b20b6b1",
+          "DTSTART;TZID=Europe/Amsterdam": "20241208T140000",
+          "SEQUENCE": "0",
+          "TRANSP": "OPAQUE",
+          "DTEND;TZID=Europe/Amsterdam": "20241208T160000",
+          "URL": "https://racingnews365.com",
+          "LOCATION": "Yas Marina Circuit\\, abu-dhabi",
+          "SUMMARY": "RN365 Abu Dhabi - Race",
+          "CLASS": "PUBLIC",
+          "DTSTAMP": "20240906T100237Z",
+          "CREATED": "20240117T132555Z",
+          "LAST-MODIFIED": "20240313T083721Z",
+          "VALARM": [
+            {
+              "TRIGGER": "-PT15M",
+              "ACTION": "DISPLAY",
+              "DESCRIPTION": "Follow live at RacingNews365.com!"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
