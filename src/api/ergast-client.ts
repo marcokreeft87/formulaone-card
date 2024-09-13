@@ -4,7 +4,7 @@ import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } fr
 
 export default class ErgastClient extends ClientBase {
 
-    baseUrl = 'https://ergast.com/api/f1';
+    baseUrl = 'https://api.jolpi.ca/ergast/f1';
 
     async GetSchedule(season: number) : Promise<Race[]> {      
       const data = await this.GetData<Root>(`${season}.json`, true, 72);

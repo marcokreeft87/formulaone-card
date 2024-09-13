@@ -420,9 +420,9 @@ describe('Testing results file', () => {
         card.setSelectedRace({ target: { value: '6' } });
 
         // Assert
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/6/results.json", {"headers": {"Accept": "application/json"}});
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/6/qualifying.json", {"headers": {"Accept": "application/json"}});
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/6/sprint.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/6/results.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/6/qualifying.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/6/sprint.json", {"headers": {"Accept": "application/json"}});
     }),   
     test('Calling setSelectedRace with selectedSeason undefined no results', async () => {
         // Arrange
@@ -435,9 +435,9 @@ describe('Testing results file', () => {
         card.setSelectedRace({ target: { value: '5' } });
 
         // Assert
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/results.json", {"headers": {"Accept": "application/json"}});
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/qualifying.json", {"headers": {"Accept": "application/json"}});
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/sprint.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/5/results.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/5/qualifying.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/5/sprint.json", {"headers": {"Accept": "application/json"}});
     }),    
     test('Calling setSelectedRace with selectedSeason undefined no results', async () => {
         // Arrange
@@ -450,9 +450,9 @@ describe('Testing results file', () => {
         card.setSelectedRace({ target: { value: '5' } });
 
         // Assert
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/results.json", {"headers": {"Accept": "application/json"}});
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/qualifying.json", {"headers": {"Accept": "application/json"}});
-        expect(fetchMock).toHaveBeenCalledWith("https://ergast.com/api/f1/2022/5/sprint.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/5/results.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/5/qualifying.json", {"headers": {"Accept": "application/json"}});
+        expect(fetchMock).toHaveBeenCalledWith("https://api.jolpi.ca/ergast/f1/2022/5/sprint.json", {"headers": {"Accept": "application/json"}});
     }),
     test('Calling render without tab_order should arrange tabs in default order', async () => {
         // Arrange
