@@ -37,6 +37,14 @@ export const getCountries = () => {
 
 export const getCountryFlagByNationality = (card: BaseCard, nationality: string) => {
     const countries = getCountries();
+
+    nationality = nationality.trim();
+    const exceptions = [{ demonym: 'Argentinian', corrected: 'Argentinean'}];
+    const exception = exceptions.filter(exception => exception.demonym == nationality);
+    if(exception.length > 0)
+    {
+        nationality = exception[0].corrected;
+    }
     
     const country = countries.filter(x => x.demonym == nationality);
     if(country.length > 1)
