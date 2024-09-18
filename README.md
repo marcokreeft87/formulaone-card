@@ -80,6 +80,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | only_show_date    | boolean       | `false`                             | Show the date of the next race (next_race)          |
 | tabs_order        | array         |'results', 'qualifying', 'sprint'    | Determine the order of the tabs (result)    |
 | show_refresh      | boolean       |`false`                              | Show the refresh button (top right)    |
+| next_race_display | enum          |`date`                               | Show the date, time or both for the next race (date,time,datetime)    |
 
 
 ### Actions

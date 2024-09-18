@@ -4,6 +4,8 @@ import { until } from 'lit-html/directives/until.js';
 import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
 import { BaseCard } from "./base-card";
 import { formatDateNumeric } from "../lib/format_date";
+import { NextRaceDisplay } from "../types/formulaone-card-types";
+import { Race } from "../api/f1-models";
 
 export default class NextRace extends BaseCard {
     hass: HomeAssistant;
@@ -55,7 +57,7 @@ export default class NextRace extends BaseCard {
                                 this.config.only_show_date ? 
                                     html`<tr>
                                         <td class="text-center">
-                                            <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${formatDateNumeric(new Date(nextRace.date + 'T' + nextRace.time), this.hass.locale, this.config.date_locale)}</h1>
+                                            <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${this.renderDateTime(nextRace)}</h1>
                                         </td>
                                     </tr>` : null
                                 }  
@@ -66,5 +68,20 @@ export default class NextRace extends BaseCard {
                 }),
             html`${getApiLoadingMessage()}`
         )}`;
+    }
+
+    private renderDateTime(nextRace: Race) {
+        switch(this.config.next_race_display) {
+            case NextRaceDisplay.DateOnly:
+                return formatDateNumeric(new Date(nextRace.date + 'T' + nextRace.time), this.hass.locale, this.config.date_locale);
+            case NextRaceDisplay.TimeOnly:
+                return new Date(nextRace.date + 'T' + nextRace.time).toLocaleTimeString(this.hass.locale.language, { hour: '2-digit', minute: '2-digit' });
+            case NextRaceDisplay.DateAndTime:
+                return formatDateNumeric(new Date(nextRace.date + 'T' + nextRace.time), this.hass.locale, this.config.date_locale) + ' ' + new Date(nextRace.date + 'T' + nextRace.time).toLocaleTimeString(this.hass.locale.language, { hour: '2-digit', minute: '2-digit' });
+            default:
+                return formatDateNumeric(new Date(nextRace.date + 'T' + nextRace.time), this.hass.locale, this.config.date_locale);
+        }
+
+        return null;
     }
 }
