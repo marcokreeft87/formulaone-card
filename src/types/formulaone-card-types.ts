@@ -29,6 +29,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     only_show_date?: boolean;
     tabs_order?: string[];
     show_refresh?: boolean;
+    next_race_display?: NextRaceDisplay;
 }
 
 export interface ValueChangedEvent {
@@ -57,6 +58,12 @@ export interface WeatherOptions {
     show_temperature?: boolean;
     show_cloud_cover?: boolean;
     show_visibility?: boolean;
+}
+
+export enum NextRaceDisplay {
+    DateOnly = 'date',
+    TimeOnly = 'time',
+    DateAndTime = 'datetime'
 }
 
 export enum WeatherUnit {
