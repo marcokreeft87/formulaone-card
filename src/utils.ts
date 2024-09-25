@@ -182,8 +182,8 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
         const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
         const lastYearsResult = renderLastYearsResults(config, lastYearData)
 
-        const freePractice1 = formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale);
-        const freePractice2 = formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale);
+        const freePractice1 = race.FirstPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale) : '-';
+        const freePractice2 = race.SecondPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale) : '-';
         const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
         const raceDateFormatted = formatDateTimeRaceInfo(raceDate, hass.locale);
         const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
