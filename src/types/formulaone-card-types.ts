@@ -29,7 +29,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     only_show_date?: boolean;
     tabs_order?: string[];
     show_refresh?: boolean;
-    next_race_display?: NextRaceDisplay;
+    next_race_display?: NextRaceDisplay | undefined;
 }
 
 export interface ValueChangedEvent {
@@ -78,7 +78,8 @@ export enum CountdownType {
     Practice1 = "practice1",
     Practice2 = "practice2",
     Practice3 = "practice3",
-    Sprint = "sprint"
+    Sprint = "sprint",
+    SprintQualifying = "sprintqualifying"
 }
 
 export interface ActionOptions {

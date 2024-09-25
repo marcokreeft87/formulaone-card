@@ -21,7 +21,8 @@ export default class NextRace extends BaseCard {
         'city': 'City',
         'racetime' : 'Race',
         'sprint' : 'Sprint',
-        'qualifying' : 'Qualifying',
+        'qualifying' : 'Qualifying',        
+        'sprintqualifying' : 'Sprint Qualifying',
         'endofseason' : 'Season is over. See you next year!',
     };
     

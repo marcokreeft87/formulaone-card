@@ -65,6 +65,7 @@ export interface Root {
     ThirdPractice?: ThirdPractice
     Qualifying?: Qualifying
     Sprint?: Sprint
+    SprintQualifying?: Qualifying
   }
   
   export interface Circuit {
