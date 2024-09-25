@@ -7,7 +7,7 @@ import LocalStorageMock from '../testdata/localStorageMock';
 import NextRace from '../../src/cards/next-race';
 import { HomeAssistant, NumberFormat, TimeFormat } from 'custom-card-helpers';
 import { getRenderString, getRenderStringAsync, getRenderStringAsyncIndex } from '../utils';
-import { FormulaOneCardConfig } from '../../src/types/formulaone-card-types';
+import { FormulaOneCardConfig, NextRaceDisplay } from '../../src/types/formulaone-card-types';
 import { Mrdata } from '../../src/api/f1-models';
 import { getApiErrorMessage, getEndOfSeasonMessage } from '../../src/utils';
 import FormulaOneCard from '../../src';
@@ -155,5 +155,77 @@ describe('Testing next-race file', () => {
     test('Calling cardSize with hass and sensor without data', () => { 
         const card = new NextRace(parent);
         expect(card.cardSize()).toBe(8);
-    });
+    }),
+    test('Calling render with next_race_display DateAndTime', async () => {
+         // Arrange 
+         const card = new NextRace(parent);
+         card.config.next_race_display = NextRaceDisplay.DateAndTime;
+         card.config.show_raceinfo = true;
+         card.config.f1_font = true;
+         jest.setSystemTime(new Date(2022, 3, 20)); // Weird bug in jest setting this to the last of the month
+         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>MRData }));
+         
+         // Act
+         const result = card.render();
+ 
+         // Assert
+         const htmlResult = await getRenderStringAsyncIndex(result);
+
+         console.log(htmlResult);
+         expect(htmlResult).toMatch('<table> <tbody> <tr> <td colspan="5"><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br></td> </tr> <tr><td>Date</td><td>24-04-22</td><td>&nbsp;</td><td>Practice 1</td><td align="right">vr 13:30</td></tr> <tr><td>Race</td><td>4</td><td>&nbsp;</td><td>Practice 2</td><td align="right">za 12:30</td></tr> <tr><td>Race name</td><td>Emilia Romagna Grand Prix</td><td>&nbsp;</td><td>Practice 3</td><td align="right">-</td></tr> <tr><td>Circuit name</td><td>Autodromo Enzo e Dino Ferrari</td><td>&nbsp;</td><td>Qualifying</td><td align="right">vr 17:00</td></tr> <tr><td>Location</td><td>Italy</td><td>&nbsp;</td><td>Sprint</td><td align="right">za 16:30</td></tr> <tr><td>City</td><td>Imola</td><td>&nbsp;</td><td>Race</td><td align="right">zo 15:00</td></tr> </tbody> </table>');
+    }),
+    test('Calling render with next_race_display DateOnly', async () => {
+        // Arrange 
+        const card = new NextRace(parent);
+        card.config.next_race_display = NextRaceDisplay.DateOnly;
+        card.config.show_raceinfo = true;
+        card.config.f1_font = true;
+        jest.setSystemTime(new Date(2022, 3, 20)); // Weird bug in jest setting this to the last of the month
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>MRData }));
+        
+        // Act
+        const result = card.render();
+
+        // Assert
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        console.log(htmlResult);
+        expect(htmlResult).toMatch('<table> <tbody> <tr> <td colspan="5"><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br></td> </tr> <tr><td>Date</td><td>24-04-22</td><td>&nbsp;</td><td>Practice 1</td><td align="right">vr 13:30</td></tr> <tr><td>Race</td><td>4</td><td>&nbsp;</td><td>Practice 2</td><td align="right">za 12:30</td></tr> <tr><td>Race name</td><td>Emilia Romagna Grand Prix</td><td>&nbsp;</td><td>Practice 3</td><td align="right">-</td></tr> <tr><td>Circuit name</td><td>Autodromo Enzo e Dino Ferrari</td><td>&nbsp;</td><td>Qualifying</td><td align="right">vr 17:00</td></tr> <tr><td>Location</td><td>Italy</td><td>&nbsp;</td><td>Sprint</td><td align="right">za 16:30</td></tr> <tr><td>City</td><td>Imola</td><td>&nbsp;</td><td>Race</td><td align="right">zo 15:00</td></tr> </tbody> </table>');
+   }),
+   test('Calling render with next_race_display TimeOnly', async () => {
+        // Arrange 
+        const card = new NextRace(parent);
+        card.config.next_race_display = NextRaceDisplay.TimeOnly;
+        card.config.show_raceinfo = true;
+        card.config.f1_font = true;
+        jest.setSystemTime(new Date(2022, 3, 20)); // Weird bug in jest setting this to the last of the month
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>MRData }));
+        
+        // Act
+        const result = card.render();
+
+        // Assert
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        console.log(htmlResult);
+        expect(htmlResult).toMatch('<table> <tbody> <tr> <td colspan="5"><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br></td> </tr> <tr><td>Date</td><td>24-04-22</td><td>&nbsp;</td><td>Practice 1</td><td align="right">vr 13:30</td></tr> <tr><td>Race</td><td>4</td><td>&nbsp;</td><td>Practice 2</td><td align="right">za 12:30</td></tr> <tr><td>Race name</td><td>Emilia Romagna Grand Prix</td><td>&nbsp;</td><td>Practice 3</td><td align="right">-</td></tr> <tr><td>Circuit name</td><td>Autodromo Enzo e Dino Ferrari</td><td>&nbsp;</td><td>Qualifying</td><td align="right">vr 17:00</td></tr> <tr><td>Location</td><td>Italy</td><td>&nbsp;</td><td>Sprint</td><td align="right">za 16:30</td></tr> <tr><td>City</td><td>Imola</td><td>&nbsp;</td><td>Race</td><td align="right">zo 15:00</td></tr> </tbody> </table>');
+    }),
+    test('Calling render with next_race_display null', async () => {
+         // Arrange 
+         const card = new NextRace(parent);
+         card.config.next_race_display = undefined;
+         card.config.show_raceinfo = true;
+         card.config.f1_font = true;
+         jest.setSystemTime(new Date(2022, 3, 20)); // Weird bug in jest setting this to the last of the month
+         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>MRData }));
+         
+         // Act
+         const result = card.render();
+ 
+         // Assert
+         const htmlResult = await getRenderStringAsyncIndex(result);
+ 
+         console.log(htmlResult);
+         expect(htmlResult).toMatch('<table> <tbody> <tr> <td colspan="5"><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br></td> </tr> <tr><td>Date</td><td>24-04-22</td><td>&nbsp;</td><td>Practice 1</td><td align="right">vr 13:30</td></tr> <tr><td>Race</td><td>4</td><td>&nbsp;</td><td>Practice 2</td><td align="right">za 12:30</td></tr> <tr><td>Race name</td><td>Emilia Romagna Grand Prix</td><td>&nbsp;</td><td>Practice 3</td><td align="right">-</td></tr> <tr><td>Circuit name</td><td>Autodromo Enzo e Dino Ferrari</td><td>&nbsp;</td><td>Qualifying</td><td align="right">vr 17:00</td></tr> <tr><td>Location</td><td>Italy</td><td>&nbsp;</td><td>Sprint</td><td align="right">za 16:30</td></tr> <tr><td>City</td><td>Imola</td><td>&nbsp;</td><td>Race</td><td align="right">zo 15:00</td></tr> </tbody> </table>');
+     });
 });

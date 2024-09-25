@@ -30,6 +30,7 @@ export default class Countdown extends BaseCard {
         'racetime' : 'Race',
         'sprint' : 'Sprint',
         'qualifying' : 'Qualifying',
+        'sprintqualifying' : 'Sprint Qualifying',
         'until' : 'Until'
     };
 
@@ -139,16 +140,18 @@ export default class Countdown extends BaseCard {
             const countdownTypes = this.config.countdown_type as CountdownType[];
 
             const raceEvents = [
-                { Date: new Date(nextRace.FirstPractice.date + 'T' + nextRace.FirstPractice.time), Type: CountdownType.Practice1 },
-                { Date: new Date(nextRace.SecondPractice.date + 'T' + nextRace.SecondPractice.time), Type: CountdownType.Practice2 },
+                { Date: nextRace.FirstPractice ? new Date(nextRace.FirstPractice.date + 'T' + nextRace.FirstPractice.time) : null, Type: CountdownType.Practice1 },
+                { Date: nextRace.SecondPractice ? new Date(nextRace.SecondPractice.date + 'T' + nextRace.SecondPractice.time) : null, Type: CountdownType.Practice2 },
                 { Date: nextRace.ThirdPractice ? new Date(nextRace.ThirdPractice.date + 'T' + nextRace.ThirdPractice.time) : null, Type: CountdownType.Practice3 },
                 { Date: nextRace.Sprint ? new Date(nextRace.Sprint.date + 'T' + nextRace.Sprint.time) : null, Type: CountdownType.Sprint },
-                { Date: new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time), Type: CountdownType.Qualifying },
+                { Date: nextRace.SprintQualifying ? new Date(nextRace.SprintQualifying.date + 'T' + nextRace.SprintQualifying.time) : null, Type: CountdownType.SprintQualifying },
+                { Date: nextRace.Qualifying ? new Date(nextRace.Qualifying.date + 'T' + nextRace.Qualifying.time) : null, Type: CountdownType.Qualifying },
                 { Date: new Date(nextRace.date + 'T' + nextRace.time), Type: CountdownType.Race }
             ].filter(x => x.Date).filter(x => x.Date > new Date()).sort((a, b) => a.Date.getTime() - b.Date.getTime());
 
             // Get the first countdown type that occurs in race events and get the date and time for that event
             const nextEvent = raceEvents.filter(x => countdownTypes?.includes(x.Type))[0];
+
             raceDateTime = nextEvent?.Date;
             countdownType = nextEvent?.Type ?? countdownType;
         }
