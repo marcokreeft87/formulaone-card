@@ -23,14 +23,16 @@ export default class ErgastClient extends ClientBase {
       const refreshCacheHours = getRefreshTime('current/driverStandings.json');
       const data = await this.GetData<Root>('current/driverStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+      const standingsLists = data.MRData.StandingsTable.StandingsLists;
+      return standingsLists && standingsLists.length > 0 ? standingsLists[0].DriverStandings : [];
     }
 
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
       const refreshCacheHours = getRefreshTime('current/constructorStandings.json');
       const data = await this.GetData<Root>('current/constructorStandings.json', true, refreshCacheHours);
 
-      return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+      const standingsLists = data.MRData.StandingsTable.StandingsLists;
+      return standingsLists && standingsLists.length > 0 ? standingsLists[0].ConstructorStandings : [];
     }
 
     async GetSprintResults(season: number, round: number) : Promise<RaceTable> {
