@@ -2,14 +2,15 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { ConstructorStanding } from "../api/f1-models";
-import { getApiErrorMessage, getApiLoadingMessage, getTeamImage, reduceArray } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getEndOfSeasonMessage, getTeamImage, reduceArray } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class ConstructorStandings extends BaseCard {    
     defaultTranslations = {
         'constructor' : 'Constructor',   
         'points' : 'Pts',
-        'wins' : 'Wins'
+        'wins' : 'Wins',
+        'no_standings' : 'No standings available yet'
     };
 
     constructor(parent: FormulaOneCard) {
@@ -33,7 +34,9 @@ export default class ConstructorStandings extends BaseCard {
     render() : HTMLTemplateResult {
 
         return html`${until(
-            this.client.GetConstructorStandings().then(response => 
+            this.client.GetConstructorStandings().then(response =>
+                response.length === 0 ? 
+                html`${getEndOfSeasonMessage(this.translation('no_standings'))}` :                
                 html`
                     <table>
                         <thead>

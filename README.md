@@ -282,6 +282,7 @@ The following texts can be translated or altered.
 | countdown | minutes | 'm' |
 | countdown | seconds | 's' |
 | countdown | until | 'Until' |
+| constructor_standings, driver_standings | no_standings | 'No standings available yet' |
 
 Example:
 

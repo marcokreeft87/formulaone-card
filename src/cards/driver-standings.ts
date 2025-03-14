@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { DriverStanding } from "../api/f1-models";
-import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, getEndOfSeasonMessage, reduceArray, renderConstructorColumn } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class DriverStandings extends BaseCard {
@@ -10,7 +10,8 @@ export default class DriverStandings extends BaseCard {
         'driver' : 'Driver',   
         'team' : 'Team',
         'points' : 'Pts',
-        'wins' : 'Wins'
+        'wins' : 'Wins',
+        'no_standings' : 'No standings available yet'
     };
 
     constructor(parent: FormulaOneCard) {
@@ -37,6 +38,8 @@ export default class DriverStandings extends BaseCard {
 
         return html`${until(
             this.client.GetDriverStandings().then(response =>
+                response.length === 0 ? 
+                html`${getEndOfSeasonMessage(this.translation('no_standings'))}` : 
               html`
                     <table>
                         <thead>
