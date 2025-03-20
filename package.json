@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card",
-  "version": "1.9.8",
+  "version": "1.9.10",
   "description": "Frontend card for Home Assistant to display Formula One data",
   "main": "index.js",
   "scripts": {
