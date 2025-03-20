@@ -22,7 +22,7 @@ export default class NextRace extends BaseCard {
         'racetime' : 'Race',
         'sprint' : 'Sprint',
         'qualifying' : 'Qualifying',        
-        'sprintqualifying' : 'Sprint Qualifying',
+        'sprint_qualifying' : 'Sprint Qualifying',
         'endofseason' : 'Season is over. See you next year!',
     };
     
