@@ -73,7 +73,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | translations      | dictionary    |  _[translations](#Translations)_          | Dictionary to override the default translation  |
 | actions           | object        |  _[Actions](#actions)_                                    | The tap, double tap or hold actions set on the image of the countdown, last_result, results, qualifying_results and next-race cards |
 | row_limit         | number        |                                     | Limit the schedule, results, last_result, driver_standings and constructor_standings to this amount of row |
-| countdown_type    | string or array | 'race'                              | Set the event to countdown to (race,qualifying,practice1,practice2,practice3,sprint,sprintqualifying) |
+| countdown_type    | string or array | 'race'                              | Set the event to countdown to (race,qualifying,practice1,practice2,practice3,sprint,sprint_qualifying) |
 | show_weather      | boolean       | `false`                             | Show the _[weather forecast](#Forecast)_ of the upcoming race |
 | next_race_delay   | number        |                                     | Delay (in hours) before the card switches to the next race |
 | show_lastyears_result | boolean   | `false`                             | Show the winner of last year (next_race, countdown) |

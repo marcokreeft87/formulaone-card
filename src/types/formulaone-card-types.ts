@@ -79,7 +79,7 @@ export enum CountdownType {
     Practice2 = "practice2",
     Practice3 = "practice3",
     Sprint = "sprint",
-    SprintQualifying = "sprintqualifying"
+    SprintQualifying = "sprint_qualifying"
 }
 
 export interface ActionOptions {
