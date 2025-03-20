@@ -30,7 +30,7 @@ export default class Countdown extends BaseCard {
         'racetime' : 'Race',
         'sprint' : 'Sprint',
         'qualifying' : 'Qualifying',
-        'sprintqualifying' : 'Sprint Qualifying',
+        'sprint_qualifying' : 'Sprint Qualifying',
         'until' : 'Until'
     };
 

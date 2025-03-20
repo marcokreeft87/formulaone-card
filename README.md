@@ -262,7 +262,7 @@ The following texts can be translated or altered.
 | next_race, countdown | city | 'City' |
 | next_race, countdown | sprint | 'Sprint' |
 | next_race, countdown | qualifying | 'Qualifying' |
-| next_race, countdown | sprintqualifying : 'Sprint Qualifying' |
+| next_race, countdown | sprint_qualifying : 'Sprint Qualifying' |
 | next_race, countdown, schedule | endofseason | 'Season is over. See you next year!' |
 | constructor_standings | constructor | 'Constructor' |
 | constructor_standings, driver_standings, last_result | points | 'Pts' |

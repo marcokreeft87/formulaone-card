@@ -182,16 +182,18 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
         const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
         const lastYearsResult = renderLastYearsResults(config, lastYearData)
 
+        const hasSprint = race.SprintQualifying !== undefined && race.Sprint !== undefined;
         const freePractice1 = race.FirstPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale) : '-';
         const freePractice2 = race.SecondPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale) : '-';
         const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
         const raceDateFormatted = formatDateTimeRaceInfo(raceDate, hass.locale);
         const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
         const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
+        const sprintQualifyingDate = race.SprintQualifying !== undefined ? formatDateTimeRaceInfo(new Date(race.SprintQualifying.date + 'T' + race.SprintQualifying.time), hass.locale) : '-';
         
         return html`${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
                     <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
-                    <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('practice3')}</td><td align="right">${freePractice3}</td></tr>
+                    <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${(hasSprint ? card.translation('sprint_qualifying') : card.translation('practice3'))}</td><td align="right">${(hasSprint ? sprintQualifyingDate : freePractice3)}</td></tr>
                     <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
                     <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
                     <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
