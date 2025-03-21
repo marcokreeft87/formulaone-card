@@ -12,7 +12,7 @@ export default class Schedule extends BaseCard {
     hass: HomeAssistant;
     defaultTranslations = {
         'date' : 'Date',   
-        'race' : 'Race',
+        'round' : 'Race',
         'time' : 'Time',
         'location' : 'Location',
         'endofseason' : 'Season is over. See you next year!'
@@ -65,7 +65,7 @@ export default class Schedule extends BaseCard {
                             <thead>
                                 <tr>
                                     <th>&nbsp;</th>
-                                    <th>${this.translation('race')}</th>
+                                    <th>${this.translation('round')}</th>
                                     <th>${this.translation('location')}</th>
                                     <th class="text-center">${this.translation('date')}</th>
                                     <th class="text-center">${this.translation('time')}</th>

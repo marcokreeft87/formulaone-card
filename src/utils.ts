@@ -1,5 +1,5 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
-import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, WeatherUnit } from "./types/formulaone-card-types";
+import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, Translation, WeatherUnit } from "./types/formulaone-card-types";
 import { Constructor, Driver, Race, Root, Location } from "./api/f1-models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
@@ -321,4 +321,45 @@ export const reduceArray = <T>(array?: T[], number?: number) => {
 
 export const renderConstructorColumn = (card: BaseCard, constructor: Constructor): HTMLTemplateResult => {
     return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
+}
+
+export const translateStatus = (status: string, config: FormulaOneCardConfig) => {
+    const defaultTranslations: Translation = {
+        'Finished' : 'Finished',
+        '+1 Lap' : '+1 Lap',
+        'Engine' : 'Engine',
+        '+2 Laps' : '+2 Laps',
+        'Accident' : 'Accident',
+        'Collision' : 'Collision',
+        'Gearbox' : 'Gearbox',
+        'Spun off' : 'Spun off',
+        '+3 Laps' : '+3 Laps',
+        'Suspension' : 'Suspension',
+        '+4 Laps' : '+4 Laps',
+        'Transmission' : 'Transmission',
+        'Electrical' : 'Electrical',
+        'Brakes' : 'Brakes',
+        'Withdrew' : 'Withdrew',
+        '+5 Laps' : '+5 Laps',
+        'Clutch' : 'Clutch',
+        'Lapped' : 'Lapped',
+        'Retired' : 'Retired',
+        'Not classified' : 'Not classified',
+        'Fuel system' : 'Fuel system',
+        '+6 Laps' : '+6 Laps',
+        'Disqualified' : 'Disqualified',
+        'Turbo' : 'Turbo',
+        'Hydraulics' : 'Hydraulics',
+        'Overheating' : 'Overheating',
+        'Ignition' : 'Ignition',
+        'Oil leak' : 'Oil leak',
+        'Throttle' : 'Throttle',
+        'Out of fuel' : 'Out of fuel'
+    };
+
+    if(!config.translations || Object.keys(config.translations).indexOf(status) < 0) {
+        return defaultTranslations[status];
+    }
+
+    return config.translations[status]
 }

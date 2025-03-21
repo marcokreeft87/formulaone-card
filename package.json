@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card",
-  "version": "1.9.10",
+  "version": "1.10.0",
   "description": "Frontend card for Home Assistant to display Formula One data",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,7 @@
     "build": "yarn lint && webpack -c webpack.config.js",
     "test": "jest",
     "coverage": "jest --coverage",
-    "workflow": "jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json",
-    "prebuild": "copy git-hooks\\pre-commit .git\\hooks\\ && echo 'hook copied'"
+    "workflow": "jest --coverage --json --outputFile=/home/runner/work/formulaone-card/formulaone-card/jest.results.json"
   },
   "repository": {
     "type": "git",
