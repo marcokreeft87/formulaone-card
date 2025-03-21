@@ -182,23 +182,55 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
         const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
         const lastYearsResult = renderLastYearsResults(config, lastYearData)
 
-        const hasSprint = race.SprintQualifying !== undefined && race.Sprint !== undefined;
-        const freePractice1 = race.FirstPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time), hass.locale) : '-';
-        const freePractice2 = race.SecondPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time), hass.locale) : '-';
-        const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time), hass.locale) : '-';
+        const freePractice1Datetime = race.FirstPractice !== undefined ? new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time) : null;
+        const freePractice2Datetime = race.SecondPractice !== undefined ? new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time) : null;
+        const freePractice3Datetime = race.ThirdPractice !== undefined ? new Date(race.ThirdPractice.date + 'T' + race.ThirdPractice.time) : null;
+        const qualifyingDatetime = race.Qualifying !== undefined ? new Date(race.Qualifying.date + 'T' + race.Qualifying.time) : null;
+        const sprintQualifyingDatetime = race.SprintQualifying !== undefined ? new Date(race.SprintQualifying.date + 'T' + race.SprintQualifying.time) : null;
+        const sprintDatetime = race.Sprint !== undefined ? new Date(race.Sprint.date + 'T' + race.Sprint.time) : null;
+
+        const freePractice1 = race.FirstPractice !== undefined ? formatDateTimeRaceInfo(freePractice1Datetime, hass.locale) : '-';
+        const freePractice2 = race.SecondPractice !== undefined ? formatDateTimeRaceInfo(freePractice2Datetime, hass.locale) : '-';
+        const freePractice3 = race.ThirdPractice !== undefined ? formatDateTimeRaceInfo(freePractice3Datetime, hass.locale) : '-';
         const raceDateFormatted = formatDateTimeRaceInfo(raceDate, hass.locale);
-        const qualifyingDate = formatDateTimeRaceInfo(new Date(race.Qualifying.date + 'T' + race.Qualifying.time), hass.locale);
-        const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(new Date(race.Sprint.date + 'T' + race.Sprint.time), hass.locale) : '-';
-        const sprintQualifyingDate = race.SprintQualifying !== undefined ? formatDateTimeRaceInfo(new Date(race.SprintQualifying.date + 'T' + race.SprintQualifying.time), hass.locale) : '-';
+        const qualifyingDate = formatDateTimeRaceInfo(qualifyingDatetime, hass.locale);
+        const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(sprintDatetime, hass.locale) : '-';
+        const sprintQualifyingDate = race.SprintQualifying !== undefined ? formatDateTimeRaceInfo(sprintQualifyingDatetime, hass.locale) : '-';
+
+
+
+        const events: { date: Date, name: string, value: string }[] = [];
+        events.push({ date: freePractice1Datetime, name: card.translation('practice1'), value: freePractice1 });
+        events.push({ date: freePractice2Datetime, name: card.translation('practice2'), value: freePractice2 });
+        events.push({ date: freePractice3Datetime, name: card.translation('practice3'), value: freePractice3 });
+        events.push({ date: qualifyingDatetime, name: card.translation('qualifying'), value: qualifyingDate });
+        events.push({ date: sprintQualifyingDatetime, name: card.translation('sprint_qualifying'), value: sprintQualifyingDate });
+        events.push({ date: sprintDatetime, name: card.translation('sprint'), value: sprintDate });
+        events.push({ date: raceDate, name: card.translation('racetime'), value: raceDateFormatted });
+
+        const filteredEvents = events.filter(event => event.date !== null).sort((a, b) => a.date.getTime() - b.date.getTime()); 
         
-        return html`${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('practice1')}</td><td align="right">${freePractice1}</td></tr>
-                    <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${card.translation('practice2')}</td><td align="right">${freePractice2}</td></tr>
-                    <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${(hasSprint ? card.translation('sprint_qualifying') : card.translation('practice3'))}</td><td align="right">${(hasSprint ? sprintQualifyingDate : freePractice3)}</td></tr>
-                    <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${card.translation('qualifying')}</td><td align="right">${qualifyingDate}</td></tr>
-                    <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('sprint')}</td><td align="right">${sprintDate}</td></tr>        
-                    <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${card.translation('racetime')}</td><td align="right">${raceDateFormatted}</td></tr>`;
+        return html`${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${renderEventColumn(0, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(0, 'value', filteredEvents)}</td></tr>
+                    <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${renderEventColumn(1, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(1, 'value', filteredEvents)}</td></tr>
+                    <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${renderEventColumn(2, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(2, 'value', filteredEvents)}</td></tr>
+                    <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${renderEventColumn(3, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(3, 'value', filteredEvents)}</td></tr>
+                    <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${renderEventColumn(4, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(4, 'value', filteredEvents)}</td></tr>        
+                    <tr><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td><td>&nbsp;</td><td>${renderEventColumn(5, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(5, 'value', filteredEvents)}</td></tr>`;
     }))}`;
 }
+
+export const renderEventColumn = (index: number, lookupKey: string, events: { date: Date, name: string, value: string }[]) => {
+ 
+    if (events.length > index) {
+        if(lookupKey === 'name') 
+            return events[index].name;
+
+        if(lookupKey === 'value') 
+            return events[index].value;
+    }
+
+    return '-';
+};
 
 export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: Race) => {
     if(!raceData) {
