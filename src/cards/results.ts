@@ -3,7 +3,7 @@ import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { QualifyingResult, Race, Result } from "../api/f1-models";
 import { CustomIcons, FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
-import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader, translateStatus } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class Results extends BaseCard {    
@@ -21,7 +21,11 @@ export default class Results extends BaseCard {
         'noresults' : 'Please select a race thats already been run.',
         'q1' : 'Q1',
         'q2' : 'Q2',
-        'q3' : 'Q3',
+        'q3' : 'Q3',        
+        'finished' : 'Finished',
+        'retired' : 'Retired',
+        'disqualified' : 'Disqualified',
+        'notclassified' : 'Not classified'
     };
 
     icons: CustomIcons = {
@@ -135,7 +139,7 @@ export default class Results extends BaseCard {
                 ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor)}` : '')}
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
-                <td class="width-50 text-center">${result.status}</td>
+                <td class="width-50 text-center">${translateStatus(result.status, this.config)}</td>
             </tr>`;
     }
 

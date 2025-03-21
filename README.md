@@ -285,6 +285,7 @@ The following texts can be translated or altered.
 | countdown | until | 'Until' |
 | constructor_standings, driver_standings | no_standings | 'No standings available yet' |
 
+
 Example:
 
 ```yaml
@@ -309,6 +310,48 @@ translations:
 
 ```
 
+## Result card status translation
+
+You can translate the status of the result card. But only the status column.
+It works the same way as the other translations.
+
+The possible values for the status column are:
+
+Here are all possible values for the status property with their default translation:
+
+```yaml
+'Finished' : 'Finished',
+'+1 Lap' : '+1 Lap',
+'Engine' : 'Engine',
+'+2 Laps' : '+2 Laps',
+'Accident' : 'Accident',
+'Collision' : 'Collision',
+'Gearbox' : 'Gearbox',
+'Spun off' : 'Spun off',
+'+3 Laps' : '+3 Laps',
+'Suspension' : 'Suspension',
+'+4 Laps' : '+4 Laps',
+'Transmission' : 'Transmission',
+'Electrical' : 'Electrical',
+'Brakes' : 'Brakes',
+'Withdrew' : 'Withdrew',
+'+5 Laps' : '+5 Laps',
+'Clutch' : 'Clutch',
+'Lapped' : 'Lapped',
+'Retired' : 'Retired',
+'Not classified' : 'Not classified',
+'Fuel system' : 'Fuel system',
+'+6 Laps' : '+6 Laps',
+'Disqualified' : 'Disqualified',
+'Turbo' : 'Turbo',
+'Hydraulics' : 'Hydraulics',
+'Overheating' : 'Overheating',
+'Ignition' : 'Ignition',
+'Oil leak' : 'Oil leak',
+'Throttle' : 'Throttle',
+'Out of fuel' : 'Out of fuel'
+```
+
 ## Weather forecast
 
 For this feature to work you have to get an API key [here](https://www.visualcrossing.com/sign-up)
@@ -320,8 +363,3 @@ weather_options:
   api_key: [YOUR API KEY HERE]
 ```
 
-## TODO
-- [ ] Editor
-- [ ] Use mwc for dropdowns
-- [ ] Better way for unit testing
-- [ ] Use hass-tast-test for testing
