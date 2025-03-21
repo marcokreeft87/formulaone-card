@@ -255,7 +255,8 @@ The following texts can be translated or altered.
 | next_race, countdown | practice1 | 'Practice 1' |
 | next_race, countdown | practice2 | 'Practice 2' |
 | next_race, countdown | practice3 | 'Practice 3' |
-| next_race, countdown, schedule | race' | 'Race' |
+| next_race, countdown | race | 'Race' |
+| schedule | round | 'Race' |
 | next_race, countdown | racename | 'Race name' |
 | next_race, countdown | circuitname | 'Circuit name' |
 | next_race, countdown, schedule | location' | 'Location' |
