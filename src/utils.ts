@@ -211,7 +211,7 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
         const filteredEvents = events.filter(event => event.date !== null).sort((a, b) => a.date.getTime() - b.date.getTime()); 
         
         return html`${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${renderEventColumn(0, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(0, 'value', filteredEvents)}</td></tr>
-                    <tr><td>${card.translation('race')}</td><td>${race.round}</td><td>&nbsp;</td><td>${renderEventColumn(1, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(1, 'value', filteredEvents)}</td></tr>
+                    <tr><td>${card.translation('round')}</td><td>${race.round}</td><td>&nbsp;</td><td>${renderEventColumn(1, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(1, 'value', filteredEvents)}</td></tr>
                     <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${renderEventColumn(2, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(2, 'value', filteredEvents)}</td></tr>
                     <tr><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td><td>&nbsp;</td><td>${renderEventColumn(3, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(3, 'value', filteredEvents)}</td></tr>
                     <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${renderEventColumn(4, 'name', filteredEvents)}</td><td align="right">${renderEventColumn(4, 'value', filteredEvents)}</td></tr>        
