@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Result } from "../api/f1-models";
-import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader, translateStatus } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -29,7 +29,7 @@ export default class LastResult extends BaseCard {
                 <td>${getDriverName(result.Driver, this.config)}</td>
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
-                <td class="width-50 text-center">${result.status}</td>
+                <td class="width-50 text-center">${translateStatus(result.status, this.config)}</td>
             </tr>`;
     }   
 

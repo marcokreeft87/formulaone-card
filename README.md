@@ -312,7 +312,7 @@ translations:
 
 ## Result card status translation
 
-You can translate the status of the result card. But only the status column.
+You can translate the status of the result and last_result card. But only the status column.
 It works the same way as the other translations.
 
 The possible values for the status column are:
