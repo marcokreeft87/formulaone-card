@@ -15,6 +15,7 @@ export default class NextRace extends BaseCard {
         'practice2' : 'Practice 2',
         'practice3' : 'Practice 3',
         'race' : 'Race',
+        'round' : 'Round',
         'racename' : 'Race name',
         'circuitname' : 'Circuit name',
         'location' : 'Location',
