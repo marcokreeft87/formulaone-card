@@ -129,12 +129,12 @@ export const clickHandler = (node: LitElement, config: FormulaOneCardConfig, has
     handleAction(node, hass, config.actions, ev.detail.action);
 }
 
-export const renderHeader = (card: BaseCard, race: Race, preventClick = false): HTMLTemplateResult => {
+export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => {
     
     const circuitName = getCircuitName(race.Circuit.Location);
 
     const _handleAction = (ev: ActionHandlerEvent): void => {
-        if (card.hass && card.config.actions && ev.detail.action && !preventClick) {
+        if (card.hass && card.config.actions && ev.detail.action && card.config.image_clickable) {
             clickHandler(card.parent, card.config, card.hass, ev);
         }
     }
