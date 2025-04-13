@@ -8,6 +8,8 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card/badge?style=flat-square)](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card)
 
 
+# This card just displays thr data. Data related "bugs" will probably be closed immediately 
+
 Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way 
 
 Watch a demo of the card by BeardedTinker!
