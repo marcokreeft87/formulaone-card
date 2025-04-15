@@ -42,9 +42,9 @@ jobs:
       - name: Gzip build output
         run: |
           mkdir dist-release
-          cp dist/*.js dist-release/
+          cp formulaone-card.js dist-release/
           gzip -k -f dist/*.js
-          cp dist/*.gz dist-release/
+          cp formaleone-card.gz dist-release/
 
       - name: Create GitHub Release
         id: create_release
