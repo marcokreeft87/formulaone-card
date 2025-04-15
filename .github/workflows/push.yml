@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir dist-release
           cp formulaone-card.js dist-release/
-          cp formulaone-card.gz dist-release/
+          cp formulaone-card.js.gz dist-release/
 
       - name: Create GitHub Release
         id: create_release
