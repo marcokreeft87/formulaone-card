@@ -39,17 +39,28 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Gzip build output
+      - name: Get version from package.json
+        id: package_version
         run: |
-          mkdir dist-release
-          cp formulaone-card.js dist-release/
-          cp formulaone-card.js.gz dist-release/
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Git tag from package.json version
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag v${{ steps.package_version.outputs.version }}
+          git push origin v${{ steps.package_version.outputs.version }}
 
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist-release/*
+          tag_name: v${{ steps.package_version.outputs.version }}
+          name: v${{ steps.package_version.outputs.version }}
+          files: |
+            formulaone-card.js
+            formulaone-card.js.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
