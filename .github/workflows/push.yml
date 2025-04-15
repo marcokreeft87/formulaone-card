@@ -1,19 +1,14 @@
 name: Tests
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   hacs:
     runs-on: "ubuntu-latest"
-    name: Test and validate
+    name: Test, Build, and Release
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
@@ -33,9 +28,31 @@ jobs:
           category: "plugin"
           ignore: brands
 
-      - name: Automatic GitHub Release
-        uses: justincy/github-action-npm-release@2.0.2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-      - name: Print release output
-        if: ${{ steps.release.outputs.released == 'true' }}
-        run: echo Release ID ${{ steps.release.outputs.release_id }}
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Gzip build output
+        run: |
+          mkdir dist-release
+          cp dist/*.js dist-release/
+          gzip -k -f dist/*.js
+          cp dist/*.gz dist-release/
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist-release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print release ID
+        run: echo "Release created with ID ${{ steps.create_release.outputs.id }}"
