@@ -1,5 +1,5 @@
 import { LocalStorageItem } from "../types/formulaone-card-types";
-import { ConstructorStanding, DriverStanding, Race, RaceTable, Season } from "./f1-models";
+import { ConstructorStanding, DriverStanding, Race } from "./f1-models";
 
 export interface IClient {
   GetConstructorStandings(): Promise<ConstructorStanding[]>;
@@ -9,18 +9,6 @@ export interface IClient {
   GetLastResult() : Promise<Race>;
 
   GetDriverStandings() : Promise<DriverStanding[]>;
-
-  GetSprintResults(season: number, round: number) : Promise<RaceTable>;
-
-  GetQualifyingResults(season: number, round: number) : Promise<RaceTable>;
-
-  GetResults(season: number, round: number) : Promise<RaceTable>;
-
-  GetSeasons() : Promise<Season[]>;
-
-  GetSeasonRaces(season: number) : Promise<Race[]>;
-
-  GetLastYearsResults(circuitName: string) : Promise<Race>;
 
   RefreshCache(): void;
 }

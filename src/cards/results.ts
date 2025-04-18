@@ -190,7 +190,7 @@ export default class Results extends BaseCard {
                 <td> 
                     ${this.translation('seasonheader')}<br />                      
                     ${until(
-                        this.client.GetSeasons().then(response => { 
+                        this.resultsClient.GetSeasons().then(response => { 
                             const seasons = response.reverse();
                                 return html`<select name="selectedSeason" @change="${selectedSeasonChanged}">
                                         <option value="0">${this.translation('selectseason')}</option>
@@ -262,10 +262,10 @@ export default class Results extends BaseCard {
 
         const selectedSeason = properties.selectedSeason as number;
 
-        Promise.all([this.client.GetResults(selectedSeason, round), 
-            this.client.GetQualifyingResults(selectedSeason, round),
-            this.client.GetSprintResults(selectedSeason, round),
-            this.client.GetSchedule(selectedSeason)])
+        Promise.all([this.resultsClient.GetResults(selectedSeason, round), 
+            this.resultsClient.GetQualifyingResults(selectedSeason, round),
+            this.resultsClient.GetSprintResults(selectedSeason, round),
+            this.resultsClient.GetSchedule(selectedSeason)])
             .then(([results, qualifyingResults, sprintResults, schedule]) => {
 
                 let race = results.Races[0];
@@ -291,7 +291,7 @@ export default class Results extends BaseCard {
         const selectedSeason = ev.target.value;
         const { properties, cardValues } = this.getParentCardValues();
 
-        this.client.GetSeasonRaces(parseInt(selectedSeason)).then(response => {            
+        this.resultsClient.GetSeasonRaces(parseInt(selectedSeason)).then(response => {            
 
             properties.selectedSeason = selectedSeason;
             properties.selectedRace = undefined;
@@ -342,9 +342,9 @@ export default class Results extends BaseCard {
                     season = parseInt(lastResult.season);
                 }
                 
-                Promise.all([this.client.GetQualifyingResults(season, round), 
-                            this.client.GetSprintResults(season, round),
-                            this.client.GetSeasonRaces(season)])
+                Promise.all([this.resultsClient.GetQualifyingResults(season, round), 
+                            this.resultsClient.GetSprintResults(season, round),
+                            this.resultsClient.GetSeasonRaces(season)])
                     .then(([qualifyingResults, sprintResults, seasonRaces]) => {
                                                 
                         const { properties, cardValues } = this.getParentCardValues();

@@ -13,6 +13,7 @@ export abstract class BaseCard {
     parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
     client: IClient;
+    resultsClient: ErgastClient;
     hass: HomeAssistant;
     weatherClient: WeatherClient;
     imageClient: ImageClient;
@@ -21,6 +22,7 @@ export abstract class BaseCard {
         this.config = parent.config;           
         this.hass = parent._hass;
         this.client = this.config.source === F1DataSource.F1Sensor ? new F1SensorClient(this.hass, this.config.entity) : new ErgastClient();
+        this.resultsClient = new ErgastClient();
         this.parent = parent;
         this.weatherClient = new WeatherClient(this.config.weather_options?.api_key ?? '');
         this.imageClient = new ImageClient();

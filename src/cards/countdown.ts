@@ -120,7 +120,7 @@ export default class Countdown extends BaseCard {
                             </table>
                             ${this.renderHeader(nextRace, raceDateTime)}`;
 
-            }).catch(() => {
+            }).catch((error) => {
                 return html`${getApiErrorMessage('next race')}`
             }),
             html`${getApiLoadingMessage()}`

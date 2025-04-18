@@ -171,7 +171,7 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
 
     const configWeatherApi = config.show_weather && config.weather_options?.api_key !== undefined;
     const weatherPromise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
-    const lastYearPromise = config.show_lastyears_result ? card.client.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
+    const lastYearPromise = config.show_lastyears_result ? card.resultsClient.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
 
     const promises = Promise.all([weatherPromise, lastYearPromise]);
     
