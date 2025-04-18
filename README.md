@@ -55,12 +55,15 @@ lovelace:
 The above configuration can be managed directly in the Configuration -> Lovelace Dashboards -> Resources panel when not using YAML mode,
 or added by clicking the "Add to lovelace" button on the HACS dashboard after installing the plugin.
 
+> [!TIP]
+> If you don't want to use the data from the Jolpi API directy but want to use a Home Assistant integration instead. Use F1 Sensor: https://github.com/Nicxe/f1_sensor
+
 ## Configuration
 
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| source            | string        | 'jolpi'    |  The source you want to use for the card (jolpi/f1sensor). The f1sensor source is only available for driver_standings,constructor_standings and schedule. And you will have to set the entity |
+| source            | string        | 'jolpi'    |  The source you want to use for the card (jolpi/f1sensor). The f1sensor source is availabe for all cards except results and last_result. And you will have to set the entity |
 | entity            | string        |            | Only required when using source: f1sensor. Set it to the entity that contains the data needed for the card. So for example when using driver_standings use entity: sensor.f1_driver_standings |
 | card_type         | string        | **Required**                        | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
