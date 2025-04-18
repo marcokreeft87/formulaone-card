@@ -24,6 +24,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     row_limit?: number;
     icons?: CustomIcons;
     countdown_type?: CountdownType | CountdownType[] | undefined;
+    show_event_details?: boolean;
     show_weather?: boolean;
     weather_options?: WeatherOptions;
     next_race_delay?: number;
