@@ -144,6 +144,6 @@ export default class FormulaOneCard extends LitElement {
     refreshCache(event: Event) {
         console.log('Refreshing cache...');
 
-        this.card.client.RefreshCache();
+       this.card.client.RefreshCache();
     }
 }

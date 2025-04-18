@@ -2,6 +2,8 @@ import { ActionConfig, ActionHandlerOptions, HomeAssistant, LovelaceCardConfig }
 import { HTMLTemplateResult } from 'lit-element';
 
 export interface FormulaOneCardConfig extends LovelaceCardConfig {
+    source: F1DataSource;
+    entity?: string;
     show_icon?: boolean;
     title?: string;
     name?: string;
@@ -30,6 +32,11 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     tabs_order?: string[];
     show_refresh?: boolean;
     next_race_display?: NextRaceDisplay | undefined;
+}
+
+export enum F1DataSource {
+    Jolpi = 'jolpi',
+    F1Sensor = 'f1sensor',
 }
 
 export interface ValueChangedEvent {

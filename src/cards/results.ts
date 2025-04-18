@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { QualifyingResult, Race, Result } from "../api/f1-models";
-import { CustomIcons, FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
+import { CustomIcons, F1DataSource, FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader, translateStatus } from "../utils";
 import { BaseCard } from "./base-card";
 
@@ -36,6 +36,9 @@ export default class Results extends BaseCard {
 
     constructor(parent: FormulaOneCard) {
         super(parent);    
+
+        if (this.config.source === F1DataSource.F1Sensor)
+            throw new Error('F1Sensor is not supported for this card type. Please use source: jolpi.');
     } 
     
     cardSize(): number {

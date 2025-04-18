@@ -60,6 +60,8 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
+| source            | string        | 'jolpi'    |  The source you want to use for the card (jolpi/f1sensor). The f1sensor source is only available for driver_standings,constructor_standings and schedule. And you will have to set the entity |
+| entity            | string        |            | Only required when using source: f1sensor. Set it to the entity that contains the data needed for the card. So for example when using driver_standings use entity: sensor.f1_driver_standings |
 | card_type         | string        | **Required**                        | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting. [Available options listed here](https://www.w3.org/International/O-charset-lang.html)|
