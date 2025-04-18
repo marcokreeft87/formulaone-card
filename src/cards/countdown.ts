@@ -4,7 +4,7 @@ import { clickHandler, getApiErrorMessage, getApiLoadingMessage, getCountryFlagB
 import { BaseCard } from "./base-card";
 import { asyncReplace } from 'lit/directives/async-replace.js';
 import { Race } from "../api/f1-models";
-import { ActionHandlerEvent, hasAction, HomeAssistant } from "custom-card-helpers";
+import { ActionHandlerEvent, formatDateTime, hasAction, HomeAssistant } from "custom-card-helpers";
 import FormulaOneCard from "..";
 import { actionHandler } from "../directives/action-handler-directive";
 import { CountdownType } from "../types/formulaone-card-types";
@@ -113,16 +113,15 @@ export default class Countdown extends BaseCard {
                                         html`<tr>
                                                 <td class="text-center">
                                                     <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${this.translation('until')} ${this.translation(countdownType.toLowerCase())}</h1>
+                                                    <h3 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${this.config.show_event_details ? formatDateTime(raceDateTime, this.hass.locale) : ''}</h3>
                                                 </td>
                                             </tr>`
                                         : null
                                 )}
                             </table>
-                            ${this.renderHeader(nextRace, raceDateTime)}`;
+                            ${this.renderHeader(nextRace, raceDateTime)}`; 
 
-            }).catch((error) => {
-                return html`${getApiErrorMessage('next race')}`
-            }),
+            }).catch(() => html`${getApiErrorMessage('next race')}`),
             html`${getApiLoadingMessage()}`
         )}`;
     }
