@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
 import { Result } from "../api/f1-models";
-import { getApiErrorMessage, getApiLoadingMessage, getDriverName, reduceArray, renderHeader, translateStatus } from "../utils";
+import { getApiErrorMessage, getApiLoadingMessage, getDriverName, getEndOfSeasonMessage, reduceArray, renderHeader, translateStatus } from "../utils";
 import { BaseCard } from "./base-card";
 
 export default class LastResult extends BaseCard {
@@ -10,7 +10,8 @@ export default class LastResult extends BaseCard {
         'driver' : 'Driver',   
         'grid' : 'Grid',
         'points' : 'Points',
-        'status' : 'Status'
+        'status' : 'Status',
+        'no_result' : 'No result available yet',
     };
 
     constructor(parent: FormulaOneCard) {
@@ -37,6 +38,8 @@ export default class LastResult extends BaseCard {
 
         return html`${until(
             this.client.GetLastResult().then(response => 
+                !response ?
+                html`${getEndOfSeasonMessage(this.translation('no_result'))}` : 
                 html` 
                     <table>
                         <tr>
