@@ -5,20 +5,22 @@ import ErgastClient from "../api/ergast-client";
 import { Race } from "../api/f1-models";
 import ImageClient from "../api/image-client";
 import WeatherClient from "../api/weather-client";
-import { CardProperties, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
+import { CardProperties, F1DataSource, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
+import { IClient } from "../api/client-base";
+import F1SensorClient from "../api/f1sensor-client";
 
 export abstract class BaseCard {
     parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
-    client: ErgastClient;
+    client: IClient;
     hass: HomeAssistant;
     weatherClient: WeatherClient;
     imageClient: ImageClient;
 
     constructor(parent: FormulaOneCard) {     
-        this.config = parent.config;   
-        this.client = new ErgastClient();
+        this.config = parent.config;           
         this.hass = parent._hass;
+        this.client = this.config.source === F1DataSource.F1Sensor ? new F1SensorClient(this.hass, this.config.entity) : new ErgastClient();
         this.parent = parent;
         this.weatherClient = new WeatherClient(this.config.weather_options?.api_key ?? '');
         this.imageClient = new ImageClient();

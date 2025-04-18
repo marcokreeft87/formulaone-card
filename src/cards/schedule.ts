@@ -75,9 +75,7 @@ export default class Schedule extends BaseCard {
                                 ${reduceArray(schedule, this.config.row_limit).map(race => this.renderScheduleRow(race))}
                             </tbody>
                         </table>`;
-            }).catch(() => {
-                return html`${getApiErrorMessage('schedule')}`
-            }),
+            }).catch(() => html`${getApiErrorMessage('schedule')}`),
             html`${getApiLoadingMessage()}`
         )}`;
     }

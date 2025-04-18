@@ -1,8 +1,8 @@
 import { getRefreshTime } from '../utils';
-import { ClientBase } from './client-base';
+import { ClientBase, IClient } from './client-base';
 import { ConstructorStanding, DriverStanding, Race, RaceTable, Root, Season } from './f1-models';
 
-export default class ErgastClient extends ClientBase {
+export default class ErgastClient extends ClientBase implements IClient {
 
     baseUrl = 'https://api.jolpi.ca/ergast/f1';
 
