@@ -52,10 +52,24 @@ jobs:
           git tag v${{ steps.package_version.outputs.version }}
           git push origin v${{ steps.package_version.outputs.version }}
 
+      - name: Get commit messages since last tag
+        id: changelog
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0)
+          LOG=$(git log ${LAST_TAG}..HEAD    --pretty=format:"- %s")
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          echo "$LOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Get latest commit message
+        id: get_commit
+        run: echo "message=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
+          body: ${{ steps.changelog.outputs.log }}
           tag_name: v${{ steps.package_version.outputs.version }}
           name: v${{ steps.package_version.outputs.version }}
           files: |
