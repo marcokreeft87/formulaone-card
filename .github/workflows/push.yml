@@ -57,9 +57,9 @@ jobs:
         run: |
           LAST_TAG=$(git describe --tags --abbrev=0)
           LOG=$(git log ${LAST_TAG}..HEAD    --pretty=format:"- %s")
-          echo "log<<EOF" >> $GITHUB_OUTPUT
-          echo "$LOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "log<<EOF" >> $GITHUB_ENV
+          echo "$LOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Get latest commit message
         id: get_commit
@@ -69,7 +69,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ steps.changelog.outputs.log }}
+          body: ${{ env.log }}
           tag_name: v${{ steps.package_version.outputs.version }}
           name: v${{ steps.package_version.outputs.version }}
           files: |
