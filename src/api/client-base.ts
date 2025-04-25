@@ -20,8 +20,6 @@ export interface IClient {
 
   GetSeasonRaces(season: number) : Promise<Race[]>;
 
-  GetLastYearsResults(circuitName: string) : Promise<Race>;
-
   RefreshCache(): void;
 }
 

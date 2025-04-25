@@ -1,29 +1,32 @@
 import { HomeAssistant } from "custom-card-helpers";
 import { HTMLTemplateResult } from "lit-html";
 import FormulaOneCard from "..";
-import ErgastClient from "../api/ergast-client";
+import JolpiClient from "../api/ergast-client";
 import { Race } from "../api/f1-models";
 import ImageClient from "../api/image-client";
-import WeatherClient from "../api/weather-client";
+import VCWeatherClient from "../api/vc-weather-client";
 import { CardProperties, F1DataSource, FormulaOneCardConfig, Translation } from "../types/formulaone-card-types";
 import { IClient } from "../api/client-base";
 import F1SensorClient from "../api/f1sensor-client";
+import { IWeatherClient } from "../api/weather-models";
 
 export abstract class BaseCard {
     parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
     client: IClient;
+    jolpiClient: JolpiClient;
     hass: HomeAssistant;
-    weatherClient: WeatherClient;
+    weatherClient: IWeatherClient;
     imageClient: ImageClient;
 
     constructor(parent: FormulaOneCard) {     
         this.config = parent.config;           
         this.hass = parent._hass;
-        this.client = this.config.source === F1DataSource.F1Sensor ? new F1SensorClient(this.hass, this.config.entity) : new ErgastClient();
+        this.client = this.config.source === F1DataSource.F1Sensor ? new F1SensorClient(this.hass, this.config.entity) : new JolpiClient();
         this.parent = parent;
-        this.weatherClient = new WeatherClient(this.config.weather_options?.api_key ?? '');
+        this.weatherClient = this.config.weather_options?.source ? new F1SensorClient(this.hass, this.config.entity) : new VCWeatherClient(this.config.weather_options?.api_key ?? '');
         this.imageClient = new ImageClient();
+        this.jolpiClient = new JolpiClient();
     }    
 
     translation(key: string) : string {
