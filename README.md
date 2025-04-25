@@ -63,7 +63,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | Name              | Type          | Default                             | Description                                      |
 | ----------------- | ------------- | ----------------------------------- | ------------------------------------------------ |
 | type              | string        | **Required**                        | `custom:formulaonecard`                          |
-| source            | string        | 'jolpi'    |  The source you want to use for the card (jolpi/f1sensor). The f1sensor source is availabe for all cards except results and last_result. And you will have to set the entity |
+| source            | string        | 'jolpi'    |  The source you want to use for the card (jolpi/f1sensor). You will have to set the entity |
 | entity            | string        |            | Only required when using source: f1sensor. Set it to the entity that contains the data needed for the card. So for example when using driver_standings use entity: sensor.f1_driver_standings |
 | card_type         | string        | **Required**                        | The type of card you want to display (driver_standings,constructor_standings,next_race,schedule,last_result,results,countdown)            |
 | title             | string        |                                     | The header of the card ( hidden when null or empty)            |
@@ -88,6 +88,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | tabs_order        | array         |'results', 'qualifying', 'sprint'    | Determine the order of the tabs (result)    |
 | show_refresh      | boolean       |`false`                              | Show the refresh button (top right)    |
 | next_race_display | enum          |`date`                               | Show the date, time or both for the next race (date,time,datetime)    |
+| show_event_details | boolean      |`false`                              | Show the date of the next event (countdown) |
 
 
 ### Actions

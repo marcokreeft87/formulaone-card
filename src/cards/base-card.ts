@@ -14,7 +14,7 @@ export abstract class BaseCard {
     parent: FormulaOneCard;
     config: FormulaOneCardConfig;  
     client: IClient;
-    jolpiClient: JolpiClient;
+    resultsClient: JolpiClient;
     hass: HomeAssistant;
     weatherClient: IWeatherClient;
     imageClient: ImageClient;
@@ -23,10 +23,10 @@ export abstract class BaseCard {
         this.config = parent.config;           
         this.hass = parent._hass;
         this.client = this.config.source === F1DataSource.F1Sensor ? new F1SensorClient(this.hass, this.config.entity) : new JolpiClient();
+        this.resultsClient = new JolpiClient();
         this.parent = parent;
         this.weatherClient = this.config.weather_options?.source ? new F1SensorClient(this.hass, this.config.entity) : new VCWeatherClient(this.config.weather_options?.api_key ?? '');
         this.imageClient = new ImageClient();
-        this.jolpiClient = new JolpiClient();
     }    
 
     translation(key: string) : string {
