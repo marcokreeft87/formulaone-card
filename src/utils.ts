@@ -1,5 +1,5 @@
 import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
-import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, Translation, WeatherUnit } from "./types/formulaone-card-types";
+import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, Translation } from "./types/formulaone-card-types";
 import { Constructor, Driver, Race, Root, Location } from "./api/f1-models";
 import FormulaOneCard from ".";
 import { BaseCard } from "./cards/base-card";
@@ -10,7 +10,7 @@ import { ImageConstants } from "./lib/constants";
 import { actionHandler } from './directives/action-handler-directive';
 import RestCountryClient from "./api/restcountry-client";
 import { until } from 'lit-html/directives/until.js';
-import { Day, Hour } from "./api/weather-models";
+import { WeatherData } from "./api/weather-models";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -161,7 +161,7 @@ export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => 
     return html`${(card.config.card_type == FormulaOneCardType.Countdown ? html`` : raceName)} ${(card.config.hide_tracklayout ? html`` : imageHtml)}<br>`;
 }
 
-export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) => {
+export const renderRaceInfo = (card: BaseCard, race: Race) => {
     const config = card.config;
     const hass = card.hass;
 
@@ -170,16 +170,14 @@ export const renderRaceInfo = (card: BaseCard, race: Race, raceDateTime?: Date) 
     }    
 
     const configWeatherApi = config.show_weather && config.weather_options?.api_key !== undefined;
-    const weatherPromise = configWeatherApi ? card.weatherClient.getWeatherData(race.Circuit.Location.lat, race.Circuit.Location.long, `${race.date}T${race.time}`) : Promise.resolve(null);
+    const weatherPromise = configWeatherApi ? card.weatherClient.getRaceWeatherData(card.config.weather_options, race) : Promise.resolve(null);
     const lastYearPromise = config.show_lastyears_result ? card.resultsClient.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
 
     const promises = Promise.all([weatherPromise, lastYearPromise]);
     
     return html`${until(promises.then(([weather, lastYearData]) => {
-        const weatherData = weather?.days[0];
-
         const raceDate = new Date(race.date + 'T' + race.time);
-        const weatherInfo = renderWeatherInfo(weatherData, config, raceDateTime ?? raceDate);
+        const weatherInfo = renderWeatherInfo(weather);
         const lastYearsResult = renderLastYearsResults(config, lastYearData)
 
         const freePractice1Datetime = race.FirstPractice !== undefined ? new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time) : null;
@@ -259,60 +257,31 @@ export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: R
         <tr><td colspan="5">&nbsp;</td></tr>`;
 }
 
-export const renderWeatherInfo = (weatherData: Day, config: FormulaOneCardConfig, raceDate: Date) => {
+export const renderWeatherInfo = (weatherData: WeatherData) => { 
     if(!weatherData) {
         return html``;
     }
 
-    const windUnit = config.weather_options?.unit === WeatherUnit.Metric ? 'km/h' : 'mph';
-    const tempUnit = config.weather_options?.unit === WeatherUnit.MilesFahrenheit ? '°F' : '°C';
-    const hourData = weatherData.hours ? weatherData.hours[raceDate.getHours()] : weatherData as Hour;    
+    const tempUnit = weatherData.race_temperature_unit === 'fahrenheit' ? '°F' : '°C';
 
     return html`<tr>
                     <td colspan="5">
                         <table class="weather-info">
                             <tr>
-                                <td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon> ${calculateWindDirection(hourData.winddir)} ${hourData.windspeed} ${windUnit}</td>
-                                <td><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon> ${hourData.precip} mm</td>
-                                <td><ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon> ${hourData.precipprob}%</td>
+                                <td><ha-icon slot="icon" icon="mdi:clouds"></ha-icon>&nbsp;${weatherData.race_cloud_cover} ${weatherData.race_cloud_cover_unit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon>&nbsp;${weatherData.race_temperature} ${tempUnit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:water-percent"></ha-icon>&nbsp;${weatherData.race_humidity} ${weatherData.race_humidity_unit}</td>
                             </tr>
                             <tr>
-                                <td><ha-icon slot="icon" icon="mdi:clouds"></ha-icon> ${hourData.cloudcover} %</td>
-                                <td><ha-icon slot="icon" icon="mdi:thermometer-lines"></ha-icon> ${hourData.temp} ${tempUnit}</td>
-                                <td><ha-icon slot="icon" icon="mdi:sun-thermometer"></ha-icon> ${hourData.feelslike} ${tempUnit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:weather-windy"></ha-icon>&nbsp;${weatherData.race_wind_direction} ${weatherData.race_wind_speed} ${weatherData.race_wind_speed_unit}</td>
+                                <td><ha-icon slot="icon" icon="mdi:weather-pouring"></ha-icon>&nbsp;${weatherData.race_precipitation} ${weatherData.race_precipitation_unit}</td>
+                                <td>${(weatherData.race_precipitation_prob ? html`<ha-icon slot="icon" icon="mdi:cloud-percent-outline"></ha-icon>&nbsp;${weatherData.race_precipitation_prob} %` : html``)}</td>
                             </tr>
+                            
                         </table>
                     </td>
                 </tr>
                 <tr><td colspan="5">&nbsp;</td></tr>`;
-}
-
-export const calculateWindDirection = (windDirection: number) => {
-    const directions = [    
-      { label: 'N', range: [0, 11.25] },
-      { label: 'NNE', range: [11.25, 33.75] },
-      { label: 'NE', range: [33.75, 56.25] },
-      { label: 'ENE', range: [56.25, 78.75] },
-      { label: 'E', range: [78.75, 101.25] },
-      { label: 'ESE', range: [101.25, 123.75] },
-      { label: 'SE', range: [123.75, 146.25] },
-      { label: 'SSE', range: [146.25, 168.75] },
-      { label: 'S', range: [168.75, 191.25] },
-      { label: 'SSW', range: [191.25, 213.75] },
-      { label: 'SW', range: [213.75, 236.25] },
-      { label: 'WSW', range: [236.25, 258.75] },
-      { label: 'W', range: [258.75, 281.25] },
-      { label: 'WNW', range: [281.25, 303.75] },
-      { label: 'NW', range: [303.75, 326.25] },
-      { label: 'NNW', range: [326.25, 348.75] },
-      { label: 'N', range: [348.75, 360]}
-    ];
-  
-    for (const { label, range } of directions) {
-      if (windDirection >= range[0] && windDirection <= range[1]) {
-        return label;
-      }
-    }
 }
 
 export const getRefreshTime = (endpoint: string) => {

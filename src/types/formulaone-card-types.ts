@@ -37,7 +37,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
 
 export enum F1DataSource {
     Jolpi = 'jolpi',
-    F1Sensor = 'f1sensor',
+    F1Sensor = 'f1sensor'
 }
 
 export interface ValueChangedEvent {
@@ -53,11 +53,12 @@ export interface ValueChangedEvent {
         value: string;
         configValue: string;
         checked?: boolean;
-    };
-    
+    };    
 }
 
 export interface WeatherOptions {
+    source: WeatherSource;
+    entity?: string;
     api_key?: string;
     unit?: WeatherUnit;
     show_icon?: boolean;
@@ -66,6 +67,11 @@ export interface WeatherOptions {
     show_temperature?: boolean;
     show_cloud_cover?: boolean;
     show_visibility?: boolean;
+}
+
+export enum WeatherSource {
+    VisualCrossing = 'visualcrossing',
+    F1Sensor = 'f1sensor',
 }
 
 export enum NextRaceDisplay {

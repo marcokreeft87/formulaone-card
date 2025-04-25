@@ -56,7 +56,7 @@ The above configuration can be managed directly in the Configuration -> Lovelace
 or added by clicking the "Add to lovelace" button on the HACS dashboard after installing the plugin.
 
 > [!TIP]
-> If you don't want to use the data from the Jolpi API directy but want to use a Home Assistant integration instead. Use F1 Sensor: https://github.com/Nicxe/f1_sensor
+> If you don't want to use the data from the Jolpi API directy but want to use a Home Assistant integration instead. Use [F1 sensor](https://github.com/Nicxe/f1_sensor)
 
 ## Configuration
 
@@ -362,11 +362,12 @@ Here are all possible values for the status property with their default translat
 
 ## Weather forecast
 
-For this feature to work you have to get an API key [here](https://www.visualcrossing.com/sign-up)
+For this feature to work you have to get an API key [here](https://www.visualcrossing.com/sign-up) or use [F1 sensor](https://github.com/Nicxe/f1_sensor)
 
 ```yaml
 show_weather: true
 weather_options:
+  source: visualcrossing or f1sensor
   unit: metric
   api_key: [YOUR API KEY HERE]
 ```

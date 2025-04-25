@@ -1,7 +1,7 @@
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
 import FormulaOneCard from "..";
-import { QualifyingResult, Race, Result } from "../api/f1-models";
+import { QualifyingResult, Race, Result, Season } from "../api/f1-models";
 import { CustomIcons, F1DataSource, FormulaOneCardTab, mwcTabBarEvent, SelectChangeEvent } from "../types/formulaone-card-types";
 import { getApiErrorMessage, getApiLoadingMessage, getCountryFlagByNationality, getDriverName, reduceArray, renderConstructorColumn, renderHeader, translateStatus } from "../utils";
 import { BaseCard } from "./base-card";
@@ -190,7 +190,7 @@ export default class Results extends BaseCard {
                 <td> 
                     ${this.translation('seasonheader')}<br />                      
                     ${until(
-                        this.resultsClient.GetSeasons().then(response => { 
+                        this.resultsClient.GetSeasons().then((response: Season[]) => { 
                             const seasons = response.reverse();
                                 return html`<select name="selectedSeason" @change="${selectedSeasonChanged}">
                                         <option value="0">${this.translation('selectseason')}</option>
@@ -278,7 +278,7 @@ export default class Results extends BaseCard {
                 /* istanbul ignore next */
                 } else {
                     /* istanbul ignore next */
-                    race = schedule.filter(item => parseInt(item.round) == round)[0];
+                    race = schedule.filter((item: Race) => parseInt(item.round) == round)[0];
                 }
 
                 properties.selectedRace = race;
@@ -291,7 +291,7 @@ export default class Results extends BaseCard {
         const selectedSeason = ev.target.value;
         const { properties, cardValues } = this.getParentCardValues();
 
-        this.resultsClient.GetSeasonRaces(parseInt(selectedSeason)).then(response => {            
+        this.resultsClient.GetSeasonRaces(parseInt(selectedSeason)).then((response: Race[]) => {            
 
             properties.selectedSeason = selectedSeason;
             properties.selectedRace = undefined;
