@@ -245,6 +245,21 @@ f1_font: true
 ```
 ![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
 
+```yaml
+type: custom:formulaone-card
+card_type: countdown
+f1_font: true
+show_raceinfo: false
+countdown_type:
+  - practice1
+  - practice2
+  - practice3
+  - qualifying
+  - sprint
+  - race
+```
+![Screenshot 2025-04-29 095323](https://github.com/user-attachments/assets/600c239d-a20a-4cb7-997d-99a103b237e8)
+
 ## Icons
 The following icons can be altered.
 | Card type(s)                        | Key           | Default value                       |
