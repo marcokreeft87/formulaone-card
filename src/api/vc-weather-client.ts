@@ -21,34 +21,43 @@ export default class VCWeatherClient
     async getRaceWeatherData(options: WeatherOptions, race: Race): Promise<WeatherData> {
         const endpoint = `${race.Circuit.Location.lat}, ${ race.Circuit.Location.long}/${race.date}T${race.time}`;
         const contentType = 'json';
-
         const url = `${endpoint}?unitGroup=${this.unitGroup}&key=${this.apiKey}&contentType=${contentType}`;
-
         const data = await this.GetData<WeatherResponse>(url, true, 1);   
-
-        const day = data?.days[0]
-
-        return { 
-            race_temperature: day.temp,
-            race_temperature_unit: options.unit === WeatherUnit.Metric ? 'celsius' : 'fahrenheit',
-            race_humidity: day.humidity,
-            race_humidity_unit: '%',
-            race_cloud_cover: day.cloudcover,
-            race_cloud_cover_unit: '%',
-            race_precipitation: day.precip,
-            race_precipitation_unit : 'mm',
-            race_wind_speed : day.windspeed,
-            race_wind_speed_unit : 'm/s',
-            race_wind_direction: this.calculateWindDirection(day.winddir),  
-            race_wind_from_direction_degrees: day.winddir,
-            race_wind_from_direction_unit: 'degrees',
-            race_feelslike: day.feelslike,
-            race_feelslike_unit: options.unit === WeatherUnit.Metric ? 'celsius' : 'fahrenheit',
-            race_precipitation_prob: day.precipprob,
-            icon: '',
-            friendly_name: 'visualcrossing', 
-        };
+        const day = data?.days[0];
+    
+    // Create the weather data with metric and imperial units
+    const weatherData: WeatherData = { 
+        race_temperature: day.temp,
+        race_temperature_unit: options.unit === WeatherUnit.Metric ? 'celsius' : 'fahrenheit',
+        race_humidity: day.humidity,
+        race_humidity_unit: '%',
+        race_cloud_cover: day.cloudcover,
+        race_cloud_cover_unit: '%',
+        race_precipitation: day.precip,
+        race_precipitation_unit: options.unit === WeatherUnit.Metric ? 'mm' : 'in',
+        race_wind_speed: day.windspeed,
+        race_wind_speed_unit: options.unit === WeatherUnit.Metric ? 'm/s' : 'mph',
+        race_wind_direction: this.calculateWindDirection(day.winddir),  
+        race_wind_from_direction_degrees: day.winddir,
+        race_wind_from_direction_unit: 'degrees',
+        race_feelslike: day.feelslike,
+        race_feelslike_unit: options.unit === WeatherUnit.Metric ? 'celsius' : 'fahrenheit',
+        race_precipitation_prob: day.precipprob,
+        icon: '',
+        friendly_name: 'visualcrossing', 
+    };
+    
+    // For imperial units, convert the values (since the API returns them in metric)
+    if (options.unit !== WeatherUnit.Metric) {
+        // Convert wind speed from m/s to mph
+        weatherData.race_wind_speed = (parseFloat(weatherData.race_wind_speed.toString()) * 2.237).toFixed(1);
+        
+        // Convert precipitation from mm to inches
+        weatherData.race_precipitation = (parseFloat(weatherData.race_precipitation.toString()) / 25.4).toFixed(3);
     }
+    
+    return weatherData;
+}
 
     private calculateWindDirection = (windDirection: number) => {
         const directions = [
