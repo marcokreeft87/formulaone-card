@@ -385,5 +385,6 @@ weather_options:
   source: visualcrossing or f1sensor
   unit: metric
   api_key: [YOUR API KEY HERE]
+  entity: [f1sensor entity]
 ```
 
