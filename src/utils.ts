@@ -87,7 +87,7 @@ export const getCircuitName = (location: Location) => {
     
     let circuitName = location.country.replace(" ","-")
     const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}, { countryDashed: 'UK', name: 'Great_Britain'}, 
-    { countryDashed: 'Monaco', name: 'Monoco'}, { countryDashed: 'Azerbaijan', name: 'Baku'}, { countryDashed: 'Saudi-Arabia', name: 'Saudi_Arabia'}];
+    { countryDashed: 'Azerbaijan', name: 'Baku'}, { countryDashed: 'Saudi-Arabia', name: 'Saudi_Arabia'}];
 
     const exception = exceptions.filter(exception => exception.countryDashed == circuitName);
     if(exception.length > 0)
@@ -151,7 +151,7 @@ export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => 
         };
     }
 
-    const imageHtml = html`<img width="100%" src="${card.imageClient.GetImage(`${ImageConstants.F1CDN}Circuit%20maps%2016x9/${circuitName}_Circuit.png.transform/7col/image.png`)}" @action=${_handleAction}
+    const imageHtml = html`<img width="100%" src="${card.imageClient.GetImage(`${ImageConstants.F1CDN}/${circuitName}_Circuit`)}" @action=${_handleAction}
     .actionHandler=${actionHandler({
         hasHold: hasAction(card.config.actions?.hold_action),
         hasDoubleClick: hasAction(card.config.actions?.double_tap_action),
