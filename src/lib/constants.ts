@@ -1,7 +1,7 @@
 export const ImageConstants = {
     FlagCDN : 'https://flagcdn.com/w320/',
     TeamLogoCDN : 'https://www.formula1.com/content/dam/fom-website/teams/',
-    F1CDN : 'https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/',
+    F1CDN : 'https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9',
 };
 
 export const TIMESTAMP_FORMATS = ['relative', 'total', 'date', 'time', 'datetime'];
