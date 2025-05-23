@@ -39,7 +39,7 @@ export const getCountryFlagByNationality = (card: BaseCard, nationality: string)
     const countries = getCountries();
 
     nationality = nationality.trim();
-    const exceptions = [{ demonym: 'Argentinian', corrected: 'Argentinean'}];
+    const exceptions = [{ demonym: 'Argentinian', corrected: 'Argentinean'}, { demonym: 'Argentine', corrected: 'Argentinean'}];
     const exception = exceptions.filter(exception => exception.demonym == nationality);
     if(exception.length > 0)
     {
@@ -52,7 +52,7 @@ export const getCountryFlagByNationality = (card: BaseCard, nationality: string)
         return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png);
     }
 
-    return card.imageClient.GetImage(country[0].flags.png);
+    return '';
 }
 
 export const getCountryFlagByName = (card: BaseCard, countryName: string) => {
