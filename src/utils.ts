@@ -50,9 +50,9 @@ export const getCountryFlagByNationality = (card: BaseCard, nationality: string)
     if(country.length > 1)
     {
         return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png);
-    }
+    }    
 
-    return '';
+    return card.imageClient.GetImage(country[0].flags.png);
 }
 
 export const getCountryFlagByName = (card: BaseCard, countryName: string) => {
