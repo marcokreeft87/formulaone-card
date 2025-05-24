@@ -12,9 +12,9 @@ export const formatDateTime = (dateObj: Date, locale: FrontendLocaleData) => new
     hour12: useAmPm(locale),
 }).format(dateObj);
 
-export const formatDateTimeRaceInfo = (dateObj: Date, locale: FrontendLocaleData) => new Intl.DateTimeFormat(locale.language, {        
+export const formatDateTimeRaceInfo = (dateObj: Date, locale: FrontendLocaleData) => new Intl.DateTimeFormat(locale.language, {
     weekday: 'short',
-    hour: '2-digit',
+    hour: 'numeric',
     minute: '2-digit',
     hour12: useAmPm(locale),
 }).format(dateObj);
