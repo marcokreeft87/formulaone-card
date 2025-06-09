@@ -5,13 +5,15 @@ import { ClientBase } from "./client-base";
 export default class RestCountryClient extends ClientBase {
     
     baseUrl = 'https://restcountries.com/v2';
+    allEndpoint = 'all?fields=name,flag,flags,nativeName,demonym,population,altSpellings';
 
     async GetAll() : Promise<Country[]> {   
-        return await this.GetData<Country[]>('all', true, 730);
+        return await this.GetData<Country[]>(this.allEndpoint, true, 730);
     }
     
     GetCountriesFromLocalStorage() : Country[] {
-        const localStorageData = localStorage.getItem('all');
+        const localStorageData = localStorage.getItem(this.allEndpoint);
+
         if(localStorageData) {
             const item: LocalStorageItem = <LocalStorageItem>JSON.parse(localStorageData);
             return <Country[]>JSON.parse(item.data);
