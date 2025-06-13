@@ -164,21 +164,20 @@ export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => 
 export const renderRaceInfo = (card: BaseCard, race: Race) => {
     const config = card.config;
     const hass = card.hass;
-
-    if(config.hide_racedatetimes) {
-        return html``;
-    }    
-
-    const configWeatherApi = config.show_weather;
-    const weatherPromise = configWeatherApi ? card.weatherClient.getRaceWeatherData(card.config.weather_options, race) : Promise.resolve(null);
+    const weatherPromise = config.show_weather ? card.weatherClient.getRaceWeatherData(card.config.weather_options, race) : Promise.resolve(null);
     const lastYearPromise = config.show_lastyears_result ? card.resultsClient.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
 
     const promises = Promise.all([weatherPromise, lastYearPromise]);
     
     return html`${until(promises.then(([weather, lastYearData]) => {
-        const raceDate = new Date(race.date + 'T' + race.time);
+        
         const weatherInfo = renderWeatherInfo(weather);
         const lastYearsResult = renderLastYearsResults(config, lastYearData)
+
+        if (config.hide_racedatetimes && (config.show_weather || config.show_lastyears_result)) 
+             return html`${weatherInfo}${lastYearsResult}`;
+
+        const raceDate = new Date(race.date + 'T' + race.time);
 
         const freePractice1Datetime = race.FirstPractice !== undefined ? new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time) : null;
         const freePractice2Datetime = race.SecondPractice !== undefined ? new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time) : null;
@@ -194,8 +193,6 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
         const qualifyingDate = formatDateTimeRaceInfo(qualifyingDatetime, hass.locale);
         const sprintDate = race.Sprint !== undefined ? formatDateTimeRaceInfo(sprintDatetime, hass.locale) : '-';
         const sprintQualifyingDate = race.SprintQualifying !== undefined ? formatDateTimeRaceInfo(sprintQualifyingDatetime, hass.locale) : '-';
-
-
 
         const events: { date: Date, name: string, value: string }[] = [];
         events.push({ date: freePractice1Datetime, name: card.translation('practice1'), value: freePractice1 });
