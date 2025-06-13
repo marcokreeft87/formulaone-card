@@ -1,16 +1,16 @@
-import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
-import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, Translation } from "./types/formulaone-card-types";
-import { Constructor, Driver, Race, Root, Location } from "./api/f1-models";
-import FormulaOneCard from ".";
-import { BaseCard } from "./cards/base-card";
-import { formatDateTimeRaceInfo } from "./lib/format_date_time";
 import { ActionHandlerEvent, handleAction, hasAction, HomeAssistant } from "custom-card-helpers";
-import { formatDateNumeric } from "./lib/format_date";
-import { ImageConstants } from "./lib/constants";
-import { actionHandler } from './directives/action-handler-directive';
-import RestCountryClient from "./api/restcountry-client";
+import { html, HTMLTemplateResult, LitElement, PropertyValues } from "lit";
 import { until } from 'lit-html/directives/until.js';
+import FormulaOneCard from ".";
+import { Constructor, Driver, Location, Race, Root } from "./api/f1-models";
+import RestCountryClient from "./api/restcountry-client";
 import { WeatherData } from "./api/weather-models";
+import { BaseCard } from "./cards/base-card";
+import { actionHandler } from './directives/action-handler-directive';
+import { ImageConstants } from "./lib/constants";
+import { formatDateNumeric } from "./lib/format_date";
+import { formatDateTimeRaceInfo } from "./lib/format_date_time";
+import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, Translation } from "./types/formulaone-card-types";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
     if (changedProps.has('config')) {
@@ -169,7 +169,7 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
         return html``;
     }    
 
-    const configWeatherApi = config.show_weather && config.weather_options?.api_key !== undefined;
+    const configWeatherApi = config.show_weather;
     const weatherPromise = configWeatherApi ? card.weatherClient.getRaceWeatherData(card.config.weather_options, race) : Promise.resolve(null);
     const lastYearPromise = config.show_lastyears_result ? card.resultsClient.GetLastYearsResults(race.Circuit.circuitName) : Promise.resolve(null);
 

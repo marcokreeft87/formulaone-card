@@ -7,10 +7,9 @@
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/marcokreeft87/formulaone-card/main.svg?style=flat-square)](https://codecov.io/gh/marcokreeft87/formulaone-card/)
 [![CodeFactor](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card/badge?style=flat-square)](https://www.codefactor.io/repository/github/marcokreeft87/formulaone-card)
 
+# This card just displays the data. Data related bugs will probably be closed immediately
 
-# This card just displays the data. Data related bugs will probably be closed immediately 
-
-Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way 
+Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way
 
 Watch a demo of the card by BeardedTinker!
 
@@ -18,15 +17,16 @@ Watch a demo of the card by BeardedTinker!
 
 ## Installation
 
-
 ### HACS (recommended)
+
 Make sure you have [HACS](https://hacs.xyz/) (Home Assistant Community Store) installed.
 <br>
 <sub>_HACS is a third party community store and is not included in Home Assistant out of the box._</sub>
 
 Just click here to directly go to the repository in HACS and click "Download": [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=marcokreeft87&repository=formulaone-card&category=plugin)
 
-Or: 
+Or:
+
 - Open HACS
 - Go to "Frontend" section
 - Click button with "+" icon
@@ -34,23 +34,27 @@ Or:
 - Click "Download" button and install repository in HACS
 
 In both situations:
+
 - _If u are using YAML mode then add this to your_ [Lovelace resources](https://my.home-assistant.io/redirect/lovelace_resources/)
+
   ```yaml
   url: /hacsfiles/formulaone-card/formulaone-card.js
   type: module
   ```
+
 - Refresh your browser
 
 ### Manual install
-Manually download [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js) and add it 
+
+Manually download [formulaone-card.js](https://raw.githubusercontent.com/marcokreeft87/formulaone-card/master/formulaone-card.js) and add it
 to your `<config>/www/` folder and add the following to the `configuration.yaml` file:
+
 ```yaml
 lovelace:
   resources:
     - url: /local/formulaone-card.js
       type: module
 ```
-
 
 The above configuration can be managed directly in the Configuration -> Lovelace Dashboards -> Resources panel when not using YAML mode,
 or added by clicking the "Add to lovelace" button on the HACS dashboard after installing the plugin.
@@ -77,7 +81,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |
 | standings         | object        |                                     | Configuration for the driver standings card     |
-| translations      | dictionary    |  _[translations](#Translations)_          | Dictionary to override the default translation  |
+| translations      | dictionary    |  _[translations](#translations)_          | Dictionary to override the default translation  |
 | actions           | object        |  _[Actions](#actions)_                                    | The tap, double tap or hold actions set on the image of the countdown, last_result, results, qualifying_results and next-race cards |
 | row_limit         | number        |                                     | Limit the schedule, results, last_result, driver_standings and constructor_standings to this amount of row |
 | countdown_type    | string or array | 'race'                              | Set the event to countdown to (race,qualifying,practice1,practice2,practice3,sprint,sprint_qualifying) |
@@ -89,7 +93,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | show_refresh      | boolean       |`false`                              | Show the refresh button (top right)    |
 | next_race_display | enum          |`date`                               | Show the date, time or both for the next race (date,time,datetime)    |
 | show_event_details | boolean      |`false`                              | Show the date of the next event (countdown) |
-
+| countdown_format | string         | d h m s                             | Determine which parts of the countdown is displayed, d (days), h (hours), m (minutes) or s (seconds) |
 
 ### Actions
 
@@ -161,6 +165,7 @@ card_type: driver_standings
 title: Driver Standings
 
 ```
+
 ![image](https://user-images.githubusercontent.com/10223677/194120796-28532a9d-a62d-44bb-8cb8-403bfa434a8b.png)
 
 This card can also show the flags and team names of the driver:
@@ -206,6 +211,7 @@ card_type: last_result
 title: Last Result
 
 ```
+
 ![image](https://user-images.githubusercontent.com/10223677/194120925-5fc6c1a7-8b2a-4c58-b89c-d0316d70efe9.png)
 
 ### Results
@@ -215,6 +221,7 @@ type: custom:formulaone-card
 card_type: results
 title: Results
 ```
+
 ![image](https://user-images.githubusercontent.com/10223677/216916869-4d2dc991-3429-45f8-b286-0b08d538031f.png)
 
 This card can also show the flags and team names of the driver, alongside the logo of the teams:
@@ -236,6 +243,7 @@ standings:
 type: custom:formulaone-card
 card_type: countdown
 ```
+
 ![image](https://user-images.githubusercontent.com/10223677/213435405-fdb2ff7c-3364-43d5-80b0-0f253d9b60c8.png)
 
 ```yaml
@@ -243,6 +251,7 @@ type: custom:formulaone-card
 card_type: countdown
 f1_font: true
 ```
+
 ![image](https://user-images.githubusercontent.com/10223677/215340692-898a03ef-2f66-46fd-92da-6e842d413500.png)
 
 ```yaml
@@ -258,13 +267,16 @@ countdown_type:
   - sprint
   - race
 ```
+
 ![Screenshot 2025-04-29 095323](https://github.com/user-attachments/assets/600c239d-a20a-4cb7-997d-99a103b237e8)
 
 ## Icons
+
 The following icons can be altered.
+
 | Card type(s)                        | Key           | Default value                       |
 | ----------------------------------- | ------------- | ----------------------------------- |
-| results                             | results       | mdi:trophy                          |        
+| results                             | results       | mdi:trophy                          |
 | results                             | qualifying    | mdi:timer-outline                   |
 | results                             | sprint        | mdi:flag-checkered                  |
 
@@ -296,18 +308,17 @@ The following texts can be translated or altered.
 | last_result | grid | 'Grid' |
 | last_result | status | 'Status' |
 | schedule | time | 'Time' |
-| results | raceheader | 'Race' | 
-| results | seasonheader | 'Season' | 
-| results | selectseason | 'Select season' | 
-| results | selectrace | 'Select race' | 
-| results | noresults | 'Please select a race thats already been run' | 
+| results | raceheader | 'Race' |
+| results | seasonheader | 'Season' |
+| results | selectseason | 'Select season' |
+| results | selectrace | 'Select race' |
+| results | noresults | 'Please select a race thats already been run' |
 | countdown | days | 'd' |
 | countdown | hours | 'h' |
 | countdown | minutes | 'm' |
 | countdown | seconds | 's' |
 | countdown | until | 'Until' |
 | constructor_standings, driver_standings | no_standings | 'No standings available yet' |
-
 
 Example:
 
@@ -387,4 +398,3 @@ weather_options:
   api_key: [YOUR API KEY HERE]
   entity: [f1sensor entity]
 ```
-

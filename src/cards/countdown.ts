@@ -1,13 +1,13 @@
+import { ActionHandlerEvent, formatDateTime, hasAction, HomeAssistant } from "custom-card-helpers";
 import { html, HTMLTemplateResult } from "lit-html";
 import { until } from 'lit-html/directives/until.js';
-import { clickHandler, getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
-import { BaseCard } from "./base-card";
 import { asyncReplace } from 'lit/directives/async-replace.js';
-import { Race } from "../api/f1-models";
-import { ActionHandlerEvent, formatDateTime, hasAction, HomeAssistant } from "custom-card-helpers";
 import FormulaOneCard from "..";
+import { Race } from "../api/f1-models";
 import { actionHandler } from "../directives/action-handler-directive";
 import { CountdownType } from "../types/formulaone-card-types";
+import { clickHandler, getApiErrorMessage, getApiLoadingMessage, getCountryFlagByName, getEndOfSeasonMessage, renderHeader, renderRaceInfo } from "../utils";
+import { BaseCard } from "./base-card";
 
 export default class Countdown extends BaseCard {
     hass: HomeAssistant;
@@ -64,7 +64,23 @@ export default class Countdown extends BaseCard {
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            yield `${days}${this.translation('days')} ${hours}${this.translation('hours')} ${minutes}${this.translation('minutes')} ${seconds}${this.translation('seconds')} `;
+            const countdown_format = this.config.countdown_format ?? 'd h m s';
+
+            let displayValue = '';
+            if (countdown_format.includes('d')) {   
+                displayValue += `${days}${this.translation('days')} `;
+            }
+            if (countdown_format.includes('h')) {
+                displayValue += `${hours}${this.translation('hours')} `;
+            }
+            if (countdown_format.includes('m')) {
+                displayValue += `${minutes}${this.translation('minutes')} `;
+            }
+            if (countdown_format.includes('s')) {
+                displayValue += `${seconds}${this.translation('seconds')} `;
+            }
+
+            yield displayValue;
 
             /* istanbul ignore next */
             await new Promise((r) => setTimeout(r, 1000));
