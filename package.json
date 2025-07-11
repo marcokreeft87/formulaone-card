@@ -1,6 +1,6 @@
 {
   "name": "formulaone-card",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "description": "Frontend card for Home Assistant to display Formula One data",
   "main": "index.js",
   "scripts": {
@@ -40,7 +40,7 @@
     "@babel/plugin-transform-runtime": "^7.22.5",
     "@babel/preset-env": "^7.23.8",
     "@lit-labs/scoped-registry-mixin": "^1.0.1",
-    "@marcokreeft/ha-editor-formbuilder": "^2023.10.9",
+    "@marcokreeft/ha-editor-formbuilder": "^2024.9.1",
     "babel-jest": "^29.7.0",
     "compression-webpack-plugin": "^10.0.0",
     "custom-card-helpers": "^1.9.0",

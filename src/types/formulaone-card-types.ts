@@ -1,5 +1,5 @@
 import { ActionConfig, ActionHandlerOptions, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
-import { HTMLTemplateResult } from 'lit-element';
+import { HTMLTemplateResult } from 'lit';
 
 export interface FormulaOneCardConfig extends LovelaceCardConfig {
     source: F1DataSource;
