@@ -1,10 +1,11 @@
-import { html, TemplateResult } from "lit-html";
-import { CARD_EDITOR_NAME } from "./consts";
-import { CountdownType, FormulaOneCardType, PreviousRaceDisplay, WeatherUnit } from "./types/formulaone-card-types";
-import EditorForm from '@marcokreeft/ha-editor-formbuilder'
+import EditorForm from '@marcokreeft/ha-editor-formbuilder';
 import { FormControlType } from "@marcokreeft/ha-editor-formbuilder/dist/interfaces";
 import { getDropdownOptionsFromEnum } from "@marcokreeft/ha-editor-formbuilder/dist/utils/entities";
-import { css, CSSResult, customElement } from "lit-element";
+import { css, CSSResult } from "lit";
+import { html, TemplateResult } from "lit-html";
+import { customElement } from 'lit/decorators.js';
+import { CARD_EDITOR_NAME } from "./consts";
+import { CountdownType, FormulaOneCardType, PreviousRaceDisplay, WeatherUnit } from "./types/formulaone-card-types";
 
 @customElement(CARD_EDITOR_NAME)
 export class FormulaOneCardEditor extends EditorForm {
