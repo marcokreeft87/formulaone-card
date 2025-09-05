@@ -4,6 +4,7 @@ import { HTMLTemplateResult } from 'lit';
 export interface FormulaOneCardConfig extends LovelaceCardConfig {
     source: F1DataSource;
     entity?: string;
+    last_race_results_entity?: string;
     show_icon?: boolean;
     title?: string;
     name?: string;

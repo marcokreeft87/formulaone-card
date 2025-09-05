@@ -1,19 +1,21 @@
 import { HomeAssistant } from 'custom-card-helpers';
+import { WeatherOptions } from '../types/formulaone-card-types';
 import { ClientBase, IClient } from './client-base';
 import { ConstructorStanding, DriverStanding, Race, RaceTable, Season } from './f1-models';
 import { IWeatherClient, WeatherData } from './weather-models';
-import { WeatherOptions } from '../types/formulaone-card-types';
 
 export default class F1SensorClient extends ClientBase implements IClient, IWeatherClient {
     baseUrl: string;
     hass: HomeAssistant;
     entity: string;
+    last_race_results_entity: string;
 
-    constructor(hass: HomeAssistant, entity: string) {
+    constructor(hass: HomeAssistant, entity: string, last_race_results_entity: string) {
         super();  
         
         this.hass = hass;
         this.entity = entity;
+        this.last_race_results_entity = last_race_results_entity;
     } 
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -43,9 +45,10 @@ export default class F1SensorClient extends ClientBase implements IClient, IWeat
         return data?.races ?? [];   
     }
 
-    GetLastResult(): Promise<Race> {
-        throw new Error('Method not implemented.');
+    async GetLastResult(): Promise<Race> {
+        return this.hass.states[this.last_race_results_entity]?.attributes?.results ?? [];
     }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     GetSprintResults(season: number, round: number): Promise<RaceTable> {
         throw new Error('Method not implemented.');

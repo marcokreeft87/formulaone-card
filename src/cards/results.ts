@@ -38,7 +38,7 @@ export default class Results extends BaseCard {
         super(parent);    
 
         if (this.config.source === F1DataSource.F1Sensor)
-            throw new Error('F1Sensor is not supported for this card type. Please use source: jolpi.');
+            throw new Error('F1Sensor is not yet supported for this card type. Please use source: jolpi.');
     } 
     
     cardSize(): number {
