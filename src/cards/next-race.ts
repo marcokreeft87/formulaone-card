@@ -33,10 +33,10 @@ export default class NextRace extends BaseCard {
     
     render() : HTMLTemplateResult {
         return html`${until(
-            this.client.GetSchedule(new Date().getFullYear()).then(response => {
-                
+            this.client.GetSchedule(new Date().getFullYear()).then(async response => {
+
                 const delay = this.config.next_race_delay || 0;
-                const nextRace = response.filter(race =>  {
+                let nextRace = response.filter(race =>  {
                     const nextRaceDate = new Date(race.date + 'T' + race.time);
 
                     // Add the delay to the hours of the next race
@@ -46,26 +46,36 @@ export default class NextRace extends BaseCard {
                 })[0];
 
                 if(!nextRace) {
-                    return getEndOfSeasonMessage(this.translation('endofseason'));
-                }                
-                
+                    // No race found in current season, try next season
+                    try {
+                        const nextSeasonSchedule = await this.client.GetSchedule(new Date().getFullYear() + 1);
+                        if(nextSeasonSchedule && nextSeasonSchedule.length > 0) {
+                            nextRace = nextSeasonSchedule[0];
+                        } else {
+                            return getEndOfSeasonMessage(this.translation('endofseason'));
+                        }
+                    } catch {
+                        return getEndOfSeasonMessage(this.translation('endofseason'));
+                    }
+                }
+
                 return html`<table>
                         <tbody>
                             <tr>
                                 <td colspan="5">${renderHeader(this, nextRace)}</td>
                             </tr>
-                            ${this.config.show_raceinfo ? 
-                                renderRaceInfo(this, nextRace) : 
-                                this.config.only_show_date ? 
+                            ${this.config.show_raceinfo ?
+                                renderRaceInfo(this, nextRace) :
+                                this.config.only_show_date ?
                                     html`<tr>
                                         <td class="text-center">
                                             <h1 class="${(this.config.f1_font ? 'formulaone-font' : '')}">${this.renderDateTime(nextRace)}</h1>
                                         </td>
                                     </tr>` : null
-                                }  
+                                }
                         </tbody>
                     </table>`
-                }).catch(() => { 
+                }).catch(() => {
                     return html`${getApiErrorMessage('next race')}`;
                 }),
             html`${getApiLoadingMessage()}`
