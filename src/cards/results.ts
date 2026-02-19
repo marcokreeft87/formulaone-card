@@ -195,7 +195,7 @@ export default class Results extends BaseCard {
                                 return html`<select name="selectedSeason" @change="${selectedSeasonChanged}">
                                         <option value="0">${this.translation('selectseason')}</option>
                                         ${seasons.map(season => {
-                                            return html`<option value="${season.season}" ?selected=${selectedSeason === season.season}>${season.season}</option>`;
+                                            return html`<option value="${season.season}" ?selected=${selectedSeason === parseInt(season.season)}>${season.season}</option>`;
                                         })}
                                     </select>`;
                                
@@ -336,7 +336,7 @@ export default class Results extends BaseCard {
                     race = upcomingRace;
                     round = parseInt(race.round);
                     season = parseInt(race.season);
-                } else {
+                } else if(lastResult !== null) {
                     race = lastResult;
                     round = parseInt(lastResult.round);
                     season = parseInt(lastResult.season);

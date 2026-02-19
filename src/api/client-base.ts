@@ -4,11 +4,15 @@ import { ConstructorStanding, DriverStanding, Race } from "./f1-models";
 export interface IClient {
   GetConstructorStandings(): Promise<ConstructorStanding[]>;
 
+  GetConstructorStandingsForSeason(season: number | undefined) : Promise<ConstructorStanding[]>;
+
   GetSchedule(season: number) : Promise<Race[]>;    
   
   GetLastResult() : Promise<Race>;
-
+  
   GetDriverStandings() : Promise<DriverStanding[]>;
+
+  GetDriverStandingsForSeason(season: number | undefined) : Promise<DriverStanding[]>;
 
   RefreshCache(): void;
 }
