@@ -29,10 +29,25 @@ export default class F1SensorClient extends ClientBase implements IClient, IWeat
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {   
         return this.hass.states[this.entity]?.attributes?.constructor_standings ?? [];
     }
+
+    async GetConstructorStandingsForSeason(season: number | undefined) : Promise<ConstructorStanding[]> {
+        const data = this.hass.states[this.entity]?.attributes;
+        if (season && season !== parseFloat(data?.season))
+            throw new Error('This entity is only valid for the current season. Please use source: jolpi for other seasons.');
+
+        return data?.constructor_standings ?? [];
+    }
     
     async GetDriverStandings(): Promise<DriverStanding[]> {
         return this.hass.states[this.entity]?.attributes?.driver_standings ?? [];
     }
+
+    async GetDriverStandingsForSeason(season: number | undefined): Promise<DriverStanding[]> {
+        const data = this.hass.states[this.entity]?.attributes;
+        if (season && season !== parseFloat(data?.season))
+            throw new Error('This entity is only valid for the current season. Please use source: jolpi for other seasons.');
+        return data?.driver_standings ?? [];
+    }   
     
     async GetSchedule(season: number): Promise<Race[]> {
         const data = this.hass.states[this.entity]?.attributes;

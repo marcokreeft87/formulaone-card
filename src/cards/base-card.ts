@@ -48,7 +48,7 @@ export abstract class BaseCard {
         const cardProperties = this.parent.properties?.get('cardValues') as CardProperties;
         const races = cardProperties?.races as Race[];
         const selectedRace = cardProperties?.selectedRace as Race;
-        const selectedSeason = cardProperties?.selectedSeason as string;
+        const selectedSeason = cardProperties?.selectedSeason as number ?? new Date().getFullYear();
         const selectedTabIndex = cardProperties?.selectedTabIndex as number ?? 0;
         return { races, selectedRace, selectedSeason, selectedTabIndex };
     }
@@ -56,6 +56,7 @@ export abstract class BaseCard {
     protected getParentCardValues() {
         const cardValues = this.parent.properties ?? new Map<string, unknown>();
         const properties = cardValues.get('cardValues') as CardProperties ?? {} as CardProperties;
+        properties.selectedSeason = properties.selectedSeason ?? new Date().getFullYear();
         return { properties, cardValues };
     }
 }

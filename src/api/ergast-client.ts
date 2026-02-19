@@ -27,9 +27,33 @@ export default class ErgastClient extends ClientBase implements IClient {
       return standingsLists && standingsLists.length > 0 ? standingsLists[0].DriverStandings : [];
     }
 
+    async GetDriverStandingsForSeason(selectedSeason: number | undefined) {
+      if (!selectedSeason || selectedSeason === 0) {
+        return this.GetDriverStandings();
+      }
+
+      const refreshCacheHours = getRefreshTime(`${selectedSeason}/driverStandings.json`);
+      const data = await this.GetData<Root>(`${selectedSeason}/driverStandings.json`, true, refreshCacheHours);
+
+      const standingsLists = data.MRData.StandingsTable.StandingsLists;
+      return standingsLists && standingsLists.length > 0 ? standingsLists[0].DriverStandings : [];
+    }
+
     async GetConstructorStandings() : Promise<ConstructorStanding[]> {      
       const refreshCacheHours = getRefreshTime('current/constructorStandings.json');
       const data = await this.GetData<Root>('current/constructorStandings.json', true, refreshCacheHours);
+
+      const standingsLists = data.MRData.StandingsTable.StandingsLists;
+      return standingsLists && standingsLists.length > 0 ? standingsLists[0].ConstructorStandings : [];
+    }
+
+    async GetConstructorStandingsForSeason(selectedSeason: number | undefined) {
+      if (!selectedSeason || selectedSeason === 0) {
+        return this.GetConstructorStandings();
+      }
+
+      const refreshCacheHours = getRefreshTime(`${selectedSeason}/constructorStandings.json`);
+      const data = await this.GetData<Root>(`${selectedSeason}/constructorStandings.json`, true, refreshCacheHours);
 
       const standingsLists = data.MRData.StandingsTable.StandingsLists;
       return standingsLists && standingsLists.length > 0 ? standingsLists[0].ConstructorStandings : [];
