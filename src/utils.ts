@@ -73,9 +73,7 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
 export const getTeamImage = (card: BaseCard, teamName: string) => {
     teamName = teamName.toLocaleLowerCase().replace('_', '-');
 
-    console.log(teamName);
-
-    const exceptions = [{ teamName: 'red-bull', corrected: 'redbullracing'}, { teamName: 'rb', corrected: 'racingbulls'}, { teamName: 'haas', corrected: 'haasf1team'}];
+    const exceptions = [{ teamName: 'red-bull', corrected: 'redbullracing'}, { teamName: 'rb', corrected: 'racingbulls'}, { teamName: 'haas', corrected: 'haasf1team'}, { teamName: 'aston-martin', corrected: 'astonmartin'}];
 
     const exception = exceptions.filter(exception => exception.teamName == teamName);
     if(exception.length > 0)
