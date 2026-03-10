@@ -1,6 +1,6 @@
 export const ImageConstants = {
     FlagCDN : 'https://flagcdn.com/w320/',
-    TeamLogoCDN : 'https://www.formula1.com/content/dam/fom-website/teams/',
+    TeamLogoCDN : 'https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/',
     F1CDN : 'https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9',
 };
 

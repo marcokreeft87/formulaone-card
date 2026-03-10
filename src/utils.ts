@@ -72,7 +72,10 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
 
 export const getTeamImage = (card: BaseCard, teamName: string) => {
     teamName = teamName.toLocaleLowerCase().replace('_', '-');
-    const exceptions = [{ teamName: 'red-bull', corrected: 'red-bull-racing'}, { teamName: 'alfa', corrected: 'alfa-romeo'}, { teamName: 'haas', corrected: 'haas-f1-team'}, { teamName: 'sauber', corrected: 'kick-sauber'}];
+
+    console.log(teamName);
+
+    const exceptions = [{ teamName: 'red-bull', corrected: 'redbullracing'}, { teamName: 'rb', corrected: 'racingbulls'}, { teamName: 'haas', corrected: 'haasf1team'}];
 
     const exception = exceptions.filter(exception => exception.teamName == teamName);
     if(exception.length > 0)
@@ -80,7 +83,7 @@ export const getTeamImage = (card: BaseCard, teamName: string) => {
         teamName = exception[0].corrected;
     }
 
-    return card.imageClient.GetImage(`${ImageConstants.TeamLogoCDN}/2024/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`);
+    return card.imageClient.GetImage(`${ImageConstants.TeamLogoCDN}2026/${teamName.toLowerCase()}/2026${teamName.toLowerCase()}logo.webp`);
 }
 
 export const getCircuitName = (location: Location) => {
