@@ -286,11 +286,11 @@ The following icons can be altered.
 The display options for the standings can be altered
 
 
-| Name              | Type          | Default                             | Description                                      |
-| ------------------| ------------- | ----------------------------------- | ------------------------------------------------ |
-| show_team         | boolean       | `true`                              | Hide or show the team name                       |
-| show_flag         | boolean       | `true`                              | Hide or show the country flag                    |
-| show_teamlogo     | boolean       | `true`                              | Hide or show the team logo                       |
+| Name                     | Type          | Default                             | Description                                      |
+| ------------------       | ------------- | ----------------------------------- | ------------------------------------------------ |
+| show_team                | boolean       | `true`                              | Hide or show the team name                       |
+| show_flag                | boolean       | `true`                              | Hide or show the country flag                    |
+| show_teamlogo            | boolean       | `true`                              | Hide or show the team logo                       |
 | hide_season_selector     | boolean       | `false`                              | Hide or show the season selector                     |
 
 ## Translations
