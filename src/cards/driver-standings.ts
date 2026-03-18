@@ -43,14 +43,14 @@ export default class DriverStandings extends BaseCard {
         };
 
         return html`
-            <table>
+            ${this.config.standings?.hide_season_selector ? '' : html`<table>
                 <tr>
                     <td>
                         Season<br />
                         ${until(
                             this.resultsClient.GetSeasons().then((response: any[]) => {
                                 const seasons = response.reverse();
-                                return html`<select name="selectedSeason" @change=${selectedSeasonChanged}>
+                                return this.config.standings?.hide_season_selector ? '' : html`<select name="selectedSeason" @change=${selectedSeasonChanged}>
                                     <option value="0">${this.translation('selectseason')}</option>
                                     ${seasons.map(season => html`<option value="${season.season}" ?selected=${selectedSeason === parseInt(season.season)}>${season.season}</option>`)}
                                 </select>`;
@@ -59,7 +59,7 @@ export default class DriverStandings extends BaseCard {
                         )}
                     </td>
                 </tr>
-            </table>
+            </table>`}
             ${until(
                 this.resultsClient.GetDriverStandingsForSeason(selectedSeason).then((response: DriverStanding[]) =>
                     response.length === 0 ?

@@ -115,6 +115,7 @@ export interface StandingDisplayOptions {
     show_team?: boolean;
     show_flag?: boolean;
     show_teamlogo?: boolean;
+    hide_season_selector?: boolean;
 }
 
 export enum PreviousRaceDisplay {
