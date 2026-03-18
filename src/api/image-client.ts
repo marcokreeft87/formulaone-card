@@ -1,6 +1,6 @@
 import { ImageConstants } from "../lib/constants";
 import { LocalStorageItem } from "../types/formulaone-card-types";
-import { getCircuitName } from "../utils";
+import { getCircuitName, getCircuitNameLegacy } from "../utils";
 import { Race } from "./f1-models";
 
 export default class ImageClient {
@@ -44,15 +44,40 @@ export default class ImageClient {
         return url;
     }
 
+    GetTeamLogoImage(teamName: string, selectedSeason: number): string {
+        
+        teamName = teamName.toLocaleLowerCase().replace('_', '-');
+        if (selectedSeason < 2026) {
+            const exceptions = [{ teamName: 'red-bull', corrected: 'red-bull-racing'}, { teamName: 'alfa', corrected: 'alfa-romeo'}, { teamName: 'haas', corrected: 'haas-f1-team'}, { teamName: 'sauber', corrected: 'kick-sauber'}];
+
+            const exception = exceptions.filter(exception => exception.teamName == teamName);
+            if(exception.length > 0)
+            {
+                teamName = exception[0].corrected;
+            }
+
+            return this.GetImage(`${ImageConstants.TeamLogoCDNLegacy}/2024/${teamName.toLowerCase()}-logo.png.transform/2col-retina/image.png`);
+        }
+
+        const exceptions = [{ teamName: 'red-bull', corrected: 'redbullracing'}, { teamName: 'rb', corrected: 'racingbulls'}, { teamName: 'haas', corrected: 'haasf1team'}, { teamName: 'aston-martin', corrected: 'astonmartin'}];
+
+        const exception = exceptions.filter(exception => exception.teamName == teamName);
+        if(exception.length > 0)
+        {
+            teamName = exception[0].corrected;
+        }
+
+        return this.GetImage(`${ImageConstants.TeamLogoCDN}2026/${teamName.toLowerCase()}/2026${teamName.toLowerCase()}logo.webp`);
+    }
+
     GetTrackLayoutImage(race: Race): string {
-        // Monaco, barcelona, spa, hungaroring, singapore, mexico, brazil , las vegas, abu dhabi 
-        const circuitName = getCircuitName(race.Circuit.Location);
+        const circuitName = getCircuitNameLegacy(race.Circuit.Location);
         const year = parseInt(race.season);
 
         if (year < 2026) {
             return this.GetImage(`${ImageConstants.F1CDNLegacy}/${circuitName}_Circuit`);
         }
 
-        return this.GetImage(`${ImageConstants.F1CDN}${race.Circuit.Location.locality.toLowerCase()}detailed.webp`);
+        return this.GetImage(`${ImageConstants.F1CDN}${getCircuitName(race).toLowerCase()}detailed.webp`);
     }
 }
