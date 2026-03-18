@@ -70,21 +70,26 @@ export const checkConfig = (config: FormulaOneCardConfig) => {
     }
 };
 
-export const getTeamImage = (card: BaseCard, teamName: string) => {
-    teamName = teamName.toLocaleLowerCase().replace('_', '-');
-
-    const exceptions = [{ teamName: 'red-bull', corrected: 'redbullracing'}, { teamName: 'rb', corrected: 'racingbulls'}, { teamName: 'haas', corrected: 'haasf1team'}, { teamName: 'aston-martin', corrected: 'astonmartin'}];
-
-    const exception = exceptions.filter(exception => exception.teamName == teamName);
-    if(exception.length > 0)
-    {
-        teamName = exception[0].corrected;
-    }
-
-    return card.imageClient.GetImage(`${ImageConstants.TeamLogoCDN}2026/${teamName.toLowerCase()}/2026${teamName.toLowerCase()}logo.webp`);
+export const getTeamImage = (card: BaseCard, teamName: string, selectedSeason: number) => {
+    return card.imageClient.GetTeamLogoImage(teamName, selectedSeason);
 }
 
-export const getCircuitName = (location: Location) => {
+export const getCircuitName = (race: Race) => {
+    
+    const exceptions = [{ countryDashed: 'Spain', name: 'Catalunya'}, { countryDashed: 'Belgium', name: 'SpaFrancorchamps'}, { countryDashed: 'Hungary', name: 'Hungaroring'}, 
+    { countryDashed: 'Brazil', name: 'Interlagos'}, { countryDashed: 'USA', name: 'LasVegas'}, { countryDashed: 'UAE', name: 'YasMarina'}, { countryDashed: 'Singapore', name: 'singapore'}];
+
+    const exception = exceptions.filter(exception => exception.countryDashed == race.Circuit.Location.country);
+    if(exception.length > 0)
+    {
+        return exception[0].name;
+    }
+
+    return race.Circuit.Location.locality.replace(" ","");
+}
+
+
+export const getCircuitNameLegacy = (location: Location) => {
     
     let circuitName = location.country.replace(" ","-")
     const exceptions = [{ countryDashed: 'UAE', name: 'Abu_Dhabi'}, { countryDashed: 'UK', name: 'Great_Britain'}, 
@@ -315,8 +320,8 @@ export const reduceArray = <T>(array?: T[], number?: number) => {
     return number ? array.slice(0, number) : array;
 }
 
-export const renderConstructorColumn = (card: BaseCard, constructor: Constructor): HTMLTemplateResult => {
-    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId)}">&nbsp;` : '')}${constructor.name}</td>`;
+export const renderConstructorColumn = (card: BaseCard, constructor: Constructor, selectedSeason: number): HTMLTemplateResult => {
+    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId, selectedSeason)}">&nbsp;` : '')}${constructor.name}</td>`;
 }
 
 export const translateStatus = (status: string, config: FormulaOneCardConfig) => {

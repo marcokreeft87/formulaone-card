@@ -22,12 +22,12 @@ export default class ConstructorStandings extends BaseCard {
         return 11;
     }
 
-    renderStandingRow(standing: ConstructorStanding): HTMLTemplateResult {
+    renderStandingRow(standing: ConstructorStanding, selectedSeason: number): HTMLTemplateResult {
         return html`
             <tr>
                 <td class="width-40 text-center">${standing.position}</td>
                 <td>
-                    ${(this.config.standings?.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(this, standing.Constructor.constructorId)}">&nbsp;` : '')}
+                    ${(this.config.standings?.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(this, standing.Constructor.constructorId, selectedSeason)}">&nbsp;` : '')}
                     ${standing.Constructor.name}
                 </td>
                 <td class="width-60 text-center">${standing.points}</td>
@@ -75,7 +75,7 @@ export default class ConstructorStandings extends BaseCard {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    ${reduceArray(response, this.config.row_limit).map(standing => this.renderStandingRow(standing))}
+                                    ${reduceArray(response, this.config.row_limit).map(standing => this.renderStandingRow(standing, selectedSeason))}
                                 </tbody>
                             </table>
                         `

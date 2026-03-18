@@ -81,7 +81,7 @@ export default class Results extends BaseCard {
                         </tr>
                     </thead>
                     <tbody>
-                        ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result, false))}
+                        ${reduceArray(selectedRace.SprintResults, this.config.row_limit).map(result => this.renderResultRow(result, false, selectedRace.season))}
                     </tbody>
                 </table>`
             : null;
@@ -101,7 +101,7 @@ export default class Results extends BaseCard {
                         </tr>
                     </thead>
                     <tbody>
-                        ${reduceArray(selectedRace.QualifyingResults, this.config.row_limit).map(result => this.renderQualifyingResultRow(result))}
+                        ${reduceArray(selectedRace.QualifyingResults, this.config.row_limit).map(result => this.renderQualifyingResultRow(result, selectedRace.season))}
                     </tbody>
                 </table>`            
             : null;
@@ -122,7 +122,7 @@ export default class Results extends BaseCard {
                         </tr>
                     </thead>
                     <tbody>
-                        ${reduceArray(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result, result.position === fastest?.position))}
+                        ${reduceArray(selectedRace.Results, this.config.row_limit).map(result => this.renderResultRow(result, result.position === fastest?.position, selectedRace.season))}
                     </tbody>
                     ${fastest ? html`
                     <tfoot>
@@ -132,26 +132,26 @@ export default class Results extends BaseCard {
                     </tfoot>` : ''}
                 </table>` 
         : null;
-    }
+    }   
 
-    renderResultRow(result: Result, fastest: boolean): HTMLTemplateResult {
+    renderResultRow(result: Result, fastest: boolean, selectedSeason: string): HTMLTemplateResult {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
                 <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(this, result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}${fastest ? ' *' : ''}</td>
-                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor)}` : '')}
+                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor, parseInt(selectedSeason))}` : '')}
                 <td>${result.grid}</td>
                 <td class="width-60 text-center">${result.points}</td>
                 <td class="width-50 text-center">${translateStatus(result.status, this.config)}</td>
             </tr>`;
     }
 
-    renderQualifyingResultRow(result: QualifyingResult): HTMLTemplateResult {
+    renderQualifyingResultRow(result: QualifyingResult, selectedSeason: string): HTMLTemplateResult {
         return html`
             <tr>
                 <td class="width-50 text-center">${result.position}</td>
                 <td>${(this.config.standings?.show_flag ? html`<img height="10" width="20" src="${getCountryFlagByNationality(this, result.Driver.nationality)}">&nbsp;` : '')}${getDriverName(result.Driver, this.config)}</td>
-                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor)}` : '')}
+                ${(this.config.standings?.show_team ? html`${renderConstructorColumn(this, result.Constructor, parseInt(selectedSeason))}` : '')}
                 <td>${result.Q1}</td>
                 <td>${result.Q2}</td>
                 <td>${result.Q3}</td>
