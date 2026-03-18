@@ -43,7 +43,7 @@ export default class ConstructorStandings extends BaseCard {
         };
 
         return html`
-            <table>
+            ${this.config.standings?.hide_season_selector ? '' : html`<table>
                 <tr>
                     <td>
                         Season<br />
@@ -59,7 +59,7 @@ export default class ConstructorStandings extends BaseCard {
                         )}
                     </td>
                 </tr>
-            </table>
+            </table>`}
             ${until(
                 this.resultsClient.GetConstructorStandingsForSeason(selectedSeason).then((response: ConstructorStanding[]) =>
                     response.length === 0 ?

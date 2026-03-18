@@ -1,4 +1,7 @@
+import { ImageConstants } from "../lib/constants";
 import { LocalStorageItem } from "../types/formulaone-card-types";
+import { getCircuitName } from "../utils";
+import { Race } from "./f1-models";
 
 export default class ImageClient {
 
@@ -39,5 +42,17 @@ export default class ImageClient {
             });
 
         return url;
+    }
+
+    GetTrackLayoutImage(race: Race): string {
+        // Monaco, barcelona, spa, hungaroring, singapore, mexico, brazil , las vegas, abu dhabi 
+        const circuitName = getCircuitName(race.Circuit.Location);
+        const year = parseInt(race.season);
+
+        if (year < 2026) {
+            return this.GetImage(`${ImageConstants.F1CDNLegacy}/${circuitName}_Circuit`);
+        }
+
+        return this.GetImage(`${ImageConstants.F1CDN}${race.Circuit.Location.locality.toLowerCase()}detailed.webp`);
     }
 }

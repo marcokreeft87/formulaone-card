@@ -280,6 +280,19 @@ The following icons can be altered.
 | results                             | qualifying    | mdi:timer-outline                   |
 | results                             | sprint        | mdi:flag-checkered                  |
 
+
+## Standings
+
+The display options for the standings can be altered
+
+
+| Name              | Type          | Default                             | Description                                      |
+| ------------------| ------------- | ----------------------------------- | ------------------------------------------------ |
+| show_team         | boolean       | `true`                              | Hide or show the team name                       |
+| show_flag         | boolean       | `true`                              | Hide or show the country flag                    |
+| show_teamlogo     | boolean       | `true`                              | Hide or show the team logo                       |
+| hide_season_selector     | boolean       | `false`                              | Hide or show the season selector                     |
+
 ## Translations
 
 The following texts can be translated or altered.

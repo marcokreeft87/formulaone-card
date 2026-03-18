@@ -1,7 +1,8 @@
 export const ImageConstants = {
     FlagCDN : 'https://flagcdn.com/w320/',
     TeamLogoCDN : 'https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/',
-    F1CDN : 'https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9',
+    F1CDNLegacy : 'https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9',
+    F1CDN: 'https://media.formula1.com/image/upload/c_fit,h_704/q_auto/v1740000001/common/f1/2026/track/2026track'
 };
 
 export const TIMESTAMP_FORMATS = ['relative', 'total', 'date', 'time', 'datetime'];
