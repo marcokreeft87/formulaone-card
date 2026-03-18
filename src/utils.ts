@@ -131,9 +131,6 @@ export const clickHandler = (node: LitElement, config: FormulaOneCardConfig, has
 }
 
 export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => {
-    
-    const circuitName = getCircuitName(race.Circuit.Location);
-
     const _handleAction = (ev: ActionHandlerEvent): void => {
         if (card.hass && card.config.actions && ev.detail.action && card.config.image_clickable) {
             clickHandler(card.parent, card.config, card.hass, ev);
@@ -152,7 +149,7 @@ export const renderHeader = (card: BaseCard, race: Race): HTMLTemplateResult => 
         };
     }
 
-    const imageHtml = html`<img width="100%" src="${card.imageClient.GetImage(`${ImageConstants.F1CDN}/${circuitName}_Circuit`)}" @action=${_handleAction}
+    const imageHtml = html`<img width="100%" src="${card.imageClient.GetTrackLayoutImage(race)}" @action=${_handleAction}
     .actionHandler=${actionHandler({
         hasHold: hasAction(card.config.actions?.hold_action),
         hasDoubleClick: hasAction(card.config.actions?.double_tap_action),
