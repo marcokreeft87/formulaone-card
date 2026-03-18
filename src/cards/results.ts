@@ -170,7 +170,7 @@ export default class Results extends BaseCard {
     render() : HTMLTemplateResult {
         const { races, selectedRace, selectedSeason, selectedTabIndex } = this.getProperties();
 
-        if(selectedSeason === undefined) {
+        if(selectedSeason === new Date().getFullYear() && !selectedRace) {
             this.getLastResult();
         }
        
@@ -323,9 +323,11 @@ export default class Results extends BaseCard {
 
         const now = new Date();
 
+        console.log('Getting last result, schedule and season');
+
         Promise.all([this.client.GetSchedule(now.getFullYear()), this.client.GetLastResult()])
             .then(([schedule, lastResult]) => {
-            
+                
                 const upcomingRace = this.getUpcomingRace(now, schedule);
 
                 let season : number = new Date().getFullYear();
@@ -355,6 +357,8 @@ export default class Results extends BaseCard {
                         properties.races = seasonRaces;
                         properties.selectedRace = race;
                         properties.selectedSeason = season.toString();
+
+                        console.log('Selected race: ' + race.raceName);
                         
                         cardValues.set('cardValues', properties);
                         this.parent.properties = cardValues;
