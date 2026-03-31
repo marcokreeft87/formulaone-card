@@ -77,11 +77,19 @@ export const getTeamImage = (card: BaseCard, teamName: string, selectedSeason: n
 export const getCircuitName = (race: Race) => {
     
     const exceptions = [{ countryDashed: 'Spain', name: 'Catalunya'}, { countryDashed: 'Belgium', name: 'SpaFrancorchamps'}, { countryDashed: 'Hungary', name: 'Hungaroring'}, 
-    { countryDashed: 'Brazil', name: 'Interlagos'}, { countryDashed: 'USA', name: 'LasVegas'}, { countryDashed: 'UAE', name: 'YasMarina'}, { countryDashed: 'Singapore', name: 'singapore'}];
+    { countryDashed: 'Brazil', name: 'Interlagos'}, { countryDashed: 'USA', name: 'LasVegas'}, { countryDashed: 'USA', name: 'Miami'}, { countryDashed: 'UAE', name: 'YasMarina'}, { countryDashed: 'Singapore', name: 'singapore'}];
 
     const exception = exceptions.filter(exception => exception.countryDashed == race.Circuit.Location.country);
     if(exception.length > 0)
     {
+        if (exception.length > 1) {
+            const circuitException = exception.filter(exception => exception.name.toLowerCase() == race.Circuit.Location.locality.toLowerCase());
+
+            if(circuitException.length > 0) {
+                return circuitException[0].name;
+            }
+        }
+
         return exception[0].name;
     }
 
