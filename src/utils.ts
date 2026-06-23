@@ -47,10 +47,13 @@ export const getCountryFlagByNationality = (card: BaseCard, nationality: string)
     }
     
     const country = countries.filter(x => x.demonym == nationality);
+    if(country.length === 0) {
+        return '';
+    }
     if(country.length > 1)
     {
         return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png);
-    }    
+    }
 
     return card.imageClient.GetImage(country[0].flags.png);
 }
@@ -60,6 +63,10 @@ export const getCountryFlagByName = (card: BaseCard, countryName: string) => {
     
     const country = countries.filter(x => x.name == countryName || x.nativeName == countryName ||
         x.altSpellings?.includes(countryName))[0];
+
+    if(!country) {
+        return '';
+    }
 
     return card.imageClient.GetImage(country.flags.png);
 }

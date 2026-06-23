@@ -1,50 +1,25 @@
-// Mocks
-import fetchMock from "jest-fetch-mock";
-import LocalStorageMock from "../testdata/localStorageMock";
-
 // Models
 import RestCountryClient from "../../src/api/restcountry-client";
-import { LocalStorageItem } from "../../src/types/formulaone-card-types";
-
-// Importing test data
-import * as countryData from '../testdata/countries.json'
+import { countries } from "../../src/data/countries";
 
 describe('Testing restcountry client file', () => {
 
-    const client = new RestCountryClient();    
-    const localStorageMock = new LocalStorageMock();
+    const client = new RestCountryClient();
 
-    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-
-    test('Calling GetCountriesFromLocalStorage should return correct data', () => {   
-         // Arrange
-        localStorageMock.clear();     
-        localStorageMock.setItem('all', JSON.stringify({ data: JSON.stringify(countryData), created: new Date() } as LocalStorageItem));
-
-        // Act
-        const countries = client.GetCountriesFromLocalStorage();
-
-        // Assert
-        expect(JSON.stringify(countries)).toMatch(JSON.stringify(countryData));
+    test('GetAll should return static country data', () => {
+        const result = client.GetAll();
+        expect(result).toBe(countries);
+        expect(result.length).toBeGreaterThan(0);
     }),
-    test('Calling GetCountriesFromLocalStorage should return correct data without localstorage', () => {   
-        // Arrange
-        localStorageMock.clear();     
-
-        // Act
-        const countries = client.GetCountriesFromLocalStorage();
-
-        // Assert
-        expect(JSON.stringify(countries)).toMatch(JSON.stringify([]));
+    test('GetCountriesFromLocalStorage should return static country data', () => {
+        const result = client.GetCountriesFromLocalStorage();
+        expect(result).toBe(countries);
     }),
-    test('Calling GetAll should return correct data', async () => { 
-        // Arrange
-        fetchMock.mockResponseOnce(JSON.stringify(countryData));
-
-        // Act
-        const result = await client.GetAll();
-
-        // Assert
-        expect(JSON.stringify(result)).toMatch(JSON.stringify(countryData));
+    test('Country data should contain Italy with correct demonym', () => {
+        const result = client.GetAll();
+        const italy = result.filter(c => c.name === 'Italy');
+        expect(italy.length).toBe(1);
+        expect(italy[0].demonym).toBe('Italian');
+        expect(italy[0].flags.png).toContain('flagcdn.com');
     })
 })
