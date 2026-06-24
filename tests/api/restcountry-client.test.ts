@@ -46,5 +46,14 @@ describe('Testing restcountry client file', () => {
 
         // Assert
         expect(JSON.stringify(result)).toMatch(JSON.stringify(countryData));
+        expect(fetchMock).toHaveBeenCalledWith(
+            'https://restcountries.com/v2/all?fields=name,flag,flags,nativeName,demonym,population,altSpellings',
+            {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: 'Bearer rc_live_12e5f4cb0d634265b2bc372a317ec15c',
+                },
+            }
+        );
     })
 })

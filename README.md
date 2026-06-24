@@ -94,6 +94,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | next_race_display | enum          |`date`                               | Show the date, time or both for the next race (date,time,datetime)    |
 | show_event_details | boolean      |`false`                              | Show the date of the next event (countdown) |
 | countdown_format | string         | d h m s                             | Determine which parts of the countdown is displayed, d (days), h (hours), m (minutes) or s (seconds) |
+| country_api_key | string          |                                     | If empty, now flags are shown. You can get your API key here: https://restcountries.com/sign-up |
 
 ### Actions
 

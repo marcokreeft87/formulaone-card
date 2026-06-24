@@ -20,7 +20,7 @@ export interface IClient {
 export abstract class ClientBase {  
   abstract baseUrl: string;
 
-  async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number): Promise<T> {
+  async GetData<T>(endpoint: string, cacheResult: boolean, hoursBeforeInvalid: number, headers?: HeadersInit): Promise<T> {
     const localStorageData = localStorage.getItem(endpoint);
 
     if (localStorageData && cacheResult) {
@@ -37,6 +37,7 @@ export abstract class ClientBase {
     const response = await fetch(`${this.baseUrl}/${endpoint}`, {
       headers: {
         Accept: 'application/json',
+        ...(headers ?? {}),
       }
     });
 

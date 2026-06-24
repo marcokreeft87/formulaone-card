@@ -34,6 +34,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     show_refresh?: boolean;
     next_race_display?: NextRaceDisplay | undefined;
     countdown_format?: string;
+    country_api_key?: string;
 }
 
 export enum F1DataSource {

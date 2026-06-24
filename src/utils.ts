@@ -30,13 +30,45 @@ export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps:
     return false;
 };
 
-export const getCountries = () => {
-    const countryClient = new RestCountryClient();
+export const getCountries = (card: BaseCard) => {
+    const countryClient = new RestCountryClient(card.config.country_api_key ?? '');
     return countryClient.GetCountriesFromLocalStorage();
 }
 
 export const getCountryFlagByNationality = (card: BaseCard, nationality: string) => {
-    const countries = getCountries();
+    const countries = getCountries(card);
+
+    const matchesNationality = (countryDemonyms: unknown, value: string): boolean => {
+        if (typeof countryDemonyms === 'string') {
+            return countryDemonyms == value;
+        }
+
+        if (!countryDemonyms || typeof countryDemonyms !== 'object') {
+            return false;   
+        }
+
+        const demonymByLanguage = countryDemonyms as Record<string, Record<string, unknown>>;
+
+        for (const languageKey in demonymByLanguage) {
+            if (!Object.prototype.hasOwnProperty.call(demonymByLanguage, languageKey)) {
+                continue;
+            }
+
+            const demonym = demonymByLanguage[languageKey];
+            for (const demonymKey in demonym) {
+                if (!Object.prototype.hasOwnProperty.call(demonym, demonymKey)) {
+                    continue;
+                }
+
+                const demonymValue = demonym[demonymKey];
+                if (typeof demonymValue === 'string' && demonymValue == value) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
 
     nationality = nationality.trim();
     const exceptions = [{ demonym: 'Argentinian', corrected: 'Argentinean'}, { demonym: 'Argentine', corrected: 'Argentinean'}];
@@ -46,22 +78,22 @@ export const getCountryFlagByNationality = (card: BaseCard, nationality: string)
         nationality = exception[0].corrected;
     }
     
-    const country = countries.filter(x => x.demonym == nationality);
+    const country = countries.filter(x => matchesNationality(x.demonyms, nationality));
     if(country.length > 1)
     {
-        return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flags.png);
+        return card.imageClient.GetImage(country.sort((a, b) => (a.population > b.population) ? -1 : 1)[0].flag.url_png);
     }    
 
-    return card.imageClient.GetImage(country[0].flags.png);
+    return card.imageClient.GetImage(country[0].flag.url_png);
 }
 
 export const getCountryFlagByName = (card: BaseCard, countryName: string) => {
-    const countries = getCountries();
+    const countries = getCountries(card);
     
-    const country = countries.filter(x => x.name == countryName || x.nativeName == countryName ||
-        x.altSpellings?.includes(countryName))[0];
+    const country = countries.filter(x => x.names.common == countryName ||
+        x.names.alternates?.includes(countryName))[0];
 
-    return card.imageClient.GetImage(country.flags.png);
+    return card.imageClient.GetImage(country?.flag.url_png);
 }
 
 export const checkConfig = (config: FormulaOneCardConfig) => {

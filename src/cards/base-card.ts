@@ -9,6 +9,7 @@ import { CardProperties, F1DataSource, FormulaOneCardConfig, Translation } from 
 import { IClient } from "../api/client-base";
 import F1SensorClient from "../api/f1sensor-client";
 import { IWeatherClient } from "../api/weather-models";
+import RestCountryClient from "../api/restcountry-client";
 
 export abstract class BaseCard {
     parent: FormulaOneCard;
