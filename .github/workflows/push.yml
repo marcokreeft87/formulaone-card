@@ -67,7 +67,13 @@ jobs:
 
       - name: Get latest commit message
         id: get_commit
-        run: echo "message=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
+        run: |
+          delimiter="EOF_$(openssl rand -hex 16)"
+          {
+            echo "message<<$delimiter"
+            git log -1 --pretty=%B
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         id: create_release
