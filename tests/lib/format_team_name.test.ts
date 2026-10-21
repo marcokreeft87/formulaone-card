@@ -18,6 +18,15 @@ describe('Testing formatTeamName', () => {
         ['Team', 'Team'],
         ['', ''],
     ])('formats "%s" as "%s"', (name, expected) => {
-        expect(formatTeamName(name)).toBe(expected);
+        expect(formatTeamName(name, true)).toBe(expected);
+    });
+
+    test.each([false, undefined])('preserves the raw name when enabled=%s', (enabled) => {
+        const name = 'Cadillac   F1   Team  ';
+        expect(formatTeamName(name, enabled)).toBe(name);
+    });
+
+    test('preserves the raw name when the option is omitted', () => {
+        expect(formatTeamName('Cadillac F1 Team')).toBe('Cadillac F1 Team');
     });
 });

@@ -12,6 +12,7 @@ export interface FormulaOneCardConfig extends LovelaceCardConfig {
     date_locale?: string;
     image_clickable?: boolean;
     show_carnumber?: boolean;
+    clip_team_names?: boolean;
     location_clickable?: boolean;
     previous_race?: PreviousRaceDisplay;
     standings?: StandingDisplayOptions;

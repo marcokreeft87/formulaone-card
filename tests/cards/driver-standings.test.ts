@@ -25,7 +25,7 @@ beforeEach(() => {
 
 describe('Testing driver-standings file', () => {
     const parent = createMock<FormulaOneCard>({ 
-        config: createMock<FormulaOneCardConfig>()
+        config: createMock<FormulaOneCardConfig>({ clip_team_names: true })
     });
 
     const card = new DriverStandings(parent);

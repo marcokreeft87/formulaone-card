@@ -84,7 +84,8 @@ describe('Testing index file function setConfig', () => {
         const config: FormulaOneCardConfig = {
             type: '',
             title: 'Test',
-            card_type: FormulaOneCardType.ConstructorStandings
+            card_type: FormulaOneCardType.ConstructorStandings,
+            clip_team_names: true
         }
         fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>constructorStandingsData }));
 
@@ -321,4 +322,3 @@ describe('Testing index file function setConfig', () => {
         // Assert
     })
 })
-

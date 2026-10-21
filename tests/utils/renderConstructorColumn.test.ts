@@ -8,15 +8,18 @@ import { renderConstructorColumn } from '../../src/utils';
 import { getRenderString } from '../utils';
 
 describe('Rendering shortened team names', () => {
+    const cases = [false, true].flatMap(showTeamLogo =>
+        [true, false, undefined].map(clipTeamNames => ({ showTeamLogo, clipTeamNames })));
     const constructor = createMock<Constructor>({
         constructorId: 'cadillac',
         name: 'Cadillac F1 Team',
     });
 
-    test.each([false, true])('shared driver/results column with show_teamlogo=%s', (showTeamLogo) => {
+    test.each(cases)('shared driver/results column with show_teamlogo=$showTeamLogo and clip_team_names=$clipTeamNames', ({ showTeamLogo, clipTeamNames }) => {
         const parent = createMock<FormulaOneCard>({
             config: createMock<FormulaOneCardConfig>({
                 standings: { show_teamlogo: showTeamLogo },
+                ...(clipTeamNames === undefined ? {} : { clip_team_names: clipTeamNames }),
             }),
         });
         const card = new DriverStandings(parent);
@@ -24,9 +27,9 @@ describe('Rendering shortened team names', () => {
 
         const result = getRenderString(renderConstructorColumn(card, constructor, 2026));
 
-        expect(result).toContain('Cadillac</td>');
-        expect(result).not.toContain('F1 Team');
+        expect(result).toContain(`${clipTeamNames ? 'Cadillac' : 'Cadillac F1 Team'}</td>`);
         expect(constructor.name).toBe('Cadillac F1 Team');
+        expect(constructor.constructorId).toBe('cadillac');
         if (showTeamLogo) {
             expect(result).toContain('src="cadillac.png"');
             expect(getLogo).toHaveBeenCalledWith('cadillac', 2026);
@@ -37,10 +40,11 @@ describe('Rendering shortened team names', () => {
         getLogo.mockRestore();
     });
 
-    test.each([false, true])('constructor standings row with show_teamlogo=%s', (showTeamLogo) => {
+    test.each(cases)('constructor standings row with show_teamlogo=$showTeamLogo and clip_team_names=$clipTeamNames', ({ showTeamLogo, clipTeamNames }) => {
         const parent = createMock<FormulaOneCard>({
             config: createMock<FormulaOneCardConfig>({
                 standings: { show_teamlogo: showTeamLogo },
+                ...(clipTeamNames === undefined ? {} : { clip_team_names: clipTeamNames }),
             }),
         });
         const card = new ConstructorStandings(parent);
@@ -49,9 +53,9 @@ describe('Rendering shortened team names', () => {
 
         const result = getRenderString(card.renderStandingRow(standing, 2026));
 
-        expect(result).toContain('Cadillac </td>');
-        expect(result).not.toContain('F1 Team');
+        expect(result).toContain(`${clipTeamNames ? 'Cadillac' : 'Cadillac F1 Team'} </td>`);
         expect(standing.Constructor.name).toBe('Cadillac F1 Team');
+        expect(standing.Constructor.constructorId).toBe('cadillac');
         if (showTeamLogo) {
             expect(result).toContain('src="cadillac.png"');
             expect(getLogo).toHaveBeenCalledWith('cadillac', 2026);

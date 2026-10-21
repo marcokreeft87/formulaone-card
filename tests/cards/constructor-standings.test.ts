@@ -17,7 +17,7 @@ import { MRData } from '../testdata/constructorStandings.json'
 
 describe('Testing constructor-standings file', () => {
     const parent = createMock<FormulaOneCard>({ 
-        config: createMock<FormulaOneCardConfig>()
+        config: createMock<FormulaOneCardConfig>({ clip_team_names: true })
     });
     const card = new ConstructorStandings(parent);
     

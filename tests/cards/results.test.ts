@@ -24,7 +24,7 @@ import * as countries from '../testdata/countries.json'
 
 describe('Testing results file', () => {
     const parent = createMock<FormulaOneCard>({
-        config: createMock<FormulaOneCardConfig>(),
+        config: createMock<FormulaOneCardConfig>({ clip_team_names: true }),
     });
     const lastRace = <Race>resultData.RaceTable.Races[0];
     

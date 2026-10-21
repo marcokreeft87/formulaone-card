@@ -74,6 +74,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | date_locale       | string        |                                     | Override the locale used for the date and time formatting. [Available options listed here](https://www.w3.org/International/O-charset-lang.html)|
 | image_clickable   | boolean       | `false`                             | Click on image leads to wikipedia, or not   |
 | show_carnumber    | boolean       | `false`                             | Show the number of the car   |
+| clip_team_names   | boolean       | `false`                             | Remove trailing F1 Team or Team from displayed team names |
 | show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown and next_race card |
 | hide_tracklayout  | boolean       | `false`                             | Hide the track layout image in the card |
 | hide_racedatetimes | boolean       | `false`                        | Hide the race information (dates and times of the qualifications/race/sprint) in the card |
@@ -94,6 +95,18 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | next_race_display | enum          |`date`                               | Show the date, time or both for the next race (date,time,datetime)    |
 | show_event_details | boolean      |`false`                              | Show the date of the next event (countdown) |
 | countdown_format | string         | d h m s                             | Determine which parts of the countdown is displayed, d (days), h (hours), m (minutes) or s (seconds) |
+
+Team name clipping is opt-in. Set `clip_team_names: true` to remove only trailing
+`F1 Team` or `Team` (case-insensitive) in standings, results, and last year's
+winner. For example, `Alpine F1 Team` becomes `Alpine`. Underlying data and team
+logos remain unchanged; omitting this option or setting it to `false` preserves
+the original names.
+
+```yaml
+type: custom:formulaonecard
+card_type: constructor_standings
+clip_team_names: true
+```
 
 ### Actions
 

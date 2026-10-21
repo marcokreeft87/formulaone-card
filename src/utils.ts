@@ -274,7 +274,7 @@ export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: R
                     <td class="text-center">
                         <h1 class="${(config.f1_font ? 'formulaone-font' : '')}">${new Date(raceData.date).getFullYear()}</h1>
                         <h2 class="${(config.f1_font ? 'formulaone-font' : '')}">
-                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${result?.Driver.givenName} ${result?.Driver.familyName} (${result ? formatTeamName(result.Constructor.name) : ''})
+                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${result?.Driver.givenName} ${result?.Driver.familyName} (${result ? formatTeamName(result.Constructor.name, config.clip_team_names) : ''})
                         </h2>
                         <h3 class="${(config.f1_font ? 'formulaone-font' : '')}">
                             <ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon> ${fastest?.Driver.givenName} ${fastest?.Driver.familyName} (${fastest?.FastestLap?.Time.time})
@@ -350,7 +350,7 @@ export const reduceArray = <T>(array?: T[], number?: number) => {
 }
 
 export const renderConstructorColumn = (card: BaseCard, constructor: Constructor, selectedSeason: number): HTMLTemplateResult => {
-    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId, selectedSeason)}">&nbsp;` : '')}${formatTeamName(constructor.name)}</td>`;
+    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId, selectedSeason)}">&nbsp;` : '')}${formatTeamName(constructor.name, card.config.clip_team_names)}</td>`;
 }
 
 export const translateStatus = (status: string, config: FormulaOneCardConfig) => {
