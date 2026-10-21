@@ -83,6 +83,16 @@ export const getTeamImage = (card: BaseCard, teamName: string, selectedSeason: n
 
 export const getCircuitName = (race: Race) => {
     
+    if (race.Circuit.Location.country === 'Spain') {
+        const locality = race.Circuit.Location.locality.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s/g, '').toLowerCase();
+        if (locality === 'madrid') {
+            return 'Madring';
+        }
+        if (['montmelo', 'barcelona', 'catalunya'].includes(locality)) {
+            return 'Catalunya';
+        }
+    }
+
     const exceptions = [{ countryDashed: 'Spain', name: 'Madring'}, { countryDashed: 'Belgium', name: 'SpaFrancorchamps'}, { countryDashed: 'Hungary', name: 'Hungaroring'},
     { countryDashed: 'Brazil', name: 'Interlagos'}, { countryDashed: 'USA', name: 'LasVegas'}, { countryDashed: 'USA', name: 'Miami'}, { countryDashed: 'UAE', name: 'YasMarina'}, { countryDashed: 'Singapore', name: 'singapore'}];
 

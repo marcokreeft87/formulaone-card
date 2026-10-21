@@ -35,5 +35,8 @@ describe('Testing util file function getCircuitName', () => {
     }),
     test('Passing Spain should return the Madring circuit name', () => {
         expect(getCircuitName(getRace('Spain', 'Madrid'))).toBe('Madring')
+    }),
+    test('Passing Spain should return the Catalunya circuit name', () => {
+        expect(getCircuitName(getRace('Spain', 'Montmeló'))).toBe('Catalunya')
     })
 })
