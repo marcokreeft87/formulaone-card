@@ -16,6 +16,17 @@ describe('Testing util file function renderLastYearsResults', () => {
         time_format: TimeFormat.language
     };
 
+    test('Shortens the winning team name without changing race data', async () => {
+        const race = JSON.parse(JSON.stringify(resultData.RaceTable.Races[0])) as Race;
+        race.Results![0].Constructor.name = 'Cadillac F1 Team';
+
+        const result = renderLastYearsResults(card.config, race);
+        const htmlResult = await getRenderStringAsyncIndex(result);
+
+        expect(htmlResult).toContain('Sergio Pérez (Cadillac)');
+        expect(race.Results![0].Constructor.name).toBe('Cadillac F1 Team');
+    });
+
     test('Given config with hide_raceinfo = false when raceinfo is rendered then raceinfo is rendered', async () => {
         card.config.f1_font = false;
         const result = renderLastYearsResults(card.config, resultData.RaceTable.Races[0] as Race);

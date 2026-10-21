@@ -10,6 +10,7 @@ import { actionHandler } from './directives/action-handler-directive';
 import { ImageConstants } from "./lib/constants";
 import { formatDateNumeric } from "./lib/format_date";
 import { formatDateTimeRaceInfo } from "./lib/format_date_time";
+import { formatTeamName } from "./lib/format_team_name";
 import { FormulaOneCardConfig, FormulaOneCardType, LocalStorageItem, Translation } from "./types/formulaone-card-types";
 
 export const hasConfigOrCardValuesChanged = (node: FormulaOneCard, changedProps: PropertyValues) => {
@@ -273,7 +274,7 @@ export const renderLastYearsResults = (config: FormulaOneCardConfig, raceData: R
                     <td class="text-center">
                         <h1 class="${(config.f1_font ? 'formulaone-font' : '')}">${new Date(raceData.date).getFullYear()}</h1>
                         <h2 class="${(config.f1_font ? 'formulaone-font' : '')}">
-                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${result?.Driver.givenName} ${result?.Driver.familyName} (${result?.Constructor.name})
+                            <ha-icon slot="icon" icon="mdi:trophy-outline"></ha-icon> ${result?.Driver.givenName} ${result?.Driver.familyName} (${result ? formatTeamName(result.Constructor.name) : ''})
                         </h2>
                         <h3 class="${(config.f1_font ? 'formulaone-font' : '')}">
                             <ha-icon slot="icon" icon="mdi:timer-outline"></ha-icon> ${fastest?.Driver.givenName} ${fastest?.Driver.familyName} (${fastest?.FastestLap?.Time.time})
@@ -349,7 +350,7 @@ export const reduceArray = <T>(array?: T[], number?: number) => {
 }
 
 export const renderConstructorColumn = (card: BaseCard, constructor: Constructor, selectedSeason: number): HTMLTemplateResult => {
-    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId, selectedSeason)}">&nbsp;` : '')}${constructor.name}</td>`;
+    return html`<td>${(card.config.standings.show_teamlogo ? html`<img class="constructor-logo" height="20" width="20" src="${getTeamImage(card, constructor.constructorId, selectedSeason)}">&nbsp;` : '')}${formatTeamName(constructor.name)}</td>`;
 }
 
 export const translateStatus = (status: string, config: FormulaOneCardConfig) => {
