@@ -32,5 +32,8 @@ describe('Testing util file function getCircuitName', () => {
     }),
     test('Passing Miami should return expected circuit name', () => {
         expect(getCircuitName(getRace('USA', 'Miami'))).toBe('Miami')
+    }),
+    test('Passing Spain should return the Madring circuit name', () => {
+        expect(getCircuitName(getRace('Spain', 'Madrid'))).toBe('Madring')
     })
 })
