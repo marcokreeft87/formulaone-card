@@ -90,11 +90,14 @@ export const getCircuitName = (race: Race) => {
     if(exception.length > 0)
     {
         if (exception.length > 1) {
-            const circuitException = exception.filter(exception => exception.name.toLowerCase() == race.Circuit.Location.locality.toLowerCase());
+            const locality = race.Circuit.Location.locality.toLowerCase().replace(" ","");
+            const circuitException = exception.filter(exception => exception.name.toLowerCase() == locality);
 
             if(circuitException.length > 0) {
                 return circuitException[0].name;
             }
+
+            return race.Circuit.Location.locality.replace(" ","");
         }
 
         return exception[0].name;
