@@ -25,6 +25,7 @@ export class FormulaOneCardEditor extends EditorForm {
                     { label: "Use F1 font", configValue: "f1_font", type: FormControlType.Switch },
                     { label: "Image clickable", configValue: "image_clickable", type: FormControlType.Switch },
                     { label: "Show carnumber", configValue: "show_carnumber", type: FormControlType.Switch },
+                    { label: "Clip team names", configValue: "clip_team_names", type: FormControlType.Switch },
                     { label: "Location clickable", configValue: "location_clickable", type: FormControlType.Switch },
                     { label: "Show race information", configValue: "show_raceinfo", type: FormControlType.Switch },
                     { label: "Hide track layout", configValue: "hide_tracklayout", type: FormControlType.Switch },
