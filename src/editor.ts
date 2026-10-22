@@ -117,7 +117,8 @@ export class FormulaOneCardEditor extends EditorForm {
                 width: 49%;
                 padding: 2px;
             }
-            ha-textfield { 
+            ha-textfield,
+            ha-combo-box {
                 width: 100%;
             }
             .hidden {
