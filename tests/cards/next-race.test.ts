@@ -14,6 +14,7 @@ import FormulaOneCard from '../../src';
 import RestCountryClient from '../../src/api/restcountry-client';
 import { Country } from '../../src/types/rest-country-types';
 import ImageClient from "../../src/api/image-client";
+import { render } from "lit-html";
 
 // Importing test data
 import * as countries from '../testdata/countries.json'
@@ -151,6 +152,42 @@ describe('Testing next-race file', () => {
         // Assert
         const htmlResult = await getRenderStringAsyncIndex(result);
         expect(htmlResult).toMatch('<table> <tbody> <tr> <td colspan="5"><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2><h2 class="formulaone-font"><img height="25" src="https://flagcdn.com/w320/it.png">&nbsp; 4 : Emilia Romagna Grand Prix</h2> <img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><img width="100%" src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png.transform/7col/image.png" @action= .actionHandler= class="" /><br></td> </tr> <tr><td>Date</td><td>24-04-22</td><td>&nbsp;</td><td>Practice 1</td><td align="right">vr 13:30</td></tr> <tr><td>Race</td><td>4</td><td>&nbsp;</td><td>Practice 2</td><td align="right">za 12:30</td></tr> <tr><td>Race name</td><td>Emilia Romagna Grand Prix</td><td>&nbsp;</td><td>Practice 3</td><td align="right">-</td></tr> <tr><td>Circuit name</td><td>Autodromo Enzo e Dino Ferrari</td><td>&nbsp;</td><td>Qualifying</td><td align="right">vr 17:00</td></tr> <tr><td>Location</td><td>Italy</td><td>&nbsp;</td><td>Sprint</td><td align="right">za 16:30</td></tr> <tr><td>City</td><td>Imola</td><td>&nbsp;</td><td>Race</td><td align="right">zo 15:00</td></tr> </tbody> </table>');
+    }),
+    test.each([
+        [true, 2],
+        [false, 2],
+        [true, 3],
+        [false, 3],
+    ])('Race info visible=%s with hidden times for race month=%s', async (showRaceInfo, month) => {
+        const config = createMock<FormulaOneCardConfig>({
+            show_raceinfo: showRaceInfo,
+            hide_racedatetimes: true,
+            f1_font: true,
+        });
+        const card = new NextRace(createMock<FormulaOneCard>({ config, _hass: hass }));
+        jest.setSystemTime(new Date(2022, month, 20));
+        fetchMock.mockResponseOnce(JSON.stringify({ MRData : <Mrdata>MRData }));
+
+        const container = document.createElement('div');
+        const result = card.render();
+        render(result, container);
+        await getRenderStringAsyncIndex(result);
+
+        const rows = container.querySelectorAll('tbody > tr');
+        expect(rows).toHaveLength(showRaceInfo ? 4 : 1);
+        expect(container.querySelector('h2.formulaone-font')).not.toBeNull();
+        expect(container.querySelector('img[width="100%"]')).not.toBeNull();
+        expect(container.textContent).not.toMatch(/\d{2}:\d{2}|Practice|Qualifying|Sprint/);
+
+        if (showRaceInfo) {
+            const race = MRData.RaceTable.Races[month === 2 ? 0 : 3];
+            expect(Array.from(rows[1].querySelectorAll('td')).map(cell => cell.textContent))
+                .toEqual(['Date', month === 2 ? '20-03-22' : '24-04-22', '\u00a0', 'Round', race.round]);
+            expect(Array.from(rows[2].querySelectorAll('td')).map(cell => cell.textContent))
+                .toEqual(['Race name', race.raceName, '\u00a0', 'Circuit name', race.Circuit.circuitName]);
+            expect(Array.from(rows[3].querySelectorAll('td')).map(cell => cell.textContent))
+                .toEqual(['Location', race.Circuit.Location.country, '\u00a0', 'City', race.Circuit.Location.locality]);
+        }
     }),
     test('Calling cardSize with hass and sensor without data', () => { 
         const card = new NextRace(parent);

@@ -3,10 +3,11 @@ import { createMock } from 'ts-auto-mock';
 import fetchMock from "jest-fetch-mock";
 import FormulaOneCard from '../../src';
 import { Mrdata, Race } from '../../src/api/f1-models';
+import { WeatherData } from '../../src/api/weather-models';
 import { BaseCard } from '../../src/cards/base-card';
 import { WeatherUnit } from '../../src/types/formulaone-card-types';
 import { renderRaceInfo } from '../../src/utils';
-import { getRenderString, getRenderStringAsyncIndex } from '../utils';
+import { getRenderStringAsyncIndex } from '../utils';
 import { MRData as scheduleData } from '../testdata/schedule.json'
 import { MRData as resultData } from '../testdata/results.json'
 
@@ -65,12 +66,26 @@ describe('Testing util file function renderRaceInfo', () => {
 
         expect(htmlResult).toBe('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td align="right">do 12:00</td></tr> <tr><td></td><td>1</td><td>&nbsp;</td><td></td><td align="right">vr 13:00</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td align="right">-</td></tr> <tr><td></td><td>Yas Marina Circuit</td><td>&nbsp;</td><td></td><td align="right">za 19:00</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td align="right">za 16:00</td></tr> <tr><td></td><td>Abu Dhabi</td><td>&nbsp;</td><td></td><td align="right">zo 19:00</td></tr>');
     }),
-    test('Given config with hide_raceinfo = true when raceinfo is rendered then raceinfo is not rendered', () => {
+    test.each([
+        [false, false],
+        [true, false],
+        [false, true],
+        [true, true],
+    ])('Hidden session times preserve race details with weather=%s and last years result=%s', async (showWeather, showLastYearsResult) => {
+        const card = createMock<BaseCard>();
+        card.hass = hass;
         card.config.hide_racedatetimes = true;
-        const result = renderRaceInfo(card, race);
-        const htmlResult = getRenderString(result);
+        card.config.show_weather = showWeather;
+        card.config.show_lastyears_result = showLastYearsResult;
+        card.weatherClient.getRaceWeatherData = jest.fn().mockResolvedValue(createMock<WeatherData>());
+        card.resultsClient.GetLastYearsResults = jest.fn().mockResolvedValue(race);
 
-        expect(htmlResult).toBe('');
+        const htmlResult = await getRenderStringAsyncIndex(renderRaceInfo(card, race));
+
+        expect(htmlResult).toContain('<tr><td></td><td>12-12-21</td><td>&nbsp;</td><td></td><td>1</td></tr> <tr><td></td><td>Abu Dhabi Grand Prix</td><td>&nbsp;</td><td></td><td>Yas Marina Circuit</td></tr> <tr><td></td><td>United Arab Emirates</td><td>&nbsp;</td><td></td><td>Abu Dhabi</td></tr>');
+        expect(htmlResult).not.toMatch(/\d{2}:\d{2}/);
+        expect(htmlResult.includes('mdi:thermometer-lines')).toBe(showWeather);
+        expect(htmlResult.includes('mdi:trophy-outline')).toBe(showLastYearsResult);
     }),
     test('Given config with hide_raceinfo = undefined when raceinfo is rendered then raceinfo is rendered', async () => {
         card.config.hide_racedatetimes = undefined;

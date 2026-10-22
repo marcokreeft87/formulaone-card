@@ -77,7 +77,7 @@ or added by clicking the "Add to lovelace" button on the HACS dashboard after in
 | clip_team_names   | boolean       | `false`                             | Remove trailing F1 Team or Team from displayed team names |
 | show_raceinfo     | boolean       | `false`                             | Show the info of the race in the countdown and next_race card |
 | hide_tracklayout  | boolean       | `false`                             | Hide the track layout image in the card |
-| hide_racedatetimes | boolean       | `false`                        | Hide the race information (dates and times of the qualifications/race/sprint) in the card |
+| hide_racedatetimes | boolean       | `false`                        | Hide session dates and times (practice/qualifying/sprint/race), keeping race details and the race date visible when `show_raceinfo` is enabled |
 | f1_font           | boolean       | `false`                             | Use the official F1 font for headers |
 | location_clickable| boolean       | `false`                             | Click on the location leads to wikipedia   |
 | previous_race     | enum          |                           |   Hide/strikethrough or make the past races italic options are (hide, strikethrough or italic) |

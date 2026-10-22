@@ -206,10 +206,13 @@ export const renderRaceInfo = (card: BaseCard, race: Race) => {
         const weatherInfo = renderWeatherInfo(weather);
         const lastYearsResult = renderLastYearsResults(config, lastYearData)
 
-        if (config.hide_racedatetimes && (config.show_weather || config.show_lastyears_result)) 
-             return html`${weatherInfo}${lastYearsResult}`;
-
         const raceDate = new Date(race.date + 'T' + race.time);
+
+        if (config.hide_racedatetimes) {
+            return html`${lastYearsResult}${weatherInfo}<tr><td>${card.translation('date')}</td><td>${formatDateNumeric(raceDate, hass.locale, config.date_locale)}</td><td>&nbsp;</td><td>${card.translation('round')}</td><td>${race.round}</td></tr>
+                        <tr><td>${card.translation('racename')}</td><td>${race.raceName}</td><td>&nbsp;</td><td>${card.translation('circuitname')}</td><td>${race.Circuit.circuitName}</td></tr>
+                        <tr><td>${card.translation('location')}</td><td>${race.Circuit.Location.country}</td><td>&nbsp;</td><td>${card.translation('city')}</td><td>${race.Circuit.Location.locality}</td></tr>`;
+        }
 
         const freePractice1Datetime = race.FirstPractice !== undefined ? new Date(race.FirstPractice.date + 'T' + race.FirstPractice.time) : null;
         const freePractice2Datetime = race.SecondPractice !== undefined ? new Date(race.SecondPractice.date + 'T' + race.SecondPractice.time) : null;
