@@ -9,7 +9,7 @@
 
 # This card just displays the data. Data related bugs will probably be closed immediately
 
-Present the data of [Formula One](https://ergast.com/mrd/) in a pretty way
+Present the data of [Formula One]([https://ergast.com/mrd/](https://api.jolpi.ca/ergast/f1/)) in a pretty way
 
 Watch a demo of the card by BeardedTinker!
 
